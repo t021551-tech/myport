@@ -24,12 +24,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # enablement:true turns Pages on for the repo if it isn't already,
-      # so the site goes live without touching repository settings.
-      - uses: actions/configure-pages@v5
-        with:
-          enablement: true
-
+      # No configure-pages step: it only computes a base URL for site
+      # generators, and its Pages API read is refused for this token.
+      # deploy-pages works without it once Pages source is "GitHub Actions".
       - uses: actions/upload-pages-artifact@v3
         with:
           path: .
