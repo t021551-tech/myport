@@ -1,0 +1,545 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fatemah Adel Shamsah — Business, Data &amp; AI</title>
+<meta name="description" content="Portfolio of Fatemah Adel Shamsah — AI and Data Science undergraduate at Manchester Metropolitan University, working where data, AI and business meet.">
+<meta name="color-scheme" content="dark">
+<meta property="og:title" content="Fatemah Adel Shamsah">
+<meta property="og:description" content="AI &amp; Data Science undergraduate. Business, data and AI.">
+<meta property="og:type" content="website">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<style>
+  :root{
+    --ink:#07070B;
+    --panel:#0E0E14;
+    --panel-2:#12121A;
+    --line:#23232F;
+    --line-soft:#1A1A24;
+    --white:#F6F6FA;
+    --muted:#8B8B9C;
+    --yellow:#FFD84D;
+    --pink:#FFB0C8;
+    --blue:#9BD4F5;
+
+    --display:"Bricolage Grotesque","Helvetica Neue",Helvetica,Arial,sans-serif;
+    --body:"IBM Plex Sans","Segoe UI",Helvetica,Arial,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+
+    --s1:.5rem; --s2:.875rem; --s3:1.25rem; --s4:2rem; --s5:3.25rem; --s6:5rem;
+  }
+
+  *{box-sizing:border-box}
+
+  body{
+    margin:0;
+    background:var(--ink);
+    color:var(--white);
+    font-family:var(--body);
+    font-size:16px;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  img{max-width:100%}
+
+  /* ---------- creative backdrop: blueprint grid + data mesh + colour blooms ---------- */
+  .bg{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+
+  /* ledger ruling — wide cells, like an accounts sheet */
+  .bg-grid{
+    position:absolute;inset:-2px;
+    background-image:
+      linear-gradient(to bottom, rgba(255,255,255,.075) 1px, transparent 1px),
+      linear-gradient(to right, rgba(255,255,255,.055) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,.03) 1px, transparent 1px);
+    background-size:100% 96px, min(11vw,132px) 100%, 100% 24px;
+    mask-image:linear-gradient(to bottom, #000 0%, rgba(0,0,0,.5) 55%, transparent 100%);
+    -webkit-mask-image:linear-gradient(to bottom, #000 0%, rgba(0,0,0,.5) 55%, transparent 100%);
+  }
+
+  /* colour wash — restrained, gold-led */
+  .bg-bloom{
+    position:absolute;inset:0;
+    background:
+      radial-gradient(52rem 32rem at 6% -12%, rgba(255,216,77,.12), transparent 66%),
+      radial-gradient(44rem 30rem at 96% 6%, rgba(155,212,245,.10), transparent 70%),
+      radial-gradient(50rem 34rem at 68% 104%, rgba(255,176,200,.09), transparent 72%),
+      linear-gradient(to bottom, rgba(12,14,24,.9), rgba(7,7,11,0) 45%);
+  }
+
+  /* market layer: growth curve + column skyline */
+  .bg-market{
+    position:absolute;left:0;right:0;bottom:0;
+    height:clamp(260px,46vh,460px);
+    opacity:.62;
+  }
+  .bg-market svg{width:100%;height:100%;display:block}
+
+  /* ghost monogram */
+  .bg-mark{
+    position:absolute;top:clamp(-1rem,-1vw,0rem);right:min(4vw,4rem);
+    font-family:var(--display);font-weight:800;
+    font-size:clamp(9rem,22vw,20rem);line-height:.8;
+    letter-spacing:-.04em;
+    color:transparent;
+    -webkit-text-stroke:1px rgba(255,216,77,.10);
+  }
+
+  /* keeps the reading column calm over the artwork */
+  .bg-veil{
+    position:absolute;inset:0;
+    background:
+      radial-gradient(105% 62% at 52% 40%, rgba(7,7,11,.70), rgba(7,7,11,.26) 64%, transparent 100%),
+      linear-gradient(to bottom, transparent 55%, rgba(7,7,11,.34) 100%);
+  }
+
+  /* accent hairline across the top edge */
+  .bg-edge{
+    position:absolute;top:0;left:0;right:0;height:2px;
+    background:linear-gradient(90deg,var(--yellow),var(--pink) 38%,var(--blue) 72%,transparent);
+    opacity:.85;
+  }
+
+  .shell{
+    position:relative; z-index:1;
+    max-width:1180px;
+    margin:0 auto;
+    padding:clamp(1.5rem,4vw,3.5rem) clamp(1.25rem,4vw,3rem) var(--s6);
+    display:grid;
+    grid-template-columns:minmax(0,20rem) minmax(0,1fr);
+    gap:clamp(2rem,5vw,4.5rem);
+    align-items:start;
+  }
+
+  /* ---------- identity rail ---------- */
+  .rail{
+    position:sticky; top:clamp(1.5rem,4vw,3.5rem);
+    display:flex; flex-direction:column; gap:var(--s3);
+  }
+
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:.7rem;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin:0;
+  }
+
+  .name{
+    font-family:var(--display);
+    font-weight:800;
+    font-size:clamp(2.4rem,4.4vw,3.5rem);
+    line-height:.98;
+    letter-spacing:-.025em;
+    margin:0;
+    text-wrap:balance;
+  }
+  .name .l2{display:block;color:var(--yellow)}
+
+  .role{
+    font-family:var(--display);
+    font-weight:600;
+    font-size:1.05rem;
+    line-height:1.35;
+    color:var(--blue);
+    margin:0;
+    letter-spacing:-.01em;
+  }
+
+  .rail-note{
+    margin:0;
+    color:var(--muted);
+    font-size:.92rem;
+    max-width:26ch;
+  }
+
+  .rule{height:1px;background:var(--line);border:0;margin:0}
+
+  .contact{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.6rem}
+  .contact li{display:flex;flex-direction:column;gap:.1rem}
+  .contact .k{
+    font-family:var(--mono);font-size:.66rem;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--muted);
+  }
+  .contact a,.contact span.v{
+    font-family:var(--mono);font-size:.88rem;color:var(--white);
+    text-decoration:none;word-break:break-word;
+  }
+  .contact a{border-bottom:1px solid var(--line);padding-bottom:1px;transition:color .18s ease,border-color .18s ease}
+  .contact a:hover{color:var(--pink);border-color:var(--pink)}
+
+  .langs{display:flex;flex-wrap:wrap;gap:.4rem}
+  .lang{
+    font-family:var(--mono);font-size:.78rem;color:var(--white);
+    border:1px solid var(--line);border-radius:999px;padding:.2rem .6rem;
+  }
+
+  /* ---------- main column ---------- */
+  main{display:flex;flex-direction:column;gap:var(--s5);min-width:0}
+
+  section{display:flex;flex-direction:column;gap:var(--s3)}
+
+  .sec-head{display:flex;align-items:baseline;gap:.75rem}
+  .sec-head h2{
+    font-family:var(--display);font-weight:600;
+    font-size:1.05rem;letter-spacing:.01em;margin:0;color:var(--white);
+  }
+  .sec-head .count{font-family:var(--mono);font-size:.72rem;color:var(--muted)}
+  .sec-head .hair{flex:1;height:1px;background:var(--line-soft)}
+
+  .lede{
+    font-family:var(--display);
+    font-weight:400;
+    font-size:clamp(1.25rem,2.2vw,1.6rem);
+    line-height:1.4;
+    letter-spacing:-.015em;
+    margin:0;
+    max-width:36ch;
+    text-wrap:balance;
+  }
+  .lede em{font-style:normal;color:var(--pink)}
+
+  .prose{margin:0;max-width:62ch;color:#D6D6E0}
+  .prose strong{color:var(--white);font-weight:600}
+
+  /* education */
+  .edu{
+    display:grid;grid-template-columns:minmax(0,1fr) auto;gap:var(--s2) var(--s3);
+    align-items:baseline;
+    border-top:1px solid var(--line);
+    padding-top:var(--s2);
+  }
+  .edu h3{
+    font-family:var(--display);font-weight:600;font-size:1.35rem;
+    letter-spacing:-.015em;margin:0;color:var(--white);
+  }
+  .edu .course{
+    grid-column:1/-1;margin:0;color:var(--yellow);
+    font-family:var(--mono);font-size:.82rem;letter-spacing:.1em;text-transform:uppercase;
+  }
+  .edu .status{
+    font-family:var(--mono);font-size:.75rem;color:var(--muted);
+    white-space:nowrap;
+  }
+
+  /* skills */
+  .skills{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:.5rem}
+  .skills li{
+    font-size:.9rem;
+    border:1px solid var(--line);
+    border-radius:2px;
+    padding:.38rem .75rem;
+    background:var(--panel);
+  }
+  .skills li:nth-child(4n+1){color:var(--yellow)}
+  .skills li:nth-child(4n+2){color:var(--pink)}
+  .skills li:nth-child(4n+3){color:var(--blue)}
+  .skills li:nth-child(4n+4){color:var(--white)}
+
+  /* programs index */
+  .index{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+  .index li{
+    display:grid;
+    grid-template-columns:6.5rem minmax(0,1fr);
+    gap:var(--s2) var(--s3);
+    padding:var(--s3) 0;
+    border-top:1px solid var(--line-soft);
+    align-items:baseline;
+    transition:background-color .2s ease;
+  }
+  .index li:first-child{border-top:1px solid var(--line)}
+  .index li:hover{background:linear-gradient(90deg,rgba(255,255,255,.035),transparent 70%)}
+  .tag{
+    font-family:var(--mono);font-size:.66rem;letter-spacing:.14em;
+    text-transform:uppercase;line-height:1.9;
+  }
+  .tag.prog{color:var(--yellow)}
+  .tag.lead{color:var(--pink)}
+  .tag.tech{color:var(--blue)}
+  .item h3{
+    font-family:var(--display);font-weight:600;font-size:1.12rem;
+    letter-spacing:-.012em;margin:0 0 .2rem;color:var(--white);
+    text-wrap:balance;
+  }
+  .item p{margin:0;color:var(--muted);font-size:.92rem;max-width:56ch}
+
+  /* contact card */
+  .cta{
+    border:1px solid var(--line);
+    background:rgba(18,18,26,.66);
+    backdrop-filter:blur(8px);
+    -webkit-backdrop-filter:blur(8px);
+    padding:clamp(1.25rem,3vw,2rem);
+    display:flex;flex-direction:column;gap:var(--s2);
+  }
+  .cta h2{
+    font-family:var(--display);font-weight:800;
+    font-size:clamp(1.5rem,3vw,2rem);letter-spacing:-.02em;margin:0;
+  }
+  .cta h2 span{color:var(--blue)}
+  .cta p{margin:0;color:var(--muted);max-width:48ch}
+  .btn-row{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:.25rem}
+  .btn{
+    font-family:var(--mono);font-size:.85rem;
+    text-decoration:none;padding:.6rem 1.05rem;
+    border:1px solid var(--yellow);color:var(--ink);background:var(--yellow);
+    transition:opacity .18s ease,transform .18s ease;
+  }
+  .btn.ghost{background:transparent;color:var(--white);border-color:var(--line)}
+  .btn:hover{opacity:.9}
+  .btn.ghost:hover{border-color:var(--pink);color:var(--pink);opacity:1}
+  a:focus-visible,.btn:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+
+  footer{
+    margin-top:var(--s1);
+    font-family:var(--mono);font-size:.72rem;color:var(--muted);
+    display:flex;flex-wrap:wrap;gap:.5rem 1.25rem;
+    border-top:1px solid var(--line-soft);padding-top:var(--s2);
+  }
+
+  @media (max-width:860px){
+    .shell{grid-template-columns:minmax(0,1fr)}
+    .rail{position:static}
+    .index li{grid-template-columns:minmax(0,1fr);gap:.35rem}
+    .tag{line-height:1.6}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none!important;animation:none!important}
+  }
+</style>
+</head>
+<body>
+
+<div class="bg" aria-hidden="true">
+  <div class="bg-bloom"></div>
+  <div class="bg-grid"></div>
+  <div class="bg-mark">FS</div>
+
+  <div class="bg-market">
+    <svg viewBox="0 0 1200 400" preserveAspectRatio="none" role="presentation">
+      <defs>
+        <linearGradient id="growth" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#FFD84D" stop-opacity=".20"></stop>
+          <stop offset="100%" stop-color="#FFD84D" stop-opacity="0"></stop>
+        </linearGradient>
+        <linearGradient id="cols" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#FFFFFF" stop-opacity=".04"></stop>
+          <stop offset="60%" stop-color="#FFB0C8" stop-opacity=".10"></stop>
+          <stop offset="100%" stop-color="#FFD84D" stop-opacity=".16"></stop>
+        </linearGradient>
+      </defs>
+
+      <!-- column skyline -->
+      <g fill="url(#cols)">
+        <rect x="8" y="354" width="34" height="26"></rect>
+        <rect x="68" y="340" width="34" height="40"></rect>
+        <rect x="128" y="346" width="34" height="34"></rect>
+        <rect x="188" y="322" width="34" height="58"></rect>
+        <rect x="248" y="328" width="34" height="52"></rect>
+        <rect x="308" y="306" width="34" height="74"></rect>
+        <rect x="368" y="314" width="34" height="66"></rect>
+        <rect x="428" y="290" width="34" height="90"></rect>
+        <rect x="488" y="296" width="34" height="84"></rect>
+        <rect x="548" y="272" width="34" height="108"></rect>
+        <rect x="608" y="284" width="34" height="96"></rect>
+        <rect x="668" y="256" width="34" height="124"></rect>
+        <rect x="728" y="262" width="34" height="118"></rect>
+        <rect x="788" y="234" width="34" height="146"></rect>
+        <rect x="848" y="242" width="34" height="138"></rect>
+        <rect x="908" y="214" width="34" height="166"></rect>
+        <rect x="968" y="222" width="34" height="158"></rect>
+        <rect x="1028" y="192" width="34" height="188"></rect>
+        <rect x="1088" y="202" width="34" height="178"></rect>
+        <rect x="1148" y="172" width="34" height="208"></rect>
+      </g>
+
+      <!-- baseline -->
+      <line x1="0" y1="380" x2="1200" y2="380" stroke="#FFFFFF" stroke-opacity=".12" stroke-width="1" vector-effect="non-scaling-stroke"></line>
+
+      <!-- growth curve -->
+      <path d="M0,330 L150,300 L300,312 L450,262 L600,238 L750,250 L900,196 L1050,160 L1200,120 L1200,380 L0,380 Z" fill="url(#growth)"></path>
+      <path d="M0,330 L150,300 L300,312 L450,262 L600,238 L750,250 L900,196 L1050,160 L1200,120"
+            fill="none" stroke="#FFD84D" stroke-opacity=".55" stroke-width="1.5" vector-effect="non-scaling-stroke"></path>
+      <g fill="#FFD84D" fill-opacity=".7">
+        <circle cx="300" cy="312" r="2.5"></circle>
+        <circle cx="600" cy="238" r="2.5"></circle>
+        <circle cx="900" cy="196" r="2.5"></circle>
+        <circle cx="1200" cy="120" r="3.5"></circle>
+      </g>
+
+      <!-- secondary series -->
+      <path d="M0,352 L150,346 L300,330 L450,336 L600,308 L750,296 L900,286 L1050,258 L1200,242"
+            fill="none" stroke="#9BD4F5" stroke-opacity=".38" stroke-width="1.5"
+            stroke-dasharray="5 6" vector-effect="non-scaling-stroke"></path>
+    </svg>
+  </div>
+
+  <div class="bg-veil"></div>
+  <div class="bg-edge"></div>
+</div>
+
+<div class="shell">
+
+  <aside class="rail">
+    <p class="eyebrow">Portfolio &middot; 2026</p>
+    <h1 class="name">Fatemah Adel<span class="l2">Shamsah</span></h1>
+    <p class="role">AI &amp; Data Science undergraduate, Manchester Metropolitan University</p>
+    <p class="rail-note">Data and AI on one side, business and leadership on the other &mdash; I work at the point where they meet.</p>
+
+    <hr class="rule">
+
+    <ul class="contact">
+      <li>
+        <span class="k">Email</span>
+        <a href="mailto:fshamsah08@gmail.com">fshamsah08@gmail.com</a>
+      </li>
+      <li>
+        <span class="k">Phone</span>
+        <a href="tel:+96597117302">9711 7302</a>
+      </li>
+    </ul>
+
+    <hr class="rule">
+
+    <div>
+      <p class="eyebrow" style="margin-bottom:.55rem">Focus</p>
+      <div class="langs">
+        <span class="lang">Business</span>
+        <span class="lang">Data &amp; AI</span>
+        <span class="lang">Leadership</span>
+      </div>
+    </div>
+
+    <hr class="rule">
+
+    <div>
+      <p class="eyebrow" style="margin-bottom:.55rem">Languages</p>
+      <div class="langs">
+        <span class="lang">Arabic</span>
+        <span class="lang">English</span>
+        <span class="lang">Turkish</span>
+      </div>
+    </div>
+  </aside>
+
+  <main>
+
+    <section id="about">
+      <p class="lede">I study <em>artificial intelligence and data science</em>, and I am just as interested in the <em>business</em> that turns it into something people use.</p>
+      <p class="prose">Alongside my degree I have worked through <strong>LOYAC Future Minds</strong>, <strong>CODED Academy X</strong>, <strong>Harvard's Lead1x</strong> leadership course and the <strong>YPA Peace Ambassadors</strong> program, and helped run operations for <strong>Kuwait Codes</strong>. My technical foundation is Python and the basics of data analysis; around it I am building the commercial side &mdash; leadership, operations and working with teams &mdash; and I communicate in three languages.</p>
+    </section>
+
+    <section id="education">
+      <div class="sec-head">
+        <h2>Education</h2>
+        <span class="hair"></span>
+      </div>
+      <div class="edu">
+        <h3>Manchester Metropolitan University</h3>
+        <span class="status">Undergraduate</span>
+        <p class="course">AI and Data Science</p>
+      </div>
+    </section>
+
+    <section id="skills">
+      <div class="sec-head">
+        <h2>Skills</h2>
+        <span class="count">05</span>
+        <span class="hair"></span>
+      </div>
+      <ul class="skills">
+        <li>Python</li>
+        <li>Data analysis basics</li>
+        <li>Problem-solving</li>
+        <li>Teamwork</li>
+        <li>Communication</li>
+      </ul>
+    </section>
+
+    <section id="programs">
+      <div class="sec-head">
+        <h2>Programs, projects &amp; volunteering</h2>
+        <span class="count">07</span>
+        <span class="hair"></span>
+      </div>
+      <ul class="index">
+        <li>
+          <span class="tag tech">Project</span>
+          <div class="item">
+            <h3>AI application build</h3>
+            <p>Created an application using artificial intelligence, in a program organized with the Salem Al-Ali Al-Sabah Informatics Award and platform, with media partnership from VO Company.</p>
+          </div>
+        </li>
+        <li>
+          <span class="tag prog">Program</span>
+          <div class="item">
+            <h3>LOYAC Future Minds</h3>
+            <p>Program track in artificial intelligence and engineering.</p>
+          </div>
+        </li>
+        <li>
+          <span class="tag prog">Program</span>
+          <div class="item">
+            <h3>CODED Academy X</h3>
+            <p>Technical training program at CODED.</p>
+          </div>
+        </li>
+        <li>
+          <span class="tag lead">Leadership</span>
+          <div class="item">
+            <h3>Harvard University &mdash; Lead1x</h3>
+            <p>Exercising Leadership program.</p>
+          </div>
+        </li>
+        <li>
+          <span class="tag lead">Leadership</span>
+          <div class="item">
+            <h3>YPA Peace Ambassadors</h3>
+            <p>Youth program in dialogue, peacebuilding and community representation.</p>
+          </div>
+        </li>
+        <li>
+          <span class="tag tech">Internship</span>
+          <div class="item">
+            <h3>The Scientific Center</h3>
+            <p>Summer internship program.</p>
+          </div>
+        </li>
+        <li>
+          <span class="tag lead">Role</span>
+          <div class="item">
+            <h3>Kuwait Codes &mdash; CODED operations</h3>
+            <p>Operations member supporting delivery of the program.</p>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+    <section id="contact" class="cta">
+      <h2>Open to internships in <span>business, data and AI</span>.</h2>
+      <p>The fastest way to reach me is email &mdash; I reply in Arabic, English or Turkish.</p>
+      <div class="btn-row">
+        <a class="btn" href="mailto:fshamsah08@gmail.com">Email me</a>
+        <a class="btn ghost" href="tel:+96597117302">Call 9711 7302</a>
+      </div>
+    </section>
+
+    <footer>
+      <span>Fatemah Adel Shamsah</span>
+      <span>Business &middot; Data &middot; AI</span>
+      <span>Arabic &middot; English &middot; Turkish</span>
+    </footer>
+
+  </main>
+</div>
+
+</body>
+</html>
