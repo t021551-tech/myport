@@ -24,9 +24,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # No configure-pages step: it only computes a base URL for site
-      # generators, and its Pages API read is refused for this token.
-      # deploy-pages works without it once Pages source is "GitHub Actions".
+      # Tries to switch Pages on by itself. Needs the repo's workflow
+      # permissions set to read and write; if it cannot, the deploy below
+      # still runs, so this never blocks a repo where Pages is already on.
+      - uses: actions/configure-pages@v5
+        continue-on-error: true
+        with:
+          enablement: true
+
       - uses: actions/upload-pages-artifact@v3
         with:
           path: .
