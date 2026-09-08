@@ -1,0 +1,277 @@
+  :root{
+    /* wine-led palette taken from the logo disc */
+    --ground:#1E0B0E;
+    --ground-2:#2B1114;
+    --disc:#5B2328;
+    --disc-deep:#431a1e;
+    --cream:#F4EADB;
+    --cream-dim:#BFA898;      /* neutral biased warm, toward the wine */
+    --brass:#C98F3C;
+    --vimto:#7A2F63;
+    --line:rgba(244,234,219,.14);
+    --line-strong:rgba(244,234,219,.28);
+
+    --display:"Marcellus","Hoefler Text",Georgia,serif;
+    --body:"Karla","Helvetica Neue",Helvetica,Arial,sans-serif;
+    --arabic:"Amiri","Geeza Pro","Noto Naskh Arabic",serif;
+
+    --measure:64ch;
+    --pad:clamp(1.25rem,5vw,4rem);
+  }
+
+  *{box-sizing:border-box}
+
+  body{
+    margin:0;
+    background:var(--ground);
+    color:var(--cream);
+    font-family:var(--body);
+    font-size:clamp(1rem,.97rem + .15vw,1.075rem);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ── sadu: Kuwaiti bedouin weaving, as the page ground ── */
+  .sadu{
+    position:fixed;inset:0;z-index:0;pointer-events:none;
+    opacity:.5;
+  }
+  .sadu svg{width:100%;height:100%;display:block}
+  /* keeps the weave off the reading column */
+  .sadu-veil{
+    position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:
+      radial-gradient(72% 55% at 50% 45%, rgba(30,11,14,.94), rgba(30,11,14,.66) 60%, rgba(30,11,14,.34) 100%);
+  }
+  /* a woven strip, used where a rule would otherwise sit */
+  .sadu-rule{position:relative;z-index:1;height:40px;overflow:hidden}
+  .sadu-rule svg{width:100%;height:40px;display:block}
+
+  .wrap{max-width:1080px;margin:0 auto;padding-inline:var(--pad)}
+  header,section,footer{position:relative;z-index:1}
+
+  /* ── section rhythm ───────────────────────────────── */
+  .band{padding-block:clamp(3rem,7vw,5.5rem)}
+  .band + .band{border-top:1px solid var(--line)}
+
+  h1,h2,h3{font-family:var(--display);font-weight:400;margin:0;text-wrap:balance;letter-spacing:.005em}
+
+  .kicker{
+    font-family:var(--body);font-size:.72rem;font-weight:700;
+    letter-spacing:.22em;text-transform:uppercase;color:var(--brass);
+    margin:0;
+  }
+
+  /* ── hero ─────────────────────────────────────────── */
+  .hero{
+    background:
+      radial-gradient(120% 90% at 15% 0%, rgba(91,35,40,.85), transparent 62%),
+      radial-gradient(90% 70% at 100% 10%, rgba(122,47,99,.22), transparent 60%),
+      linear-gradient(180deg, rgba(30,11,14,.74), rgba(30,11,14,.52));
+  }
+  .hero-in{
+    display:grid;grid-template-columns:auto minmax(0,1fr);
+    gap:clamp(1.75rem,5vw,3.5rem);align-items:center;
+    padding-block:clamp(2.5rem,6vw,4.5rem);
+  }
+
+  /* the Darseen mark, embedded so it travels with the page */
+  .mark{
+    width:clamp(150px,21vw,210px);height:auto;aspect-ratio:1;
+    display:block;border-radius:50%;
+    filter:drop-shadow(0 24px 46px rgba(0,0,0,.55));
+  }
+
+  .hero h1{
+    font-size:clamp(2.6rem,7vw,4.4rem);line-height:1.02;
+    margin-block:.45rem .6rem;
+  }
+  .hero h1 .amp{color:var(--brass)}
+  .hero-lede{
+    margin:0;max-width:46ch;color:var(--cream);
+    font-size:clamp(1.05rem,1rem + .5vw,1.3rem);line-height:1.5;
+  }
+  .hero-lede b{font-weight:500;color:var(--brass)}
+  .hero-lede .ar{font-family:var(--arabic);color:var(--brass);font-size:1.05em}
+  .hero-sub{
+    margin:.9rem 0 0;max-width:48ch;color:var(--cream-dim);
+    font-size:.98rem;line-height:1.55;
+  }
+  .hero-sub b{font-weight:500;color:var(--cream)}
+
+  .actions{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:1.6rem}
+  .btn{
+    font-family:var(--body);font-size:.82rem;font-weight:700;
+    letter-spacing:.14em;text-transform:uppercase;text-decoration:none;
+    padding:.85rem 1.5rem;border:1px solid var(--brass);
+    background:var(--brass);color:#231014;
+    transition:background .18s ease,color .18s ease,border-color .18s ease;
+  }
+  .btn.line{background:transparent;color:var(--cream);border-color:var(--line-strong)}
+  .btn:hover{background:var(--cream);border-color:var(--cream);color:#231014}
+  .btn.line:hover{background:transparent;border-color:var(--brass);color:var(--brass)}
+  a:focus-visible,.btn:focus-visible{outline:2px solid var(--brass);outline-offset:3px}
+
+  /* ── provenance ribbon ────────────────────────────── */
+  .ribbon{background:rgba(43,17,20,.80);border-bottom:1px solid var(--line)}
+  .ribbon-in{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));
+    gap:clamp(1.25rem,3vw,2.5rem);padding-block:clamp(1.75rem,4vw,2.5rem);
+  }
+  .fact h3{font-size:1.12rem;margin-bottom:.2rem}
+  .fact p{margin:0;color:var(--cream-dim);font-size:.95rem;max-width:34ch}
+
+  /* ── menu ─────────────────────────────────────────── */
+  .course + .course{margin-top:clamp(2.25rem,5vw,3.25rem)}
+  .course-head{
+    display:flex;align-items:baseline;gap:1rem;
+    padding-bottom:.6rem;border-bottom:1px solid var(--line-strong);
+  }
+  .course-head h3{font-size:clamp(1.35rem,2.6vw,1.7rem)}
+  .course-head .ar{
+    font-family:var(--arabic);font-size:1.25rem;color:var(--brass);
+    margin-inline-start:auto;
+  }
+
+  .dishes{list-style:none;margin:1.1rem 0 0;padding:0;display:grid;gap:.35rem}
+  .dish{
+    display:grid;grid-template-columns:minmax(0,15rem) minmax(0,1fr) auto;
+    gap:.25rem clamp(1rem,3vw,2.5rem);align-items:baseline;
+    padding:.85rem .75rem;margin-inline:-.75rem;
+    border-radius:2px;transition:background-color .18s ease;
+  }
+  .dish .name{grid-column:1;grid-row:1}
+  .dish p{grid-column:2;grid-row:1}
+  .dish .price{
+    grid-column:3;grid-row:1;justify-self:end;white-space:nowrap;
+    display:grid;justify-items:end;gap:.12rem;
+    font-family:var(--display);font-size:1.1rem;color:var(--brass);
+    font-variant-numeric:tabular-nums;
+  }
+  .dish .price small{
+    font-family:var(--body);font-size:.66rem;font-weight:700;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--cream-dim);
+  }
+  .dish:hover{background:rgba(244,234,219,.045)}
+  .dish .name{font-family:var(--display);font-size:1.16rem;line-height:1.25}
+  .dish .name .ar{
+    font-family:var(--arabic);font-size:1.02rem;color:var(--brass);
+    display:block;margin-top:.1rem;
+  }
+  .dish p{margin:0;color:var(--cream-dim);font-size:.96rem;max-width:52ch}
+  .dish p em{font-style:normal;color:var(--cream)}
+
+  /* drinks carry the one non-brass accent */
+  #drinks .course-head{border-color:rgba(122,47,99,.55)}
+  #drinks .course-head .ar,
+  #drinks .dish .name .ar{color:#C878B0}
+  #drinks .dish:hover{background:rgba(122,47,99,.14)}
+
+
+  /* ── find us ──────────────────────────────────────── */
+  .find-in{
+    display:grid;gap:clamp(1.5rem,4vw,3rem);
+    grid-template-columns:repeat(auto-fit,minmax(16rem,1fr));
+  }
+  .find h2{font-size:clamp(1.8rem,4vw,2.4rem);margin-bottom:1.25rem;grid-column:1/-1}
+  .block h3{
+    font-family:var(--body);font-size:.72rem;font-weight:700;
+    letter-spacing:.2em;text-transform:uppercase;color:var(--brass);
+    margin-bottom:.5rem;
+  }
+  .block p{margin:0;color:var(--cream)}
+  .block a{color:var(--cream);text-decoration:none;border-bottom:1px solid var(--line-strong)}
+  .block a:hover{color:var(--brass);border-color:var(--brass)}
+
+  .hours{list-style:none;margin:0;padding:0;display:grid;gap:.3rem;max-width:20rem}
+  .hours li{display:flex;justify-content:space-between;gap:1rem;font-variant-numeric:tabular-nums}
+  .hours span:last-child{color:var(--cream-dim)}
+
+  .late{
+    margin-top:1rem;padding:.85rem 1rem;
+    border:1px solid rgba(201,143,60,.45);background:rgba(201,143,60,.08);
+    display:grid;gap:.3rem;max-width:22rem;
+  }
+  .late strong{
+    font-family:var(--body);font-size:.7rem;font-weight:700;
+    letter-spacing:.18em;text-transform:uppercase;color:var(--brass);
+  }
+  .late p{margin:0;color:var(--cream);font-size:.92rem;line-height:1.5}
+
+  .tbd{
+    display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:.14em;
+    text-transform:uppercase;color:#231014;background:var(--brass);
+    padding:.1rem .45rem;border-radius:2px;vertical-align:.1em;margin-inline-start:.4rem;
+  }
+
+  /* ── the kitchen ──────────────────────────────────── */
+  .kitchen{background:transparent}
+  .kitchen-in{display:grid;gap:clamp(1.5rem,4vw,3rem);grid-template-columns:minmax(0,1fr)}
+  @media (min-width:56rem){
+    .kitchen-in{grid-template-columns:minmax(0,17rem) minmax(0,1fr);align-items:start}
+  }
+  .chef-card{
+    border:1px solid var(--line);background:rgba(91,35,40,.35);
+    padding:clamp(1.25rem,3vw,1.75rem);display:grid;gap:.45rem;text-align:center;
+  }
+  .chef-card .ar{font-family:var(--arabic);font-size:1.9rem;color:var(--cream);line-height:1.2}
+  .chef-card .nm{font-family:var(--display);font-size:1.35rem}
+  .chef-card .rl{
+    font-size:.7rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--brass);
+  }
+  .kitchen h2{font-size:clamp(1.8rem,4vw,2.5rem);margin-bottom:.8rem}
+  .kitchen p{margin:0 0 .9rem;color:var(--cream-dim);max-width:var(--measure)}
+  .kitchen p:last-child{margin-bottom:0}
+  .kitchen strong{color:var(--cream);font-weight:500}
+
+  /* ── meal subscriptions ───────────────────────────── */
+  .plans-grid{
+    display:grid;gap:1rem;margin-top:1.75rem;
+    grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));
+  }
+  .plan{
+    border:1px solid var(--line);padding:clamp(1.25rem,3vw,1.6rem);
+    display:grid;gap:.55rem;align-content:start;background:rgba(244,234,219,.03);
+  }
+  .plan.featured{border-color:var(--brass);background:rgba(201,143,60,.08)}
+  .plan h3{font-size:1.4rem}
+  .plan .for{
+    font-size:.7rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--brass);
+  }
+  .plan .spec{
+    display:flex;gap:1.25rem;flex-wrap:wrap;
+    padding-block:.55rem;border-block:1px solid var(--line);
+    font-variant-numeric:tabular-nums;font-size:.9rem;color:var(--cream-dim);
+  }
+  .plan ul{list-style:none;margin:0;padding:0;display:grid;gap:.35rem;font-size:.94rem}
+  .plan li{display:grid;grid-template-columns:.8rem minmax(0,1fr);gap:.5rem;color:var(--cream-dim)}
+  .plan li::before{content:"\203A";color:var(--brass);line-height:1.5}
+  .how{
+    display:grid;gap:1rem;margin-top:1.75rem;
+    grid-template-columns:repeat(auto-fit,minmax(13rem,1fr));
+  }
+  .step{display:grid;gap:.3rem;align-content:start}
+  .step .n{
+    font-family:var(--display);font-size:1.6rem;color:var(--brass);line-height:1;
+  }
+  .step h4{font-family:var(--display);font-weight:400;font-size:1.08rem;margin:0}
+  .step p{margin:0;color:var(--cream-dim);font-size:.92rem}
+
+  footer{border-top:1px solid var(--line);background:rgba(43,17,20,.80)}
+  .foot-in{
+    display:flex;flex-wrap:wrap;gap:.6rem 1.5rem;justify-content:space-between;
+    padding-block:1.75rem;color:var(--cream-dim);font-size:.85rem;
+  }
+  .foot-in .ar{font-family:var(--arabic);color:var(--brass)}
+
+  @media (max-width:46rem){
+    .hero-in{grid-template-columns:minmax(0,1fr);text-align:left}
+    .dish{grid-template-columns:minmax(0,1fr) auto}
+    .dish p{grid-column:1/-1;grid-row:2}
+    .dish .price{grid-column:2}
+    .course-head{flex-wrap:wrap}
+    .course-head .ar{margin-inline-start:0}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
