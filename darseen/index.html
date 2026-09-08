@@ -19,45 +19,65 @@
 <div class="sadu" aria-hidden="true">
   <svg role="presentation">
     <defs>
-      <!-- one woven repeat: stripe, triangle row, lozenge row, zigzag -->
+      <!-- Motifs are drawn once and stamped three times: a shadow dropped
+           down-right, a highlight lifted up-left, then the thread itself.
+           fill and stroke are inherited from each <use>, so one shape set
+           serves all three passes. -->
+      <g id="weft">
+        <rect x="0" y="0" width="80" height="3"></rect>
+        <rect x="0" y="36" width="80" height="2"></rect>
+        <rect x="0" y="90" width="80" height="2"></rect>
+        <rect x="0" y="117" width="80" height="3"></rect>
+        <polygon points="-20,10 0,32 20,10"></polygon>
+        <polygon points="20,10 40,32 60,10"></polygon>
+        <polygon points="60,10 80,32 100,10"></polygon>
+        <polygon points="20,58 26,64 20,70 14,64"></polygon>
+        <polygon points="60,58 66,64 60,70 54,64"></polygon>
+      </g>
+      <g id="figure">
+        <polygon points="0,32 20,10 40,32"></polygon>
+        <polygon points="40,32 60,10 80,32"></polygon>
+        <rect x="0" y="6" width="80" height="1.5"></rect>
+        <polygon points="20,44 36,64 20,84 4,64" fill="none" stroke-width="2"></polygon>
+        <polygon points="60,44 76,64 60,84 44,64" fill="none" stroke-width="2"></polygon>
+        <polyline points="0,112 20,98 40,112 60,98 80,112" fill="none" stroke-width="2.5"></polyline>
+      </g>
+
+      <g id="bandweft">
+        <rect x="0" y="0" width="80" height="3"></rect>
+        <rect x="0" y="40" width="80" height="3"></rect>
+        <polygon points="-20,10 0,34 20,10"></polygon>
+        <polygon points="20,10 40,34 60,10"></polygon>
+        <polygon points="60,10 80,34 100,10"></polygon>
+      </g>
+      <g id="bandfigure">
+        <polygon points="0,34 20,10 40,34"></polygon>
+        <polygon points="40,34 60,10 80,34"></polygon>
+      </g>
+
       <pattern id="sadu" width="80" height="120" patternUnits="userSpaceOnUse">
-        <rect x="0" y="0" width="80" height="3" fill="#F4EADB" opacity=".20"></rect>
-        <rect x="0" y="6" width="80" height="1.5" fill="#C98F3C" opacity=".28"></rect>
-
-        <polygon points="0,32 20,10 40,32" fill="#C98F3C" opacity=".20"></polygon>
-        <polygon points="40,32 60,10 80,32" fill="#C98F3C" opacity=".20"></polygon>
-        <polygon points="-20,10 0,32 20,10" fill="#F4EADB" opacity=".12"></polygon>
-        <polygon points="20,10 40,32 60,10" fill="#F4EADB" opacity=".12"></polygon>
-        <polygon points="60,10 80,32 100,10" fill="#F4EADB" opacity=".12"></polygon>
-
-        <rect x="0" y="36" width="80" height="2" fill="#F4EADB" opacity=".18"></rect>
-
-        <polygon points="20,44 36,64 20,84 4,64" fill="none" stroke="#C98F3C" stroke-width="2" opacity=".28"></polygon>
-        <polygon points="60,44 76,64 60,84 44,64" fill="none" stroke="#C98F3C" stroke-width="2" opacity=".28"></polygon>
-        <polygon points="20,58 26,64 20,70 14,64" fill="#F4EADB" opacity=".20"></polygon>
-        <polygon points="60,58 66,64 60,70 54,64" fill="#F4EADB" opacity=".20"></polygon>
-
-        <rect x="0" y="90" width="80" height="2" fill="#F4EADB" opacity=".18"></rect>
-
-        <polyline points="0,112 20,98 40,112 60,98 80,112" fill="none"
-                  stroke="#C98F3C" stroke-width="2.5" opacity=".24"></polyline>
-        <rect x="0" y="117" width="80" height="3" fill="#F4EADB" opacity=".20"></rect>
+        <use href="#weft"   x="1.6"  y="1.6"  fill="#080305" stroke="#080305" opacity=".55"></use>
+        <use href="#figure" x="1.6"  y="1.6"  fill="#080305" stroke="#080305" opacity=".55"></use>
+        <use href="#weft"   x="-1.1" y="-1.1" fill="#FFE7C4" stroke="#FFE7C4" opacity=".13"></use>
+        <use href="#figure" x="-1.1" y="-1.1" fill="#FFE7C4" stroke="#FFE7C4" opacity=".13"></use>
+        <use href="#weft"   fill="#F4EADB" stroke="#F4EADB" opacity=".17"></use>
+        <use href="#figure" fill="#C98F3C" stroke="#C98F3C" opacity=".26"></use>
       </pattern>
 
-      <!-- the narrow band used as a divider -->
-      <pattern id="saduband" width="80" height="40" patternUnits="userSpaceOnUse">
-        <rect x="0" y="0" width="80" height="3" fill="#F4EADB" opacity=".55"></rect>
-        <polygon points="0,32 20,9 40,32" fill="#C98F3C" opacity=".72"></polygon>
-        <polygon points="40,32 60,9 80,32" fill="#C98F3C" opacity=".72"></polygon>
-        <polygon points="-20,9 0,32 20,9" fill="#F4EADB" opacity=".34"></polygon>
-        <polygon points="20,9 40,32 60,9" fill="#F4EADB" opacity=".34"></polygon>
-        <polygon points="60,9 80,32 100,9" fill="#F4EADB" opacity=".34"></polygon>
-        <rect x="0" y="36" width="80" height="3" fill="#F4EADB" opacity=".55"></rect>
+      <pattern id="saduband" width="80" height="44" patternUnits="userSpaceOnUse">
+        <use href="#bandweft"   x="1.8"  y="1.8"  fill="#080305" stroke="#080305" opacity=".7"></use>
+        <use href="#bandfigure" x="1.8"  y="1.8"  fill="#080305" stroke="#080305" opacity=".7"></use>
+        <use href="#bandweft"   x="-1.2" y="-1.2" fill="#FFF1D8" stroke="#FFF1D8" opacity=".3"></use>
+        <use href="#bandfigure" x="-1.2" y="-1.2" fill="#FFF1D8" stroke="#FFF1D8" opacity=".3"></use>
+        <use href="#bandweft"   fill="#F4EADB" stroke="#F4EADB" opacity=".5"></use>
+        <use href="#bandfigure" fill="#C98F3C" stroke="#C98F3C" opacity=".72"></use>
       </pattern>
     </defs>
     <rect width="100%" height="100%" fill="url(#sadu)"></rect>
   </svg>
 </div>
+<div class="sadu-warp" aria-hidden="true"></div>
+<div class="sadu-sheen" aria-hidden="true"></div>
 <div class="sadu-veil" aria-hidden="true"></div>
 
 <header class="hero">

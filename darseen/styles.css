@@ -37,15 +37,41 @@
     opacity:.5;
   }
   .sadu svg{width:100%;height:100%;display:block}
+  /* warp threads: the fine vertical ribbing of the loom */
+  .sadu-warp{
+    position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:repeating-linear-gradient(90deg,
+      rgba(255,255,255,.05) 0 1px, rgba(0,0,0,.05) 1px 2px, transparent 2px 4px);
+    mix-blend-mode:soft-light;
+  }
+  /* one light source, so the cloth has a near side and a far side */
+  .sadu-sheen{
+    position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:linear-gradient(118deg,
+      rgba(255,238,214,.13), transparent 40%, transparent 60%, rgba(0,0,0,.34));
+    mix-blend-mode:overlay;
+  }
   /* keeps the weave off the reading column */
   .sadu-veil{
     position:fixed;inset:0;z-index:0;pointer-events:none;
     background:
       radial-gradient(72% 55% at 50% 45%, rgba(30,11,14,.94), rgba(30,11,14,.66) 60%, rgba(30,11,14,.34) 100%);
   }
-  /* a woven strip, used where a rule would otherwise sit */
-  .sadu-rule{position:relative;z-index:1;height:40px;overflow:hidden}
-  .sadu-rule svg{width:100%;height:40px;display:block}
+  /* a woven strip, raised off the page like a band sewn on */
+  .sadu-rule{
+    position:relative;z-index:1;height:44px;overflow:hidden;
+    box-shadow:
+      inset 0 1px 0 rgba(255,233,201,.22),
+      inset 0 -1px 0 rgba(0,0,0,.55),
+      0 8px 18px -8px rgba(0,0,0,.85);
+  }
+  .sadu-rule svg{width:100%;height:44px;display:block}
+  /* the curve of a band lying over the surface */
+  .sadu-rule::after{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(180deg,
+      rgba(255,238,214,.16), transparent 34%, transparent 62%, rgba(0,0,0,.38));
+  }
 
   .wrap{max-width:1080px;margin:0 auto;padding-inline:var(--pad)}
   header,section,footer{position:relative;z-index:1}
