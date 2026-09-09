@@ -194,6 +194,64 @@
   #drinks .dish:hover{background:rgba(122,47,99,.14)}
 
 
+  /* ── feedback ─────────────────────────────────────── */
+  .feedback{background:rgba(43,17,20,.72)}
+  .fb-in{display:grid;gap:clamp(1.5rem,4vw,3rem);grid-template-columns:minmax(0,1fr)}
+  @media (min-width:56rem){
+    .fb-in{grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);align-items:start}
+  }
+  .fb-in h2{font-size:clamp(1.8rem,4vw,2.5rem);margin-block:.4rem .7rem}
+  .fb-in .intro{margin:0;color:var(--cream-dim);max-width:42ch}
+
+  .fb-form{display:grid;gap:1rem}
+  .fb-form label.field{display:grid;gap:.35rem}
+  .fb-form .lab{
+    font-family:var(--body);font-size:.7rem;font-weight:700;
+    letter-spacing:.18em;text-transform:uppercase;color:var(--brass);
+  }
+  .fb-form input[type=text],
+  .fb-form textarea{
+    font-family:var(--body);font-size:1rem;color:var(--cream);
+    background:rgba(8,3,5,.5);border:1px solid var(--line-strong);
+    border-radius:2px;padding:.7rem .8rem;width:100%;
+    transition:border-color .18s ease,background-color .18s ease;
+  }
+  .fb-form textarea{resize:vertical;min-height:7.5rem;line-height:1.55}
+  .fb-form input[type=text]:focus,
+  .fb-form textarea:focus{
+    outline:none;border-color:var(--brass);background:rgba(8,3,5,.72);
+  }
+  .fb-form input::placeholder,.fb-form textarea::placeholder{color:#8B7568}
+
+  /* rating: radios in reverse DOM order, flipped back by row-reverse,
+     so hovering or checking one star fills every star to its left */
+  .stars{border:0;margin:0;padding:0;display:grid;gap:.35rem}
+  .stars legend{
+    padding:0;font-family:var(--body);font-size:.7rem;font-weight:700;
+    letter-spacing:.18em;text-transform:uppercase;color:var(--brass);
+  }
+  .star-row{display:flex;flex-direction:row-reverse;justify-content:flex-end;gap:.15rem}
+  .star-row input{position:absolute;opacity:0;width:1px;height:1px}
+  .star-row label{
+    font-size:1.6rem;line-height:1;cursor:pointer;color:#5A4238;
+    padding:.1rem;transition:color .15s ease,transform .15s ease;
+  }
+  .star-row label:hover,
+  .star-row label:hover ~ label,
+  .star-row input:checked + label,
+  .star-row input:checked ~ label{color:var(--brass)}
+  .star-row label:hover{transform:scale(1.12)}
+  .star-row input:focus-visible + label{outline:2px solid var(--brass);outline-offset:2px}
+
+  .fb-form .send{justify-self:start;border:0;cursor:pointer}
+  .fb-alt{margin:0;color:var(--cream-dim);font-size:.9rem}
+  .fb-alt a{color:var(--cream);border-bottom:1px solid var(--line-strong);text-decoration:none}
+  .fb-alt a:hover{color:var(--brass);border-color:var(--brass)}
+  .fb-said{
+    margin:0;padding:.7rem .9rem;font-size:.92rem;color:var(--cream);
+    border-left:2px solid var(--brass);background:rgba(201,143,60,.1);
+  }
+
   /* ── find us ──────────────────────────────────────── */
   .find-in{
     display:grid;gap:clamp(1.5rem,4vw,3rem);

@@ -313,6 +313,43 @@
   </div>
 </section>
 
+<section class="band feedback" id="feedback">
+  <div class="wrap fb-in">
+    <div>
+      <p class="kicker">Feedback</p>
+      <h2>Tell Sara how we did.</h2>
+      <p class="intro">She reads these herself. If a dish was not right, say so plainly &mdash; that is how it gets fixed. If it reminded you of home, she would like to know that too.</p>
+    </div>
+
+    <form class="fb-form" id="fb-form" action="mailto:darseen24@gmail.com" method="post" enctype="text/plain">
+      <label class="field">
+        <span class="lab">Your name <span style="text-transform:none;letter-spacing:0;font-weight:400">(optional)</span></span>
+        <input type="text" name="name" id="fb-name" autocomplete="name" placeholder="Who are we thanking?">
+      </label>
+
+      <fieldset class="stars">
+        <legend>How was it?</legend>
+        <div class="star-row">
+          <input type="radio" name="rating" id="fb-r5" value="5"><label for="fb-r5" title="5 out of 5">&#9733;</label>
+          <input type="radio" name="rating" id="fb-r4" value="4"><label for="fb-r4" title="4 out of 5">&#9733;</label>
+          <input type="radio" name="rating" id="fb-r3" value="3"><label for="fb-r3" title="3 out of 5">&#9733;</label>
+          <input type="radio" name="rating" id="fb-r2" value="2"><label for="fb-r2" title="2 out of 5">&#9733;</label>
+          <input type="radio" name="rating" id="fb-r1" value="1"><label for="fb-r1" title="1 out of 5">&#9733;</label>
+        </div>
+      </fieldset>
+
+      <label class="field">
+        <span class="lab">Your feedback</span>
+        <textarea name="message" id="fb-message" rows="5" required placeholder="What did you eat, and how was it?"></textarea>
+      </label>
+
+      <button class="btn send" type="submit">Send feedback</button>
+      <p class="fb-alt">Prefer to type it on your phone? Send it on <a href="https://wa.me/447775962211" target="_blank" rel="noopener">WhatsApp</a> instead.</p>
+      <p class="fb-said" id="fb-said" hidden></p>
+    </form>
+  </div>
+</section>
+
 <section class="band find" id="find">
   <div class="wrap find-in">
     <h2>Find us</h2>
@@ -360,5 +397,6 @@
     <span>Ingredients shipped from Kuwait</span>
   </div>
 </footer>
+<script src="feedback.js" defer></script>
 </body>
 </html>

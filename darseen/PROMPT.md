@@ -9,7 +9,8 @@ system and the content, so a fresh build lands in the same place.
 
 Build a one-page website for **Darseen** (دار سين), a Kuwaiti restaurant inside
 the Manchester Shopping Centre, Manchester, UK. Single static HTML page with a
-separate stylesheet. No JavaScript, no build step, no frameworks.
+separate stylesheet, no build step and no frameworks. The only JavaScript
+is one small file that hands the feedback form to the customer's mail app.
 
 The restaurant is owned and run by **Sara Shamsah** (سارة شمساه), a Kuwaiti
 mother who cooks for the dining room the way she cooks for her own children.
@@ -76,9 +77,11 @@ price moves up beside the name and the description drops underneath.
    salads → حلو (sweet) → drinks.
 6. **Meal subscriptions** — three tiers (Lean / Performance / Balanced) plus a
    three-step how-it-works.
-7. **Find us** — address, dining in, opening hours with the after-hours note,
+7. **Feedback** — name, a five-star rating and a message, which opens the
+   customer's mail app addressed to Sara; WhatsApp offered as an alternative.
+8. **Find us** — address, dining in, opening hours with the after-hours note,
    contact.
-8. **Sadu divider band**, then footer.
+9. **Sadu divider band**, then footer.
 
 ## Menu content
 
