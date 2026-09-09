@@ -161,15 +161,25 @@
 
   .dishes{list-style:none;margin:1.1rem 0 0;padding:0;display:grid;gap:.35rem}
   .dish{
-    display:grid;grid-template-columns:minmax(0,15rem) minmax(0,1fr) auto;
-    gap:.25rem clamp(1rem,3vw,2.5rem);align-items:baseline;
+    display:grid;
+    grid-template-columns:4.75rem minmax(0,14rem) minmax(0,1fr) auto;
+    gap:.25rem clamp(.9rem,2.4vw,2rem);align-items:baseline;
     padding:.85rem .75rem;margin-inline:-.75rem;
     border-radius:2px;transition:background-color .18s ease;
   }
-  .dish .name{grid-column:1;grid-row:1}
-  .dish p{grid-column:2;grid-row:1}
+  /* the dish itself, cut to a circle so it sits on the cloth */
+  .dish .shot{
+    grid-column:1;grid-row:1;align-self:center;
+    width:4.25rem;height:4.25rem;border-radius:50%;
+    object-fit:cover;display:block;
+    filter:drop-shadow(0 8px 16px rgba(0,0,0,.6));
+    transition:transform .2s ease;
+  }
+  .dish:hover .shot{transform:scale(1.06)}
+  .dish .name{grid-column:2;grid-row:1}
+  .dish p{grid-column:3;grid-row:1}
   .dish .price{
-    grid-column:3;grid-row:1;justify-self:end;white-space:nowrap;
+    grid-column:4;grid-row:1;justify-self:end;white-space:nowrap;
     display:grid;justify-items:end;gap:.12rem;
     font-family:var(--display);font-size:1.1rem;color:var(--brass);
     font-variant-numeric:tabular-nums;
@@ -352,9 +362,11 @@
 
   @media (max-width:46rem){
     .hero-in{grid-template-columns:minmax(0,1fr);text-align:left}
-    .dish{grid-template-columns:minmax(0,1fr) auto}
-    .dish p{grid-column:1/-1;grid-row:2}
-    .dish .price{grid-column:2}
+    .dish{grid-template-columns:3.9rem minmax(0,1fr) auto}
+    .dish .shot{grid-row:1/3;align-self:start;width:3.4rem;height:3.4rem}
+    .dish .name{grid-column:2}
+    .dish p{grid-column:2/-1;grid-row:2}
+    .dish .price{grid-column:3}
     .course-head{flex-wrap:wrap}
     .course-head .ar{margin-inline-start:0}
   }
