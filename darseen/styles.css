@@ -101,11 +101,49 @@
     padding-block:clamp(2.5rem,6vw,4.5rem);
   }
 
-  /* the Darseen mark, embedded so it travels with the page */
+  /* the Darseen mark as a coin, turning slowly on its own axis */
   .mark{
-    width:clamp(150px,21vw,210px);height:auto;aspect-ratio:1;
-    display:block;border-radius:50%;
+    width:clamp(150px,21vw,210px);aspect-ratio:1;
+    perspective:900px;display:block;
+  }
+  .coin{
+    position:relative;width:100%;height:100%;
+    transform-style:preserve-3d;
+    animation:coin-turn 16s linear infinite;
+  }
+  .mark:hover .coin{animation-duration:4s}
+  .coin .face{
+    position:absolute;inset:0;border-radius:50%;
+    backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  }
+  .coin .front{
+    width:100%;height:100%;object-fit:contain;display:block;
     filter:drop-shadow(0 24px 46px rgba(0,0,0,.55));
+  }
+  /* the reverse: the wordmark struck into the metal */
+  .coin .back{
+    transform:rotateY(180deg);
+    background:
+      radial-gradient(120% 120% at 32% 24%, #6d2b32, #4a1c21 62%, #3a151a);
+    box-shadow:
+      inset 0 0 0 2px rgba(201,143,60,.5),
+      inset 0 12px 30px rgba(255,231,196,.10),
+      inset 0 -14px 30px rgba(0,0,0,.5),
+      0 24px 46px rgba(0,0,0,.55);
+    display:grid;place-content:center;gap:.45rem;text-align:center;
+  }
+  .coin .back .ar{
+    font-family:var(--arabic);font-size:clamp(2rem,4.4vw,2.9rem);
+    line-height:1;color:#F6E7D2;
+    text-shadow:0 1px 0 rgba(0,0,0,.45), 0 -1px 0 rgba(255,235,205,.25);
+  }
+  .coin .back .la{
+    font-family:var(--body);font-size:clamp(.5rem,.95vw,.6rem);
+    letter-spacing:.44em;text-indent:.44em;color:rgba(201,143,60,.95);
+  }
+  @keyframes coin-turn{from{transform:rotateY(0)}to{transform:rotateY(360deg)}}
+  @media (prefers-reduced-motion:reduce){
+    .coin{animation:none}
   }
 
   .hero h1{
