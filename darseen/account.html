@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Your account &mdash; Darseen</title>
+<meta name="description" content="Order from Darseen, give your table number, and manage your meal plan.">
+<meta name="color-scheme" content="dark">
+<meta name="robots" content="noindex">
+<link rel="icon" href="darseen-logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&family=Karla:wght@400;500;700&family=Amiri:wght@400;700&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="account">
+
+<header class="acc-top">
+  <a class="acc-brand" href="index.html">
+    <img src="darseen-logo.png" alt="" width="56" height="56">
+    <span>
+      <strong>Darseen</strong>
+      <small>Kuwaiti kitchen &middot; Manchester</small>
+    </span>
+  </a>
+  <nav class="acc-nav">
+    <a href="index.html#menu">Menu</a>
+    <button type="button" id="sign-out" hidden>Sign out</button>
+  </nav>
+</header>
+
+<main class="acc-wrap">
+
+  <!-- signed out -->
+  <section id="gate" class="acc-gate">
+    <div class="acc-intro">
+      <p class="kicker">Your account</p>
+      <h1>Order ahead, and tell us where you are sitting.</h1>
+      <p class="intro">An account keeps your name and number so you do not type them every time, and keeps your past orders in one place. It takes a minute to make.</p>
+    </div>
+
+    <div class="acc-cards">
+      <form class="acc-card" id="signin-form">
+        <h2>Sign in</h2>
+        <label class="field"><span class="lab">Email</span>
+          <input type="email" name="email" autocomplete="email" required></label>
+        <label class="field"><span class="lab">Password</span>
+          <input type="password" name="password" autocomplete="current-password" required></label>
+        <button class="btn" type="submit">Sign in</button>
+        <p class="msg" data-msg hidden></p>
+      </form>
+
+      <form class="acc-card" id="signup-form">
+        <h2>Create an account</h2>
+        <label class="field"><span class="lab">Name</span>
+          <input type="text" name="full_name" autocomplete="name" required></label>
+        <label class="field"><span class="lab">Phone</span>
+          <input type="tel" name="phone" autocomplete="tel" placeholder="07…"></label>
+        <label class="field"><span class="lab">Email</span>
+          <input type="email" name="email" autocomplete="email" required></label>
+        <label class="field"><span class="lab">Password</span>
+          <input type="password" name="password" autocomplete="new-password" minlength="8" required>
+          <small class="hint">At least 8 characters.</small></label>
+        <button class="btn" type="submit">Create account</button>
+        <p class="msg" data-msg hidden></p>
+      </form>
+    </div>
+  </section>
+
+  <!-- signed in -->
+  <section id="app" class="acc-app" hidden>
+    <p class="kicker">Signed in as <span id="who"></span></p>
+
+    <section class="acc-panel">
+      <h2>Order</h2>
+      <ul class="order-list" id="order-list">
+        <li class="loading">Loading the menu…</li>
+      </ul>
+
+      <div class="order-meta">
+        <fieldset class="choice">
+          <legend>Where are you eating?</legend>
+          <label><input type="radio" name="order_type" value="dine_in" checked> Eating in</label>
+          <label><input type="radio" name="order_type" value="collection"> Collecting</label>
+        </fieldset>
+
+        <label class="field" id="table-field"><span class="lab">Table number</span>
+          <input type="text" id="table-number" inputmode="numeric" maxlength="10" placeholder="e.g. 7">
+        </label>
+
+        <fieldset class="choice">
+          <legend>Paying by</legend>
+          <label><input type="radio" name="payment" value="cash" checked> Cash</label>
+          <label><input type="radio" name="payment" value="card"> Card</label>
+          <label><input type="radio" name="payment" value="apple_pay"> Apple&nbsp;Pay</label>
+        </fieldset>
+
+        <label class="field"><span class="lab">Anything we should know?</span>
+          <textarea id="order-notes" rows="2" placeholder="Allergies, no chilli, extra daqoos…"></textarea>
+        </label>
+      </div>
+
+      <p class="pay-note">Payment is taken at the table when the food comes, or at the till if you are collecting. Nothing is charged now.</p>
+
+      <div class="order-foot">
+        <span class="total">Total <strong id="order-total">&pound;0.00</strong></span>
+        <button class="btn" type="button" id="place-order" disabled>Place order</button>
+      </div>
+      <p class="msg" id="order-msg" hidden></p>
+    </section>
+
+    <section class="acc-panel">
+      <h2>Meal plan</h2>
+      <p class="intro">Tell us which plan suits you and Sara will call to set the macros and the price with you.</p>
+      <form id="plan-form" class="plan-form">
+        <label class="field"><span class="lab">Plan</span>
+          <select name="plan" required>
+            <option value="lean">Lean &mdash; diet and cutting</option>
+            <option value="performance">Performance &mdash; training</option>
+            <option value="balanced">Balanced &mdash; everyday</option>
+          </select></label>
+        <label class="field"><span class="lab">Start from</span>
+          <input type="date" name="starts_on"></label>
+        <label class="field"><span class="lab">Your target, and anything you will not eat</span>
+          <textarea name="notes" rows="3" placeholder="Training five days a week, no seafood…"></textarea></label>
+        <button class="btn" type="submit">Request this plan</button>
+        <p class="msg" data-msg hidden></p>
+      </form>
+    </section>
+
+    <section class="acc-panel">
+      <h2>Your orders</h2>
+      <ul class="past" id="past-orders"><li class="loading">Loading…</li></ul>
+    </section>
+  </section>
+</main>
+
+<footer class="acc-foot">
+  <span>Darseen &mdash; Kuwaiti kitchen, Manchester</span>
+  <span class="ar" dir="rtl" lang="ar">دار سين</span>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0/dist/umd/supabase.min.js"></script>
+<script src="account.js" defer></script>
+</body>
+</html>

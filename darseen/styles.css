@@ -408,3 +408,132 @@
     .course-head .ar{margin-inline-start:0}
   }
   @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+  /* ── the account page ─────────────────────────────────── */
+  body.account{background:var(--ground)}
+  .account .acc-top{
+    display:flex;flex-wrap:wrap;gap:1rem;align-items:center;justify-content:space-between;
+    max-width:1080px;margin:0 auto;padding:1.25rem var(--pad);
+    border-bottom:1px solid var(--line);
+  }
+  .acc-brand{display:flex;gap:.8rem;align-items:center;text-decoration:none;color:var(--cream)}
+  .acc-brand img{border-radius:50%;display:block}
+  .acc-brand strong{font-family:var(--display);font-weight:400;font-size:1.25rem;display:block}
+  .acc-brand small{color:var(--cream-dim);font-size:.78rem}
+  .acc-nav{display:flex;gap:1rem;align-items:center}
+  .acc-nav a,.acc-nav button{
+    font-family:var(--body);font-size:.72rem;font-weight:700;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--brass);background:none;border:0;
+    text-decoration:none;cursor:pointer;padding:.4rem 0;
+  }
+  .acc-nav a:hover,.acc-nav button:hover{color:var(--cream)}
+
+  .acc-wrap{max-width:1080px;margin:0 auto;padding:clamp(2rem,5vw,3.5rem) var(--pad) 4rem}
+  .acc-intro h1{font-size:clamp(1.9rem,4.5vw,2.8rem);margin-block:.4rem .7rem}
+  .acc-intro .intro,.acc-app .intro{margin:0;color:var(--cream-dim);max-width:52ch}
+
+  .acc-cards{
+    display:grid;gap:1rem;margin-top:2rem;
+    grid-template-columns:repeat(auto-fit,minmax(17rem,1fr));
+  }
+  .acc-card{
+    border:1px solid var(--line);background:rgba(244,234,219,.03);
+    padding:clamp(1.25rem,3vw,1.75rem);display:grid;gap:.9rem;align-content:start;
+  }
+  .acc-card h2{font-size:1.35rem}
+  .acc-card .btn{justify-self:start;border:0;cursor:pointer}
+
+  .field .hint{color:var(--cream-dim);font-size:.78rem}
+  .acc-wrap input[type=text],.acc-wrap input[type=email],.acc-wrap input[type=tel],
+  .acc-wrap input[type=password],.acc-wrap input[type=date],
+  .acc-wrap textarea,.acc-wrap select{
+    font-family:var(--body);font-size:1rem;color:var(--cream);width:100%;
+    background:rgba(8,3,5,.5);border:1px solid var(--line-strong);border-radius:2px;
+    padding:.7rem .8rem;
+  }
+  .acc-wrap textarea{resize:vertical;line-height:1.55}
+  .acc-wrap input:focus,.acc-wrap textarea:focus,.acc-wrap select:focus{
+    outline:none;border-color:var(--brass);background:rgba(8,3,5,.72);
+  }
+
+  .msg{margin:0;font-size:.9rem;color:var(--brass)}
+  .msg.bad{color:#F0A5A5}
+
+  .acc-app{display:grid;gap:clamp(1.5rem,4vw,2.5rem)}
+  .acc-panel{
+    border:1px solid var(--line);background:rgba(43,17,20,.55);
+    padding:clamp(1.25rem,3vw,2rem);display:grid;gap:1rem;
+  }
+  .acc-panel h2{font-size:clamp(1.4rem,3vw,1.8rem)}
+
+  .order-list{list-style:none;margin:0;padding:0;display:grid}
+  .order-row{
+    display:grid;grid-template-columns:minmax(0,1fr) auto auto;
+    gap:.5rem 1rem;align-items:center;
+    padding:.7rem 0;border-top:1px solid var(--line-soft,rgba(244,234,219,.09));
+  }
+  .order-row:first-child{border-top:0}
+  .or-name{font-family:var(--display);font-size:1.08rem}
+  .or-name .ar{font-family:var(--arabic);color:var(--brass);font-size:.95rem;margin-inline-start:.5rem}
+  .or-price{font-family:var(--display);color:var(--brass);font-variant-numeric:tabular-nums}
+  .qty{display:flex;align-items:center;gap:.4rem}
+  .qty button{
+    width:2rem;height:2rem;border:1px solid var(--line-strong);background:transparent;
+    color:var(--cream);font-size:1rem;cursor:pointer;border-radius:2px;
+  }
+  .qty button:hover{border-color:var(--brass);color:var(--brass)}
+  .qty output{min-width:1.5rem;text-align:center;font-variant-numeric:tabular-nums}
+
+  .order-meta{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(14rem,1fr))}
+  .choice{border:0;margin:0;padding:0;display:grid;gap:.4rem}
+  .choice legend{
+    padding:0;font-family:var(--body);font-size:.7rem;font-weight:700;
+    letter-spacing:.18em;text-transform:uppercase;color:var(--brass);
+  }
+  .choice label{display:flex;gap:.5rem;align-items:center;color:var(--cream);font-size:.95rem}
+  .choice input{accent-color:var(--brass)}
+
+  .pay-note{
+    margin:0;padding:.7rem .9rem;font-size:.88rem;color:var(--cream-dim);
+    border-left:2px solid var(--brass);background:rgba(201,143,60,.08);
+  }
+  .order-foot{display:flex;flex-wrap:wrap;gap:1rem;align-items:center;justify-content:space-between}
+  .order-foot .total{font-size:.95rem;color:var(--cream-dim)}
+  .order-foot .total strong{
+    font-family:var(--display);font-size:1.5rem;color:var(--brass);font-weight:400;
+    margin-inline-start:.4rem;font-variant-numeric:tabular-nums;
+  }
+  .order-foot .btn{border:0;cursor:pointer}
+  .order-foot .btn:disabled{opacity:.45;cursor:not-allowed}
+
+  .plan-form{display:grid;gap:.9rem;max-width:34rem}
+  .plan-form .btn{justify-self:start;border:0;cursor:pointer}
+
+  .past{list-style:none;margin:0;padding:0;display:grid}
+  .past li{
+    display:grid;gap:.3rem 1rem;align-items:baseline;
+    grid-template-columns:auto minmax(0,1fr) auto auto auto;
+    padding:.7rem 0;border-top:1px solid rgba(244,234,219,.09);font-size:.92rem;
+  }
+  .past li:first-child{border-top:0}
+  .past .when{color:var(--cream-dim);font-variant-numeric:tabular-nums}
+  .past .where{color:var(--cream-dim)}
+  .past .status{
+    font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+    color:#231014;background:var(--brass);padding:.1rem .45rem;border-radius:2px;
+  }
+  .past .status.cancelled{background:#7A2F63;color:#F4EADB}
+  .past .sum{font-family:var(--display);color:var(--brass);font-variant-numeric:tabular-nums}
+  .loading{color:var(--cream-dim);padding:.7rem 0}
+
+  .acc-foot{
+    max-width:1080px;margin:0 auto;padding:1.5rem var(--pad) 3rem;
+    display:flex;flex-wrap:wrap;gap:1rem;justify-content:space-between;
+    border-top:1px solid var(--line);color:var(--cream-dim);font-size:.85rem;
+  }
+  .acc-foot .ar{font-family:var(--arabic);color:var(--brass)}
+
+  @media (max-width:46rem){
+    .past li{grid-template-columns:minmax(0,1fr) auto}
+    .past .when{grid-column:1/-1}
+  }
