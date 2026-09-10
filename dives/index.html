@@ -467,7 +467,7 @@ a:focus-visible{outline:2px solid var(--brass);outline-offset:3px}
 
         <div class="model">
           <div class="stage" data-scene="khiran"><canvas></canvas></div>
-          <div class="cap"><span><b>Drag to turn</b> &middot; seawater canals cut into desert</span><span>~200 km of new shoreline</span></div>
+          <div class="cap"><span><b>Drag to turn</b> &middot; the resort strip: block, lawns, beach</span><span>Modelled from the resort</span></div>
         </div>
 
         <p>The strangest thing on this list, and the most Kuwaiti. South of the city, where the
@@ -914,32 +914,67 @@ a:focus-visible{outline:2px solid var(--brass);outline-offset:3px}
     return new THREE.CanvasTexture(c);
   }
 
-  /* Painted texture: rendered wall damage for the Qurain house. */
-  function scarredTexture() {
+  /* Painted texture: the house's yellow brick, then what was done to it.
+     Kept deliberately plain — pitting, coursing, and the open cavities. */
+  function brickTexture(damaged) {
     var c = document.createElement('canvas');
     c.width = 512; c.height = 512;
     var x = c.getContext('2d');
-    x.fillStyle = '#CBB795';
+    x.fillStyle = '#C4A97A';                       // mortar bed
     x.fillRect(0, 0, c.width, c.height);
-    var i, r, px, py;
-    for (i = 0; i < 900; i++) {          // grain
-      x.fillStyle = 'rgba(150,130,100,' + (Math.random() * 0.12) + ')';
-      x.fillRect(Math.random() * 512, Math.random() * 512, 3, 3);
+
+    var bw = 34, bh = 17, i, j, px, py, r;
+    for (j = 0; j * bh < 512 + bh; j++) {
+      for (i = -1; i * bw < 512 + bw; i++) {
+        var bx = i * bw + (j % 2 ? bw / 2 : 0);
+        var tone = 224 + ((i * 13 + j * 7) % 9) * 3;
+        x.fillStyle = 'rgb(' + tone + ',' + Math.round(tone * 0.88) + ',' + Math.round(tone * 0.62) + ')';
+        x.fillRect(bx + 1.2, j * bh + 1.2, bw - 2.4, bh - 2.4);
+      }
     }
-    for (i = 0; i < 260; i++) {          // small-arms pitting
-      px = Math.random() * 512; py = Math.random() * 512; r = 2 + Math.random() * 4;
-      x.beginPath(); x.arc(px, py, r * 1.5, 0, Math.PI * 2);
-      x.fillStyle = 'rgba(236,225,205,.5)'; x.fill();
-      x.beginPath(); x.arc(px, py, r, 0, Math.PI * 2);
-      x.fillStyle = 'rgba(58,46,34,.85)'; x.fill();
+    for (i = 0; i < 700; i++) {                    // dust and weathering
+      x.fillStyle = 'rgba(168,142,96,' + (Math.random() * 0.13) + ')';
+      x.fillRect(Math.random() * 512, Math.random() * 512, 4, 3);
     }
-    for (i = 0; i < 4; i++) {            // shell cavities
-      px = 60 + Math.random() * 390; py = 60 + Math.random() * 390; r = 16 + Math.random() * 16;
-      x.beginPath(); x.arc(px, py, r * 1.6, 0, Math.PI * 2);
-      x.fillStyle = 'rgba(214,198,172,.75)'; x.fill();
-      x.beginPath(); x.arc(px, py, r, 0, Math.PI * 2);
-      x.fillStyle = 'rgba(34,26,20,.92)'; x.fill();
+
+    if (damaged) {
+      for (i = 0; i < 320; i++) {                  // small-arms pitting
+        px = Math.random() * 512; py = Math.random() * 512; r = 1.6 + Math.random() * 3;
+        x.beginPath(); x.arc(px, py, r * 1.6, 0, Math.PI * 2);
+        x.fillStyle = 'rgba(226,208,168,.45)'; x.fill();
+        x.beginPath(); x.arc(px, py, r, 0, Math.PI * 2);
+        x.fillStyle = 'rgba(52,40,28,.88)'; x.fill();
+      }
+      for (i = 0; i < 5; i++) {                    // cavities where shells came through
+        px = 70 + Math.random() * 370; py = 70 + Math.random() * 370;
+        r = 18 + Math.random() * 20;
+        x.beginPath(); x.arc(px, py, r * 1.7, 0, Math.PI * 2);
+        x.fillStyle = 'rgba(205,184,142,.7)'; x.fill();
+        x.beginPath();                             // ragged, not circular
+        for (j = 0; j <= 14; j++) {
+          var a = (j / 14) * Math.PI * 2, rr = r * (0.72 + Math.random() * 0.5);
+          x[j ? 'lineTo' : 'moveTo'](px + Math.cos(a) * rr, py + Math.sin(a) * rr);
+        }
+        x.closePath();
+        x.fillStyle = 'rgba(28,22,16,.94)'; x.fill();
+      }
     }
+    var t = new THREE.CanvasTexture(c);
+    t.wrapS = t.wrapT = THREE.RepeatWrapping;
+    return t;
+  }
+
+  /* The flag, painted rather than imported. */
+  function flagTexture() {
+    var c = document.createElement('canvas');
+    c.width = 120; c.height = 60;
+    var x = c.getContext('2d');
+    x.fillStyle = '#007A3D'; x.fillRect(0, 0, 120, 20);
+    x.fillStyle = '#FFFFFF'; x.fillRect(0, 20, 120, 20);
+    x.fillStyle = '#CE1126'; x.fillRect(0, 40, 120, 20);
+    x.fillStyle = '#000000';
+    x.beginPath(); x.moveTo(0, 0); x.lineTo(34, 20); x.lineTo(34, 40); x.lineTo(0, 60);
+    x.closePath(); x.fill();
     return new THREE.CanvasTexture(c);
   }
 
@@ -986,43 +1021,151 @@ a:focus-visible{outline:2px solid var(--brass);outline-offset:3px}
   }
 
   /* -- 10 · Al Qurain Martyrs Museum -------------------------------- */
+  /* The house as it stands: yellow brick, two floors and part of a
+     third, walls opened up and the top courses left ragged, behind its
+     boundary wall and railings, with the minaret beyond it.
+     No lettering is reproduced on the wall. */
   function buildQurain(scene) {
     var g = new THREE.Group();
-    var wallTex = scarredTexture();
-    var wall = new THREE.MeshStandardMaterial({ map: wallTex, roughness: 0.95 });
-    var trim = mat(0xB9A585, 0.95);
-    var dark = mat(0x1A1712, 1);
 
-    var ground = new THREE.Mesh(new THREE.CircleGeometry(11, 40), mat(0x6E6146, 1));
-    ground.rotation.x = -Math.PI / 2;
-    g.add(put(ground, 0, 0, 0));
+    var hurt = brickTexture(true);
+    hurt.repeat.set(2.2, 1.4);
+    var plain = brickTexture(false);
+    plain.repeat.set(3.4, 1.0);
 
-    // ground floor
-    var lower = box(6, 2.5, 4.4, wall); g.add(put(lower, 0, 1.25, 0));
-    // set-back upper floor
-    var upper = box(5.2, 2.2, 3.6, wall); g.add(put(upper, -0.3, 3.6, -0.1));
-    // roof slabs
-    g.add(put(box(6.3, 0.18, 4.7, trim), 0, 2.6, 0));
-    g.add(put(box(5.5, 0.18, 3.9, trim), -0.3, 4.78, -0.1));
+    var wallM = new THREE.MeshStandardMaterial({ map: hurt, roughness: 0.96 });
+    var fenceWallM = new THREE.MeshStandardMaterial({ map: plain, roughness: 0.96 });
+    var slabM = mat(0xC2AE84, 0.95);
+    var dark = mat(0x14110D, 1);
+    var steel = mat(0x1C1C1E, 0.6, 0.4);
 
-    // openings, deliberately plain
-    [[-1.9, 1.5, 2.21], [0.2, 1.5, 2.21], [2.0, 1.5, 2.21]].forEach(function (p) {
-      g.add(put(box(0.9, 1.0, 0.06, dark), p[0], p[1], p[2]));
+    /* deterministic jitter — the crest must not shimmer between frames */
+    function rnd(i) { var v = Math.sin(i * 127.1) * 43758.5453; return v - Math.floor(v); }
+
+    /* broken masonry left standing around the top of a wall — a rim
+       following the four edges, not a slab across the whole roof */
+    function crest(cx, y, cz, w, d, seed) {
+      var band = 0.4, step = 0.38, i, f, hgt, n;
+      function blk(bw, bd, bx, bz, i2) {
+        f = rnd(i2 + seed);
+        if (f < 0.34) return;                         // courses gone entirely
+        hgt = 0.06 + f * 0.36;
+        g.add(put(box(bw, hgt, bd, wallM), bx, y + hgt / 2, bz));
+      }
+      n = Math.max(2, Math.round(w / step));
+      for (i = 0; i < n; i++) {
+        var bx = cx - w / 2 + (i + 0.5) * (w / n);
+        blk(w / n * 0.92, band, bx, cz - d / 2 + band / 2, i);
+        blk(w / n * 0.92, band, bx, cz + d / 2 - band / 2, i + 500);
+      }
+      n = Math.max(2, Math.round(d / step));
+      for (i = 1; i < n - 1; i++) {
+        var bz = cz - d / 2 + (i + 0.5) * (d / n);
+        blk(band, d / n * 0.92, cx - w / 2 + band / 2, bz, i + 900);
+        blk(band, d / n * 0.92, cx + w / 2 - band / 2, bz, i + 1300);
+      }
+    }
+
+    // ---- ground: lawn, paving, kerb, road ----------------------------
+    g.add(put(box(46, 0.4, 40, mat(0xC9B489, 1)), 0, -0.2, 0));
+    var lawn = new THREE.Mesh(new THREE.CircleGeometry(7.4, 44), mat(0x4E8F3A, 1));
+    lawn.rotation.x = -Math.PI / 2; lawn.scale.set(1.5, 1, 0.75);
+    g.add(put(lawn, 2.5, 0.03, 10.5));
+    g.add(put(box(30, 0.06, 1.7, mat(0xA9704F, 0.95)), 1, 0.05, 7.4));   // brick paving
+    g.add(put(box(34, 0.05, 7, mat(0x3A3A3C, 0.95)), 1, 0.04, 16.5));    // road
+    for (var k = 0; k < 30; k++) {                                        // painted kerb
+      g.add(put(box(0.9, 0.22, 0.3, mat(k % 2 ? 0xE8C93F : 0x1E1E1E, 0.9)),
+        -13 + k * 1.0, 0.11, 13.1));
+    }
+
+    // ---- the house ---------------------------------------------------
+    // lower floor, stepped: the left wing is lower than the main mass
+    g.add(put(box(10.5, 3.3, 8.0, wallM), 0, 1.65, 0));
+    g.add(put(box(4.6, 2.5, 5.6, wallM), -7.2, 1.25, -0.6));
+    g.add(put(box(10.9, 0.28, 8.4, slabM), 0, 3.42, 0));
+    g.add(put(box(5.0, 0.26, 6.0, slabM), -7.2, 2.62, -0.6));
+
+    // second floor, with the right-hand corner blown open
+    g.add(put(box(4.6, 2.9, 6.4, wallM), -2.9, 5.1, -0.3));
+    g.add(put(box(3.2, 2.9, 3.0, wallM), 2.6, 5.1, -2.1));
+    g.add(put(box(3.4, 0.26, 6.6, slabM), -2.9, 6.65, -0.3));
+    // the standing frame of the floor above
+    g.add(put(box(3.4, 2.3, 3.0, wallM), 1.4, 7.9, -2.2));
+    g.add(put(box(4.2, 0.3, 4.0, slabM), 1.2, 9.2, -1.8));
+    [[-0.5, -3.5], [-0.5, -0.7], [3.0, -3.5]].forEach(function (c) {
+      g.add(put(box(0.35, 2.3, 0.35, wallM), c[0], 7.9, c[1]));
     });
-    g.add(put(box(1.0, 1.9, 0.08, dark), -0.9, 0.95, 2.22));
-    [[-1.6, 3.7, 1.71], [0.6, 3.7, 1.71]].forEach(function (p) {
-      g.add(put(box(0.9, 1.0, 0.06, dark), p[0], p[1], p[2]));
+
+    // ragged tops
+    crest(0, 3.56, 0, 10.5, 8.0, 11);
+    crest(-7.2, 2.75, -0.6, 4.6, 5.6, 61);
+    crest(-2.9, 6.78, -0.3, 4.6, 6.4, 131);
+    crest(2.6, 6.55, -2.1, 3.2, 3.0, 191);
+
+    // openings and torn-out rooms
+    [[-3.6, 1.5, 4.02, 1.3, 1.5], [-1.1, 1.5, 4.02, 1.1, 1.4],
+     [1.9, 1.6, 4.02, 1.6, 1.9], [4.0, 1.4, 4.02, 1.0, 1.3],
+     [-3.4, 5.0, 2.92, 1.5, 1.7], [-1.4, 5.2, 2.92, 1.2, 2.0],
+     [2.4, 5.4, -0.58, 1.8, 1.9], [1.2, 8.0, -0.68, 2.0, 1.8],
+     [-7.4, 1.2, 2.22, 1.2, 1.3]].forEach(function (o) {
+      g.add(put(box(o[3], o[4], 0.12, dark), o[0], o[1], o[2]));
     });
 
-    // boundary wall
-    var bw = mat(0xC0AC8A, 0.95);
-    g.add(put(box(9.6, 0.9, 0.2, bw), 0, 0.45, 3.6));
-    g.add(put(box(9.6, 0.9, 0.2, bw), 0, 0.45, -3.6));
-    g.add(put(box(0.2, 0.9, 7.4, bw), 4.8, 0.45, 0));
-    g.add(put(box(0.2, 0.9, 7.4, bw), -4.8, 0.45, 0));
+    // ---- boundary wall and railings ----------------------------------
+    g.add(put(box(12.5, 3.0, 0.45, fenceWallM), 7.5, 1.5, 5.6));
+    g.add(put(box(12.7, 0.16, 0.55, mat(0xC2AE84, 0.9)), 7.5, 3.05, 5.6));
+    for (var e = 0; e < 5; e++) {                     // the torn end nearest the house
+      var eh = 0.9 + rnd(e + 77) * 1.6;
+      g.add(put(box(0.45, eh, 0.45, fenceWallM), 1.4 - e * 0.42, eh / 2, 5.6));
+    }
+    for (var b2 = 0; b2 < 42; b2++) {                 // vertical bar railing
+      g.add(put(box(0.06, 1.7, 0.06, steel), -12.5 + b2 * 0.32, 0.85, 5.6));
+    }
+    [[-12.6], [-9.4], [-6.2]].forEach(function (q2) {
+      g.add(put(box(0.22, 2.0, 0.22, steel), q2[0], 1.0, 5.6));
+    });
+    g.add(put(box(6.5, 0.09, 0.09, steel), -9.4, 1.68, 5.6));
+
+    // ---- flags --------------------------------------------------------
+    var flagT = flagTexture();
+    var flagM = new THREE.MeshStandardMaterial({ map: flagT, roughness: 0.8, side: THREE.DoubleSide });
+    function flag(x, y, z, h, w) {
+      g.add(put(new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.055, h, 7), mat(0xD8D6CE, 0.6, 0.2)),
+        x, y + h / 2, z));
+      var cloth = new THREE.Mesh(new THREE.PlaneGeometry(w, w * 0.5), flagM);
+      cloth.rotation.y = -0.25;
+      g.add(put(cloth, x + w / 2, y + h - w * 0.32, z));
+    }
+    flag(-4.6, 6.8, 0.5, 1.7, 0.9);
+    flag(3.6, 6.7, -2.0, 1.6, 0.85);
+    flag(0.4, 9.35, -1.9, 1.5, 0.8);
+    flag(11.5, 0.0, 4.4, 8.0, 2.0);                   // the tall pole beside the wall
+
+    // ---- the minaret behind the house ---------------------------------
+    var cream = mat(0xE8E0CC, 0.85);
+    g.add(put(box(10, 3.4, 8, mat(0xD9CFB4, 0.95)), 18, 1.7, -6));
+    g.add(put(new THREE.Mesh(new THREE.CylinderGeometry(0.62, 0.75, 8.5, 20), cream), 16.5, 4.25, -2.5));
+    var bal = new THREE.Mesh(new THREE.CylinderGeometry(0.95, 0.95, 0.7, 20), mat(0xDCD2BA, 0.9));
+    g.add(put(bal, 16.5, 8.2, -2.5));
+    g.add(put(new THREE.Mesh(new THREE.CylinderGeometry(0.45, 0.58, 2.6, 18), cream), 16.5, 9.8, -2.5));
+    g.add(put(new THREE.Mesh(new THREE.ConeGeometry(0.55, 1.4, 18), mat(0x2E6B4A, 0.7, 0.25)), 16.5, 11.7, -2.5));
+    g.add(put(new THREE.Mesh(new THREE.SphereGeometry(0.13, 10, 8), mat(0xC8A94E, 0.5, 0.5)), 16.5, 12.5, -2.5));
+
+    // ---- the low neighbours to the left --------------------------------
+    g.add(put(box(7, 2.6, 6, mat(0xCFC0A0, 0.95)), -16, 1.3, -2));
+    g.add(put(box(5, 2.2, 5, mat(0xD5C7A8, 0.95)), -21, 1.1, 2));
 
     scene.add(g);
-    return { group: g, target: new THREE.Vector3(0, 2.1, 0), dist: 15, tilt: 0.16 };
+    return {
+      group: g,
+      target: new THREE.Vector3(0.5, 3.2, 0.5),
+      dist: 26,
+      tilt: 0.10,
+      lift: 0.09,
+      yaw0: 0.26,
+      fog: [46, 120],
+      light: { hemi: 0.58, key: 1.05, rim: 0.16 }
+    };
   }
 
   /* -- 12 · Al Shaheed Park ----------------------------------------- */
@@ -1229,50 +1372,211 @@ a:focus-visible{outline:2px solid var(--brass);outline-offset:3px}
   }
 
   /* -- 06 · Khiran Resorts ------------------------------------------ */
+  /* The resort itself rather than the canals: the long sandstone block
+     with its fin-shaded balconies, lawns stepping down over brick
+     retaining walls to the promenade, the curved timber fence, then
+     beach, the rock groyne, and the sheltered water beyond. */
   function buildKhiran(scene) {
     var g = new THREE.Group();
 
-    var sand = new THREE.Mesh(new THREE.BoxGeometry(20, 0.6, 14), mat(0xC8AF83, 1));
-    g.add(put(sand, 0, -0.3, 0));
+    var C = {
+      sand:   0xE0CDA2,
+      beach:  0xDCC9A0,
+      lawn:   0x5D9445,
+      brick:  0xC59C55,
+      coping: 0x8A4A33,
+      paving: 0xB06A4E,
+      stone:  0xCBA47B,
+      stone2: 0xB98F66,
+      shade:  0x7E6045,
+      awning: 0x2E7A50,
+      white:  0xF6F5EF,
+      timber: 0xD8BC8C,
+      shallow:0x54C3C4,
+      deep:   0x1F7F97,
+      rock:   0x7C7568
+    };
+    function M(c, r, m) { return mat(c, r === undefined ? 0.92 : r, m || 0); }
 
-    var waterMat = new THREE.MeshStandardMaterial({
-      color: 0x2E8FA0, roughness: 0.18, metalness: 0.5
-    });
-    var chalet = mat(0xF0EADD, 0.85);
-    var roof = mat(0x2B6C7A, 0.7);
-    var boat = mat(0xF6F4EE, 0.6);
+    // ---- ground, water, beach -------------------------------------
+    g.add(put(box(40, 0.5, 42, M(C.sand, 1)), 0, -0.25, 0));
 
-    // four fingers of seawater cut into the desert, off one spine
-    var spine = box(19.4, 0.34, 1.5, waterMat);
-    g.add(put(spine, 0, -0.06, -4.6));
+    var deep = new THREE.Mesh(new THREE.PlaneGeometry(46, 34),
+      new THREE.MeshStandardMaterial({ color: C.deep, roughness: 0.16, metalness: 0.55 }));
+    deep.rotation.x = -Math.PI / 2;
+    g.add(put(deep, 24, 0.01, 0));
 
-    for (var k = 0; k < 4; k++) {
-      var cx = -6.6 + k * 4.4;
-      g.add(put(box(1.25, 0.34, 8.2, waterMat), cx, -0.06, -0.4));
+    var lagoon = new THREE.Mesh(new THREE.PlaneGeometry(16, 30),
+      new THREE.MeshStandardMaterial({ color: C.shallow, roughness: 0.12, metalness: 0.5 }));
+    lagoon.rotation.x = -Math.PI / 2;
+    g.add(put(lagoon, 12.5, 0.02, 1));
 
-      // chalets down both banks
-      for (var j = 0; j < 6; j++) {
-        var cz = -3.9 + j * 1.45;
-        [-1.35, 1.35].forEach(function (off) {
-          var h = 0.42 + Math.random() * 0.2;
-          g.add(put(box(0.95, h, 0.95, chalet), cx + off, h / 2, cz));
-          g.add(put(box(1.06, 0.08, 1.06, roof), cx + off, h + 0.04, cz));
-        });
-      }
-      // a boat tied up in the channel
-      var bz = -2.4 + Math.random() * 4;
-      var hull = new THREE.Mesh(new THREE.BoxGeometry(0.26, 0.12, 0.8), boat);
-      hull.rotation.y = 0.05;
-      g.add(put(hull, cx + (Math.random() - 0.5) * 0.5, 0.06, bz));
+    g.add(put(box(6.0, 0.16, 30, M(C.beach, 1)), 6.4, 0.06, 1));      // beach
+    g.add(put(box(3.2, 0.22, 30, M(C.paving, 0.95)), 2.5, 0.10, 1));  // promenade
+    g.add(put(box(3.2, 0.02, 30, M(0xC98A6C, 0.9)), 2.5, 0.215, 1));  // paving tone
+
+    // the rock groyne reaching into the water
+    for (var r = 0; r < 26; r++) {
+      var t = r / 25;
+      var rs = 0.22 + Math.random() * 0.26;
+      var rock = new THREE.Mesh(new THREE.DodecahedronGeometry(rs, 0), M(C.rock, 1));
+      rock.rotation.set(Math.random() * 3, Math.random() * 3, Math.random() * 3);
+      g.add(put(rock, 8.2 + t * 9.5, 0.1 + Math.random() * 0.12,
+                -9.5 - Math.sin(t * 1.5) * 2.6 + (Math.random() - 0.5) * 0.5));
     }
 
-    // open Gulf along the far edge
-    var gulf = new THREE.Mesh(new THREE.PlaneGeometry(34, 16), waterMat);
-    gulf.rotation.x = -Math.PI / 2;
-    g.add(put(gulf, 0, -0.09, -13.4));
+    // ---- terraced lawns, stepping down to the promenade ------------
+    function terrace(x, w, y, wallX) {
+      g.add(put(box(w, y, 26, M(C.lawn, 1)), x, y / 2, 0.5));
+      if (wallX !== undefined) {
+        g.add(put(box(0.3, y + 0.16, 26, M(C.brick, 0.95)), wallX, (y + 0.16) / 2, 0.5));
+        g.add(put(box(0.42, 0.1, 26, M(C.coping, 0.85)), wallX, y + 0.2, 0.5));
+      }
+    }
+    terrace(-3.4, 4.2, 0.62, -1.4);   // upper lawn, against the block
+    terrace(0.1, 2.8, 0.34, 1.0);     // lower lawn, above the promenade
+
+    // planting beds along the walls
+    for (var b = 0; b < 30; b++) {
+      var bz = -11.5 + b * 0.82;
+      var bush = new THREE.Mesh(new THREE.SphereGeometry(0.2, 7, 5), M(0x477A38, 1));
+      bush.scale.y = 0.65;
+      g.add(put(bush, -1.05, 0.72, bz));
+      if (b % 2) {
+        var bush2 = new THREE.Mesh(new THREE.SphereGeometry(0.17, 7, 5), M(0x568A3E, 1));
+        bush2.scale.y = 0.65;
+        g.add(put(bush2, 1.35, 0.44, bz));
+      }
+    }
+
+    // ---- the accommodation block -----------------------------------
+    var blk = new THREE.Group();
+    blk.add(put(box(4.4, 3.3, 24, M(C.stone, 0.95)), 0, 1.65, 0));
+    blk.add(put(box(4.7, 0.3, 24.3, M(C.stone2, 0.9)), 0, 3.4, 0));      // parapet
+    blk.add(put(box(0.25, 2.6, 23.6, M(C.shade, 1)), 2.16, 1.9, 0));     // shaded recess
+
+    for (var i = 0; i < 26; i++) {
+      var z = -11.6 + i * 0.93;
+      // the angled fins that shade every balcony bay
+      var fin = box(0.75, 2.5, 0.16, M(C.stone2, 0.9));
+      fin.rotation.y = 0.35;
+      blk.add(put(fin, 2.42, 1.95, z));
+      // ground-floor awnings
+      if (i % 2) blk.add(put(box(0.6, 0.1, 0.62, M(C.awning, 0.9)), 2.45, 0.95, z));
+      // roof vents
+      if (i % 3 === 0) blk.add(put(box(0.4, 0.28, 0.5, M(C.stone2, 0.9)), -0.4, 3.68, z));
+    }
+    // floor slabs reading across the fins
+    [1.18, 2.18].forEach(function (y) {
+      blk.add(put(box(0.9, 0.13, 23.6, M(C.stone, 0.85)), 2.3, y, 0));
+    });
+    g.add(put(blk, -6.2, 0, 0.5));
+
+    // ---- the curved timber fence between lawn and beach ------------
+    var fence = new THREE.Group(), timberM = M(C.timber, 0.9);
+    for (var f = 0; f < 96; f++) {
+      var ft = f / 95;
+      var fz = -12 + ft * 25;
+      var fx = 4.35 + Math.sin(ft * Math.PI) * 0.95;   // bows out toward the beach
+      fence.add(put(box(0.055, 0.5, 0.055, timberM), fx, 0.36, fz));
+      if (f % 12 === 0) fence.add(put(box(0.1, 0.66, 0.1, M(0xC9A876, 0.9)), fx, 0.44, fz));
+      if (f % 4 === 0 && f < 92) {                      // rails, chorded along the curve
+        var nz = -12 + ((f + 4) / 95) * 25;
+        var nx = 4.35 + Math.sin(((f + 4) / 95) * Math.PI) * 0.95;
+        [0.28, 0.46].forEach(function (ry) {
+          var rail = box(0.05, 0.05, Math.hypot(nx - fx, nz - fz), timberM);
+          rail.rotation.y = Math.atan2(nx - fx, nz - fz);
+          fence.add(put(rail, (fx + nx) / 2, ry, (fz + nz) / 2));
+        });
+      }
+    }
+    g.add(fence);
+
+    // ---- BBQ pillars ------------------------------------------------
+    function grill(x, z) {
+      g.add(put(box(0.55, 0.95, 0.55, M(0x8A4230, 0.95)), x, 1.05, z));
+      g.add(put(box(0.3, 1.0, 0.3, M(0x7A3A2A, 0.95)), x, 2.0, z));
+      g.add(put(box(0.66, 0.1, 0.66, M(0x5E2C20, 0.9)), x, 1.55, z));
+    }
+    grill(-0.75, 2.2);
+    grill(-0.75, -4.6);
+
+    // ---- garden furniture -------------------------------------------
+    var whiteM = M(C.white, 0.75);
+    function table(x, z) {
+      g.add(put(new THREE.Mesh(new THREE.CylinderGeometry(0.42, 0.42, 0.06, 18), whiteM), x, 0.98, z));
+      g.add(put(new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.09, 0.36, 8), whiteM), x, 0.8, z));
+      for (var c = 0; c < 4; c++) {
+        var a = c * Math.PI / 2 + 0.4;
+        var cx = x + Math.cos(a) * 0.72, cz = z + Math.sin(a) * 0.72;
+        g.add(put(box(0.34, 0.06, 0.34, whiteM), cx, 0.86, cz));
+        var back = box(0.34, 0.42, 0.06, whiteM);
+        back.rotation.y = -a;
+        g.add(put(back, cx + Math.cos(a) * 0.15, 1.08, cz + Math.sin(a) * 0.15));
+        for (var l = 0; l < 2; l++) {
+          g.add(put(box(0.04, 0.24, 0.04, whiteM),
+            cx + (l ? 0.13 : -0.13), 0.74, cz + (l ? 0.13 : -0.13)));
+        }
+      }
+    }
+    table(-3.2, 3.4); table(-4.2, 0.2); table(-2.9, -3.2); table(-4.0, -6.4);
+
+    // the parasol
+    g.add(put(new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.045, 1.6, 8), whiteM), -3.4, 1.45, 6.0));
+    var shade = new THREE.Mesh(new THREE.ConeGeometry(1.05, 0.42, 16), M(0xFBFAF4, 0.8));
+    g.add(put(shade, -3.4, 2.35, 6.0));
+
+    // ---- the buggy on the promenade ----------------------------------
+    var buggy = new THREE.Group();
+    buggy.add(put(box(0.9, 0.42, 1.75, M(0xE9E7DF, 0.7)), 0, 0.42, 0));
+    buggy.add(put(box(0.96, 0.07, 1.5, M(0xD8D5CB, 0.7)), 0, 1.28, 0.05));
+    [[-0.4, 0.6], [0.4, 0.6], [-0.4, -0.55], [0.4, -0.55]].forEach(function (q) {
+      buggy.add(put(box(0.07, 0.55, 0.07, M(0xCFCCC2, 0.7)), q[0], 0.95, q[1]));
+      var wh = new THREE.Mesh(new THREE.CylinderGeometry(0.19, 0.19, 0.1, 12), M(0x2C2C2A, 0.9));
+      wh.rotation.z = Math.PI / 2;
+      buggy.add(put(wh, q[0], 0.19, q[1] * 1.05));
+    });
+    buggy.rotation.y = 0.12;
+    g.add(put(buggy, 2.5, 0.21, 1.4));
+
+    // ---- palms ---------------------------------------------------------
+    function palmTree(x, y, z, h) {
+      var tr = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.15, h, 7), M(0x9A7F55, 1));
+      tr.rotation.z = (Math.random() - 0.5) * 0.14;
+      g.add(put(tr, x, y + h / 2, z));
+      for (var q = 0; q < 9; q++) {
+        var fa = (q / 9) * Math.PI * 2 + (q % 2) * 0.2;
+        var fr = new THREE.Mesh(new THREE.ConeGeometry(0.22, 1.35, 4), M(q % 2 ? 0x4C8A3E : 0x3E7A38, 1));
+        fr.scale.set(1, 1, 0.22);                    // a frond is flat, not a spike
+        fr.rotation.set(Math.PI / 2 - 0.28 - (q % 3) * 0.12, fa, 0);
+        g.add(put(fr, x + Math.cos(fa) * 0.58, y + h - 0.04, z + Math.sin(fa) * 0.58));
+      }
+      g.add(put(new THREE.Mesh(new THREE.SphereGeometry(0.16, 7, 6), M(0x4A7F3C, 1)), x, y + h + 0.1, z));
+    }
+    [[-1.9, 0.62, 7.4, 2.1], [-1.9, 0.62, -1.0, 2.4], [-1.9, 0.62, -8.2, 2.2],
+     [1.6, 0.34, 5.2, 2.0], [1.6, 0.34, -6.0, 2.3], [4.9, 0.14, 9.6, 2.2],
+     [-4.6, 0.62, 9.8, 2.0], [4.9, 0.14, -11.0, 2.0]].forEach(function (q) {
+      palmTree(q[0], q[1], q[2], q[3]);
+    });
+
+    // ---- the far shore across the water --------------------------------
+    g.add(put(box(30, 0.5, 3.2, M(0xD9C9A6, 1)), 22, 0.2, -19));
+    for (var t2 = 0; t2 < 9; t2++) {
+      g.add(put(box(1.3, 0.5 + Math.random() * 0.5, 1.1, M(0xE7E2D4, 0.9)),
+        12 + t2 * 2.6, 0.6, -18.6));
+    }
 
     scene.add(g);
-    return { group: g, target: new THREE.Vector3(0, 0, -1.6), dist: 16, tilt: 0.42 };
+    return {
+      group: g,
+      target: new THREE.Vector3(-0.6, 1.3, 3.0),
+      dist: 19,
+      tilt: 0.14,
+      lift: 0.05,
+      yaw0: Math.PI - 0.14,
+      fog: [34, 96],
+      light: { hemi: 0.6, key: 0.88, rim: 0.18 }
+    };
   }
 
   var builders = {
@@ -1304,6 +1608,7 @@ a:focus-visible{outline:2px solid var(--brass);outline-offset:3px}
     scene.add(rim);
 
     var conf = build(scene);
+    if (conf.fog) scene.fog = new THREE.Fog(0x06222E, conf.fog[0], conf.fog[1]);
     // a near-white model needs far less light than a sandstone one
     if (conf.light) {
       hemi.intensity = conf.light.hemi;
@@ -1312,13 +1617,15 @@ a:focus-visible{outline:2px solid var(--brass);outline-offset:3px}
     }
     var camera = new THREE.PerspectiveCamera(38, 1, 0.1, 120);
 
-    var yaw = -0.5, pitch = conf.tilt, dragging = false, lastX = 0, lastY = 0, spin = true;
+    var yaw = conf.yaw0 === undefined ? -0.5 : conf.yaw0;
+    var pitch = conf.tilt, dragging = false, lastX = 0, lastY = 0, spin = true;
 
+    var lift = conf.lift === undefined ? 0.16 : conf.lift;
     function place() {
       var d = conf.dist;
       camera.position.set(
         conf.target.x + Math.sin(yaw) * Math.cos(pitch) * d,
-        conf.target.y + Math.sin(pitch) * d + d * 0.16,
+        conf.target.y + Math.sin(pitch) * d + d * lift,
         conf.target.z + Math.cos(yaw) * Math.cos(pitch) * d
       );
       camera.lookAt(conf.target);
