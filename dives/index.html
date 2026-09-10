@@ -1,0 +1,1239 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Thirteen places in Kuwait grouped by depth, in a pearl-diving theme, with 3D models of Kuwait Towers, Al Qurain Martyrs Museum, Al Shaheed Park and Khiran Resorts.">
+<meta name="color-scheme" content="dark">
+<meta property="og:title" content="Thirteen Dives">
+<meta property="og:description" content="Thirteen places in Kuwait, grouped the way a pearl diver works.">
+<meta property="og:type" content="website">
+<title>Thirteen Dives</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,800&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* ================================================================
+   Thirteen Dives — Kuwait, grouped by depth.
+   One committed visual world: the water column of a pearl dive.
+   Every colour is painted explicitly; nothing borrows the host ground.
+   ================================================================ */
+
+:root{
+  --abyss:#02131B;
+  --deep:#06222E;
+  --sea:#0A3141;
+  --sea-2:#0D3C4D;
+  --line:#14495C;
+  --line-soft:#0F3646;
+
+  --nacre:#F0E6D6;
+  --silt:#8FADB6;
+  --glass:#4FBFB0;
+  --brass:#D8A24A;
+  --coral:#DE7F6A;
+
+  --display:"Fraunces",Georgia,"Times New Roman",serif;
+  --body:"IBM Plex Sans Arabic","Segoe UI",Helvetica,Arial,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+
+  --depth:0;
+
+  --s1:.5rem; --s2:.875rem; --s3:1.25rem; --s4:2rem; --s5:3.5rem; --s6:5.5rem;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  background:var(--abyss);
+  color:var(--nacre);
+  font-family:var(--body);
+  font-size:16px;
+  line-height:1.7;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ---------------- the water column ---------------- */
+.sea{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;background:var(--abyss)}
+.sea-grad{
+  position:absolute;inset:0;
+  background:linear-gradient(to bottom,
+    #10586A 0%,
+    #0A4054 16%,
+    #06293A 38%,
+    #041C28 62%,
+    #02131B 88%);
+}
+/* sunlight through the surface — shifts as you descend */
+.rays{
+  position:absolute;top:-12%;left:-10%;right:-10%;height:78%;
+  background:
+    linear-gradient(97deg, rgba(190,235,225,.22) 0 2%, transparent 2% 9%),
+    linear-gradient(88deg, rgba(190,235,225,.15) 0 1.4%, transparent 1.4% 7%),
+    linear-gradient(103deg, rgba(190,235,225,.10) 0 3%, transparent 3% 13%);
+  filter:blur(1.5px);
+  mask-image:linear-gradient(to bottom,#000 0%,rgba(0,0,0,.5) 46%,transparent 92%);
+  -webkit-mask-image:linear-gradient(to bottom,#000 0%,rgba(0,0,0,.5) 46%,transparent 92%);
+  opacity:calc(.85 - var(--depth) * .75);
+  animation:sway 19s ease-in-out infinite alternate;
+}
+@keyframes sway{
+  from{transform:translateX(-1.5%) skewX(-1.5deg)}
+  to{transform:translateX(1.5%) skewX(1.5deg)}
+}
+/* darkness that closes in the deeper you scroll */
+.gloom{
+  position:absolute;inset:0;
+  background:radial-gradient(120% 70% at 50% 8%, transparent 30%, rgba(1,10,15,.85) 100%);
+  opacity:calc(.35 + var(--depth) * .6);
+}
+#drift{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:.75}
+
+/* ---------------- page ---------------- */
+.page{
+  position:relative;z-index:1;
+  max-width:820px;margin:0 auto;
+  padding-inline:clamp(1.1rem,5vw,2.5rem);
+  padding-block:0 var(--s6);
+}
+
+.eyebrow{
+  font-family:var(--mono);font-size:.7rem;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--glass);margin:0;
+}
+
+/* ---------------- hero ---------------- */
+.hero{
+  display:flex;flex-direction:column;gap:var(--s3);
+  padding-block:clamp(3rem,11vw,6rem) var(--s5);
+}
+.hero h1{
+  font-family:var(--display);
+  font-optical-sizing:auto;
+  font-weight:800;
+  font-size:clamp(3rem,13vw,6.5rem);
+  line-height:.9;letter-spacing:-.035em;
+  margin:0;color:var(--nacre);text-wrap:balance;
+}
+.hero h1 em{font-style:normal;display:block;color:var(--glass)}
+.hero .ar-title{
+  font-family:var(--body);font-weight:400;
+  font-size:clamp(1.1rem,3.4vw,1.5rem);color:var(--brass);
+  letter-spacing:.02em;margin:0;
+}
+.hero .lede{
+  font-family:var(--display);font-weight:400;
+  font-size:clamp(1.15rem,2.7vw,1.45rem);line-height:1.5;
+  margin:0;max-width:40ch;color:var(--nacre);text-wrap:balance;
+}
+.hero .lede em{font-style:italic;color:var(--brass)}
+.hero .sub{margin:0;color:var(--silt);max-width:56ch;font-size:.97rem}
+
+.legend{
+  display:flex;flex-wrap:wrap;gap:.5rem 1.5rem;
+  border-top:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft);
+  padding-block:.8rem;margin-top:var(--s2);
+  font-family:var(--mono);font-size:.73rem;color:var(--silt);
+  font-variant-numeric:tabular-nums;
+}
+.legend b{color:var(--nacre);font-weight:500}
+.legend .dia{color:var(--glass)}
+
+/* ---------------- depth bands ---------------- */
+.band{padding-block:var(--s5) var(--s4);scroll-margin-top:2rem}
+
+.band-head{
+  display:grid;grid-template-columns:auto minmax(0,1fr);
+  gap:.2rem var(--s3);align-items:baseline;
+  border-top:1px solid var(--line);padding-top:var(--s3);
+}
+.mark{
+  grid-row:1 / span 3;
+  font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;
+  color:var(--glass);white-space:nowrap;
+  align-self:start;padding-top:.5rem;
+  font-variant-numeric:tabular-nums;
+}
+.mark span{display:block;color:var(--silt);font-size:.62rem;letter-spacing:.14em}
+.band-head h2{
+  font-family:var(--display);font-weight:800;
+  font-size:clamp(1.7rem,5vw,2.5rem);line-height:1.05;letter-spacing:-.03em;
+  margin:0;color:var(--nacre);text-wrap:balance;
+}
+.band-head .ar{
+  font-family:var(--body);font-size:1.05rem;color:var(--brass);margin:0;letter-spacing:.02em;
+}
+.band-head .who{margin:.35rem 0 0;color:var(--silt);max-width:52ch;font-size:.95rem}
+
+/* ---------------- a place ---------------- */
+.place{
+  display:grid;grid-template-columns:2.6rem minmax(0,1fr);
+  gap:var(--s2) var(--s3);
+  padding-block:var(--s4);
+  border-top:1px solid var(--line-soft);
+}
+.place:first-of-type{border-top:0}
+.idx{
+  font-family:var(--mono);font-size:.72rem;color:var(--silt);
+  padding-top:.45rem;font-variant-numeric:tabular-nums;
+}
+.place-body{display:flex;flex-direction:column;gap:.7rem;min-width:0}
+
+.name-row{display:flex;flex-wrap:wrap;align-items:baseline;gap:.5rem .8rem}
+.place h3{
+  font-family:var(--display);font-weight:700;
+  font-size:clamp(1.35rem,3.4vw,1.75rem);line-height:1.15;letter-spacing:-.02em;
+  margin:0;color:var(--nacre);text-wrap:balance;
+}
+.place .ar{font-family:var(--body);font-size:1.02rem;color:var(--brass);margin:0}
+.place .dia{color:var(--glass);font-size:.85rem}
+.where{
+  font-family:var(--mono);font-size:.73rem;letter-spacing:.06em;
+  color:var(--silt);margin:0;text-transform:uppercase;
+}
+.place p{margin:0;color:#DCEAEC;font-size:.98rem;max-width:62ch}
+.place p strong{color:var(--nacre);font-weight:600}
+
+.note{
+  border-left:2px solid var(--brass);
+  padding:.15rem 0 .15rem .85rem;
+  color:var(--nacre)!important;font-size:.94rem!important;
+  font-style:italic;
+}
+
+.facts{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(9rem,1fr));
+  gap:.65rem var(--s3);margin:.35rem 0 0;
+  border-top:1px solid var(--line-soft);padding-top:.8rem;
+}
+.facts div{display:flex;flex-direction:column;min-width:0}
+.facts dt{
+  font-family:var(--mono);font-size:.62rem;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--silt);
+}
+.facts dd{
+  margin:0;font-family:var(--mono);font-size:.83rem;color:var(--nacre);
+  word-break:break-word;font-variant-numeric:tabular-nums;
+}
+
+/* ---------------- 3D model block ---------------- */
+.model{
+  margin:.2rem 0 .35rem;
+  border:1px solid var(--line);
+  background:linear-gradient(to bottom, rgba(13,60,77,.55), rgba(3,20,28,.75));
+  overflow:hidden;
+}
+.model .stage{
+  position:relative;width:100%;height:clamp(240px,42vw,340px);
+  cursor:grab;touch-action:pan-y;
+}
+.model .stage:active{cursor:grabbing}
+.model canvas{display:block;width:100%;height:100%}
+.model .cap{
+  display:flex;flex-wrap:wrap;justify-content:space-between;gap:.3rem 1rem;
+  border-top:1px solid var(--line-soft);
+  padding:.55rem .8rem;
+  font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--silt);
+}
+.model .cap b{color:var(--glass);font-weight:500}
+
+/* ---------------- glossary ---------------- */
+.glossary{
+  margin-top:var(--s5);
+  border:1px solid var(--line);
+  background:rgba(6,34,46,.72);
+  padding:clamp(1.2rem,4vw,2rem);
+  display:flex;flex-direction:column;gap:var(--s3);
+}
+.glossary h2{
+  font-family:var(--display);font-weight:800;font-size:clamp(1.5rem,4vw,2rem);
+  letter-spacing:-.025em;margin:0;color:var(--nacre);
+}
+.glossary > p{margin:0;color:var(--silt);max-width:58ch;font-size:.95rem}
+.words{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.7rem}
+.words li{
+  display:grid;grid-template-columns:minmax(0,10rem) minmax(0,1fr);
+  gap:.15rem .95rem;align-items:baseline;
+  border-top:1px solid var(--line-soft);padding-top:.7rem;
+}
+.words li:first-child{border-top:0;padding-top:0}
+.words .w{display:flex;flex-direction:column}
+.words .lat{font-family:var(--display);font-weight:700;font-size:1.05rem;color:var(--nacre)}
+.words .arb{font-family:var(--body);font-size:.95rem;color:var(--brass)}
+.words .def{margin:0;color:#DCEAEC;font-size:.94rem}
+
+.close{
+  margin-top:var(--s5);border-top:1px solid var(--line);padding-top:var(--s3);
+  display:flex;flex-direction:column;gap:.5rem;
+  font-family:var(--mono);font-size:.72rem;color:var(--silt);line-height:1.7;
+}
+.close b{color:var(--nacre);font-weight:500}
+
+a{color:var(--glass)}
+a:focus-visible{outline:2px solid var(--brass);outline-offset:3px}
+
+@media (max-width:640px){
+  .place{grid-template-columns:minmax(0,1fr);gap:.55rem}
+  .idx{padding-top:0}
+  .band-head{grid-template-columns:minmax(0,1fr)}
+  .mark{grid-row:auto;padding-top:0;display:flex;gap:.6rem;align-items:baseline}
+  .mark span{font-size:.62rem}
+  .words li{grid-template-columns:minmax(0,1fr)}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .rays{animation:none}
+}
+</style>
+</head>
+<body>
+
+
+<div class="sea" aria-hidden="true">
+  <div class="sea-grad"></div>
+  <div class="rays"></div>
+  <canvas id="drift"></canvas>
+  <div class="gloom"></div>
+</div>
+
+<div class="page">
+
+  <header class="hero">
+    <p class="eyebrow">Kuwait &middot; thirteen places</p>
+    <h1>Thirteen<em>Dives</em></h1>
+    <p class="ar-title">ثلاث عشرة غوصة</p>
+    <p class="lede">The pearl fleet sailed in June and came home in September. Everything in
+      between was measured in <em>qamah</em> &mdash; the depth of one man standing.</p>
+    <p class="sub">Thirteen places in Kuwait, grouped the way a diver works: what sits at the
+      surface first, then further down each time. Four of them you can pick up and turn around.</p>
+    <div class="legend">
+      <span><b>13</b> places</span>
+      <span><b>5</b> depths</span>
+      <span><span class="dia">&#9671;</span> <b>4</b> in 3D &mdash; drag to turn</span>
+      <span>1 qamah &asymp; <b>1.8 m</b></span>
+    </div>
+  </header>
+
+  <!-- ============================ DEPTH I ============================ -->
+  <section class="band" id="surface">
+    <div class="band-head">
+      <span class="mark">2 qamah<span>at the surface</span></span>
+      <h2>What you see from the road</h2>
+      <p class="ar">على السطح</p>
+      <p class="who">The two that need no introduction and no boat. Start here, especially if
+        you&rsquo;re showing someone Kuwait for the first time.</p>
+    </div>
+
+    <article class="place">
+      <span class="idx">01</span>
+      <div class="place-body">
+        <div class="name-row">
+          <h3>Kuwait Towers</h3>
+          <p class="ar">أبراج الكويت</p>
+          <span class="dia">&#9671;</span>
+        </div>
+        <p class="where">Ras Al-Ardh, Sharq &middot; Arabian Gulf Street</p>
+
+        <div class="model">
+          <div class="stage" data-scene="towers"><canvas></canvas></div>
+          <div class="cap"><span><b>Drag to turn</b> &middot; 187 m, 147 m, 113 m</span><span>41,000 enamelled discs</span></div>
+        </div>
+
+        <p>Three towers, opened in <strong>1979</strong>, and the only building most people can
+          draw from memory. The tallest carries two spheres: the lower one holds a water reservoir
+          and a restaurant, the upper one is a viewing floor that turns a full circle while you sit
+          in it. The second tower is water storage. The third has no sphere at all &mdash; it
+          lights the other two.</p>
+        <p>The blue-green skin is the part photographs never quite catch: roughly
+          <strong>41,000 enamelled steel discs</strong> in eight shades, set so the spheres change
+          colour depending on where the sun is. Iraqi forces damaged the towers during the
+          occupation; they were repaired and reopened in 1992, then closed for a long restoration
+          and reopened again in 2016.</p>
+        <p class="note">Go about an hour before sunset. You get the city in daylight, the turn of
+          the viewing floor through dusk, and the Gulf lit up on the way down.</p>
+
+        <dl class="facts">
+          <div><dt>Opened</dt><dd>1979</dd></div>
+          <div><dt>Main tower</dt><dd>187 m</dd></div>
+          <div><dt>Viewing floor</dt><dd>Revolving</dd></div>
+          <div><dt>Best time</dt><dd>Before sunset</dd></div>
+        </dl>
+      </div>
+    </article>
+
+    <article class="place">
+      <span class="idx">02</span>
+      <div class="place-body">
+        <div class="name-row">
+          <h3>Mirror House</h3>
+          <p class="ar">بيت المرايا</p>
+        </div>
+        <p class="where">Qadsiya &middot; by appointment only</p>
+        <p>A family home in a quiet street where every wall, floor, ceiling and door is covered in
+          hand-cut mirror mosaic. The Italian-born artist <strong>Lidia Al-Qattan</strong>, wife of
+          the Kuwaiti painter Khalifa Al-Qattan, worked on it from <strong>1972 to 2006</strong>
+          &mdash; more than thirty years of one continuous piece.</p>
+        <p>It is still a private house, not a public museum, and that is exactly what makes the
+          visit what it is: you are let in, given tea, and walked through room by room. Set aside
+          about two hours. Nothing here is behind glass.</p>
+        <p class="note">Call ahead &mdash; there is no turning up. Confirm the tour and the current
+          price when you book.</p>
+
+        <dl class="facts">
+          <div><dt>Made</dt><dd>1972&ndash;2006</dd></div>
+          <div><dt>Entry</dt><dd>Appointment</dd></div>
+          <div><dt>Allow</dt><dd>~2 hours</dd></div>
+          <div><dt>Area</dt><dd>Qadsiya</dd></div>
+        </dl>
+      </div>
+    </article>
+  </section>
+
+  <!-- ============================ DEPTH II ============================ -->
+  <section class="band" id="sea">
+    <div class="band-head">
+      <span class="mark">5 qamah<span>on the dhow</span></span>
+      <h2>For people who love the sea</h2>
+      <p class="ar">على السفينة</p>
+      <p class="who">Four places that only make sense because Kuwait faces the water &mdash; two
+        you walk into, two you need a boat or a long drive for.</p>
+    </div>
+
+    <article class="place">
+      <span class="idx">03</span>
+      <div class="place-body">
+        <div class="name-row">
+          <h3>The Maritime Museum</h3>
+          <p class="ar">المتحف البحري</p>
+        </div>
+        <p class="where">Arabian Gulf Street, Sharq</p>
+        <p>If you only understand one thing about Kuwait before oil, make it this: the country
+          lived off the sea. This museum is where the whole pearl-diving world is laid out
+          properly &mdash; the <strong>boom</strong> and <strong>sambuk</strong> hulls, the diving
+          ropes and stones, the turtle-shell nose clips, and the merchants&rsquo; brass sieves for
+          grading a pearl by the hole it falls through.</p>
+        <p>It is small, and that works in its favour. An hour here changes how you read every other
+          place on this page, including the towers.</p>
+        <p class="note">Do this one <em>first</em> if you can. Everything else on the coast makes
+          more sense afterwards.</p>
+
+        <dl class="facts">
+          <div><dt>Subject</dt><dd>Dhows &amp; pearling</dd></div>
+          <div><dt>Allow</dt><dd>~1 hour</dd></div>
+          <div><dt>Indoor</dt><dd>Yes</dd></div>
+          <div><dt>Pairs with</dt><dd>Kuwait Towers</dd></div>
+        </dl>
+      </div>
+    </article>
+
+    <article class="place">
+      <span class="idx">04</span>
+      <div class="place-body">
+        <div class="name-row">
+          <h3>The Scientific Center</h3>
+          <p class="ar">المركز العلمي</p>
+        </div>
+        <p class="where">Salmiya &middot; Arabian Gulf Street</p>
+        <p>Opened in <strong>2000</strong>, and still the best answer to a hot afternoon. The
+          aquarium is the reason to come &mdash; one of the largest in the region, and it is built
+          around Gulf habitats rather than a generic tropical tank, so you get the mudflats and the
+          desert side of the coast too. There is also a large-format dome cinema and a hands-on
+          Discovery Place for younger visitors.</p>
+        <p>Outside on the water sits a restored wooden dhow in its own harbour. Go and stand next
+          to it: the scale of what men sailed to the pearl banks in is not something you get from a
+          photograph.</p>
+        <p class="note">Weekday mornings are calm. Weekend afternoons are not.</p>
+
+        <dl class="facts">
+          <div><dt>Opened</dt><dd>2000</dd></div>
+          <div><dt>Main draw</dt><dd>Aquarium</dd></div>
+          <div><dt>Also</dt><dd>Dome cinema, dhow harbour</dd></div>
+          <div><dt>Allow</dt><dd>Half a day</dd></div>
+        </dl>
+      </div>
+    </article>
+
+    <article class="place">
+      <span class="idx">05</span>
+      <div class="place-body">
+        <div class="name-row">
+          <h3>Kubbar Island</h3>
+          <p class="ar">جزيرة كبر</p>
+        </div>
+        <p class="where">~30 km offshore &middot; boat only, ~40 min</p>
+        <p>A low sandy island with a ring of coral around it, roughly <strong>30 km</strong> off the
+          southern coast and about forty minutes out by boat. The water sits between 4 and 14
+          metres, with most of the reef around nine down &mdash; hard and soft coral, ledges,
+          reef fish, and turtles if the day is good to you.</p>
+        <p>There is nothing on the island. No shade, no water, no shop. Everything you need goes in
+          the boat with you, and everything you bring comes back out with you.</p>
+        <p class="note">Morning, not evening &mdash; the water is clearer and the anchorage empties
+          out. Cooler months only; summer here is punishing.</p>
+
+        <dl class="facts">
+          <div><dt>Distance</dt><dd>~30 km offshore</dd></div>
+          <div><dt>Access</dt><dd>Charter boat</dd></div>
+          <div><dt>Depth</dt><dd>4&ndash;14 m</dd></div>
+          <div><dt>Facilities</dt><dd>None at all</dd></div>
+        </dl>
+      </div>
+    </article>
+
+    <article class="place">
+      <span class="idx">06</span>
+      <div class="place-body">
+        <div class="name-row">
+          <h3>Khiran Resorts</h3>
+          <p class="ar">منتجعات الخيران</p>
+          <span class="dia">&#9671;</span>
+        </div>
+        <p class="where">Al-Khiran &middot; ~100 km south of Kuwait City</p>
+
+        <div class="model">
+          <div class="stage" data-scene="khiran"><canvas></canvas></div>
+          <div class="cap"><span><b>Drag to turn</b> &middot; seawater canals cut into desert</span><span>~200 km of new shoreline</span></div>
+        </div>
+
+        <p>The strangest thing on this list, and the most Kuwaiti. South of the city, where the
+          desert met the Gulf, engineers cut a lattice of channels straight into the sand and let
+          the seawater in &mdash; creating around <strong>200 km of artificial shoreline</strong>
+          where there had been almost none, and a chalet on the water for people who grew up
+          wanting exactly that.</p>
+        <p>It is a weekend place: chalets, a marina, resorts, and long quiet water that stays flat
+          when the open Gulf is choppy. Come for a night rather than a day &mdash; it is a
+          hundred kilometres each way.</p>
+        <p class="note">Rent early for the cool months. Chalets on the water go long before the
+          season starts.</p>
+
+        <dl class="facts">
+          <div><dt>Distance</dt><dd>~100 km south</dd></div>
+          <div><dt>Made of</dt><dd>Dredged seawater canals</dd></div>
+          <div><dt>Shoreline</dt><dd>~200 km, all new</dd></div>
+          <div><dt>Stay</dt><dd>Chalet or resort</dd></div>
+        </dl>
+      </div>
+    </article>
+  </section>
+
+  <!-- ============================ DEPTH III ============================ -->
+  <section class="band" id="old-ground">
+    <div class="band-head">
+      <span class="mark">9 qamah<span>the old ground</span></span>
+      <h2>For people who want to see how far back it goes</h2>
+      <p class="ar">القاع القديم</p>
+      <p class="who">Bronze Age settlements, a British agent&rsquo;s house on the seafront, and
+        twelve thousand manuscripts in a reading room in Jabriya.</p>
+    </div>
+
+    <article class="place">
+      <span class="idx">07</span>
+      <div class="place-body">
+        <div class="name-row">
+          <h3>Failaka Island</h3>
+          <p class="ar">جزيرة فيلكا</p>
+        </div>
+        <p class="where">~20 km offshore &middot; ferry from Ras Al-Ardh</p>
+        <p>The only Kuwaiti island with a real history of settlement, and it has several layers of
+          it stacked on top of each other. Bronze Age Dilmun sits under a Hellenistic Greek
+          fortress &mdash; Alexander&rsquo;s people called the island <strong>Ikaros</strong>
+          &mdash; and above both is a modern village that was emptied during the occupation and
+          largely left as it stood, buildings still marked.</p>
+        <p>That last part is why the island stays with people. You walk from a 4,000-year-old
+          foundation to a house with 1990 still written on the wall of it, in the same afternoon.</p>
+        <p class="note">Check the ferry timetable before you plan anything else &mdash; the last
+          boat back decides the whole day.</p>
+
+        <dl class="facts">
+          <div><dt>Distance</dt><dd>~20 km offshore</dd></div>
+          <div><dt>Access</dt><dd>Passenger ferry</dd></div>
+          <div><dt>Layers</dt><dd>Dilmun, Greek, modern</dd></div>
+          <div><dt>Allow</dt><dd>A full day</dd></div>
+        </dl>
+      </div>
+    </article>
+
+    <article class="place">
+      <span class="idx">08</span>
+      <div class="place-body">
+        <div class="name-row">
+          <h3>Dickson House</h3>
+          <p class="ar">بيت ديكسون</p>
+        </div>
+        <p class="where">Arabian Gulf Street, Kuwait City</p>
+        <p>One of the last old seafront houses still standing on the Gulf Road, now a cultural
+          centre. It was home to <strong>Harold and Violet Dickson</strong> &mdash; he was the
+          British political agent, she stayed on in Kuwait for decades after him, right up to 1990
+          &mdash; and it is furnished as a house rather than staged as a museum.</p>
+        <p>The value of it is the ordinary detail: rooms, courtyard, wind direction, how a family
+          actually lived on this shoreline before the towers went up across the road.</p>
+        <p class="note">Twenty minutes on foot from the Maritime Museum. Do the two together.</p>
+
+        <dl class="facts">
+          <div><dt>Type</dt><dd>Historic house</dd></div>
+          <div><dt>Lived in until</dt><dd>1990</dd></div>
+          <div><dt>Allow</dt><dd>~45 min</dd></div>
+          <div><dt>Pairs with</dt><dd>Maritime Museum</dd></div>
+        </dl>
+      </div>
+    </article>
+
+    <article class="place">
+      <span class="idx">09</span>
+      <div class="place-body">
+        <div class="name-row">
+          <h3>Center of Manuscripts, Heritage and Documents</h3>
+          <p class="ar">مركز المخطوطات والتراث والوثائق</p>
+        </div>
+        <p class="where">Jabriya &middot; researchers, by arrangement</p>
+        <p>Not a day out &mdash; a working archive, and the quietest place on this list. It holds
+          on the order of <strong>12,000 filmed manuscripts</strong> of Arab and Islamic heritage,
+          collected and indexed from libraries around the world, along with historical documents
+          and its own published bulletins.</p>
+        <p>If you study anything &mdash; history, language, law, Islamic sciences &mdash; this is a
+          resource sitting in Jabriya that most people in Kuwait have never walked into.</p>
+        <p class="note">Contact them before you go and say what you are looking for. Reading rooms
+          like this run on appointments, not walk-ins.</p>
+
+        <dl class="facts">
+          <div><dt>Holdings</dt><dd>~12,000 manuscripts</dd></div>
+          <div><dt>Form</dt><dd>Filmed &amp; indexed</dd></div>
+          <div><dt>Access</dt><dd>By arrangement</dd></div>
+          <div><dt>Area</dt><dd>Jabriya</dd></div>
+        </dl>
+      </div>
+    </article>
+  </section>
+
+  <!-- ============================ DEPTH IV ============================ -->
+  <section class="band" id="memory">
+    <div class="band-head">
+      <span class="mark">14 qamah<span>what we carry up</span></span>
+      <h2>Places that ask you to remember</h2>
+      <p class="ar">الذاكرة</p>
+      <p class="who">A house left exactly as it was, a museum of the people who kept order, and a
+        park built over the old city wall. Go in this order.</p>
+    </div>
+
+    <article class="place">
+      <span class="idx">10</span>
+      <div class="place-body">
+        <div class="name-row">
+          <h3>Al Qurain Martyrs Museum</h3>
+          <p class="ar">متحف شهداء القرين</p>
+          <span class="dia">&#9671;</span>
+        </div>
+        <p class="where">Qurain &middot; the house, kept as it was</p>
+
+        <div class="model">
+          <div class="stage" data-scene="qurain"><canvas></canvas></div>
+          <div class="cap"><span><b>Drag to turn</b> &middot; 24 February 1991</span><span>Preserved, not repaired</span></div>
+        </div>
+
+        <p>On <strong>24 February 1991</strong>, nineteen members of the Al-Messilah resistance
+          group were in this house when an Iraqi patrol approached. What followed was a
+          <strong>ten-hour battle</strong> between lightly armed young men and armour. Twelve of
+          them were killed. Seven survived beneath the rubble.</p>
+        <p>The rubble was cleared and nothing else was. The walls stayed as the fighting left them
+          &mdash; pitted with small-arms fire inside and out, with the cavities where shells came
+          through still open. It was made a museum by Amiri decree and opened in
+          <strong>2003</strong>.</p>
+        <p class="note">Give it the quiet it asks for, and read the names before you leave. This is
+          not a photo stop.</p>
+
+        <dl class="facts">
+          <div><dt>Date</dt><dd>24 Feb 1991</dd></div>
+          <div><dt>Battle</dt><dd>~10 hours</dd></div>
+          <div><dt>Fighters</dt><dd>19 &middot; 12 martyred</dd></div>
+          <div><dt>Museum since</dt><dd>2003</dd></div>
+        </dl>
+      </div>
+    </article>
+
+    <article class="place">
+      <span class="idx">11</span>
+      <div class="place-body">
+        <div class="name-row">
+          <h3>Kuwait Police Museum</h3>
+          <p class="ar">متحف الشرطة</p>
+        </div>
+        <p class="where">Bneid Al-Gar &middot; off Arabian Gulf Street</p>
+        <p>Opened as a museum in <strong>February 2014</strong> in an older building near the Gulf
+          Road. Inside: uniforms from the <strong>1930s</strong> onward, service weapons, and a
+          small crime lab with a fingerprinting kit and a forensic entomology section. Outside:
+          a line of retired patrol cars, oldest to newest, which is the part everyone photographs.</p>
+        <p>It is free, it is rarely busy, and it tells a version of the country&rsquo;s last ninety
+          years that no other museum here covers.</p>
+        <p class="note">Split opening hours &mdash; typically mornings and again in the evening,
+          closed Friday. Confirm before you drive over.</p>
+
+        <dl class="facts">
+          <div><dt>Museum since</dt><dd>Feb 2014</dd></div>
+          <div><dt>Entry</dt><dd>Free</dd></div>
+          <div><dt>Outdoor</dt><dd>Historic patrol cars</dd></div>
+          <div><dt>Allow</dt><dd>~45 min</dd></div>
+        </dl>
+      </div>
+    </article>
+
+    <article class="place">
+      <span class="idx">12</span>
+      <div class="place-body">
+        <div class="name-row">
+          <h3>Al Shaheed Park</h3>
+          <p class="ar">حديقة الشهيد</p>
+          <span class="dia">&#9671;</span>
+        </div>
+        <p class="where">Kuwait City &middot; on the line of the old city wall</p>
+
+        <div class="model">
+          <div class="stage" data-scene="shaheed"><canvas></canvas></div>
+          <div class="cap"><span><b>Drag to turn</b> &middot; park over the old wall line</span><span>Opened 2015</span></div>
+        </div>
+
+        <p>Kuwait&rsquo;s largest urban park, opened in <strong>2015</strong> and laid out along
+          where the old city wall once ran &mdash; which is why the shape of it is a long band
+          rather than a square. Lawns, a lake, running paths, an amphitheatre, and two museums
+          built into the landscape rather than sitting on top of it: a habitat museum and a
+          memorial museum.</p>
+        <p>It is the one place in this group you can go to without a reason. Walk the loop after
+          dark, when the city towers are lit behind the ridge line.</p>
+        <p class="note">Evening, always. Bring someone and do one full circuit before you sit down.</p>
+
+        <dl class="facts">
+          <div><dt>Opened</dt><dd>2015</dd></div>
+          <div><dt>Sits on</dt><dd>Old city wall line</dd></div>
+          <div><dt>Museums</dt><dd>Habitat, Memorial</dd></div>
+          <div><dt>Best time</dt><dd>After dark</dd></div>
+        </dl>
+      </div>
+    </article>
+  </section>
+
+  <!-- ============================ DEPTH V ============================ -->
+  <section class="band" id="layers">
+    <div class="band-head">
+      <span class="mark">20 qamah<span>the sea floor</span></span>
+      <h2>For people who like the land itself</h2>
+      <p class="ar">الطبقات</p>
+      <p class="who">The bottom of the descent: rock, not architecture. One place, and it is the
+        hardest to get into.</p>
+    </div>
+
+    <article class="place">
+      <span class="idx">13</span>
+      <div class="place-body">
+        <div class="name-row">
+          <h3>Kuwait Geopark</h3>
+          <p class="ar">الحديقة الجيولوجية</p>
+        </div>
+        <p class="where">North of Kuwait Bay &middot; Jal Az-Zor &amp; Subiya</p>
+        <p>North of the bay, the flat country finally breaks. The <strong>Jal Az-Zor</strong>
+          escarpment runs for more than <strong>60 km</strong> above the shoreline, rising to
+          around 150 m, cut by wadis and folded by the tectonics that made it &mdash; and out
+          towards Subiya the ground goes strange enough that people describe it as Martian.</p>
+        <p>It is being developed as Kuwait&rsquo;s geopark, with the aim of eventually joining the
+          UNESCO Global Geoparks network. The same area holds settlement traces going back to the
+          Ubaid period, roughly <strong>5500&ndash;4900 BC</strong>.</p>
+        <p class="note">Access is the hard part: much of it needs prior permission, a 4&times;4,
+          and someone who knows the tracks. Arrange it before you set out, and never go alone.</p>
+
+        <dl class="facts">
+          <div><dt>Escarpment</dt><dd>60+ km long</dd></div>
+          <div><dt>Height</dt><dd>Up to ~150 m</dd></div>
+          <div><dt>Human traces</dt><dd>From ~5500 BC</dd></div>
+          <div><dt>Access</dt><dd>Permit &amp; 4&times;4</dd></div>
+        </dl>
+      </div>
+    </article>
+  </section>
+
+  <!-- ============================ GLOSSARY ============================ -->
+  <section class="glossary">
+    <p class="eyebrow">The theme, in its own words</p>
+    <h2>Words from the diving season</h2>
+    <p>Kuwait ran on pearls before it ran on oil, and the season had its own vocabulary. These
+      are the words the grouping above borrows from.</p>
+    <ul class="words">
+      <li>
+        <span class="w"><span class="lat">Ghaus</span><span class="arb">الغوص</span></span>
+        <p class="def">The dive, and the whole season of diving &mdash; roughly June to September,
+          when the fleet was out on the banks.</p>
+      </li>
+      <li>
+        <span class="w"><span class="lat">Nokhatha</span><span class="arb">النوخذة</span></span>
+        <p class="def">The captain. He owned the voyage, chose the banks, and settled everyone&rsquo;s
+          share at the end of it.</p>
+      </li>
+      <li>
+        <span class="w"><span class="lat">Ghais</span><span class="arb">الغيص</span></span>
+        <p class="def">The diver himself &mdash; down on one breath, again and again, all day.</p>
+      </li>
+      <li>
+        <span class="w"><span class="lat">Saib</span><span class="arb">السيب</span></span>
+        <p class="def">The hauler. He held the rope, felt the signal, and pulled his diver back up.
+          The two worked as one person.</p>
+      </li>
+      <li>
+        <span class="w"><span class="lat">Fatam</span><span class="arb">الفطام</span></span>
+        <p class="def">The nose clip, cut from turtle shell or bone. Just about the only equipment a
+          diver had.</p>
+      </li>
+      <li>
+        <span class="w"><span class="lat">Nahham</span><span class="arb">النهام</span></span>
+        <p class="def">The singer on board. He set the rhythm for hauling and kept the crew going
+          &mdash; a job, not entertainment.</p>
+      </li>
+      <li>
+        <span class="w"><span class="lat">Dana</span><span class="arb">الدانة</span></span>
+        <p class="def">A large, fine pearl. The word a whole season was hoping for.</p>
+      </li>
+      <li>
+        <span class="w"><span class="lat">Qaffal</span><span class="arb">القفال</span></span>
+        <p class="def">The return &mdash; the day the fleet came home together and the town went
+          down to the shore to meet it.</p>
+      </li>
+    </ul>
+  </section>
+
+  <div class="close">
+    <span><b>Check before you go.</b> Opening hours, ticket prices, ferry times and permits change
+      &mdash; especially for the island trips, the archive, the geopark and Mirror House, which all
+      need arranging in advance.</span>
+    <span>Thirteen places &middot; five depths &middot; four models you can turn.</span>
+  </div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------------------------------------------------------------
+     Scroll depth — the page gets darker the further down you go.
+     --------------------------------------------------------------- */
+  var root = document.documentElement;
+  function depth() {
+    var span = document.body.scrollHeight - window.innerHeight;
+    var p = span > 0 ? Math.min(1, Math.max(0, window.scrollY / span)) : 0;
+    root.style.setProperty('--depth', p.toFixed(3));
+  }
+  depth();
+  window.addEventListener('scroll', depth, { passive: true });
+  window.addEventListener('resize', depth);
+
+  /* ---------------------------------------------------------------
+     Drifting particles — silt and bubbles in the water column.
+     --------------------------------------------------------------- */
+  (function drift() {
+    var cv = document.getElementById('drift');
+    var ctx = cv.getContext('2d');
+    var motes = [];
+    var w = 0, h = 0, dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+    function size() {
+      w = cv.clientWidth; h = cv.clientHeight;
+      cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      var target = Math.round(Math.min(150, (w * h) / 9000));
+      motes = [];
+      for (var i = 0; i < target; i++) {
+        motes.push({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          r: 0.5 + Math.random() * 2.1,
+          v: 0.12 + Math.random() * 0.55,
+          sway: 0.3 + Math.random() * 0.9,
+          phase: Math.random() * Math.PI * 2,
+          a: 0.12 + Math.random() * 0.4
+        });
+      }
+    }
+
+    function frame(t) {
+      ctx.clearRect(0, 0, w, h);
+      for (var i = 0; i < motes.length; i++) {
+        var m = motes[i];
+        if (!reduced) {
+          m.y -= m.v;
+          if (m.y < -6) { m.y = h + 6; m.x = Math.random() * w; }
+        }
+        var x = m.x + Math.sin((t / 2600) + m.phase) * m.sway * 6;
+        ctx.beginPath();
+        ctx.arc(x, m.y, m.r, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(198,238,232,' + m.a + ')';
+        ctx.fill();
+      }
+      requestAnimationFrame(frame);
+    }
+
+    size();
+    window.addEventListener('resize', size);
+    requestAnimationFrame(frame);
+  })();
+
+  /* ---------------------------------------------------------------
+     3D models. Four hand-built scenes, one shared renderer harness.
+     --------------------------------------------------------------- */
+  if (!window.THREE) {
+    document.querySelectorAll('.model').forEach(function (m) { m.remove(); });
+    return;
+  }
+
+  var scenes = [];
+
+  /* -- small helpers ------------------------------------------------ */
+  function mat(color, rough, metal) {
+    return new THREE.MeshStandardMaterial({
+      color: color,
+      roughness: rough === undefined ? 0.85 : rough,
+      metalness: metal === undefined ? 0.05 : metal
+    });
+  }
+  function box(w, h, d, m) { return new THREE.Mesh(new THREE.BoxGeometry(w, h, d), m); }
+  function put(o, x, y, z) { o.position.set(x, y, z); return o; }
+
+  /* Painted texture: the towers' enamelled discs, eight blue-green shades. */
+  function discTexture() {
+    var c = document.createElement('canvas');
+    c.width = 512; c.height = 256;
+    var x = c.getContext('2d');
+    x.fillStyle = '#20515C';
+    x.fillRect(0, 0, c.width, c.height);
+    var shades = ['#2E7C86', '#4FA9A4', '#6FC3B4', '#9BD7C8', '#356E8C',
+                  '#5C97AE', '#D7DCD8', '#8FB0B4'];
+    var step = 16;
+    for (var row = 0; row * step < c.height + step; row++) {
+      for (var col = 0; col * step < c.width + step; col++) {
+        var cx = col * step + (row % 2 ? step / 2 : 0);
+        var cy = row * step;
+        x.beginPath();
+        x.arc(cx, cy, step * 0.56, 0, Math.PI * 2);
+        x.fillStyle = shades[(row * 7 + col * 3) % shades.length];
+        x.fill();
+      }
+    }
+    return new THREE.CanvasTexture(c);
+  }
+
+  /* Painted texture: rendered wall damage for the Qurain house. */
+  function scarredTexture() {
+    var c = document.createElement('canvas');
+    c.width = 512; c.height = 512;
+    var x = c.getContext('2d');
+    x.fillStyle = '#CBB795';
+    x.fillRect(0, 0, c.width, c.height);
+    var i, r, px, py;
+    for (i = 0; i < 900; i++) {          // grain
+      x.fillStyle = 'rgba(150,130,100,' + (Math.random() * 0.12) + ')';
+      x.fillRect(Math.random() * 512, Math.random() * 512, 3, 3);
+    }
+    for (i = 0; i < 260; i++) {          // small-arms pitting
+      px = Math.random() * 512; py = Math.random() * 512; r = 2 + Math.random() * 4;
+      x.beginPath(); x.arc(px, py, r * 1.5, 0, Math.PI * 2);
+      x.fillStyle = 'rgba(236,225,205,.5)'; x.fill();
+      x.beginPath(); x.arc(px, py, r, 0, Math.PI * 2);
+      x.fillStyle = 'rgba(58,46,34,.85)'; x.fill();
+    }
+    for (i = 0; i < 4; i++) {            // shell cavities
+      px = 60 + Math.random() * 390; py = 60 + Math.random() * 390; r = 16 + Math.random() * 16;
+      x.beginPath(); x.arc(px, py, r * 1.6, 0, Math.PI * 2);
+      x.fillStyle = 'rgba(214,198,172,.75)'; x.fill();
+      x.beginPath(); x.arc(px, py, r, 0, Math.PI * 2);
+      x.fillStyle = 'rgba(34,26,20,.92)'; x.fill();
+    }
+    return new THREE.CanvasTexture(c);
+  }
+
+  /* -- 01 · Kuwait Towers ------------------------------------------- */
+  function buildTowers(scene) {
+    var g = new THREE.Group();
+    var discs = discTexture();
+    var skin = new THREE.MeshStandardMaterial({ map: discs, roughness: 0.42, metalness: 0.25 });
+    var shaft = mat(0xE7E2D6, 0.7, 0.05);
+
+    function tower(h, rb, rt) {
+      return new THREE.Mesh(new THREE.CylinderGeometry(rt, rb, h, 28, 1, false), shaft);
+    }
+    function sphere(r) {
+      return new THREE.Mesh(new THREE.SphereGeometry(r, 32, 24), skin);
+    }
+
+    // main tower: 187 m -> spheres at 82 m and 123 m (1 unit = 20 m)
+    var t1 = tower(9.35, 0.42, 0.10); put(t1, 0, 9.35 / 2, 0); g.add(t1);
+    g.add(put(sphere(0.95), 0, 4.10, 0));
+    g.add(put(sphere(0.52), 0, 6.15, 0));
+    var tip = new THREE.Mesh(new THREE.ConeGeometry(0.07, 1.1, 12), shaft);
+    g.add(put(tip, 0, 9.6, 0));
+
+    // second tower: 147 m, one sphere
+    var t2 = tower(7.35, 0.34, 0.09); put(t2, -2.6, 7.35 / 2, -0.7); g.add(t2);
+    g.add(put(sphere(0.72), -2.6, 4.55, -0.7));
+
+    // third tower: 113 m, no sphere — it lights the other two
+    var t3 = tower(5.65, 0.26, 0.07); put(t3, 2.5, 5.65 / 2, -1.1); g.add(t3);
+    var crown = new THREE.Mesh(new THREE.CylinderGeometry(0.20, 0.26, 0.5, 16), skin);
+    g.add(put(crown, 2.5, 5.85, -1.1));
+
+    // headland
+    var land = new THREE.Mesh(new THREE.CylinderGeometry(5.6, 5.9, 0.5, 40), mat(0x24505E, 0.95));
+    g.add(put(land, 0, -0.25, -0.4));
+    var water = new THREE.Mesh(new THREE.CircleGeometry(16, 48),
+      new THREE.MeshStandardMaterial({ color: 0x0A3242, roughness: 0.25, metalness: 0.4 }));
+    water.rotation.x = -Math.PI / 2;
+    g.add(put(water, 0, -0.52, 0));
+
+    scene.add(g);
+    return { group: g, target: new THREE.Vector3(0, 4.4, 0), dist: 17, tilt: 0.06 };
+  }
+
+  /* -- 10 · Al Qurain Martyrs Museum -------------------------------- */
+  function buildQurain(scene) {
+    var g = new THREE.Group();
+    var wallTex = scarredTexture();
+    var wall = new THREE.MeshStandardMaterial({ map: wallTex, roughness: 0.95 });
+    var trim = mat(0xB9A585, 0.95);
+    var dark = mat(0x1A1712, 1);
+
+    var ground = new THREE.Mesh(new THREE.CircleGeometry(11, 40), mat(0x6E6146, 1));
+    ground.rotation.x = -Math.PI / 2;
+    g.add(put(ground, 0, 0, 0));
+
+    // ground floor
+    var lower = box(6, 2.5, 4.4, wall); g.add(put(lower, 0, 1.25, 0));
+    // set-back upper floor
+    var upper = box(5.2, 2.2, 3.6, wall); g.add(put(upper, -0.3, 3.6, -0.1));
+    // roof slabs
+    g.add(put(box(6.3, 0.18, 4.7, trim), 0, 2.6, 0));
+    g.add(put(box(5.5, 0.18, 3.9, trim), -0.3, 4.78, -0.1));
+
+    // openings, deliberately plain
+    [[-1.9, 1.5, 2.21], [0.2, 1.5, 2.21], [2.0, 1.5, 2.21]].forEach(function (p) {
+      g.add(put(box(0.9, 1.0, 0.06, dark), p[0], p[1], p[2]));
+    });
+    g.add(put(box(1.0, 1.9, 0.08, dark), -0.9, 0.95, 2.22));
+    [[-1.6, 3.7, 1.71], [0.6, 3.7, 1.71]].forEach(function (p) {
+      g.add(put(box(0.9, 1.0, 0.06, dark), p[0], p[1], p[2]));
+    });
+
+    // boundary wall
+    var bw = mat(0xC0AC8A, 0.95);
+    g.add(put(box(9.6, 0.9, 0.2, bw), 0, 0.45, 3.6));
+    g.add(put(box(9.6, 0.9, 0.2, bw), 0, 0.45, -3.6));
+    g.add(put(box(0.2, 0.9, 7.4, bw), 4.8, 0.45, 0));
+    g.add(put(box(0.2, 0.9, 7.4, bw), -4.8, 0.45, 0));
+
+    scene.add(g);
+    return { group: g, target: new THREE.Vector3(0, 2.1, 0), dist: 15, tilt: 0.16 };
+  }
+
+  /* -- 12 · Al Shaheed Park ----------------------------------------- */
+  function buildShaheed(scene) {
+    var g = new THREE.Group();
+
+    var ground = new THREE.Mesh(new THREE.CircleGeometry(13, 48), mat(0x2E4A31, 1));
+    ground.rotation.x = -Math.PI / 2;
+    g.add(ground);
+
+    // the long band of the park, following the old wall line
+    var lawn = new THREE.Mesh(new THREE.SphereGeometry(6.4, 40, 20, 0, Math.PI * 2, 0, Math.PI / 2),
+      mat(0x3F7A45, 1));
+    lawn.scale.set(1.5, 0.13, 0.72);
+    g.add(put(lawn, 0, 0.02, 0));
+
+    // lake
+    var lake = new THREE.Mesh(new THREE.CircleGeometry(2.1, 40),
+      new THREE.MeshStandardMaterial({ color: 0x2C7C93, roughness: 0.2, metalness: 0.45 }));
+    lake.rotation.x = -Math.PI / 2;
+    lake.scale.set(1.7, 1, 1);
+    g.add(put(lake, -3.2, 0.72, 1.1));
+
+    // walking loop
+    var path = new THREE.Mesh(new THREE.RingGeometry(4.4, 4.85, 64), mat(0xC7B48C, 1));
+    path.rotation.x = -Math.PI / 2;
+    path.scale.set(1.45, 1, 0.78);
+    g.add(put(path, 0, 0.78, 0));
+
+    // museums, set into the landform rather than on it
+    var stone = mat(0xD8CDB4, 0.9);
+    g.add(put(box(2.6, 0.9, 1.8, stone), 3.1, 0.6, 0.4));
+    g.add(put(box(2.0, 0.75, 1.6, stone), 5.0, 0.5, -1.2));
+    g.add(put(box(2.9, 0.1, 2.1, mat(0xE7DFC9, 0.85)), 3.1, 1.06, 0.4));
+
+    // trees
+    var trunk = mat(0x4A3A2A, 1), leaf = mat(0x2F6B3A, 1);
+    for (var i = 0; i < 26; i++) {
+      var a = (i / 26) * Math.PI * 2, rad = 2.2 + Math.random() * 5.6;
+      var tx = Math.cos(a) * rad * 1.45, tz = Math.sin(a) * rad * 0.72;
+      if (Math.abs(tx + 3.2) < 2.9 && Math.abs(tz - 1.1) < 1.6) continue;
+      var s = 0.75 + Math.random() * 0.55;
+      g.add(put(new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.09, 0.55 * s, 6), trunk), tx, 0.95, tz));
+      g.add(put(new THREE.Mesh(new THREE.SphereGeometry(0.42 * s, 10, 8), leaf), tx, 1.45 * s + 0.75, tz));
+    }
+
+    // the city standing behind it
+    var city = mat(0x18313F, 0.6, 0.3);
+    [[-4.5, 3.4, -8.5, 0.9], [-2.8, 5.2, -9.2, 0.8], [-0.6, 4.1, -8.8, 1.1],
+     [1.9, 6.3, -9.4, 0.75], [4.2, 3.0, -8.6, 1.0], [6.0, 4.4, -9.0, 0.85]].forEach(function (b) {
+      g.add(put(box(b[3], b[1], b[3], city), b[0], b[1] / 2, b[2]));
+    });
+
+    scene.add(g);
+    return { group: g, target: new THREE.Vector3(0, 1.1, 0), dist: 17, tilt: 0.30 };
+  }
+
+  /* -- 06 · Khiran Resorts ------------------------------------------ */
+  function buildKhiran(scene) {
+    var g = new THREE.Group();
+
+    var sand = new THREE.Mesh(new THREE.BoxGeometry(20, 0.6, 14), mat(0xC8AF83, 1));
+    g.add(put(sand, 0, -0.3, 0));
+
+    var waterMat = new THREE.MeshStandardMaterial({
+      color: 0x2E8FA0, roughness: 0.18, metalness: 0.5
+    });
+    var chalet = mat(0xF0EADD, 0.85);
+    var roof = mat(0x2B6C7A, 0.7);
+    var boat = mat(0xF6F4EE, 0.6);
+
+    // four fingers of seawater cut into the desert, off one spine
+    var spine = box(19.4, 0.34, 1.5, waterMat);
+    g.add(put(spine, 0, -0.06, -4.6));
+
+    for (var k = 0; k < 4; k++) {
+      var cx = -6.6 + k * 4.4;
+      g.add(put(box(1.25, 0.34, 8.2, waterMat), cx, -0.06, -0.4));
+
+      // chalets down both banks
+      for (var j = 0; j < 6; j++) {
+        var cz = -3.9 + j * 1.45;
+        [-1.35, 1.35].forEach(function (off) {
+          var h = 0.42 + Math.random() * 0.2;
+          g.add(put(box(0.95, h, 0.95, chalet), cx + off, h / 2, cz));
+          g.add(put(box(1.06, 0.08, 1.06, roof), cx + off, h + 0.04, cz));
+        });
+      }
+      // a boat tied up in the channel
+      var bz = -2.4 + Math.random() * 4;
+      var hull = new THREE.Mesh(new THREE.BoxGeometry(0.26, 0.12, 0.8), boat);
+      hull.rotation.y = 0.05;
+      g.add(put(hull, cx + (Math.random() - 0.5) * 0.5, 0.06, bz));
+    }
+
+    // open Gulf along the far edge
+    var gulf = new THREE.Mesh(new THREE.PlaneGeometry(34, 16), waterMat);
+    gulf.rotation.x = -Math.PI / 2;
+    g.add(put(gulf, 0, -0.09, -13.4));
+
+    scene.add(g);
+    return { group: g, target: new THREE.Vector3(0, 0, -1.6), dist: 16, tilt: 0.42 };
+  }
+
+  var builders = {
+    towers: buildTowers,
+    qurain: buildQurain,
+    shaheed: buildShaheed,
+    khiran: buildKhiran
+  };
+
+  /* -- harness ------------------------------------------------------ */
+  document.querySelectorAll('.stage').forEach(function (stage) {
+    var build = builders[stage.dataset.scene];
+    if (!build) return;
+
+    var canvas = stage.querySelector('canvas');
+    var renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+
+    var scene = new THREE.Scene();
+    scene.fog = new THREE.Fog(0x06222E, 18, 44);
+
+    scene.add(new THREE.HemisphereLight(0xCFF0EA, 0x123542, 0.85));
+    var key = new THREE.DirectionalLight(0xFFF1DA, 1.15);
+    key.position.set(6, 11, 7);
+    scene.add(key);
+    var rim = new THREE.DirectionalLight(0x6FD3C6, 0.4);
+    rim.position.set(-8, 4, -6);
+    scene.add(rim);
+
+    var conf = build(scene);
+    var camera = new THREE.PerspectiveCamera(38, 1, 0.1, 120);
+
+    var yaw = -0.5, pitch = conf.tilt, dragging = false, lastX = 0, lastY = 0, spin = true;
+
+    function place() {
+      var d = conf.dist;
+      camera.position.set(
+        conf.target.x + Math.sin(yaw) * Math.cos(pitch) * d,
+        conf.target.y + Math.sin(pitch) * d + d * 0.16,
+        conf.target.z + Math.cos(yaw) * Math.cos(pitch) * d
+      );
+      camera.lookAt(conf.target);
+    }
+
+    function resize() {
+      var w = stage.clientWidth, h = stage.clientHeight;
+      if (!w || !h) return;
+      renderer.setSize(w, h, false);
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+    }
+
+    function down(e) {
+      dragging = true; spin = false;
+      var p = e.touches ? e.touches[0] : e;
+      lastX = p.clientX; lastY = p.clientY;
+    }
+    function move(e) {
+      if (!dragging) return;
+      var p = e.touches ? e.touches[0] : e;
+      yaw -= (p.clientX - lastX) * 0.008;
+      pitch = Math.max(-0.05, Math.min(0.95, pitch + (p.clientY - lastY) * 0.005));
+      lastX = p.clientX; lastY = p.clientY;
+      place();
+      if (e.cancelable && e.touches) e.preventDefault();
+    }
+    function up() { dragging = false; }
+
+    stage.addEventListener('mousedown', down);
+    window.addEventListener('mousemove', move);
+    window.addEventListener('mouseup', up);
+    stage.addEventListener('touchstart', down, { passive: true });
+    stage.addEventListener('touchmove', move, { passive: false });
+    stage.addEventListener('touchend', up);
+
+    resize();
+    place();
+    renderer.render(scene, camera);
+    window.addEventListener('resize', function () { resize(); place(); });
+
+    var visible = true;
+    if ('IntersectionObserver' in window) {
+      visible = false;
+      new IntersectionObserver(function (rows) {
+        visible = rows[0].isIntersecting;
+      }, { rootMargin: '120px' }).observe(stage);
+    }
+
+    scenes.push({
+      step: function () {
+        if (!visible) return;
+        if (spin && !reduced && !dragging) { yaw += 0.0022; place(); }
+        renderer.render(scene, camera);
+      }
+    });
+  });
+
+  (function loop() {
+    for (var i = 0; i < scenes.length; i++) scenes[i].step();
+    requestAnimationFrame(loop);
+  })();
+})();
+</script>
+
+</body>
+</html>
