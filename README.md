@@ -9,9 +9,8 @@ Manchester Metropolitan University.
   dependencies beyond Google Fonts). Dark editorial layout with a sticky identity rail,
   about / education / skills / programs sections and a contact card.
 - `dives/` — **Thirteen Pearls**: thirteen places in Kuwait grouped by who they suit, over a
-  pearl-and-seawater backdrop, with live 3D models (Three.js) of Kuwait Towers, Al Qurain
-  Martyrs Museum, Al Shaheed Park and Khiran Resorts. One self-contained page:
-  `dives/index.html`.
+  pearl-and-seawater backdrop. Every place carries a live 3D model (Three.js), each built
+  from a photograph of the real place. One self-contained page: `dives/index.html`.
 - `notes/` — the Notebook: six running logs (places in Kuwait, a car build list, a gahwa
   log, things I'm learning, read & watched, small wins). A hub page plus one page per log,
   all sharing `notes/styles.css`. Currently a **draft** — every page carries a
