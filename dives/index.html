@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Thirteen places in Kuwait grouped by who they suit, each with an interactive 3D model.">
+<meta name="description" content="Thirteen places in Kuwait, each with a 3D model, how it is actually booked, and a planner that builds your booking route.">
 <meta name="color-scheme" content="dark">
 <meta property="og:title" content="Thirteen Pearls">
 <meta property="og:description" content="Thirteen places in Kuwait, grouped by who they suit.">
@@ -217,6 +217,109 @@ body{
   word-break:break-word;font-variant-numeric:tabular-nums;
 }
 
+/* ---------------- how you actually book it ---------------- */
+.book{
+  display:grid;grid-template-columns:auto minmax(0,1fr);
+  gap:.35rem .9rem;align-items:baseline;
+  margin-top:.5rem;padding-top:.7rem;
+  border-top:1px solid var(--line-soft);
+}
+.bk-lbl{
+  font-family:var(--mono);font-size:.62rem;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--glass);white-space:nowrap;
+}
+.bk-how{margin:0!important;color:var(--silt)!important;font-size:.9rem!important;max-width:56ch}
+.bk-links{grid-column:2;display:flex;flex-wrap:wrap;gap:.45rem;margin-top:.15rem}
+.bk{
+  flex:none;white-space:nowrap;
+  font-family:var(--mono);font-size:.74rem;letter-spacing:.03em;
+  text-decoration:none;padding:.28rem .8rem;border-radius:999px;
+  background:var(--glass);color:#04222A;border:1px solid var(--glass);
+  transition:opacity .18s ease;
+}
+.bk:hover{opacity:.85}
+.bk.ghost{background:transparent;color:var(--nacre);border-color:var(--line)}
+.bk.ghost:hover{border-color:var(--brass);color:var(--brass);opacity:1}
+.bk.none{
+  flex:none;white-space:nowrap;background:transparent;
+  font-family:var(--mono);font-size:.72rem;color:var(--silt);
+  border:1px dashed var(--line);border-radius:999px;padding:.28rem .8rem;
+}
+
+/* ---------------- the planner ---------------- */
+.planner{
+  margin-top:var(--s5);
+  border:1px solid var(--line);
+  background:rgba(6,34,46,.72);
+  padding:clamp(1.2rem,4vw,2rem);
+  display:flex;flex-direction:column;gap:var(--s3);
+  scroll-margin-top:1.5rem;
+}
+.planner h2{
+  font-family:var(--display);font-weight:800;font-size:clamp(1.5rem,4vw,2.1rem);
+  letter-spacing:-.025em;margin:0;color:var(--nacre);
+}
+.planner > p{margin:0;color:var(--silt);max-width:60ch;font-size:.95rem}
+.planner > p b{color:var(--nacre);font-weight:500}
+
+.picker{display:grid;grid-template-columns:repeat(auto-fit,minmax(13rem,1fr));gap:.45rem}
+.pick{
+  display:flex;align-items:baseline;gap:.55rem;
+  border:1px solid var(--line-soft);padding:.45rem .65rem;
+  cursor:pointer;font-size:.92rem;color:var(--nacre);
+  transition:border-color .18s ease,background-color .18s ease;
+}
+.pick:hover{border-color:var(--glass)}
+.pick input{accent-color:var(--glass);margin:0;flex:none}
+.pick span.g{font-family:var(--mono);font-size:.62rem;color:var(--silt);margin-left:auto;white-space:nowrap}
+.pick.on{border-color:var(--glass);background:rgba(79,191,176,.08)}
+
+.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(10rem,1fr));gap:.8rem}
+.fields label{display:flex;flex-direction:column;gap:.25rem}
+.fields .k{
+  font-family:var(--mono);font-size:.62rem;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--silt);
+}
+.fields input{
+  font-family:var(--body);font-size:.95rem;color:var(--nacre);
+  background:rgba(2,19,27,.7);border:1px solid var(--line);
+  padding:.5rem .65rem;border-radius:0;
+}
+.fields input:focus{outline:2px solid var(--glass);outline-offset:1px}
+
+.plan-out{
+  border-top:1px solid var(--line-soft);padding-top:var(--s3);
+  display:flex;flex-direction:column;gap:.9rem;
+}
+.plan-empty{margin:0;color:var(--silt);font-size:.93rem}
+.plan-head{
+  font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;color:var(--glass);
+  text-transform:uppercase;margin:0;
+}
+.plan-item{
+  display:grid;grid-template-columns:1.6rem minmax(0,1fr);gap:.2rem .8rem;
+  border-left:2px solid var(--brass);padding:.1rem 0 .1rem .8rem;
+}
+.plan-item .n{font-family:var(--mono);font-size:.72rem;color:var(--silt);grid-row:1/span 3}
+.plan-item h4{
+  font-family:var(--display);font-weight:700;font-size:1.05rem;margin:0;color:var(--nacre);
+}
+.plan-item p{margin:0;color:#DCEAEC;font-size:.9rem;max-width:58ch}
+.plan-item .go{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.25rem}
+
+.plan-actions{display:flex;flex-wrap:wrap;gap:.5rem}
+.act{
+  font-family:var(--mono);font-size:.76rem;letter-spacing:.04em;
+  background:transparent;color:var(--nacre);border:1px solid var(--line);
+  padding:.45rem .95rem;cursor:pointer;
+  transition:border-color .18s ease,color .18s ease;
+}
+.act:hover{border-color:var(--glass);color:var(--glass)}
+.act.primary{background:var(--glass);color:#04222A;border-color:var(--glass)}
+.act.primary:hover{opacity:.85;color:#04222A}
+.act[hidden]{display:none}
+.said{font-family:var(--mono);font-size:.72rem;color:var(--brass);margin:0}
+
 /* ---------------- 3D model block ---------------- */
 .model{
   margin:.2rem 0 .35rem;
@@ -250,6 +353,8 @@ a{color:var(--glass)}
 a:focus-visible{outline:2px solid var(--brass);outline-offset:3px}
 
 @media (max-width:640px){
+  .book{grid-template-columns:minmax(0,1fr);gap:.3rem}
+  .bk-links{grid-column:1}
   .place{grid-template-columns:minmax(0,1fr);gap:.55rem}
   .idx{padding-top:0}
   .band-head{grid-template-columns:minmax(0,1fr)}
@@ -287,6 +392,7 @@ a:focus-visible{outline:2px solid var(--brass);outline-offset:3px}
       <span><b>13</b> places</span>
       <span><b>5</b> groups</span>
       <span><span class="dia">&#9671;</span> <b>all 13</b> in 3D &mdash; drag to turn</span>
+      <span><a href="#plan">Plan &amp; book &darr;</a></span>
     </div>
   </header>
 
@@ -334,6 +440,12 @@ a:focus-visible{outline:2px solid var(--brass);outline-offset:3px}
           <div><dt>Viewing floor</dt><dd>Revolving</dd></div>
           <div><dt>Best time</dt><dd>Before sunset</dd></div>
         </dl>
+
+        <div class="book">
+          <span class="bk-lbl">Booking</span>
+          <p class="bk-how">Tickets at the tower base &mdash; about KD 3 for the viewing floor. Book the restaurant separately.</p>
+          <span class="bk-links"><a class="bk" href="https://www.restaurants.kuwaittowers.com/reservation" target="_blank" rel="noopener noreferrer">Restaurant booking &rarr;</a><a class="bk ghost" href="tel:+96524965500">2496 5500</a></span>
+        </div>
       </div>
     </article>
 
@@ -367,6 +479,12 @@ a:focus-visible{outline:2px solid var(--brass);outline-offset:3px}
           <div><dt>Allow</dt><dd>~2 hours</dd></div>
           <div><dt>Area</dt><dd>Qadsiya</dd></div>
         </dl>
+
+        <div class="book">
+          <span class="bk-lbl">Booking</span>
+          <p class="bk-how">Appointment only. Call, agree a time, and confirm the price for the day you are going.</p>
+          <span class="bk-links"><a class="bk" href="https://mirrorhousekuwait.com/" target="_blank" rel="noopener noreferrer">Mirror House &rarr;</a><a class="bk ghost" href="tel:+96522518522">2251 8522</a></span>
+        </div>
       </div>
     </article>
   </section>
@@ -411,6 +529,12 @@ a:focus-visible{outline:2px solid var(--brass);outline-offset:3px}
           <div><dt>Indoor</dt><dd>Yes</dd></div>
           <div><dt>Pairs with</dt><dd>Kuwait Towers</dd></div>
         </dl>
+
+        <div class="book">
+          <span class="bk-lbl">Booking</span>
+          <p class="bk-how">No online booking &mdash; walk in during opening hours. Confirm the day&rsquo;s hours first.</p>
+          <span class="bk-links"><a class="bk" href="https://www.nccal.gov.kw/" target="_blank" rel="noopener noreferrer">NCCAL &rarr;</a><a class="bk ghost" href="tel:+96522929444">2292 9444</a></span>
+        </div>
       </div>
     </article>
 
@@ -444,6 +568,12 @@ a:focus-visible{outline:2px solid var(--brass);outline-offset:3px}
           <div><dt>Also</dt><dd>Dome cinema, dhow harbour</dd></div>
           <div><dt>Allow</dt><dd>Half a day</dd></div>
         </dl>
+
+        <div class="book">
+          <span class="bk-lbl">Booking</span>
+          <p class="bk-how">Book online: pick the date, pick an entry time, pay, done. The one place here with real online ticketing.</p>
+          <span class="bk-links"><a class="bk" href="https://www.tsck.org.kw/en/services/ticket-prices/" target="_blank" rel="noopener noreferrer">Tickets &amp; prices &rarr;</a></span>
+        </div>
       </div>
     </article>
 
@@ -476,6 +606,12 @@ a:focus-visible{outline:2px solid var(--brass);outline-offset:3px}
           <div><dt>Depth</dt><dd>4&ndash;14 m</dd></div>
           <div><dt>Facilities</dt><dd>None at all</dd></div>
         </dl>
+
+        <div class="book">
+          <span class="bk-lbl">Booking</span>
+          <p class="bk-how">No booking office. You charter a boat &mdash; from the Marina or Ras Al-Ardh &mdash; and agree the day, the hours and the price with the skipper.</p>
+          <span class="bk-links"><span class="bk none">Arranged in person</span></span>
+        </div>
       </div>
     </article>
 
@@ -511,6 +647,12 @@ a:focus-visible{outline:2px solid var(--brass);outline-offset:3px}
           <div><dt>Shoreline</dt><dd>~200 km, all new</dd></div>
           <div><dt>Stay</dt><dd>Chalet or resort</dd></div>
         </dl>
+
+        <div class="book">
+          <span class="bk-lbl">Booking</span>
+          <p class="bk-how">Chalets are booked through Touristic Enterprises. Book weeks ahead for the cool months.</p>
+          <span class="bk-links"><a class="bk" href="http://www.kuwaittourism.com/KhiranResort.html" target="_blank" rel="noopener noreferrer">Khiran Resort &rarr;</a><a class="bk ghost" href="tel:1806806">1806806</a></span>
+        </div>
       </div>
     </article>
   </section>
@@ -555,6 +697,12 @@ a:focus-visible{outline:2px solid var(--brass);outline-offset:3px}
           <div><dt>Layers</dt><dd>Dilmun, Greek, modern</dd></div>
           <div><dt>Allow</dt><dd>A full day</dd></div>
         </dl>
+
+        <div class="book">
+          <span class="bk-lbl">Booking</span>
+          <p class="bk-how">Ferry tickets are sold at the office in Ras Al-Ardh &mdash; around KD 15 return. Ask for the last boat back before you buy.</p>
+          <span class="bk-links"><span class="bk none">Arranged in person</span></span>
+        </div>
       </div>
     </article>
 
@@ -586,6 +734,12 @@ a:focus-visible{outline:2px solid var(--brass);outline-offset:3px}
           <div><dt>Allow</dt><dd>~45 min</dd></div>
           <div><dt>Pairs with</dt><dd>Maritime Museum</dd></div>
         </dl>
+
+        <div class="book">
+          <span class="bk-lbl">Booking</span>
+          <p class="bk-how">Walk in during opening hours. No ticket needed.</p>
+          <span class="bk-links"><a class="bk" href="https://www.nccal.gov.kw/" target="_blank" rel="noopener noreferrer">NCCAL &rarr;</a><a class="bk ghost" href="tel:+96522929444">2292 9444</a></span>
+        </div>
       </div>
     </article>
 
@@ -618,6 +772,12 @@ a:focus-visible{outline:2px solid var(--brass);outline-offset:3px}
           <div><dt>Access</dt><dd>By arrangement</dd></div>
           <div><dt>Area</dt><dd>Jabriya</dd></div>
         </dl>
+
+        <div class="book">
+          <span class="bk-lbl">Booking</span>
+          <p class="bk-how">By arrangement. Write or call first and say what you are looking for &mdash; reading rooms run on appointments.</p>
+          <span class="bk-links"><a class="bk" href="https://www.nccal.gov.kw/" target="_blank" rel="noopener noreferrer">NCCAL &rarr;</a><a class="bk ghost" href="tel:+96522929444">2292 9444</a></span>
+        </div>
       </div>
     </article>
   </section>
@@ -664,6 +824,12 @@ a:focus-visible{outline:2px solid var(--brass);outline-offset:3px}
           <div><dt>Fighters</dt><dd>19 &middot; 12 martyred</dd></div>
           <div><dt>Museum since</dt><dd>2003</dd></div>
         </dl>
+
+        <div class="book">
+          <span class="bk-lbl">Booking</span>
+          <p class="bk-how">Free entry, no booking. Just check it is open the day you go.</p>
+          <span class="bk-links"><a class="bk" href="https://www.nccal.gov.kw/" target="_blank" rel="noopener noreferrer">NCCAL &rarr;</a><a class="bk ghost" href="tel:+96522929444">2292 9444</a></span>
+        </div>
       </div>
     </article>
 
@@ -696,6 +862,12 @@ a:focus-visible{outline:2px solid var(--brass);outline-offset:3px}
           <div><dt>Outdoor</dt><dd>Historic patrol cars</dd></div>
           <div><dt>Allow</dt><dd>~45 min</dd></div>
         </dl>
+
+        <div class="book">
+          <span class="bk-lbl">Booking</span>
+          <p class="bk-how">Free entry, no booking &mdash; but the hours are split, morning and evening. Call before you drive over.</p>
+          <span class="bk-links"><a class="bk" href="https://www.nccal.gov.kw/" target="_blank" rel="noopener noreferrer">NCCAL &rarr;</a><a class="bk ghost" href="tel:+96522929444">2292 9444</a></span>
+        </div>
       </div>
     </article>
 
@@ -729,6 +901,12 @@ a:focus-visible{outline:2px solid var(--brass);outline-offset:3px}
           <div><dt>Museums</dt><dd>Habitat, Memorial</dd></div>
           <div><dt>Best time</dt><dd>After dark</dd></div>
         </dl>
+
+        <div class="book">
+          <span class="bk-lbl">Booking</span>
+          <p class="bk-how">The park itself is free and open. The two museums are ticketed separately.</p>
+          <span class="bk-links"><a class="bk" href="https://alshaheedparkmuseums.com/" target="_blank" rel="noopener noreferrer">Park museums &rarr;</a></span>
+        </div>
       </div>
     </article>
   </section>
@@ -773,8 +951,40 @@ a:focus-visible{outline:2px solid var(--brass);outline-offset:3px}
           <div><dt>Human traces</dt><dd>From ~5500 BC</dd></div>
           <div><dt>Access</dt><dd>Permit &amp; 4&times;4</dd></div>
         </dl>
+
+        <div class="book">
+          <span class="bk-lbl">Booking</span>
+          <p class="bk-how">Not a turn-up-and-visit place. Access needs prior permission, a 4&times;4, and someone who knows the tracks.</p>
+          <span class="bk-links"><span class="bk none">Arranged in person</span></span>
+        </div>
       </div>
     </article>
+  </section>
+
+  <section class="planner" id="plan">
+    <p class="eyebrow">Plan &amp; book</p>
+    <h2>Build a booking plan</h2>
+    <p>Tick what you want to see and this puts the thirteen booking routes in order for you
+      &mdash; who to book with, what it costs, and the link or number to do it on. Kuwait has
+      <b>no single booking system</b> for these places: one takes online tickets, several are a
+      phone call, and a few you arrange in person.</p>
+
+    <div class="picker" id="picker"></div>
+
+    <div class="fields">
+      <label><span class="k">Date</span><input type="date" id="planDate"></label>
+      <label><span class="k">People</span><input type="number" id="planPeople" min="1" max="60" value="2"></label>
+      <label><span class="k">Name for the booking</span><input type="text" id="planName" placeholder="Your name"></label>
+    </div>
+
+    <div class="plan-out" id="planOut"></div>
+
+    <div class="plan-actions">
+      <button class="act primary" type="button" id="planCopy">Copy the plan</button>
+      <button class="act" type="button" id="planSave">Save as a file</button>
+      <button class="act" type="button" id="planClear">Clear</button>
+    </div>
+    <p class="said" id="planSaid"></p>
   </section>
 
   <div class="close">
@@ -782,6 +992,8 @@ a:focus-visible{outline:2px solid var(--brass);outline-offset:3px}
       &mdash; especially for the island trips, the archive, the geopark and Mirror House, which all
       need arranging in advance.</span>
     <span>Thirteen places &middot; five groups &middot; thirteen models you can turn.</span>
+    <span><b>Nothing you type into the planner leaves your own browser.</b> The plan is yours to
+      send &mdash; the bookings themselves are made with each place, on the links above.</span>
   </div>
 
 </div>
@@ -2869,6 +3081,263 @@ a:focus-visible{outline:2px solid var(--brass);outline-offset:3px}
     for (var i = 0; i < scenes.length; i++) scenes[i].step();
     requestAnimationFrame(loop);
   })();
+})();
+</script>
+
+<script>
+/* ==================================================================
+   Plan & book. Everything here stays in the viewer's own browser:
+   the picks are remembered in localStorage, the plan is assembled
+   locally, and the bookings themselves happen on each place's own
+   site or phone line. Nothing is sent anywhere.
+   ================================================================== */
+(function () {
+  'use strict';
+
+  var PLACES = [
+    { id: 'towers', name: 'Kuwait Towers', group: 'Landmarks',
+      how: 'Buy at the tower base, about KD 3 for the viewing floor. Book the restaurant separately if you want to eat.',
+      url: 'https://www.restaurants.kuwaittowers.com/reservation', label: 'Restaurant booking',
+      tel: '+96524965500', telText: '2496 5500', lead: 'Same day is fine; book the restaurant ahead on a weekend.' },
+    { id: 'mirror', name: 'Mirror House', group: 'Landmarks',
+      how: 'Appointment only. Call, agree a time, confirm the price for that day.',
+      url: 'https://mirrorhousekuwait.com/', label: 'Mirror House',
+      tel: '+96522518522', telText: '2251 8522', lead: 'Call at least a few days ahead. Allow about two hours.' },
+    { id: 'maritime', name: 'The Maritime Museum', group: 'The sea',
+      how: 'Walk in during opening hours. No online booking.',
+      url: 'https://www.nccal.gov.kw/', label: 'NCCAL',
+      tel: '+96522929444', telText: '2292 9444', lead: 'Check the hours the day before.' },
+    { id: 'scicenter', name: 'The Scientific Center', group: 'The sea',
+      how: 'Book online: choose the date, choose an entry time, pay. The only place on this list with real online ticketing.',
+      url: 'https://www.tsck.org.kw/en/services/ticket-prices/', label: 'Tickets & prices',
+      tel: '', telText: '', lead: 'Book a morning slot on a weekday if you want it quiet.' },
+    { id: 'kubbar', name: 'Kubbar Island', group: 'The sea',
+      how: 'No booking office. Charter a boat from the Marina or Ras Al-Ardh and agree the day, the hours and the price with the skipper.',
+      url: '', label: '', tel: '', telText: '',
+      lead: 'Arrange the boat a week ahead. Cooler months only, and go in the morning.' },
+    { id: 'khiran', name: 'Khiran Resorts', group: 'The sea',
+      how: 'Chalets are booked through Touristic Enterprises Company.',
+      url: 'http://www.kuwaittourism.com/KhiranResort.html', label: 'Khiran Resort',
+      tel: '1806806', telText: '1806806', lead: 'Weeks ahead for the cool months — the waterside chalets go first.' },
+    { id: 'failaka', name: 'Failaka Island', group: 'History',
+      how: 'Ferry tickets are sold at the office in Ras Al-Ardh, around KD 15 return. Ask for the last boat back before you buy.',
+      url: '', label: '', tel: '', telText: '',
+      lead: 'Give it a whole day, and let the last ferry decide your plan.' },
+    { id: 'dickson', name: 'Dickson House', group: 'History',
+      how: 'Walk in during opening hours. No ticket needed.',
+      url: 'https://www.nccal.gov.kw/', label: 'NCCAL',
+      tel: '+96522929444', telText: '2292 9444', lead: 'Twenty minutes on foot from the Maritime Museum — do both in one go.' },
+    { id: 'manuscripts', name: 'Center of Manuscripts, Heritage and Documents', group: 'History',
+      how: 'By arrangement. Write or call first and say what you are looking for.',
+      url: 'https://www.nccal.gov.kw/', label: 'NCCAL',
+      tel: '+96522929444', telText: '2292 9444', lead: 'Ask well ahead, and bring your research question with you.' },
+    { id: 'qurain', name: 'Al Qurain Martyrs Museum', group: 'Memory',
+      how: 'Free entry, no booking. Check it is open the day you go.',
+      url: 'https://www.nccal.gov.kw/', label: 'NCCAL', tel: '', telText: '',
+      lead: 'Go early, and leave time to read the names.' },
+    { id: 'police', name: 'Kuwait Police Museum', group: 'Memory',
+      how: 'Free entry, no booking — but the hours are split, morning and evening.',
+      url: 'https://www.nccal.gov.kw/', label: 'NCCAL',
+      tel: '+96522929444', telText: '2292 9444', lead: 'Call before you drive over; the middle of the day is closed.' },
+    { id: 'shaheed', name: 'Al Shaheed Park', group: 'Memory',
+      how: 'The park is free and open. The two museums are ticketed separately.',
+      url: 'https://alshaheedparkmuseums.com/', label: 'Park museums', tel: '', telText: '',
+      lead: 'Evening. Museums first, then walk the loop after dark.' },
+    { id: 'geopark', name: 'Kuwait Geopark', group: 'The land',
+      how: 'Not a turn-up-and-visit place. Access needs prior permission, a 4x4, and someone who knows the tracks.',
+      url: '', label: '', tel: '', telText: '',
+      lead: 'Start asking weeks ahead. Never go alone.' }
+  ];
+
+  var KEY = 'thirteen-pearls-plan';
+  var picker = document.getElementById('picker');
+  var out = document.getElementById('planOut');
+  var elDate = document.getElementById('planDate');
+  var elPeople = document.getElementById('planPeople');
+  var elName = document.getElementById('planName');
+  var said = document.getElementById('planSaid');
+  if (!picker || !out) return;
+
+  var state = { picked: [], date: '', people: '2', name: '' };
+  try {
+    var saved = JSON.parse(localStorage.getItem(KEY) || 'null');
+    if (saved && Object.prototype.toString.call(saved.picked) === '[object Array]') state = saved;
+  } catch (e) { /* private window, cleared storage — carry on with defaults */ }
+
+  function remember() {
+    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { /* not essential */ }
+  }
+  function say(msg) {
+    said.textContent = msg || '';
+    if (msg) window.setTimeout(function () { said.textContent = ''; }, 4000);
+  }
+
+  // ---- the pickers ------------------------------------------------
+  PLACES.forEach(function (pl) {
+    var lab = document.createElement('label');
+    lab.className = 'pick';
+    var box = document.createElement('input');
+    box.type = 'checkbox';
+    box.id = 'pick-' + pl.id;
+    box.checked = state.picked.indexOf(pl.id) !== -1;
+    lab.classList.toggle('on', box.checked);
+    var txt = document.createElement('span');
+    txt.textContent = pl.name;
+    var grp = document.createElement('span');
+    grp.className = 'g';
+    grp.textContent = pl.group;
+    lab.appendChild(box); lab.appendChild(txt); lab.appendChild(grp);
+    box.addEventListener('change', function () {
+      var at = state.picked.indexOf(pl.id);
+      if (box.checked && at === -1) state.picked.push(pl.id);
+      if (!box.checked && at !== -1) state.picked.splice(at, 1);
+      lab.classList.toggle('on', box.checked);
+      remember(); render();
+    });
+    picker.appendChild(lab);
+  });
+
+  elDate.value = state.date || '';
+  elPeople.value = state.people || '2';
+  elName.value = state.name || '';
+  [[elDate, 'date'], [elPeople, 'people'], [elName, 'name']].forEach(function (pair) {
+    pair[0].addEventListener('input', function () {
+      state[pair[1]] = pair[0].value; remember(); render();
+    });
+  });
+
+  // ---- the plan ---------------------------------------------------
+  function chosen() {
+    return PLACES.filter(function (pl) { return state.picked.indexOf(pl.id) !== -1; });
+  }
+
+  function render() {
+    var list = chosen();
+    out.textContent = '';
+
+    if (!list.length) {
+      var p = document.createElement('p');
+      p.className = 'plan-empty';
+      p.textContent = 'Tick a place above and its booking route appears here.';
+      out.appendChild(p);
+      return;
+    }
+
+    var head = document.createElement('p');
+    head.className = 'plan-head';
+    head.textContent = list.length + (list.length === 1 ? ' place' : ' places')
+      + (state.date ? ' · ' + state.date : '')
+      + (state.people ? ' · ' + state.people + (state.people === '1' ? ' person' : ' people') : '');
+    out.appendChild(head);
+
+    list.forEach(function (pl, i) {
+      var item = document.createElement('div');
+      item.className = 'plan-item';
+
+      var n = document.createElement('span');
+      n.className = 'n';
+      n.textContent = (i + 1 < 10 ? '0' : '') + (i + 1);
+      item.appendChild(n);
+
+      var h = document.createElement('h4');
+      h.textContent = pl.name;
+      item.appendChild(h);
+
+      var how = document.createElement('p');
+      how.textContent = pl.how;
+      item.appendChild(how);
+
+      var lead = document.createElement('p');
+      lead.style.color = 'var(--silt)';
+      lead.textContent = pl.lead;
+      item.appendChild(lead);
+
+      var go = document.createElement('div');
+      go.className = 'go';
+      if (pl.url) {
+        var a = document.createElement('a');
+        a.className = 'bk';
+        a.href = pl.url; a.target = '_blank'; a.rel = 'noopener noreferrer';
+        a.textContent = pl.label + ' →';
+        go.appendChild(a);
+      }
+      if (pl.tel) {
+        var t = document.createElement('a');
+        t.className = 'bk ghost';
+        t.href = 'tel:' + pl.tel;
+        t.textContent = 'Call ' + pl.telText;
+        go.appendChild(t);
+      }
+      if (!pl.url && !pl.tel) {
+        var none = document.createElement('span');
+        none.className = 'bk none';
+        none.textContent = 'Arranged in person';
+        go.appendChild(none);
+      }
+      item.appendChild(go);
+      out.appendChild(item);
+    });
+  }
+
+  function asText() {
+    var list = chosen();
+    var lines = ['Kuwait — booking plan'];
+    if (state.name) lines.push('For: ' + state.name);
+    if (state.date) lines.push('Date: ' + state.date);
+    if (state.people) lines.push('People: ' + state.people);
+    lines.push('');
+    list.forEach(function (pl, i) {
+      lines.push((i + 1) + '. ' + pl.name + '  [' + pl.group + ']');
+      lines.push('   How: ' + pl.how);
+      lines.push('   When: ' + pl.lead);
+      if (pl.url) lines.push('   Book: ' + pl.url);
+      if (pl.tel) lines.push('   Call: ' + pl.telText + ' (' + pl.tel + ')');
+      lines.push('');
+    });
+    lines.push('Confirm hours, prices and ferry times with each place before travelling.');
+    return lines.join('\n');
+  }
+
+  document.getElementById('planCopy').addEventListener('click', function () {
+    if (!chosen().length) { say('Tick a place first.'); return; }
+    var text = asText();
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { say('Plan copied.'); },
+        function () { say('Could not copy — select the plan and copy it by hand.'); });
+    } else {
+      say('Copying is not available here — select the plan and copy it by hand.');
+    }
+  });
+
+  var saveBtn = document.getElementById('planSave');
+  saveBtn.hidden = true;
+  saveBtn.addEventListener('click', function () {
+    if (!chosen().length) { say('Tick a place first.'); return; }
+    claude.use('downloads').then(function (downloads) {
+      if (!downloads) { say('Saving is not available here.'); return; }
+      return downloads.save({ filename: 'kuwait-booking-plan.md', data: asText() })
+        .then(function () { say('Saved.'); })
+        .catch(function (err) {
+          say(err && err.code === 'declined' ? 'Save cancelled.' : 'Could not save the file.');
+        });
+    });
+  });
+  // only offer the save once we know this view can do it
+  if (window.claude && typeof window.claude.use === 'function') {
+    window.claude.use('downloads').then(function (d) { if (d) saveBtn.hidden = false; });
+  }
+
+  document.getElementById('planClear').addEventListener('click', function () {
+    state = { picked: [], date: '', people: '2', name: '' };
+    remember();
+    picker.querySelectorAll('input').forEach(function (b) {
+      b.checked = false; b.parentNode.classList.remove('on');
+    });
+    elDate.value = ''; elPeople.value = '2'; elName.value = '';
+    render(); say('Cleared.');
+  });
+
+  render();
 })();
 </script>
 
