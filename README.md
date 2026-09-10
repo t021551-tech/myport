@@ -15,7 +15,10 @@ Manchester Metropolitan University.
   ID number and nothing else. Pick the substance from a library of twelve, get a staged plan
   with the medications a doctor can actually prescribe, pair a wrist band, and the band
   detects drug use from seven body signs — naming the drug class, the match strength and the
-  signals behind it — then sends it to a doctor's queue. One self-contained page
+  signals behind it — then sends it to a doctor's queue. A section on being treated outside
+  Kuwait sets the self-funded route beside the Ministry of Health's funded one and is explicit
+  about which is actually private, and about which MOH steps can be done online and which
+  cannot. One self-contained page
   (`rafeeq/index.html`) plus `rafeeq/PROMPT.md`, the build brief. It is a **prototype**: no
   real clinicians, placeholder clinician profiles, and one marked placeholder helpline
   number. All state stays in `localStorage`.

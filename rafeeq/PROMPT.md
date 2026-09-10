@@ -98,10 +98,60 @@ not an illustration: it is the most characteristic object in this subject's worl
 2. **What I'm taking** — the substance grid, then five intake questions.
 3. **My plan** — generated: phase 0 plus the substance's four phases, medication
    list, withdrawal timeline, and what the band watches for *this* substance.
-4. **The band** — trace, six vital tiles with sparklines, pairing, the six alert
-   rules, the alert log.
-5. **Doctors** — directory filtered by the chosen substances.
-6. **Doctor's view** — panel table, summary tiles, alert queue with acknowledge.
+4. **The band** — trace, six vital tiles with sparklines, pairing, the detection
+   readout, the alert rules, the alert log.
+5. **Abroad** — the two routes out of the country and what is genuinely online
+   with the Ministry of Health (see below).
+6. **Doctors** — directory filtered by the chosen substances.
+7. **Doctor's view** — panel table, summary tiles, alert queue with acknowledge.
+
+## The Abroad view
+
+Written for the patient whose real obstacle is being recognised in a waiting
+room ten minutes from their family's house. It gives two routes and states the
+privacy of each honestly, because the privacy difference is the whole decision:
+
+- **Route one — a private clinic abroad, self-funded.** Nobody in Kuwait is
+  involved: no ministry file, no committee, no employer, no relative signing
+  anything. The cost is money, and the section says so.
+- **Route two — MOH-funded treatment abroad (العلاج بالخارج).** Real, and the
+  less private of the two. Written as three steps: the **Request Treatment
+  Abroad** service on `e.gov.kw` plus appointments and the psychiatric clinic
+  request on `eservices.moh.gov.kw` and the MOHKW app (all genuinely online, any
+  hour); then the **medical committee** at the competent hospital, in person,
+  which decides whether the treatment is available inside Kuwait; then the
+  **Department of Treatment Abroad**, submitted in person by the patient or a
+  relative with legal capacity, with refusals appealable to the Supreme Medical
+  Committee for Treatment Abroad. Treatment Abroad Office: 2481 0931.
+
+**Do not write "all of it online".** The request and the appointments are; the
+committee examination is not, the file is a government file, and a relative
+attending in your place is a relative who knows. The view says this in a warning
+block and tells the reader that if secrecy from family is non-negotiable, route
+one is the honest answer. Overselling this to a frightened patient is the one
+failure mode that would matter.
+
+Two more pieces of content earn their place there:
+
+- **Six questions before paying anyone abroad**, each with the register to check
+  it against: CQC (England), Care Inspectorate (Scotland), JCI for international
+  accreditation; doctor-led detox on site; the 3am hospital plan; the total and
+  its exclusions; who prescribes in Kuwait afterwards; and whether the clinic
+  will write to that doctor.
+- **Bringing medication home**, as a critical note. Controlled medicines cannot
+  be posted into Kuwait or carried in loose, and the continuation prescriber has
+  to be arranged before the flight home — otherwise a good month abroad ends in
+  a relapse at exactly the point tolerance has fallen and the old dose can stop
+  someone's breathing.
+
+No foreign clinics are named, for the same reason no unverified doctor is: a list
+on a page reads as a recommendation, and rehab abroad is easy to sell badly.
+Verification is pushed to the country's own register and to MOH's approved-hospital
+list.
+
+The view closes on the option people forget: staying in Kuwait and being treated
+privately, or free at the government centre, neither of which calls anyone's
+family. Distance and privacy are not the same purchase.
 
 ## Content rules
 

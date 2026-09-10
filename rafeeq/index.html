@@ -380,6 +380,7 @@ footer{border-top:1px solid var(--line);padding-block:1.5rem;color:var(--ink-dim
     <button class="tab" type="button" data-go="choose">What I&rsquo;m taking</button>
     <button class="tab" type="button" data-go="plan">My plan</button>
     <button class="tab" type="button" data-go="band">The band<span class="badge" id="bandBadge" hidden>0</span></button>
+    <button class="tab" type="button" data-go="abroad">Abroad</button>
     <button class="tab" type="button" data-go="clinicians">Doctors</button>
     <button class="tab" type="button" data-go="console">Doctor&rsquo;s view</button>
   </div>
@@ -457,6 +458,19 @@ footer{border-top:1px solid var(--line);padding-block:1.5rem;color:var(--ink-dim
         minute. Confirming which drug it was, and what to do about it, is your doctor&rsquo;s call
         &mdash; the band is what tells them to make it.</p>
       <div class="sig" id="sigTable"></div>
+    </div>
+  </div>
+
+  <div class="band stack stack-16">
+    <span class="eyebrow">If you do not want anyone here to know</span>
+    <h2 style="font-size:var(--f3);max-width:30ch">You can be treated outside Kuwait, and you can
+      start most of it from your phone.</h2>
+    <p class="lede">Two separate routes, and they are not equally private. Paying for a clinic
+      abroad yourself involves nobody in Kuwait at all. The Ministry of Health will fund treatment
+      abroad, but that route goes through a medical committee and a government file &mdash; which is
+      worth knowing before you start it, not after.</p>
+    <div class="row">
+      <button class="btn" type="button" data-go="abroad">Both routes, in full</button>
     </div>
   </div>
 
@@ -630,6 +644,175 @@ footer{border-top:1px solid var(--line);padding-block:1.5rem;color:var(--ink-dim
         <button class="btn quiet sm" type="button" id="clearLog">Clear log</button>
       </div>
       <ul class="log" id="log"></ul>
+    </div>
+  </div>
+</section>
+
+<!-- ══ ABROAD ═══════════════════════════════════════════ -->
+<section class="view" id="view-abroad" hidden>
+  <div class="band" style="border-top:0">
+    <div class="stack stack-16">
+      <span class="eyebrow">Treated outside Kuwait</span>
+      <h2 style="font-size:var(--f3)">Leaving the country is a real option. So is doing the
+        paperwork at 2am from your bed.</h2>
+      <p class="lede">Plenty of people will accept treatment abroad who will not walk into a clinic
+        ten minutes from their family&rsquo;s house. That is not weakness and it is not vanity &mdash;
+        in a country this small, being recognised in a waiting room is a real cost. Here are the two
+        routes, with the privacy of each stated honestly.</p>
+    </div>
+  </div>
+
+  <div class="band">
+    <div class="stack stack-16">
+      <span class="eyebrow">Route one</span>
+      <h3 style="font-size:var(--f2)">A private clinic abroad, paid for yourself</h3>
+      <div class="promise">
+        <div><b>Who in Kuwait knows</b><span class="small">Nobody. No ministry file, no medical
+          committee, no employer, no relative signing anything. You book it, you fly, you come
+          back. This is the private route, and it is private because you are paying for it.</span></div>
+        <div><b>What it costs</b><span class="small">Money, and all of it. Residential rehab abroad
+          is priced per week and the number is large. Ask for the total before you send a deposit,
+          and ask what the number excludes &mdash; detox, medication, and aftercare are often
+          separate lines.</span></div>
+        <div><b>What it is good for</b><span class="small">Detox and the first weeks, away from the
+          people and places attached to using. Distance genuinely helps at the start.</span></div>
+        <div><b>What it cannot do</b><span class="small">Come home with you. Recovery is decided in
+          the months after you land, in the same city you left, which is why the aftercare question
+          below matters more than the brochure.</span></div>
+      </div>
+      <div class="note warn">
+        <span class="demo-flag">No clinic list here yet</span><br>
+        Rafeeq does not name foreign clinics, for the same reason it does not name unverified
+        doctors: a rehab abroad is one of the easiest things in medicine to sell badly, and a list
+        on a website reads as a recommendation. Verify any clinic yourself against the register of
+        the country it sits in &mdash; and against the Ministry of Health&rsquo;s own approved-hospital
+        list if you are going through them.
+      </div>
+    </div>
+  </div>
+
+  <div class="band">
+    <div class="stack stack-16">
+      <span class="eyebrow">Before you pay anyone, anywhere</span>
+      <h3 style="font-size:var(--f2)">Six questions, and the register to check</h3>
+      <div class="sig">
+        <div><b>Is it registered, and where can I see that?</b>
+          <span class="cond">England: CQC &middot; Scotland: Care Inspectorate &middot; international: JCI</span>
+          <span class="small">Every serious country publishes a searchable register with inspection
+            reports. If a clinic cannot give you its registration number, that is the answer.</span></div>
+        <div><b>Is the detox doctor-led, on site?</b>
+          <span class="cond">not "medically supervised" &mdash; a doctor, in the building</span>
+          <span class="small">For alcohol, benzodiazepines, pregabalin and sleeping tablets this is
+            the whole question: withdrawal from those can cause seizures.</span></div>
+        <div><b>What happens if I need a hospital at 3am?</b>
+          <span class="cond">named hospital, distance, who travels with me</span>
+          <span class="small">A villa with a nurse on call is not an answer.</span></div>
+        <div><b>What is the total, and what is excluded?</b>
+          <span class="cond">in writing, before a deposit</span>
+          <span class="small">Medication, detox, family sessions and aftercare are the usual
+            extras.</span></div>
+        <div><b>Who prescribes for me when I get home?</b>
+          <span class="cond">a named doctor in Kuwait, arranged before you fly back</span>
+          <span class="small">A clinic abroad generally cannot lawfully prescribe to you in Kuwait
+            once you leave.</span></div>
+        <div><b>Will they write to that doctor?</b>
+          <span class="cond">discharge summary, medication list, in English or Arabic</span>
+          <span class="small">Without it your Kuwaiti doctor is starting from nothing.</span></div>
+      </div>
+      <div class="note crit">
+        <b>The part people get caught by: bringing the medication home.</b> Controlled medicines
+        &mdash; buprenorphine, methadone, benzodiazepines, strong painkillers, some sleeping tablets
+        &mdash; cannot simply be posted into Kuwait or carried in loose. They need proper
+        documentation, and the rules are enforced. If a clinic abroad stabilises you on something,
+        settle who continues it in Kuwait, and on what paperwork, <em>before</em> you fly home. Coming
+        back to nothing is how a good month ends badly. The weeks after you land are also when
+        relapse risk peaks &mdash; and after a clean stretch, your old dose can stop your breathing.
+      </div>
+    </div>
+  </div>
+
+  <div class="band">
+    <div class="stack stack-16">
+      <span class="eyebrow">Route two</span>
+      <h3 style="font-size:var(--f2)">Treatment abroad, funded by the Ministry of Health</h3>
+      <p class="lede">Kuwait does send patients abroad for treatment and pays for it
+        (<span class="ar" dir="rtl" lang="ar">العلاج بالخارج</span>). It is a real route and worth
+        knowing. It is also the less private of the two, and anyone who tells you otherwise has not
+        been through it.</p>
+      <div class="phases">
+        <div class="phase now">
+          <div class="phase-mark">1</div>
+          <div class="phase-body"><h3>Start it online</h3>
+            <span class="when">from your phone, any hour</span>
+            <ul class="steps">
+              <li><span class="num">&bull;</span><span>The <b>Request Treatment Abroad</b> service
+                on Kuwait&rsquo;s government portal, <a href="https://e.gov.kw/sites/kgoenglish/Pages/Services/MOH/RequestTreatmentAbroad.aspx"
+                target="_blank" rel="noopener noreferrer">e.gov.kw</a>, is where the request
+                begins.</span></li>
+              <li><span class="num">&bull;</span><span>Clinic appointments and the
+                <b>psychiatric clinic request</b> are online too, at
+                <a href="https://eservices.moh.gov.kw/" target="_blank" rel="noopener noreferrer">eservices.moh.gov.kw</a>.</span></li>
+              <li><span class="num">&bull;</span><span>The <b>MOHKW</b> app carries the same
+                services, including appointments for the Treatment Abroad Department.</span></li>
+              <li><span class="num">&bull;</span><span>Treatment Abroad Office, if you would rather
+                ask a person: <a href="tel:+96524810931">2481 0931</a>.</span></li>
+            </ul></div>
+        </div>
+        <div class="phase">
+          <div class="phase-mark">2</div>
+          <div class="phase-body"><h3>The medical committee &mdash; in person</h3>
+            <span class="when">at a government hospital</span>
+            <ul class="steps">
+              <li><span class="num">&bull;</span><span>A medical committee at the competent hospital
+                examines you and decides whether the treatment you need is available inside
+                Kuwait.</span></li>
+              <li><span class="num">&bull;</span><span>This is the step that cannot be done on a
+                phone, and it is the step to plan for: an examination, a file, and hospital
+                corridors.</span></li>
+            </ul></div>
+        </div>
+        <div class="phase">
+          <div class="phase-mark">3</div>
+          <div class="phase-body"><h3>The Department of Treatment Abroad</h3>
+            <span class="when">after approval</span>
+            <ul class="steps">
+              <li><span class="num">&bull;</span><span>The request is submitted at the department in
+                person &mdash; by you, or by a relative with legal capacity acting for you.</span></li>
+              <li><span class="num">&bull;</span><span>If the committee refuses, the decision can be
+                appealed to the <b>Supreme Medical Committee for Treatment Abroad</b> through the
+                Under Secretary&rsquo;s office.</span></li>
+            </ul></div>
+        </div>
+      </div>
+      <div class="note warn">
+        <b>So: not all of it online, and not anonymous.</b> The request, the appointments and the
+        psychiatric clinic booking are genuinely online &mdash; that part is true, and it means you can
+        begin tonight without telling anybody. The committee examination is in person, the file is a
+        government file, and sending a relative in your place means that relative knows. If keeping
+        this from your family is the thing you cannot compromise on, route one is the honest answer
+        and route two is not.
+      </div>
+      <p class="small"><span class="tbd">Eligibility for the funded route is a question for the
+        Treatment Abroad Office, and reporting suggests it is aimed at citizens: confirm your own
+        entitlement on 2481 0931 rather than assuming either way.</span> Whether addiction treatment
+        specifically is approved for funding depends on the committee&rsquo;s finding that it is not
+        available in Kuwait &mdash; and it largely is available here, free, which is the argument the
+        committee will make. Expect that, and go in with a reason it does not fit your case.</p>
+    </div>
+  </div>
+
+  <div class="band">
+    <div class="stack stack-16">
+      <span class="eyebrow">The third option people forget</span>
+      <h3 style="font-size:var(--f2)">Staying here, and being treated privately</h3>
+      <p class="lede">Kuwait has private psychiatrists who treat addiction, and the government
+        service at the address on the front page is free for citizens and expatriates alike. Neither
+        one calls your family. Leaving the country is a way to buy distance from the people around
+        you &mdash; it is not the only way to buy privacy, and it is the most expensive one.</p>
+      <div class="row">
+        <button class="btn ghost" type="button" data-go="clinicians">Doctors on this service</button>
+        <button class="btn quiet" type="button" data-go="door">The Kuwait address and hotline</button>
+      </div>
     </div>
   </div>
 </section>
@@ -1069,7 +1252,7 @@ function save(){ try{ localStorage.setItem(KEY,JSON.stringify(S)); $("#privacyPi
   catch(e){ $("#privacyPill").innerHTML='<span class="dot warn"></span> Not saved — private window'; } }
 
 /* ═══ 4. routing ══════════════════════════════════════════════════════ */
-const VIEWS=["door","choose","plan","band","clinicians","console"];
+const VIEWS=["door","choose","plan","band","abroad","clinicians","console"];
 function go(v){
   VIEWS.forEach(n=>{ $("#view-"+n).hidden = n!==v; });
   $$(".tab").forEach(t=>t.setAttribute("aria-current", String(t.dataset.go===v)));
