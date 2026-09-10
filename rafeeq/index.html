@@ -404,6 +404,9 @@ footer{border-top:1px solid var(--line);padding-block:1.5rem;color:var(--ink-dim
       <span class="small" style="margin-inline-start:.35rem">a companion, not a file</span>
     </div>
     <span class="pill on" id="privacyPill"><span class="dot"></span> On this device only</span>
+    <button class="pill" id="oncallPill" type="button" data-go="clinicians"
+      style="cursor:pointer;background:none" title="Two doctors cover every day, twelve hours each">
+      <span class="dot live"></span> <span id="oncallWho">on call</span></button>
     <button class="exit" id="panicExit" type="button" title="Wipe everything on this device and leave">Wipe &amp; leave</button>
   </div>
 </header>
@@ -668,6 +671,7 @@ footer{border-top:1px solid var(--line);padding-block:1.5rem;color:var(--ink-dim
       <ul class="rules" id="rules"></ul>
       <p class="small">Thresholds are set against <em>your</em> seven-day baseline, not a population
         average, so a naturally fast resting heart rate doesn&rsquo;t page a doctor every evening.</p>
+      <p class="small" id="rulesOncall"></p>
     </div>
   </div>
 
@@ -1033,6 +1037,35 @@ footer{border-top:1px solid var(--line);padding-block:1.5rem;color:var(--ink-dim
         licence number, the issuing authority, and a telehealth licence valid in the patient&rsquo;s
         country. Until a clinician is verified against a medical register, nothing goes in this list.
       </div>
+      <div class="stack stack-12">
+        <span class="eyebrow">On call &middot; two doctors a day, twelve hours each</span>
+        <div id="oncallNow"></div>
+        <div class="tablewrap">
+          <table>
+            <caption class="small" style="text-align:start;padding:.6rem .8rem">
+              The next seven days. <span class="demo-flag">placeholder rota</span> &mdash; the shape
+              of the cover, with the same placeholder clinicians as the directory below.
+            </caption>
+            <thead><tr><th>Date</th><th>Day &middot; 08:00&ndash;20:00</th><th>Night &middot; 20:00&ndash;08:00</th><th></th></tr></thead>
+            <tbody id="rota"></tbody>
+          </table>
+        </div>
+        <div class="promise">
+          <div><b>There is no closed hour</b><span class="small">The Ministry hotline stops at 5pm
+            and the clinics keep office hours. Cravings, withdrawal and overdoses do not, and 3am is
+            when most of this happens. One of the two doctors above is awake for it.</span></div>
+          <div><b>Who gets your alert</b><span class="small">Your own doctor, if they are the one on
+            shift. Otherwise the doctor who is awake &mdash; and an overdose escalation always goes to
+            whoever is on call, never into a queue for the morning.</span></div>
+          <div><b>If the first call is not answered</b><span class="small">The other doctor on that
+            day&rsquo;s rota is the named backup, and that escalation is automatic rather than
+            something you have to chase while frightened.</span></div>
+          <div><b>What you can expect</b><span class="small">Overdose escalation: an emergency
+            response, immediately. A critical alert: the on-call doctor, within minutes. Everything
+            else: your own doctor, same day. <span class="tbd">Response times need a staffed rota and
+            a contract behind them before they are promises rather than intentions.</span></span></div>
+        </div>
+      </div>
       <div class="row" id="docFilter"></div>
       <div class="docs" id="docs"></div>
     </div>
@@ -1336,15 +1369,24 @@ const QUESTIONS=[
 
 const CLINICIANS=[
  {n:"Dr. Farah Al-Sabti", r:"Addiction psychiatry &middot; consultant", tz:"GMT+3 &middot; Arabic, English",
-  tags:["alcohol","benzos","zolpidem","pregabalin","other"], avail:"Video, same week &middot; urgent slots held daily"},
+  tags:["alcohol","benzos","zolpidem","pregabalin","other"], avail:"Video, same week &middot; urgent slots held daily", oncall:true},
  {n:"Dr. Omar Haddad", r:"Addiction medicine &middot; opioid agonist prescriber", tz:"GMT+3 &middot; Arabic, English",
-  tags:["heroin","rx-opioids","pregabalin","other"], avail:"Same-day start for buprenorphine or methadone"},
+  tags:["heroin","rx-opioids","pregabalin","other"], avail:"Same-day start for buprenorphine or methadone", oncall:true},
  {n:"Dr. Leena Marzouq", r:"Psychiatry &middot; stimulant programmes", tz:"GMT+3 &middot; Arabic, English, French",
-  tags:["captagon","meth","cocaine","other"], avail:"Video, twice weekly &middot; runs the contingency-management group"},
+  tags:["captagon","meth","cocaine","other"], avail:"Video, twice weekly &middot; runs the contingency-management group", oncall:true},
  {n:"Dr. Nadia Osei", r:"Clinical psychology &middot; CBT and relapse prevention", tz:"GMT+1 &middot; English",
   tags:["cannabis","cocaine","nicotine","ketamine","other"], avail:"Weekly, evenings"},
  {n:"Dr. Yusuf Rahimi", r:"Internal medicine &middot; withdrawal and detox supervision", tz:"GMT+4 &middot; Arabic, Farsi, English",
-  tags:["alcohol","benzos","zolpidem","other"], avail:"On call for supervised detox &middot; inpatient referral"},
+  tags:["alcohol","benzos","zolpidem","other"], avail:"On call for supervised detox &middot; inpatient referral", oncall:true},
+ {n:"Dr. Dana Al-Mutairi", r:"Emergency medicine &middot; overdose and acute withdrawal", tz:"GMT+3 &middot; Arabic, English",
+  tags:["heroin","rx-opioids","alcohol","benzos","pregabalin","other"],
+  avail:"Nights &middot; takes the overdose escalations", oncall:true},
+ {n:"Dr. Khaled Bassam", r:"Addiction medicine &middot; opioid agonist prescriber", tz:"GMT+3 &middot; Arabic, English",
+  tags:["heroin","rx-opioids","zolpidem","other"], avail:"Same-week starts &middot; alternate-night on call", oncall:true},
+ {n:"Dr. Reem Al-Otaibi", r:"Addiction psychiatry &middot; consultant", tz:"GMT+3 &middot; Arabic, English",
+  tags:["alcohol","captagon","meth","cocaine","cannabis","other"], avail:"Video, twice weekly &middot; weekend on call", oncall:true},
+ {n:"Dr. Tareq Fadel", r:"Internal medicine &middot; detox supervision", tz:"GMT+3 &middot; Arabic, English",
+  tags:["alcohol","benzos","zolpidem","pregabalin","other"], avail:"Supervised detox &middot; day cover", oncall:true},
  {n:"Dr. Maya Frost", r:"Urology &middot; ketamine bladder clinic", tz:"GMT+0 &middot; English",
   tags:["ketamine"], avail:"Referral within two weeks"},
  {n:"Dr. Hessa Al-Duaij", r:"Clinical psychology &middot; trauma and long-term aftercare", tz:"GMT+3 &middot; Arabic, English",
@@ -1434,6 +1476,49 @@ const STATES={
  withdrawal: {hr:[97,5], hrv:[29,5],  spo2:[97,.6], temp:[34.4,.18], rr:[20,1.8], motion:[.44,.16], eda:[7.9,1.1]}
 };
 
+/* ═══ 2c. the on-call rota ════════════════════════════════════════════
+   Two doctors a day, twelve hours each, so there is never an hour when a
+   critical alert has nobody to land on. Whoever is not on shift is that
+   day's named backup, which is how a real rota handles a first call that
+   goes unanswered. The rota is derived from the date rather than stored,
+   so every device shows the same pair. */
+const SHIFTS=[{k:"day", label:"Day", from:8, to:20},{k:"night", label:"Night", from:20, to:8}];
+const ROTA_EPOCH=Math.floor(Date.UTC(2026,0,1)/86400000);
+const oncallPool=()=>CLINICIANS.filter(c=>c.oncall);
+const dayIndex=d=>Math.floor(d.getTime()/86400000)-ROTA_EPOCH;
+function rotaFor(d){
+  const pool=oncallPool(), i=dayIndex(d), n=pool.length;
+  return {day:pool[((i*2)%n+n)%n], night:pool[((i*2+1)%n+n)%n]};
+}
+/* At 03:00 the doctor on call is the one who started at 20:00 yesterday. */
+function onCallNow(now){
+  now=now||new Date();
+  const h=now.getHours();
+  if(h<8){
+    const y=new Date(now); y.setDate(y.getDate()-1);
+    return {shift:SHIFTS[1], doctor:rotaFor(y).night, backup:rotaFor(now).day, until:8};
+  }
+  const r=rotaFor(now);
+  return h<20
+    ? {shift:SHIFTS[0], doctor:r.day, backup:r.night, until:20}
+    : {shift:SHIFTS[1], doctor:r.night, backup:rotaFor(new Date(now.getTime()+864e5)).day, until:8};
+}
+function minsLeft(now){
+  now=now||new Date();
+  const oc=onCallNow(now), end=new Date(now);
+  end.setHours(oc.until,0,0,0);
+  if(oc.until===8 && now.getHours()>=20) end.setDate(end.getDate()+1);
+  return Math.max(0, Math.round((end-now)/60000));
+}
+/* Who an alert actually reaches: your own doctor when they are on shift,
+   otherwise the doctor who is awake. Nothing waits for morning. */
+function recipientFor(sev){
+  const oc=onCallNow();
+  if(S.doctor && oc.doctor && S.doctor===oc.doctor.n) return S.doctor+" (your doctor, on call)";
+  if(sev==="crit") return oc.doctor.n+" ("+oc.shift.label.toLowerCase()+" on call)";
+  return S.doctor || oc.doctor.n+" ("+oc.shift.label.toLowerCase()+" on call)";
+}
+
 /* ═══ 3. state, kept in this browser and nowhere else ═════════════════ */
 const KEY="rafeeq.v1", DEMO_SPEED=60;
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
@@ -1465,7 +1550,7 @@ function go(v){
   $$(".tab").forEach(t=>t.setAttribute("aria-current", String(t.dataset.go===v)));
   if(v==="plan") renderPlan();
   if(v==="after"){ renderStepdown(); renderPhq(); renderOrgs(); }
-  if(v==="clinicians") renderDocs();
+  if(v==="clinicians"){ renderDocs(); renderOncall(); }
   if(v==="console") renderConsole();
   window.scrollTo({top:0,behavior:"instant"});
 }
@@ -1840,7 +1925,7 @@ function loop(now){
 
 /* ═══ 8. alerts ═══════════════════════════════════════════════════════ */
 function alert_(sev,b,m,ack){
-  S.log.unshift({t:Date.now(),sev,b,m,ack:ack||""});
+  S.log.unshift({t:Date.now(),sev,b,m,ack:ack||"",to:recipientFor(sev)});
   if(S.log.length>60) S.log.pop();
   save(); renderLog(); renderBadge();
   if($("#view-console").hidden===false) renderConsole();
@@ -1858,7 +1943,9 @@ function renderLog(){
     const li=el("li",a.sev);
     li.innerHTML=`<span class="when">${ago(a.t)} &middot; ${new Date(a.t).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"})}</span>
       <b>${esc(a.b)}</b><span class="small">${esc(a.m)}</span>
-      ${a.ack?`<span class="ack">✓ ${esc(a.ack)}</span>`:`<span class="small" style="color:var(--ochre)">Waiting for your doctor</span>`}`;
+      ${a.to?`<span class="small">Sent to ${esc(a.to)}</span>`:""}
+      ${a.ack?`<span class="ack">✓ ${esc(a.ack)}</span>`
+             :`<span class="small" style="color:var(--ochre)">Waiting for ${esc(a.to?a.to.replace(/ \(.*$/,""):"your doctor")}</span>`}`;
     ul.appendChild(li);
   });
 }
@@ -1923,12 +2010,55 @@ function renderRules(){
     <span class="cond">signature match ≥ 60% held ≥ 3 min</span>
     <span class="who">Doctor</span>`;
   ul.appendChild(first);
+  const oc=onCallNow(), line=$("#rulesOncall");
+  if(line) line.innerHTML=`Every rule above has somebody to reach at every hour: two doctors cover
+    each day in twelve-hour shifts, and right now that is <b>${esc(oc.doctor.n)}</b> on the
+    ${oc.shift.label.toLowerCase()} shift, with ${esc(oc.backup.n)} as the backup.
+    <button class="btn quiet sm" type="button" data-go="clinicians">see the rota</button>`;
   RULES.forEach(r=>{
     const li=el("li",r.sev);
     li.innerHTML=`<b>${r.b}</b><span class="cond">${r.cond}</span><span class="who">${r.who}</span>`;
     ul.appendChild(li);
   });
 }
+
+/* ═══ 8b. on call, rendered ═══════════════════════════════════════════ */
+const surname=n=>String(n||"").replace(/^Dr\.\s*/,"").split(" ").slice(-1)[0];
+function renderOncall(){
+  const oc=onCallNow(), left=minsLeft();
+  const w=$("#oncallWho");
+  if(w) w.textContent=oc.shift.label.toLowerCase()+" on call \u00B7 Dr. "+surname(oc.doctor.n);
+  const now=$("#oncallNow");
+  if(now){
+    const h=Math.floor(left/60), m=left%60;
+    now.innerHTML=`<div class="where" style="border-inline-start-color:var(--pine)">
+      <span class="eyebrow">Awake right now</span>
+      <b>${esc(oc.doctor.n)}</b>
+      <span class="small">${oc.doctor.r} &middot; ${oc.doctor.tz}</span>
+      <address>${oc.shift.label} shift &middot; ${String(oc.shift.from).padStart(2,"0")}:00&ndash;${String(oc.shift.to).padStart(2,"0")}:00<br>
+        ${h?h+"h ":""}${m}m left on this shift<br>
+        backup: ${esc(oc.backup.n)}</address>
+      <span class="small">A critical alert from your band reaches this doctor now, whatever the hour.
+        If they do not answer, it escalates to the backup automatically.</span>
+    </div>`;
+  }
+  const tb=$("#rota");
+  if(tb){
+    tb.textContent="";
+    const today=new Date(), shift=onCallNow().shift.k;
+    for(let i=0;i<7;i++){
+      const d=new Date(today.getTime()+i*864e5), r=rotaFor(d), isToday=i===0;
+      const tr=el("tr");
+      tr.innerHTML=`<td><b>${d.toLocaleDateString([], {weekday:"short", day:"numeric", month:"short"})}</b>
+          ${isToday?' <span class="small">today</span>':""}</td>
+        <td>${esc(r.day.n)}${isToday&&shift==="day"?' <span class="state ok">on now</span>':""}</td>
+        <td>${esc(r.night.n)}${isToday&&shift==="night"?' <span class="state ok">on now</span>':""}</td>
+        <td class="small">${esc(surname(r.day.n))} &amp; ${esc(surname(r.night.n))} back each other up</td>`;
+      tb.appendChild(tr);
+    }
+  }
+}
+setInterval(renderOncall, 30000);
 
 /* ═══ 9. clinicians ═══════════════════════════════════════════════════ */
 let docFilter="mine";
@@ -1985,12 +2115,18 @@ function renderConsole(){
 
   const crit=all.filter(a=>a.sev==="crit").length;
   const t=$("#consoleTiles"); t.textContent="";
+  const oc=onCallNow();
   [["Open alerts",all.length,crit?"flag":""],["Emergency-level",crit,crit?"bad":""],
    ["Patients on the band",PANEL.filter(p=>p.band==="on").length+(band.on?1:0),""],
    ["Bands off right now",PANEL.filter(p=>p.band==="off").length+(band.on?0:1),band.on?"":"flag"]]
   .forEach(([k,v,c])=>{
     t.appendChild(el("div","tile "+c,`<span class="k">${k}</span><span class="v">${v}</span><span class="u">right now</span>`));
   });
+
+  t.appendChild(el("div","tile",
+    `<span class="k">${oc.shift.label} shift, on call</span>
+     <span class="v" style="font-size:var(--f1)">Dr. ${surname(oc.doctor.n)}</span>
+     <span class="u">backup: Dr. ${surname(oc.backup.n)}</span>`));
 
   const tb=$("#panel"); tb.textContent="";
   const rows=[{alias:S.alias, subId:S.subs[0]||"other", day:S.day, band:band.on?"on":"off", mine:true, open:mine.length, id:S.id}]
@@ -2184,7 +2320,7 @@ $("#panicExit").onclick=()=>{
 /* ═══ 12. boot ════════════════════════════════════════════════════════ */
 renderSubs(); renderDanger(); renderQuestions(); syncHint();
 renderTiles(); renderRules(); renderSigTable(); renderLog(); renderBadge(); syncId(); renderDetect();
-renderStepdown(); renderPhq(); renderOrgs();
+renderStepdown(); renderPhq(); renderOrgs(); renderOncall();
 $("#bandDevice").textContent="demo band · clock 60× real time";
 $("#pairMsg").textContent="Not paired yet — the demo band is streaming so the page has something to show.";
 $("#heroWho").textContent=(S.demo?"example patient":"patient")+" “"+S.alias+"”";

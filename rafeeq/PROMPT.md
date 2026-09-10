@@ -104,7 +104,8 @@ not an illustration: it is the most characteristic object in this subject's worl
    a working PHQ-9, and volunteering in Kuwait (see below).
 6. **Abroad** — the two routes out of the country and what is genuinely online
    with the Ministry of Health (see below).
-7. **Doctors** — directory filtered by the chosen substances.
+7. **Doctors** — who is awake right now, the seven-day on-call rota, then the
+   directory filtered by the chosen substances.
 8. **Doctor's view** — panel table, summary tiles, alert queue with acknowledge.
 
 ## The After view
@@ -213,6 +214,34 @@ licence, a regulator, or a named accreditation.
 The view closes on the option people forget: staying in Kuwait and being treated
 privately, or free at the government centre, neither of which calls anyone's
 family. Distance and privacy are not the same purchase.
+
+## The on-call rota
+
+**Two doctors a day, twelve hours each, so no hour has nobody in it.** Day shift
+08:00–20:00, night 20:00–08:00, and whoever is off shift is that day's named
+backup — first-on-call plus escalation, the way a real rota handles an unanswered
+call.
+
+`rotaFor(date)` derives the pair from the date against a fixed epoch rather than
+storing a schedule, so every device shows the same names, and `onCallNow()`
+resolves the current shift. The one case worth getting right: **before 08:00 the
+doctor on call is the one who started at 20:00 yesterday**, so an alert at 3am
+names the person actually awake rather than a doctor who has not begun their day.
+Eight prescribers carry `oncall: true`, which gives a 1-in-4 rota instead of two
+names alternating every other night.
+
+The rota is not decoration — it changes where alerts go. `recipientFor(sev)`
+routes to the patient's own doctor when they are on shift, and otherwise to the
+doctor who is awake; a critical alert always goes to the on-call doctor rather
+than into a queue for the morning. Every alert stores its recipient, so the
+patient's log says who it reached and the doctor's console shows the shift.
+
+The pill in the rail names the on-call doctor everywhere in the app and refreshes
+every thirty seconds. Response expectations are stated — emergency response for
+an overdose escalation, on-call doctor within minutes for a critical alert, own
+doctor same day for the rest — with a `.tbd` marker, because response times need
+a staffed rota and a contract behind them before they are promises rather than
+intentions.
 
 ## Content rules
 
