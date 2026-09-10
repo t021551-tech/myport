@@ -344,6 +344,18 @@ td .num{font-size:var(--f-1)}
 .lines dd{margin:0;font-family:var(--mono);font-size:var(--f0);font-weight:500}
 .tbd{color:var(--ochre);font-family:var(--body);font-size:var(--f-1);font-weight:600}
 
+.where{
+  display:grid;gap:.35rem;justify-items:start;
+  background:var(--surface);border:1px solid var(--line-strong);
+  border-inline-start:4px solid var(--pine);border-radius:0 var(--r) var(--r) 0;
+  padding:.9rem 1rem;
+}
+.where b{font-family:var(--display);font-size:var(--f1);font-weight:600}
+.where .ar{font-size:var(--f1)}
+.where address{
+  font-style:normal;font-family:var(--mono);font-size:var(--f-1);
+  line-height:1.75;color:var(--ink);
+}
 footer{border-top:1px solid var(--line);padding-block:1.5rem;color:var(--ink-dim);font-size:var(--f-1)}
 @media (prefers-reduced-motion:reduce){*{animation-duration:0s!important;transition:none!important}}
 </style>
@@ -454,16 +466,46 @@ footer{border-top:1px solid var(--line);padding-block:1.5rem;color:var(--ink-dim
       <b>Kuwait &mdash; call now, before the plan, before the band, before signing up.</b>
       <dl class="lines">
         <div><dt>Emergency &mdash; ambulance, police, fire</dt><dd><a href="tel:112">112</a></dd></div>
-        <div><dt>Kuwait Center for Mental Health &mdash; hotline</dt><dd><a href="tel:+96524621770">2462 1770</a></dd></div>
-        <div><dt>Addiction treatment &mdash; Al-Sabah health region, Sulaibikhat</dt>
-          <dd class="tbd">walk in, or ask the hotline above to refer you</dd></div>
+        <div><dt>Kuwait Center for Mental Health &mdash; hotline</dt>
+          <dd><a href="tel:+96524621770">2462 1770</a></dd>
+          <dt style="font-size:var(--f-2)">daily, 9am&ndash;5pm</dt></div>
+        <div><dt>Addiction treatment &mdash; same campus</dt>
+          <dd style="font-family:var(--body);font-size:var(--f-1);font-weight:400">walk in, or ask
+            the hotline to refer you</dd></div>
       </dl>
+
+      <div class="where">
+        <span class="eyebrow">Psychiatric emergency &mdash; the address</span>
+        <b>Kuwait Center for Mental Health</b>
+        <span class="ar" dir="rtl" lang="ar">مركز الكويت للصحة النفسية</span>
+        <address>
+          Sabah Health Region, Block 1<br>
+          Jamal Abdul Nasser Street, Shuwaikh<br>
+          Capital Governorate, Kuwait
+        </address>
+        <span class="small">Kuwait&rsquo;s main public psychiatric hospital, and the campus the
+          government addiction service sits on. Free for citizens and expatriates alike. You do
+          not need an appointment to be triaged, and you can show the Arabic line above to a
+          driver instead of explaining anything.</span>
+        <a class="btn ghost sm" href="https://www.google.com/maps/search/?api=1&amp;query=Kuwait+Center+for+Mental+Health+Shuwaikh"
+           target="_blank" rel="noopener noreferrer">Open in Maps</a>
+      </div>
       <p class="small">
         <b>2462 1770</b> is the Ministry of Health hotline at the Kuwait Center for Mental Health,
         free and in Arabic or English, staffed by doctors during the day. It is the mental-health
         line rather than a dedicated 24-hour addiction line, and the centre is where government
         addiction treatment sits &mdash; so it is the number to call to be seen, and the number to
         ask for a referral. Treatment there is free, for citizens and expatriates alike.
+      </p>
+      <p class="small">
+        <b>Outside 9am&ndash;5pm, go to a door rather than a phone.</b> For wanting to die, for
+        hearing or seeing things, or for a withdrawal that has turned frightening, the address above
+        is the right door. For an overdose, a seizure, chest pain, or someone who cannot be woken,
+        call <b>112</b> and go to the nearest general hospital emergency department instead &mdash;
+        those are medical emergencies, and a general A&amp;E is faster at them than a psychiatric
+        hospital. <span class="tbd">Whether the psychiatric emergency room is staffed overnight is
+        not published anywhere public: confirm it with the Ministry of Health before this site is
+        put in front of a real patient.</span>
       </p>
       <p class="small">
         Signs of an opioid overdose &mdash; breathing slow or stopped, lips or fingertips blue, cannot be

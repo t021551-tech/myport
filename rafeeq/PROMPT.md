@@ -127,11 +127,28 @@ not an illustration: it is the most characteristic object in this subject's worl
   and the centre where government addiction treatment sits. Both are `tel:`
   links. The strip states plainly that 2462 1770 is the mental-health line
   rather than a dedicated 24-hour addiction line, because that is what it is.
-- The Al-Sabah health region addiction centre is listed as a place to walk into
-  or be referred to, with **no direct number**: the numbers circulating for it
-  disagree with each other across sources, and a wrong number in a crisis strip
-  is worse than no number. Confirm it with the Ministry of Health before
-  printing one, and keep the `.tbd` marker until then.
+- The strip also carries **the address**, because at 3am a phone number is the
+  wrong instrument: Kuwait Center for Mental Health (مركز الكويت للصحة النفسية),
+  Sabah Health Region, Block 1, Jamal Abdul Nasser Street, Shuwaikh, Capital
+  Governorate. The Arabic name is set in the Arabic face at reading size
+  specifically so it can be shown to a driver, the street lines are set in the
+  mono face so they can be read out, and a Maps link sits under them.
+- **Which door, for what.** The strip separates the two emergencies rather than
+  implying one number covers both: wanting to die, hallucinations, or a
+  frightening withdrawal → the psychiatric address; an overdose, a seizure, chest
+  pain, or someone who cannot be woken → 112 and the nearest general A&E, which
+  is faster at those. Getting this the wrong way round costs lives, so it is
+  stated in the copy rather than left to the reader.
+- The Al-Sabah addiction centre is listed as a place to walk into or be referred
+  to, with **no direct number**: the numbers circulating for it disagree with
+  each other across sources, and a wrong number in a crisis strip is worse than
+  no number.
+- Whether the psychiatric emergency room is staffed overnight is not published
+  publicly, so that gap wears the `.tbd` marker in the copy itself. Both open
+  markers — that, and the addiction centre's direct line — are Ministry of Health
+  questions to settle before this site is put in front of a real patient. The
+  `.tbd` marker means a missing or unverified *fact*; it is not for an
+  instruction like "walk in".
 
 ## Demo mechanics
 
