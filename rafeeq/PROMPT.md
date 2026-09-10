@@ -1,0 +1,143 @@
+# Build prompt — Rafeeq (رفيق)
+
+Use this to regenerate or extend the site. It describes the brief, the design
+system, the clinical content rules and the demo mechanics, so a fresh build
+lands in the same place.
+
+---
+
+## The brief
+
+Build a website for people who are addicted and are afraid to look for help.
+One self-contained page, no build step, no frameworks, no dependencies beyond
+Google Fonts. It has to do five things:
+
+1. **Take fear seriously as the first design problem.** No name, no phone
+   number, no next-of-kin field. An alias, and a one-press **Wipe & leave**.
+2. **Let the patient say what they are taking** — a wide library of substances,
+   multi-select, because most people are honest about one and quiet about the
+   second.
+3. **Give a real staged plan** for that substance: phases, steps, the withdrawal
+   timeline, and the medications a doctor can actually prescribe, named.
+4. **Pair a wrist band** and show the live signals, the alert rules in plain
+   words, and a log of what has been sent.
+5. **Show the doctor's side** — an alias-only queue, sorted worst-first, where
+   acknowledging an alert writes back into the patient's log.
+
+## The one thing the site must never pretend
+
+**A wrist band cannot detect drugs in the blood.** No consumer wearable can.
+What it measures is heart rate, HRV, skin temperature, blood oxygen, respiration,
+sweat (EDA), tremor and motion — plus whether it is on the wrist. The site flags
+the *pattern*, never the substance, and says so on the landing page in a
+critical-styled note. Any copy that implies a drug test is a bug.
+
+## Design system
+
+**Palette** — light-first, because a frightened person should not be met by a
+dark surveillance console. Neutrals are biased green toward the accent.
+
+| token | light | dark | role |
+|---|---|---|---|
+| `--ground` | `#EDF1EE` | `#0E1613` | page ground |
+| `--surface` | `#FAFCFA` | `#16211D` | panels, cards, trace frame |
+| `--ink` | `#14201C` | `#E5EDE8` | body text |
+| `--ink-dim` | `#65756E` | `#8B9C94` | secondary, green-biased grey |
+| `--pine` | `#1C6B58` | `#54BCA0` | the single accent |
+| `--ochre` | `#9C6412` | `#D9A34B` | warning severity |
+| `--brick` | `#9C2F24` | `#E37F6E` | critical severity |
+| `--steady` | `#2F7D6A` | `#5DC0A4` | good / clear |
+| `--on-accent` | `#F6FBF8` | `#08120F` | text on a pine fill |
+| `--link` | `#0F4B3D` | `#8FD8C3` | links, hero emphasis |
+
+Severity colour is separate from the accent and is the only place colour
+carries meaning. Every colour is declared in the bare `:root` block first, then
+redefined in `@media (prefers-color-scheme: dark) :root:not([data-theme="light"])`
+and again in `:root[data-theme="dark"]`. **Never** scope a component colour to a
+theme selector — that is how filled buttons ended up with dark text on a dark
+fill during the first build. Use a token (`--on-accent`, `--link`) instead.
+
+**Type** — four roles, all Google Fonts:
+- Display: **Spectral** — a serif with clinical calm, used for headings only.
+- Body: **IBM Plex Sans** — institutional without being cold.
+- Data: **IBM Plex Mono** with `tabular-nums` — every vital, clock and threshold.
+- Arabic: **IBM Plex Sans Arabic**, so `رفيق` and each substance's Arabic name
+  are set properly. Every Arabic string carries `dir="rtl" lang="ar"`.
+
+**Layout** — 1080px measure, six views switched in place (`.view[hidden]`), a
+sticky identity rail above a sticky scrolling tab strip. Bands separated by
+hairlines, single column under 720px. The hero is a live wrist trace on canvas,
+not an illustration: it is the most characteristic object in this subject's world.
+
+## Views
+
+1. **The door** — hero + live trace, the four promises, the "a band cannot detect
+   drugs" note, and the crisis strip.
+2. **What I'm taking** — the substance grid, then five intake questions.
+3. **My plan** — generated: phase 0 plus the substance's four phases, medication
+   list, withdrawal timeline, and what the band watches for *this* substance.
+4. **The band** — trace, six vital tiles with sparklines, pairing, the six alert
+   rules, the alert log.
+5. **Doctors** — directory filtered by the chosen substances.
+6. **Doctor's view** — panel table, summary tiles, alert queue with acknowledge.
+
+## Content rules
+
+- **Clinical safety comes before encouragement.** For alcohol, benzodiazepines,
+  pregabalin/gabapentin and Z-drugs, the danger of stopping suddenly is stated
+  before any plan step, and the generated plan opens with "This plan does not
+  start at home" whenever the substance is in that class and use is not light,
+  or the patient reports a previous fit.
+- **Name real medications.** Buprenorphine, methadone, naltrexone, acamprosate,
+  disulfiram, thiamine, lofexidine, diazepam tapers, varenicline, NRT, naloxone.
+  Where nothing is licensed (stimulants, cannabis, ketamine) say so plainly and
+  name contingency management and CBT instead of implying a pill exists.
+- **An honest report is never punished.** Self-reporting use logs as `info`,
+  reaches the doctor as a note, and never resets a phase.
+- **Leave a visible marker where a fact is missing** rather than inventing it.
+  The Kuwait addiction helpline is a marked `.tbd` placeholder; the six
+  clinicians are marked placeholder profiles with unverified licences. Real
+  profiles need a licence number, an issuing authority and a telehealth licence
+  valid where the patient is.
+- Helpline numbers that *are* printed must be verifiable: 112, 999, 911,
+  SAMHSA 1-800-662-4357, 988, Samaritans 116 123, FRANK 0300 123 6600.
+
+## Demo mechanics
+
+- **One engine** (`band`) drives both traces, the tiles, the sparklines and the
+  rule checks from a single `requestAnimationFrame` loop. Vitals ease toward the
+  target for the current state (`steady` / `stim` / `opioid` / `withdrawal`) or
+  freeze when off-wrist.
+- **The demo clock runs 60× real time**, labelled as such, so a rule with a
+  20-patient-minute dwell fires in 20 seconds while someone is looking at it.
+  Rules count patient-minutes, never frames.
+- **Six rules**, each with a dwell and a one-shot latch that clears when the
+  condition clears: band off ≥20 min, band off ≥60 min, HR ≥ baseline +25 with
+  low motion ≥10 min, HRV ≤65% of baseline ≥30 min, SpO₂ <92% with respiration
+  <10 for 2 min (the only rule that escalates past the doctor), and skin temp
+  ≥ baseline +0.8 °C with sweat ≥15 min. Thresholds are relative to the
+  patient's own seven-day baseline, never a population average.
+- **Real pairing** is Web Bluetooth against the standard Heart Rate service
+  (`0x180D` / `0x2A37`). Heart rate becomes real; the other five signals stay
+  simulated, and the page says so. It degrades to the demo band wherever Web
+  Bluetooth is missing or blocked (including inside an iframe).
+- **The PPG waveform** is three Gaussians — systolic peak, dicrotic notch,
+  diastolic bump — into a 900-sample ring buffer, prefilled at boot so the first
+  painted frame shows a full trace.
+- **State** lives in `localStorage` under `rafeeq.v1` and nowhere else. That is
+  a privacy decision, not a shortcut: nothing about the patient leaves the
+  device, and the privacy pill in the rail reflects it (including failing
+  honestly in a private window).
+
+## Rules
+
+- The page must read at rest, with the example patient "Q" loaded so the plan,
+  band and console all have content on first paint. Anything belonging to the
+  example is marked as an example.
+- Accessibility: visible focus rings, `aria-hidden` on decoration, labelled
+  canvases, `aria-pressed` on the substance toggles, `prefers-reduced-motion`
+  respected, no horizontal scroll at 400px.
+- The footer says what this still needs before it touches one real person:
+  verified prescribers, a lawful basis for health data per country, a validated
+  overdose escalation path with a real emergency service, and clinical sign-off
+  on every plan in the library.

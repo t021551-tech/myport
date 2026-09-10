@@ -11,6 +11,12 @@ Manchester Metropolitan University.
 - `dives/` — **Thirteen Pearls**: thirteen places in Kuwait grouped by who they suit, over a
   pearl-and-seawater backdrop. Every place carries a live 3D model (Three.js), each built
   from a photograph of the real place. One self-contained page: `dives/index.html`.
+- `rafeeq/` — **Rafeeq** (رفيق): a private front door to addiction treatment. Pick the
+  substance from a library of twelve, get a staged plan with the medications a doctor can
+  actually prescribe, pair a wrist band, and watch the alert rules fire into a doctor's
+  queue. One self-contained page (`rafeeq/index.html`) plus `rafeeq/PROMPT.md`, the build
+  brief. It is a **prototype**: no real clinicians, placeholder clinician profiles, and one
+  marked placeholder helpline number. All state stays in `localStorage`.
 - `notes/` — the Notebook: six running logs (places in Kuwait, a car build list, a gahwa
   log, things I'm learning, read & watched, small wins). A hub page plus one page per log,
   all sharing `notes/styles.css`. Currently a **draft** — every page carries a
@@ -44,6 +50,16 @@ For the Notebook, colours and components live in `notes/styles.css`. Every log p
 same shape — page head, entries, then an open-ended list — so a new entry is a copy of one
 `<li class="entry">` with new content. The places and parts pages filter their entries with
 a small inline script driven by `data-tags` / `data-status`.
+
+`rafeeq/index.html` is one file too. Its colours are the `:root` tokens (light-first, with
+both dark blocks); the substance library, the intake questions, the alert rules and the
+clinician list are the four data arrays at the top of the script, so adding a substance
+means adding one object with its own phases, medications, timeline and band signals.
+A single `requestAnimationFrame` loop drives the traces, the vital tiles and the rule
+checks; the demo clock runs 60× real time so a 20-minute rule fires in 20 seconds. Real
+band pairing uses Web Bluetooth's Heart Rate service and degrades to the demo band. The
+whole design brief, including the rules about what the site must never claim a wrist band
+can do, is in `rafeeq/PROMPT.md`.
 
 `dives/index.html` is one file with no build step. Colours are the `:root` tokens at the top;
 each place is one `<article class="place">`; the pearls and silt are drawn on the `#drift` canvas; the four 3D scenes are the `build*()` functions in

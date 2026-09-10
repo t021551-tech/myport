@@ -1,0 +1,1436 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rafeeq Recovery Companion</title>
+<meta name="description" content="A private way to start treatment for addiction: choose the substance, get a staged plan, and let a paired band tell your doctor when you are in trouble.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Arabic:wght@400;600&display=swap">
+<style>
+/* ── tokens ──────────────────────────────────────────────
+   Light is the primary world: someone frightened should not
+   be met by a dark surveillance console. Neutrals are biased
+   green, toward the pine accent, so nothing reads as stock grey. */
+:root{
+  --ground:#EDF1EE;
+  --ground-2:#E3E9E4;
+  --surface:#FAFCFA;
+  --surface-2:#F2F6F2;
+  --ink:#14201C;
+  --ink-2:#3A4A44;
+  --ink-dim:#65756E;
+  --line:#D2DBD4;
+  --line-strong:#B6C3BB;
+  --pine:#1C6B58;          /* the single accent */
+  --pine-soft:#DCEAE3;
+  --pine-ink:#0F4B3D;
+  --ochre:#9C6412;         /* warning */
+  --ochre-soft:#F5E9D3;
+  --brick:#9C2F24;         /* critical */
+  --brick-soft:#F6DFDA;
+  --steady:#2F7D6A;        /* good */
+  --steady-soft:#DAECE4;
+  --on-accent:#F6FBF8;     /* text sitting on a pine fill */
+  --link:#0F4B3D;
+
+  --display:"Spectral","Hoefler Text",Georgia,serif;
+  --body:"IBM Plex Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  --arabic:"IBM Plex Sans Arabic","Noto Naskh Arabic",serif;
+
+  --f-2:.72rem; --f-1:.82rem; --f0:.98rem; --f1:1.12rem;
+  --f2:1.4rem;  --f3:1.85rem; --f4:clamp(2.1rem,1.4rem + 2.6vw,3.1rem);
+  --pad:clamp(1rem,3.5vw,2.5rem);
+  --r:10px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#0E1613; --ground-2:#131D19; --surface:#16211D; --surface-2:#1B2823;
+    --ink:#E5EDE8; --ink-2:#BCCAC3; --ink-dim:#8B9C94;
+    --line:#26332D; --line-strong:#38473F;
+    --pine:#54BCA0; --pine-soft:#17332B; --pine-ink:#8FD8C3;
+    --ochre:#D9A34B; --ochre-soft:#33280F;
+    --brick:#E37F6E; --brick-soft:#371914;
+    --steady:#5DC0A4; --steady-soft:#152E27;
+    --on-accent:#08120F; --link:#8FD8C3;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0E1613; --ground-2:#131D19; --surface:#16211D; --surface-2:#1B2823;
+  --ink:#E5EDE8; --ink-2:#BCCAC3; --ink-dim:#8B9C94;
+  --line:#26332D; --line-strong:#38473F;
+  --pine:#54BCA0; --pine-soft:#17332B; --pine-ink:#8FD8C3;
+  --ochre:#D9A34B; --ochre-soft:#33280F;
+  --brick:#E37F6E; --brick-soft:#371914;
+  --steady:#5DC0A4; --steady-soft:#152E27;
+  --on-accent:#08120F; --link:#8FD8C3;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--ground);color:var(--ink);
+  font-family:var(--body);font-size:var(--f0);line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{font-family:var(--display);font-weight:600;line-height:1.18;text-wrap:balance;margin:0}
+p{margin:0}
+a{color:var(--link);text-underline-offset:3px}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2.5px solid var(--pine);outline-offset:2px;border-radius:3px}
+.ar{font-family:var(--arabic);font-size:.95em}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.shell{max-width:1080px;margin:0 auto;padding-inline:var(--pad)}
+.eyebrow{
+  font-size:var(--f-2);letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink-dim);font-weight:600;
+}
+.lede{font-size:var(--f1);color:var(--ink-2);max-width:62ch}
+.small{font-size:var(--f-1);color:var(--ink-dim)}
+.stack{display:flex;flex-direction:column}
+.stack-4{gap:.25rem}.stack-8{gap:.5rem}.stack-12{gap:.75rem}
+.stack-16{gap:1rem}.stack-24{gap:1.5rem}.stack-32{gap:2rem}
+.row{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center}
+
+/* ── rail ─────────────────────────────────────────────── */
+.rail{
+  position:sticky;top:0;z-index:20;background:var(--surface);
+  border-bottom:1px solid var(--line);
+}
+.rail-in{display:flex;align-items:center;gap:.75rem;padding-block:.6rem;flex-wrap:wrap}
+.brand{display:flex;align-items:baseline;gap:.5rem;margin-inline-end:auto}
+.brand b{font-family:var(--display);font-size:var(--f1);font-weight:600;letter-spacing:.01em}
+.brand .ar{color:var(--ink-dim)}
+.pill{
+  display:inline-flex;align-items:center;gap:.4rem;
+  font-size:var(--f-2);letter-spacing:.06em;text-transform:uppercase;font-weight:600;
+  padding:.28rem .6rem;border-radius:999px;border:1px solid var(--line-strong);color:var(--ink-2);
+}
+.pill.on{background:var(--pine-soft);border-color:transparent;color:var(--pine-ink)}
+.dot{width:.5rem;height:.5rem;border-radius:50%;background:var(--steady);flex:none}
+.dot.warn{background:var(--ochre)}.dot.crit{background:var(--brick)}
+.dot.live{animation:beat 1.9s ease-in-out infinite}
+@keyframes beat{0%,100%{opacity:1}50%{opacity:.35}}
+.exit{
+  background:none;border:1px solid var(--line-strong);border-radius:999px;
+  padding:.28rem .7rem;font-size:var(--f-2);font-weight:600;letter-spacing:.06em;
+  text-transform:uppercase;cursor:pointer;color:var(--brick);
+}
+.exit:hover{background:var(--brick-soft)}
+
+/* ── tabs ─────────────────────────────────────────────── */
+.tabs{
+  display:flex;gap:.15rem;overflow-x:auto;scrollbar-width:none;
+  border-bottom:1px solid var(--line);background:var(--surface);
+  position:sticky;top:0;z-index:19;
+}
+.tabs::-webkit-scrollbar{display:none}
+.tabs-in{display:flex;gap:.15rem;min-width:max-content}
+.tab{
+  background:none;border:0;border-bottom:2.5px solid transparent;
+  padding:.6rem .8rem;cursor:pointer;font-size:var(--f-1);font-weight:500;
+  color:var(--ink-dim);white-space:nowrap;
+}
+.tab:hover{color:var(--ink)}
+.tab[aria-current="true"]{color:var(--ink);border-bottom-color:var(--pine)}
+.tab .badge{
+  font-family:var(--mono);font-size:var(--f-2);background:var(--brick);color:#fff;
+  border-radius:999px;padding:0 .35rem;margin-inline-start:.35rem;
+}
+.tab .badge[hidden]{display:none!important}
+
+/* ── buttons ──────────────────────────────────────────── */
+.btn{
+  display:inline-flex;align-items:center;gap:.45rem;cursor:pointer;
+  border-radius:var(--r);padding:.6rem 1rem;font-weight:500;font-size:var(--f0);
+  background:var(--pine);color:var(--on-accent);border:1px solid transparent;
+}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:none;color:var(--ink);border-color:var(--line-strong)}
+.btn.ghost:hover{background:var(--surface-2);filter:none}
+.btn.quiet{background:none;color:var(--ink-2);border-color:transparent;padding-inline:.4rem}
+.btn.quiet:hover{color:var(--ink);text-decoration:underline}
+.btn.sm{padding:.35rem .7rem;font-size:var(--f-1)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+
+/* ── surfaces ─────────────────────────────────────────── */
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:clamp(1rem,2.5vw,1.5rem)}
+.panel.flat{background:var(--surface-2)}
+.band{padding-block:clamp(2rem,5vw,3.25rem);border-top:1px solid var(--line)}
+.view[hidden]{display:none!important}
+.note{
+  border-inline-start:3px solid var(--line-strong);padding-inline-start:.85rem;
+  color:var(--ink-2);font-size:var(--f-1);
+}
+.note.warn{border-color:var(--ochre);background:var(--ochre-soft);padding:.7rem .85rem;border-radius:0 var(--r) var(--r) 0}
+.note.crit{border-color:var(--brick);background:var(--brick-soft);padding:.7rem .85rem;border-radius:0 var(--r) var(--r) 0}
+.demo-flag{
+  display:inline-flex;gap:.4rem;align-items:center;font-size:var(--f-2);font-weight:600;
+  letter-spacing:.06em;text-transform:uppercase;color:var(--ochre);
+}
+
+/* ── hero ─────────────────────────────────────────────── */
+.hero{display:grid;gap:clamp(1.25rem,3vw,2rem);padding-block:clamp(1.75rem,4vw,3rem)}
+.hero h1{font-size:var(--f4);max-width:26ch}
+.hero h1 em{font-style:italic;color:var(--link)}
+.trace-frame{
+  border:1px solid var(--line);border-radius:var(--r);background:var(--surface);
+  overflow:hidden;
+}
+.trace-head{
+  display:flex;gap:.75rem;align-items:center;flex-wrap:wrap;
+  padding:.55rem .8rem;border-bottom:1px solid var(--line);background:var(--surface-2);
+  font-size:var(--f-2);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-dim);font-weight:600;
+}
+.trace-head .num{letter-spacing:0;text-transform:none;font-size:var(--f-1);color:var(--ink)}
+canvas.trace{display:block;width:100%;height:120px;max-width:100%}
+
+/* ── promise list ─────────────────────────────────────── */
+.promise{display:grid;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.promise>div{background:var(--surface);padding:.9rem 1rem;display:grid;gap:.2rem}
+.promise dt,.promise b{font-weight:600}
+@media(min-width:720px){.promise{grid-template-columns:1fr 1fr}}
+
+/* ── substances ───────────────────────────────────────── */
+.subs{display:grid;gap:.6rem;grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
+.sub{
+  text-align:start;cursor:pointer;background:var(--surface);border:1px solid var(--line);
+  border-radius:var(--r);padding:.8rem .9rem;display:grid;gap:.3rem;
+}
+.sub:hover{border-color:var(--pine);background:var(--surface-2)}
+.sub[aria-pressed="true"]{border-color:var(--pine);box-shadow:inset 0 0 0 1px var(--pine);background:var(--pine-soft)}
+.sub b{font-size:var(--f0)}
+.sub .ar{color:var(--ink-dim);font-size:var(--f-1)}
+.sub .cls{font-size:var(--f-2);letter-spacing:.07em;text-transform:uppercase;color:var(--ink-dim);font-weight:600}
+.risk{
+  font-size:var(--f-2);font-weight:600;letter-spacing:.04em;
+  padding:.1rem .45rem;border-radius:4px;justify-self:start;
+}
+.risk.stop{background:var(--brick-soft);color:var(--brick)}
+.risk.watch{background:var(--ochre-soft);color:var(--ochre)}
+.risk.ok{background:var(--steady-soft);color:var(--steady)}
+
+/* ── intake form ──────────────────────────────────────── */
+.qs{display:grid;gap:1.1rem}
+fieldset{border:0;padding:0;margin:0;display:grid;gap:.5rem}
+legend{padding:0;font-weight:600;font-size:var(--f0)}
+.opts{display:flex;flex-wrap:wrap;gap:.4rem}
+.opts label{
+  border:1px solid var(--line-strong);border-radius:999px;padding:.32rem .75rem;
+  font-size:var(--f-1);cursor:pointer;background:var(--surface);
+}
+.opts input{position:absolute;opacity:0;width:0;height:0}
+.opts input:focus-visible+span{outline:2.5px solid var(--pine);outline-offset:3px;border-radius:3px}
+.opts label:has(input:checked){background:var(--pine-soft);border-color:var(--pine);color:var(--pine-ink);font-weight:500}
+
+/* ── plan ─────────────────────────────────────────────── */
+.phases{display:grid;gap:0;position:relative}
+.phase{
+  display:grid;grid-template-columns:auto 1fr;gap:0 1rem;
+  padding-block:1.1rem;border-top:1px solid var(--line);
+}
+.phase:first-child{border-top:0}
+.phase-mark{
+  width:2.4rem;height:2.4rem;border-radius:50%;display:grid;place-items:center;
+  background:var(--surface-2);border:1px solid var(--line-strong);
+  font-family:var(--mono);font-size:var(--f-1);color:var(--ink-2);
+}
+.phase.now .phase-mark{background:var(--pine);border-color:transparent;color:var(--on-accent)}
+.phase-body{display:grid;gap:.5rem}
+.phase h3{font-size:var(--f1)}
+.phase .when{font-family:var(--mono);font-size:var(--f-1);color:var(--ink-dim)}
+.steps{margin:0;padding:0;list-style:none;display:grid;gap:.35rem}
+.steps li{display:grid;grid-template-columns:auto 1fr;gap:.5rem;align-items:start;font-size:var(--f-1)}
+.steps input[type=checkbox]{margin-top:.35rem;accent-color:var(--pine);width:1rem;height:1rem}
+.steps li.done>span{color:var(--ink-dim);text-decoration:line-through}
+.meds{display:grid;gap:.4rem}
+.med{display:grid;gap:.15rem;background:var(--surface-2);border-radius:8px;padding:.55rem .7rem;font-size:var(--f-1)}
+.med b{font-weight:600}
+
+/* ── vitals ───────────────────────────────────────────── */
+.tiles{display:grid;gap:.6rem;grid-template-columns:repeat(auto-fit,minmax(148px,1fr))}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:.7rem .8rem;display:grid;gap:.15rem}
+.tile .k{font-size:var(--f-2);letter-spacing:.07em;text-transform:uppercase;color:var(--ink-dim);font-weight:600}
+.tile .v{font-family:var(--mono);font-size:var(--f2);line-height:1.1;font-variant-numeric:tabular-nums}
+.tile .u{font-size:var(--f-1);color:var(--ink-dim)}
+.tile canvas{display:block;width:100%;height:26px;margin-top:.2rem}
+.tile.flag{border-color:var(--ochre);background:var(--ochre-soft)}
+.tile.flag .v{color:var(--ochre)}
+.tile.bad{border-color:var(--brick);background:var(--brick-soft)}
+.tile.bad .v{color:var(--brick)}
+
+.rules{margin:0;padding:0;list-style:none;display:grid;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.rules li{background:var(--surface);padding:.7rem .85rem;display:grid;gap:.2rem;grid-template-columns:1fr auto;align-items:start}
+.rules b{font-weight:600;font-size:var(--f-1)}
+.rules .cond{grid-column:1;font-family:var(--mono);font-size:var(--f-2);color:var(--ink-dim)}
+.rules .who{grid-column:2;grid-row:1/span 2;font-size:var(--f-2);text-transform:uppercase;letter-spacing:.06em;font-weight:600;color:var(--ink-dim);text-align:end}
+.rules li.crit .who{color:var(--brick)}
+
+.log{margin:0;padding:0;list-style:none;display:grid;gap:.5rem;max-height:26rem;overflow-y:auto}
+.log li{
+  background:var(--surface);border:1px solid var(--line);border-inline-start:4px solid var(--line-strong);
+  border-radius:0 var(--r) var(--r) 0;padding:.6rem .8rem;display:grid;gap:.2rem;
+}
+.log li.info{border-inline-start-color:var(--steady)}
+.log li.warn{border-inline-start-color:var(--ochre)}
+.log li.crit{border-inline-start-color:var(--brick);background:var(--brick-soft)}
+.log .when{font-family:var(--mono);font-size:var(--f-2);color:var(--ink-dim)}
+.log b{font-size:var(--f-1)}
+.log .ack{font-size:var(--f-2);color:var(--steady);font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+.log:empty::after{content:"Nothing yet. A quiet log is the good outcome.";color:var(--ink-dim);font-size:var(--f-1)}
+
+/* ── clinicians ───────────────────────────────────────── */
+.docs{display:grid;gap:.6rem;grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
+.doc{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:.9rem;display:grid;gap:.4rem;align-content:start}
+.doc[hidden]{display:none!important}
+.doc h3{font-size:var(--f1)}
+.doc .role{font-size:var(--f-1);color:var(--ink-dim)}
+.tags{display:flex;flex-wrap:wrap;gap:.25rem}
+.tags span{font-size:var(--f-2);background:var(--surface-2);border:1px solid var(--line);border-radius:4px;padding:.05rem .4rem;color:var(--ink-2)}
+.doc .avail{font-size:var(--f-1);display:flex;gap:.4rem;align-items:center}
+
+/* ── console ──────────────────────────────────────────── */
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:36rem;font-size:var(--f-1)}
+th,td{text-align:start;padding:.6rem .8rem;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:var(--f-2);letter-spacing:.07em;text-transform:uppercase;color:var(--ink-dim);font-weight:600;background:var(--surface-2)}
+tbody tr:last-child td{border-bottom:0}
+td .num{font-size:var(--f-1)}
+.state{font-size:var(--f-2);font-weight:600;text-transform:uppercase;letter-spacing:.05em;padding:.1rem .4rem;border-radius:4px}
+.state.crit{background:var(--brick-soft);color:var(--brick)}
+.state.warn{background:var(--ochre-soft);color:var(--ochre)}
+.state.ok{background:var(--steady-soft);color:var(--steady)}
+
+/* ── crisis ───────────────────────────────────────────── */
+.crisis{background:var(--surface-2);border:1px solid var(--line-strong);border-radius:var(--r);padding:1rem}
+.lines{display:grid;gap:.5rem;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));margin:0}
+.lines div{display:grid;gap:.1rem}
+.lines dt{font-size:var(--f-1);color:var(--ink-dim)}
+.lines dd{margin:0;font-family:var(--mono);font-size:var(--f0);font-weight:500}
+.tbd{color:var(--ochre);font-family:var(--body);font-size:var(--f-1);font-weight:600}
+
+footer{border-top:1px solid var(--line);padding-block:1.5rem;color:var(--ink-dim);font-size:var(--f-1)}
+@media (prefers-reduced-motion:reduce){*{animation-duration:0s!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="rail">
+  <div class="shell rail-in">
+    <div class="brand">
+      <b>Rafeeq</b>
+      <span class="ar" dir="rtl" lang="ar">رفيق</span>
+      <span class="small" style="margin-inline-start:.35rem">a companion, not a file</span>
+    </div>
+    <span class="pill on" id="privacyPill"><span class="dot"></span> On this device only</span>
+    <button class="exit" id="panicExit" type="button" title="Wipe everything on this device and leave">Wipe &amp; leave</button>
+  </div>
+</header>
+
+<nav class="tabs" aria-label="Sections">
+  <div class="shell tabs-in" style="padding-inline:var(--pad)">
+    <button class="tab" type="button" data-go="door" aria-current="true">The door</button>
+    <button class="tab" type="button" data-go="choose">What I&rsquo;m taking</button>
+    <button class="tab" type="button" data-go="plan">My plan</button>
+    <button class="tab" type="button" data-go="band">The band<span class="badge" id="bandBadge" hidden>0</span></button>
+    <button class="tab" type="button" data-go="clinicians">Doctors</button>
+    <button class="tab" type="button" data-go="console">Doctor&rsquo;s view</button>
+  </div>
+</nav>
+
+<main class="shell">
+
+<!-- ══ THE DOOR ══════════════════════════════════════════ -->
+<section class="view" id="view-door">
+  <div class="hero">
+    <div class="stack stack-16">
+      <span class="eyebrow">For the part of you that hasn&rsquo;t told anyone</span>
+      <h1>You can start treatment without <em>saying your name</em> to anybody.</h1>
+      <p class="lede">
+        Pick what you&rsquo;re taking. Get a staged plan written for that substance, not a
+        motivational poster. Pair a wrist band, and it tells a doctor when your body says
+        you&rsquo;re in trouble &mdash; including when you take it off. Nothing here asks for
+        your name, your number, or your family.
+      </p>
+      <div class="row">
+        <button class="btn" type="button" data-go="choose">Choose the substance</button>
+        <button class="btn ghost" type="button" data-go="band">See what the band watches</button>
+        <button class="btn quiet" type="button" data-go="console">See what the doctor sees</button>
+      </div>
+    </div>
+
+    <div class="trace-frame">
+      <div class="trace-head">
+        <span><span class="dot live" id="heroDot"></span> Live wrist trace</span>
+        <span class="num" id="heroHr">&mdash;</span>
+        <span class="num" id="heroState">on wrist &middot; steady</span>
+        <span style="margin-inline-start:auto" class="num" id="heroWho">example patient &ldquo;Q&rdquo;</span>
+      </div>
+      <canvas class="trace" id="heroTrace" aria-label="Live pulse trace from the paired band"></canvas>
+    </div>
+  </div>
+
+  <div class="band stack stack-16">
+    <span class="eyebrow">What this is honest about</span>
+    <h2 style="font-size:var(--f3);max-width:30ch">Four promises, and one thing we refuse to pretend.</h2>
+    <div class="promise">
+      <div>
+        <b>No name, no ID, no phone number.</b>
+        <span class="small">You get an alias. Your doctor treats an alias. Nothing is posted, shared,
+        or shown to anyone in your life.</span>
+      </div>
+      <div>
+        <b>Your family cannot be notified.</b>
+        <span class="small">There is no next-of-kin field. Only you can add a person, and only you
+        can remove them &mdash; except in an overdose escalation, which is spelled out on the band page.</span>
+      </div>
+      <div>
+        <b>Everything on this page stays in this browser.</b>
+        <span class="small">Your choice, your plan and your alert log are written to local storage on this
+        device. Nothing is uploaded. <b>Wipe &amp; leave</b>, top right, clears it in one press.</span>
+      </div>
+      <div>
+        <b>Telling us you used is not punished.</b>
+        <span class="small">An honest report reaches your doctor as a note, never an alarm, and never
+        resets your plan to day one. Hiding it is what the band is for.</span>
+      </div>
+    </div>
+    <div class="note crit">
+      <b>A wrist band cannot detect drugs in your blood.</b> No consumer wearable can, and any
+      product that claims to is lying to you. What a band measures is your heart rate, heart-rate
+      variability, skin temperature, blood oxygen, breathing rate, sweat and tremor &mdash; and
+      whether it is on your wrist at all. Rafeeq flags the <em>pattern</em>, not the substance. A
+      flag is a reason for your doctor to check on you. It is not a test result and it is not proof.
+    </div>
+  </div>
+
+  <div class="band stack stack-16">
+    <span class="eyebrow">If today is the bad day</span>
+    <div class="crisis stack stack-12">
+      <b>Call someone now &mdash; before the plan, before the band, before signing up.</b>
+      <dl class="lines">
+        <div><dt>Emergency, Kuwait / GCC</dt><dd>112</dd></div>
+        <div><dt>Emergency, UK &middot; US</dt><dd>999 &middot; 911</dd></div>
+        <div><dt>Kuwait addiction line</dt><dd class="tbd">[verify local number before launch]</dd></div>
+        <div><dt>US &mdash; SAMHSA helpline</dt><dd>1-800-662-4357</dd></div>
+        <div><dt>US &mdash; crisis &amp; suicide line</dt><dd>988</dd></div>
+        <div><dt>UK &mdash; Samaritans &middot; FRANK</dt><dd>116 123 &middot; 0300 123 6600</dd></div>
+      </dl>
+      <p class="small">
+        Signs of an opioid overdose &mdash; breathing slow or stopped, lips or fingertips blue, cannot be
+        woken: give naloxone if you have it, call the emergency number, stay until help arrives.
+        Nobody needs your name to keep you alive.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CHOOSE ════════════════════════════════════════════ -->
+<section class="view" id="view-choose" hidden>
+  <div class="band" style="border-top:0">
+    <div class="stack stack-16">
+      <span class="eyebrow">Step 1 of 2 &middot; the substance</span>
+      <h2 style="font-size:var(--f3)">What are you taking?</h2>
+      <p class="lede">
+        Pick everything that applies &mdash; most people are honest about one thing and quiet about
+        the second. The plan changes completely depending on the answer: some of these are dangerous
+        to stop suddenly, and the plan has to say so before it says anything else.
+      </p>
+      <div class="subs" id="subs"></div>
+      <div id="dangerNote"></div>
+    </div>
+  </div>
+
+  <div class="band">
+    <form class="stack stack-24" id="intake">
+      <div class="stack stack-8">
+        <span class="eyebrow">Step 2 of 2 &middot; five questions, no names</span>
+        <h2 style="font-size:var(--f3)">How it has been going.</h2>
+        <p class="small">Answers only change the plan&rsquo;s pace and whether a doctor has to see you
+          before day one. Skip any question you don&rsquo;t want to answer.</p>
+      </div>
+      <div class="qs" id="questions"></div>
+      <div class="row">
+        <button class="btn" type="submit">Build my plan</button>
+        <span class="small" id="chooseHint">Choose at least one substance above.</span>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- ══ PLAN ══════════════════════════════════════════════ -->
+<section class="view" id="view-plan" hidden>
+  <div class="band" style="border-top:0" id="planHead"></div>
+  <div class="band"><div class="stack stack-16">
+    <span class="eyebrow">The plan</span>
+    <div class="phases" id="phases"></div>
+  </div></div>
+  <div class="band"><div class="stack stack-16" id="planMeds"></div></div>
+  <div class="band"><div class="stack stack-16" id="planWatch"></div></div>
+</section>
+
+<!-- ══ BAND ══════════════════════════════════════════════ -->
+<section class="view" id="view-band" hidden>
+  <div class="band" style="border-top:0">
+    <div class="stack stack-16">
+      <span class="eyebrow">The band</span>
+      <h2 style="font-size:var(--f3)">What it sees, what it sends, and who it wakes.</h2>
+      <div class="trace-frame">
+        <div class="trace-head">
+          <span><span class="dot live" id="bandDot"></span> <span id="bandStateLabel">On wrist</span></span>
+          <span class="num" id="bandClock">&mdash;</span>
+          <span style="margin-inline-start:auto" class="num" id="bandDevice">no band paired</span>
+        </div>
+        <canvas class="trace" id="bandTrace" style="height:150px" aria-label="Live pulse trace"></canvas>
+      </div>
+      <div class="tiles" id="tiles"></div>
+      <div class="row">
+        <button class="btn" type="button" id="pairBtn">Pair a real band (Bluetooth)</button>
+        <button class="btn ghost" type="button" id="simBtn">Use the demo band</button>
+        <span class="small" id="pairMsg"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="band">
+    <div class="stack stack-16">
+      <span class="eyebrow">Try it &middot; these fire real alerts into the doctor&rsquo;s view</span>
+      <h3 style="font-size:var(--f2)">Make something happen.</h3>
+      <div class="row">
+        <button class="btn ghost sm" type="button" data-sim="off">Take the band off</button>
+        <button class="btn ghost sm" type="button" data-sim="stim">Stimulant pattern</button>
+        <button class="btn ghost sm" type="button" data-sim="opioid">Opioid-risk pattern</button>
+        <button class="btn ghost sm" type="button" data-sim="withdrawal">Withdrawal pattern</button>
+        <button class="btn ghost sm" type="button" data-sim="steady">Back to steady</button>
+        <button class="btn sm" type="button" data-sim="report">I used &mdash; tell my doctor</button>
+      </div>
+      <p class="small">The last one is the honest report: it reaches your doctor as a note, keeps your
+        plan where it is, and is logged as <span class="num">self-reported</span> so nobody mistakes it
+        for something the band caught you doing.</p>
+    </div>
+  </div>
+
+  <div class="band">
+    <div class="stack stack-16">
+      <span class="eyebrow">Alert rules</span>
+      <h3 style="font-size:var(--f2)">Every rule, in plain words.</h3>
+      <ul class="rules" id="rules"></ul>
+      <p class="small">Thresholds are set against <em>your</em> seven-day baseline, not a population
+        average, so a naturally fast resting heart rate doesn&rsquo;t page a doctor every evening.</p>
+    </div>
+  </div>
+
+  <div class="band">
+    <div class="stack stack-16">
+      <span class="eyebrow">Alert log &middot; this device</span>
+      <div class="row">
+        <h3 style="font-size:var(--f2);margin-inline-end:auto">What has been sent.</h3>
+        <button class="btn quiet sm" type="button" id="clearLog">Clear log</button>
+      </div>
+      <ul class="log" id="log"></ul>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CLINICIANS ════════════════════════════════════════ -->
+<section class="view" id="view-clinicians" hidden>
+  <div class="band" style="border-top:0">
+    <div class="stack stack-16">
+      <span class="eyebrow">Doctors</span>
+      <h2 style="font-size:var(--f3)">Addiction medicine, by substance.</h2>
+      <p class="lede">Filtered by what you chose, because an alcohol detox and a Captagon crash are
+        not the same specialty. You see them; they see an alias.</p>
+      <div class="note warn">
+        <span class="demo-flag">Placeholder profiles</span><br>
+        These six are the shape of the directory, not real people. Real profiles need a verified
+        licence number, the issuing authority, and a telehealth licence valid in the patient&rsquo;s
+        country. Until a clinician is verified against a medical register, nothing goes in this list.
+      </div>
+      <div class="row" id="docFilter"></div>
+      <div class="docs" id="docs"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CONSOLE ═══════════════════════════════════════════ -->
+<section class="view" id="view-console" hidden>
+  <div class="band" style="border-top:0">
+    <div class="stack stack-16">
+      <span class="eyebrow">Doctor&rsquo;s view</span>
+      <h2 style="font-size:var(--f3)">The other side of the alert.</h2>
+      <p class="lede">This is the clinician&rsquo;s queue: no names, an alias per patient, sorted so the
+        person in the most trouble is at the top. Acknowledging an alert writes back into the
+        patient&rsquo;s log, so they can see that someone actually looked.</p>
+      <div class="tiles" id="consoleTiles"></div>
+      <div class="tablewrap">
+        <table>
+          <caption class="small" style="text-align:start;padding:.6rem .8rem">
+            Dr. Farah Al-Sabti&rsquo;s panel &mdash; <span class="demo-flag">example rows</span>, except
+            &ldquo;Q&rdquo;, which is you.
+          </caption>
+          <thead>
+            <tr><th>Alias</th><th>Substance</th><th>Day</th><th>Band</th><th>Open alerts</th><th></th></tr>
+          </thead>
+          <tbody id="panel"></tbody>
+        </table>
+      </div>
+      <div class="stack stack-8">
+        <h3 style="font-size:var(--f2)">Alert queue</h3>
+        <ul class="log" id="queue"></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="shell stack stack-8">
+  <p><b>Rafeeq</b> <span class="ar" dir="rtl" lang="ar">رفيق</span> &mdash; a working prototype.
+    Not a medical device, not a diagnosis, and not connected to any real clinician. Nothing typed
+    here is sent anywhere; it is stored in this browser until you wipe it.</p>
+  <p class="small">Before this treats one real person it needs: verified prescribers, a lawful basis
+    for handling health data in each country it operates, a validated escalation path for overdose
+    alerts with a real emergency service on the other end, and clinical sign-off on every plan in
+    the library. The design is the easy half.</p>
+</footer>
+</main>
+
+<script>
+"use strict";
+/* ═══ 1. the substance library ═════════════════════════════════════════
+   Each entry carries: how bad stopping is (risk), the honest sentence
+   about what quitting is like, a withdrawal timeline, medication options
+   that actually exist, what a wrist band can plausibly see for that
+   substance, and four phases of plan. Content order matters: for the
+   dangerous ones, the warning comes before the encouragement. */
+const SUBS = [
+{
+  id:"alcohol", name:"Alcohol", ar:"الكحول", cls:"Depressant", risk:"stop",
+  also:"beer, wine, spirits, arak",
+  truth:"Alcohol is one of the few drugs where stopping can kill you and continuing might not, today. That is why this plan starts with a doctor and not with willpower.",
+  danger:"After months of heavy daily drinking, stopping suddenly can cause seizures and delirium tremens. Untreated DTs kills roughly one in twenty people who get it. Do not dry out alone.",
+  timeline:["6–12 h — shaking, sweating, nausea, anxiety","12–48 h — the seizure window","48–96 h — the DT window: confusion, hallucination, racing heart","5–14 days — sleep and mood slowly return"],
+  meds:[
+    {n:"Chlordiazepoxide or diazepam, on a fixed taper", d:"The detox itself — a short, reducing benzodiazepine course that holds the seizure window open safely. Prescribed and reviewed daily, never self-dosed."},
+    {n:"Thiamine (vitamin B1), often by injection first", d:"Prevents Wernicke's encephalopathy, a brain injury that is cheap to prevent and permanent if missed."},
+    {n:"Naltrexone or acamprosate", d:"After detox. Naltrexone dulls the reward; acamprosate quiets the constant background pull. Both are ordinary prescriptions, not last resorts."},
+    {n:"Disulfiram", d:"Makes drinking physically punishing. Only with supervision and only if you want that kind of fence."}],
+  signals:["Resting heart rate climbing 20–30 bpm above your baseline while you are sitting still","Heart-rate variability collapsing overnight","Skin temperature and sweat rising together with a fine tremor","Sleep broken into short fragments"],
+  phases:[
+    {t:"Supervised detox", when:"Day 0–5", steps:["Doctor sets the taper dose and reviews it every day","Thiamine started before any carbohydrate-heavy meal","Someone knows where you are for the first 72 hours, even if they don't know why","Band stays on through the seizure window — this is the part that matters most"]},
+    {t:"The flat week", when:"Day 5–14", steps:["Start naltrexone or acamprosate with your doctor","No decisions about your job, marriage or money this week","Eat three times a day even without appetite","Two video check-ins"]},
+    {t:"Rebuilding the day", when:"Week 3–8", steps:["Map the three hours a day you used to drink in, and fill them on paper","Weekly therapy — CBT or relapse-prevention focused","One social event tested sober, with an exit plan"]},
+    {t:"Long hold", when:"Month 3+", steps:["Monthly review; medication continues as long as it helps","Write the lapse plan while you are well, not during","Liver function rechecked at three and six months"]}]
+},
+{
+  id:"heroin", name:"Heroin / street opioids", ar:"الهيروين", cls:"Opioid", risk:"watch",
+  also:"brown, white, street fentanyl",
+  truth:"Withdrawal will not kill you. The two weeks after it might: your tolerance falls fast, and the dose that was normal last month can stop your breathing now. Overdose risk is highest right after a clean stretch.",
+  danger:"Street supply is increasingly cut with fentanyl and its analogues. Carry naloxone. Never use alone — if there is nobody else, keep someone on the phone.",
+  timeline:["8–12 h — restlessness, yawning, gooseflesh, runny nose","1–3 days — the peak: cramps, vomiting, no sleep, bone ache","4–10 days — the physical tail","Weeks to months — sleep, mood and cravings settle last"],
+  meds:[
+    {n:"Buprenorphine/naloxone or methadone", d:"Opioid agonist treatment. This is the treatment with the strongest evidence for keeping people alive; it is not 'swapping one drug for another', and there is no clock on how long you stay on it."},
+    {n:"Naloxone, take-home", d:"Reverses an overdose in minutes. Two doses, one where you use and one where you sleep. Teach whoever is nearby."},
+    {n:"Lofexidine or clonidine", d:"Blunts the sweating, cramps and racing pulse if you are doing a medication-free withdrawal."},
+    {n:"Extended-release naltrexone", d:"Only after you are fully withdrawn — starting it too early causes violent precipitated withdrawal."}],
+  signals:["Breathing rate under 10 and blood oxygen falling — the overdose pattern, and the only alert Rafeeq escalates past your doctor","Pupil-independent signs: heart rate dropping while movement stops","Withdrawal read as rising temperature, sweat and restlessness at 3 am"],
+  phases:[
+    {t:"Stay alive first", when:"Day 0", steps:["Naloxone in your hand before anything else","Same-day start on buprenorphine or methadone if you want it — no waiting list in this plan","Agree the one rule: never use alone","Band paired, overdose escalation switched on and explained"]},
+    {t:"Stabilise the dose", when:"Day 1–14", steps:["Daily then alternate-day dose review until cravings and withdrawal are both quiet","Treat the sleep — it is the most common reason people walk away","Nothing else is asked of you these two weeks"]},
+    {t:"Get your week back", when:"Week 3–12", steps:["Move to weekly, then fortnightly pickups as trust builds","Blood-borne virus testing offered — hepatitis C is curable now","Start the part of therapy that deals with why, not just whether"]},
+    {t:"Maintenance, for as long as it helps", when:"Month 4+", steps:["Monthly review; no dose reduction on someone else's timetable","Keep naloxone current even when you have not used for a year","Plan a lapse response that does not end your treatment"]}]
+},
+{
+  id:"rx-opioids", name:"Prescription opioids", ar:"المسكنات الأفيونية", cls:"Opioid", risk:"watch",
+  also:"tramadol, codeine, oxycodone, morphine, cough syrup",
+  truth:"Most people here did not go looking for a drug. It was a prescription for a real pain, then a difficult month, then a habit that got its own reasons. That history changes the plan, not the biology.",
+  danger:"Tramadol carries a seizure risk of its own, and a serotonin interaction with common antidepressants. Tell whoever prescribes for you what else you take, even if you are buying it without a prescription.",
+  timeline:["12–24 h — aches, sweats, agitation (sooner for tramadol and codeine)","2–4 days — peak discomfort, no sleep","5–14 days — physical tail","Weeks — the original pain has to be answered honestly"],
+  meds:[
+    {n:"A structured taper of what you already take", d:"Usually 10% of the dose every one to two weeks, held whenever a step is hard. Slow tapers finish; fast ones fail."},
+    {n:"Buprenorphine transfer", d:"If the taper keeps failing, moving to buprenorphine is a step forward, not a demotion."},
+    {n:"Non-opioid pain treatment, started early", d:"Duloxetine, gabapentinoids used carefully, physiotherapy, or a pain-clinic referral. Removing the opioid without answering the pain is why relapse happens."},
+    {n:"Naloxone at home", d:"Prescription origin does not lower overdose risk, particularly alongside sleeping tablets."}],
+  signals:["Sedation pattern: low heart rate, low breathing rate and no movement in the middle of the day","Blood oxygen dips during sleep","Taper steps that go badly show as three bad nights of heart-rate variability before you would ever call the clinic"],
+  phases:[
+    {t:"Count it honestly", when:"Day 0–3", steps:["Write down the real daily amount, including what is not prescribed","Doctor converts it to a morphine-equivalent dose and sets the first taper step","Pain plan agreed at the same visit, not after","Naloxone at home"]},
+    {t:"First taper steps", when:"Week 1–6", steps:["One reduction step a week while it holds; hold longer when it doesn't","Log sleep and pain daily — two numbers, ten seconds","Fortnightly review with the same clinician"]},
+    {t:"Through the hard middle", when:"Week 7–16", steps:["Expect the middle third to be the worst; the plan slows here by design","Add CBT for pain and craving","Review whether buprenorphine transfer would be kinder than continuing"]},
+    {t:"Off, and staying off", when:"Month 5+", steps:["Final steps are the slowest — smaller cuts, longer holds","Written plan for the next surgery or injury, so a hospital does not restart this by accident","Keep the pain treatment even after the opioid is gone"]}]
+},
+{
+  id:"benzos", name:"Benzodiazepines", ar:"البنزوديازيبينات", cls:"Sedative", risk:"stop",
+  also:"Xanax / alprazolam, Rivotril / clonazepam, Valium / diazepam, lorazepam",
+  truth:"This is the slowest plan in the library and the one people most often try to rush. A benzodiazepine taper is measured in months. Rushing it causes seizures.",
+  danger:"Never stop abruptly and never let anyone cut your dose fast. Abrupt withdrawal causes seizures, psychosis and a syndrome that can last weeks. If your supply has already run out, this is an urgent medical problem — go in today.",
+  timeline:["1–4 days — rebound anxiety and insomnia (sooner with short-acting drugs like alprazolam)","1–2 weeks — the seizure risk window","Weeks to months — waves of anxiety, sensory sensitivity, tinnitus","Slow but real recovery over 6–18 months"],
+  meds:[
+    {n:"Switch to diazepam, then taper", d:"A long-acting drug at an equivalent dose makes small reductions possible. Alprazolam cannot be tapered smoothly at the end."},
+    {n:"Reductions of 5–10% every 2–4 weeks", d:"Held as long as needed. There is no prize for finishing early."},
+    {n:"Propranolol or an antihistamine for symptoms", d:"For tremor and sleep, without adding another dependence."},
+    {n:"Treat what the benzodiazepine was for", d:"Usually anxiety, panic or insomnia. An SSRI plus CBT-I, started before the taper bites, is what makes the taper survivable."}],
+  signals:["Heart-rate variability dropping and staying down for days after each reduction step — the objective sign of a step taken too fast","Sleep fragmenting into many short blocks","Tremor visible in the motion sensor at rest"],
+  phases:[
+    {t:"Stabilise before you reduce", when:"Week 1–3", steps:["Do not cut anything yet — get a reliable prescription and a single prescriber","Switch to diazepam equivalent if you are on a short-acting drug","Anxiety treatment starts now, before the first reduction","Band paired so each step can be judged on evidence, not memory"]},
+    {t:"Early reductions", when:"Month 1–3", steps:["5–10% every two to four weeks; hold whenever a step is rough","Fortnightly review; no reduction at a review that goes badly","CBT for insomnia rather than another sedative"]},
+    {t:"The long middle", when:"Month 4–9", steps:["Smaller cuts, longer holds; waves are normal and are not relapse","Monthly review","Nobody adds a new sedative — including alcohol, which is the same receptor"]},
+    {t:"The last milligram", when:"Month 10–18", steps:["The final quarter of the dose is tapered as slowly as the whole first half","Liquid or compounded doses for very small steps","Six months of follow-up after the last dose"]}]
+},
+{
+  id:"pregabalin", name:"Pregabalin / gabapentin", ar:"الليريكا", cls:"Gabapentinoid", risk:"stop",
+  also:"Lyrica, Neurontin",
+  truth:"Sold as harmless because it comes in a pharmacy box. At the doses people actually take it recreationally, it has a withdrawal of its own and it multiplies an opioid's effect on breathing.",
+  danger:"Do not stop high-dose pregabalin suddenly — abrupt withdrawal can cause seizures. Taken with any opioid, it raises overdose risk sharply, and the combination is behind a large share of drug deaths in the region.",
+  timeline:["12–48 h — anxiety, sweating, insomnia, agitation","3–7 days — peak, with seizure risk at high doses","1–3 weeks — mood and sleep tail"],
+  meds:[
+    {n:"Structured dose taper", d:"Typically 25–50% of the current dose every one to two weeks, slower at the end and slower again at high starting doses."},
+    {n:"Never paired with an opioid without review", d:"If you take both, the taper order is decided by a doctor. Getting it wrong is how people stop breathing."},
+    {n:"Treat the underlying pain or anxiety", d:"Nerve pain, generalised anxiety, or sleep — whatever it was prescribed for still needs answering."}],
+  signals:["Sedation pattern by day and broken sleep by night","Combined with opioids: low breathing rate and dropping oxygen, which triggers the escalation rule","Agitation and tremor as each step lands"],
+  phases:[
+    {t:"Get the real number", when:"Day 0–5", steps:["Write the true daily dose, including capsules bought outside a pharmacy","Doctor checks every other sedative you take, opioids first","First taper step set; no cutting before that conversation"]},
+    {t:"Steady reductions", when:"Week 1–6", steps:["One step every one to two weeks, held if the week was bad","Track sleep and anxiety daily","No new sedative fills the gap"]},
+    {t:"Low dose", when:"Week 7–12", steps:["Smaller steps as the dose gets low — the last stretch is the hardest","Anxiety or pain treatment reviewed on its own merits","Fortnightly check-ins"]},
+    {t:"Off", when:"Month 4+", steps:["Monthly review for three months","Written note in your record so it is not represcribed casually","Naloxone stays at home if opioids were ever part of this"]}]
+},
+{
+  id:"captagon", name:"Captagon / amphetamine", ar:"الكبتاجون", cls:"Stimulant", risk:"watch",
+  also:"Captagon tablets, speed, Adderall taken outside a prescription",
+  truth:"Stopping is not physically dangerous and is emotionally brutal. The crash brings flat mood, enormous sleep and, for some people, real suicidal thinking in the first fortnight. That window is what the plan is built around.",
+  danger:"If the thought of not being here arrives during the crash, treat it as the emergency it is and call a crisis line the same hour. It usually lifts within two weeks — but only if you are still here for it.",
+  timeline:["1–3 days — the crash: exhaustion, huge appetite, sleeping through days","4–10 days — flat mood, no pleasure in anything, heavy cravings","2–4 weeks — mood starts returning in patches","1–3 months — sleep and concentration keep improving"],
+  meds:[
+    {n:"No approved medication yet — and that is the honest answer", d:"Nothing is licensed for amphetamine dependence. Anyone selling you a cure is selling something."},
+    {n:"Contingency management", d:"Small, immediate, verified rewards for negative tests. It is the psychological treatment with the best evidence for stimulants, and it works better than talking about willpower."},
+    {n:"CBT and the Matrix model", d:"Structured 12–16 week programmes designed for stimulant users specifically."},
+    {n:"Treat sleep and mood directly", d:"Short-term non-addictive sleep support, and screening for depression at two weeks rather than assuming the crash is the whole story."},
+    {n:"Cardiac check", d:"Blood pressure and an ECG — long stimulant use damages the heart quietly."}],
+  signals:["Resting heart rate 25–40 bpm above baseline with almost no movement — the clearest pattern a band can read","No sleep block at all for 24–48 hours","Skin temperature up, heart-rate variability flattened","The crash reads as the opposite: very low heart rate and 14 hours of sleep"],
+  phases:[
+    {t:"Through the crash", when:"Day 0–5", steps:["Sleep as much as your body demands; do not fight it","Eat and drink on a schedule, appetite or not","Crisis number saved in your phone before the crash starts","No decisions, no confrontations, no quitting your job this week"]},
+    {t:"The flat fortnight", when:"Day 6–21", steps:["Mood screen with your doctor at day 14 — the flatness is expected, depression is treatable","Contingency-management schedule begins if available","One walk outside a day; that is the whole exercise plan","Two check-ins a week"]},
+    {t:"Rewiring the reward", when:"Week 4–12", steps:["Weekly CBT or Matrix sessions","Rebuild one thing you used to enjoy before, even if it feels like nothing now","Cardiac review: blood pressure and ECG","Map your triggers by place and hour, not by mood"]},
+    {t:"Holding", when:"Month 4+", steps:["Monthly review while the anhedonia keeps lifting","Sleep protected like medication","A written plan for the first lapse, agreed while you are well"]}]
+},
+{
+  id:"meth", name:"Methamphetamine", ar:"الميثامفيتامين", cls:"Stimulant", risk:"watch",
+  also:"crystal, shabu, ice",
+  truth:"The same crash as amphetamine, deeper and longer, and more likely to bring paranoia that outlasts the drug. Recovery is slower than people are told, and it does happen.",
+  danger:"Paranoia or hearing voices that continues after several days of sleep needs medical review, not waiting out. So does chest pain at any point.",
+  timeline:["1–3 days — crash and enormous sleep","1–2 weeks — flat mood, cravings in waves","2–8 weeks — paranoia and sleep slowly settle","3–12 months — concentration and pleasure keep returning"],
+  meds:[
+    {n:"No licensed medication", d:"Trials of naltrexone with bupropion, and of mirtazapine, show modest benefit; both are decisions for a specialist, not a self-experiment."},
+    {n:"Contingency management", d:"Again the strongest evidence. Small verified rewards, immediately."},
+    {n:"Antipsychotic, short course, if psychosis persists", d:"A specialist decision, and often a short one."},
+    {n:"Dental and skin care in the plan", d:"Not vanity — infection and pain drive people straight back."}],
+  signals:["Days without a sleep block, then a 14-hour one","Resting heart rate far above baseline with no motion","Weight and temperature drifting","Agitation visible in continuous small movement at 4 am"],
+  phases:[
+    {t:"Sleep and safety", when:"Day 0–7", steps:["Sleep without an alarm; the debt is real","Somebody checks on you daily if paranoia is part of this","Crisis line saved; chest pain means the emergency number","Food and water on a timer"]},
+    {t:"Flat and craving", when:"Week 2–4", steps:["Twice-weekly contact — short calls beat long appointments","Contingency management starts","Mood and psychosis reviewed at week two","Dental and skin problems actually treated"]},
+    {t:"Structure", when:"Week 5–16", steps:["Weekly therapy with a stimulant-specific programme","Daily structure written the night before","Cardiac review","Rebuild sleep hygiene deliberately"]},
+    {t:"The long return", when:"Month 5+", steps:["Monthly review; expect concentration to keep improving for a year","Craving waves get treated as weather, not verdicts","Lapse plan in writing"]}]
+},
+{
+  id:"cocaine", name:"Cocaine", ar:"الكوكايين", cls:"Stimulant", risk:"watch",
+  also:"coke, crack",
+  truth:"Usually social, usually weekend-shaped, and usually spotted late because it does not look like the pictures of addiction. The heart risk is immediate and does not care how often you use.",
+  danger:"Chest pain, a heart rhythm that feels wrong, a sudden severe headache or weakness on one side: emergency number, immediately. Cocaine causes heart attacks and strokes in young people with healthy hearts. Mixing with alcohol makes a compound that is harder on the heart than either.",
+  timeline:["Hours — crash, irritability, hunger","1–7 days — low mood, vivid dreams, strong cravings","2–4 weeks — mood lifts unevenly"],
+  meds:[
+    {n:"No licensed medication", d:"Treatment is psychological, and it is effective. Do not wait for a pill."},
+    {n:"Contingency management and CBT", d:"Twelve weeks, structured, with a focus on the specific situations you use in."},
+    {n:"Cardiac assessment", d:"Blood pressure, ECG, and honesty with your cardiologist if you already have one."},
+    {n:"Treat the alcohol alongside", d:"For most people the two are one habit; treating cocaine alone usually fails."}],
+  signals:["Sharp heart-rate spikes clustered on the same two evenings each week — the pattern that makes weekend use obvious","Poor sleep after those nights","Heart-rate variability that never recovers by Monday"],
+  phases:[
+    {t:"See the pattern", when:"Week 1", steps:["Two weeks of band data before judging anything — the pattern is usually a surprise","Blood pressure and ECG","Name the three situations that carry 80% of your use","Decide what you tell the friends who are part of them"]},
+    {t:"Change the situations", when:"Week 2–6", steps:["Weekly CBT focused on those three situations","Alcohol addressed in the same plan","Money moved out of easy reach of a 2 am decision","Two check-ins a week for the first fortnight"]},
+    {t:"Rebuild the weekend", when:"Week 7–12", steps:["Plan Friday and Saturday deliberately for six weeks","Contingency management if available","Sleep protected — bad sleep is the reliable predictor of the next use"]},
+    {t:"Steady", when:"Month 4+", steps:["Monthly review","Repeat cardiac check at six months","Written lapse plan; one night is not the end of the plan"]}]
+},
+{
+  id:"cannabis", name:"Cannabis / hashish", ar:"الحشيش", cls:"Cannabinoid", risk:"ok",
+  also:"weed, hash, edibles, synthetic 'spice'",
+  truth:"Withdrawal is not dangerous and is genuinely unpleasant: a week of no sleep, no appetite and a short temper. Most people underestimate it, quit unprepared, and conclude they cannot. Prepared, the same week is ordinary.",
+  danger:"Synthetic cannabinoids ('spice') are a different and far more dangerous class — seizures, kidney injury and psychosis are common. If that is what you are using, tell the doctor plainly; the plan is not the same.",
+  timeline:["1–2 days — irritability, restlessness, appetite gone","2–6 days — the peak: no sleep, vivid dreams, sweating","1–3 weeks — sleep normalises","1–2 months — mood and concentration keep improving"],
+  meds:[
+    {n:"No licensed medication", d:"Sleep support for a fortnight is the usual pharmacological help, and it is enough for most people."},
+    {n:"CBT plus motivational work", d:"Six to twelve sessions has good evidence, especially with a use-diary."},
+    {n:"Screen for what it was managing", d:"Anxiety, PTSD, chronic pain and undiagnosed ADHD are common underneath daily cannabis use, and treating them changes everything."}],
+  signals:["Sleep latency stretching past an hour for the first week — the objective version of 'I can't sleep without it'","Night heart rate up, heart-rate variability down","Restlessness in the small hours"],
+  phases:[
+    {t:"Pick the date and prepare it", when:"Week 1", steps:["Choose a stop date and clear the week after it of anything demanding","Accept in advance that nights three to six are the worst","Sleep plan agreed with your doctor before you stop","Tell one person the date"]},
+    {t:"The bad week", when:"Day 1–7", steps:["Two-week sleep support if prescribed","Exercise in the afternoon, caffeine stopped by midday","Eat on a schedule while appetite is gone","Short daily check-in"]},
+    {t:"Sleep comes back", when:"Week 2–6", steps:["Weekly CBT with a use-diary","Screen for anxiety, ADHD or pain underneath","Rebuild the evening routine that used to end with a joint"]},
+    {t:"Settled", when:"Month 3+", steps:["Monthly review","Decide in advance what you do at a gathering where it is being passed around","Concentration keeps improving for months — expect that"]}]
+},
+{
+  id:"nicotine", name:"Nicotine", ar:"النيكوتين", cls:"Stimulant", risk:"ok",
+  also:"cigarettes, vape, shisha, dip",
+  truth:"The most treatable dependence in this list and the one people apologise for bringing up. Medication roughly triples the odds. Willpower alone is the least effective method available, and it is the one almost everybody tries first.",
+  timeline:["2–4 h — the first craving","1–3 days — peak irritability and restlessness","1–4 weeks — cravings shorten and space out","3 months — the habit-shaped cravings fade last"],
+  meds:[
+    {n:"Nicotine replacement, two forms at once", d:"A patch for the baseline plus gum, lozenge or spray for the spikes. Two forms beats one, and most people under-dose both."},
+    {n:"Varenicline", d:"The most effective single medication. Started a week or two before the quit date."},
+    {n:"Bupropion", d:"An alternative, useful where mood is also part of the picture."},
+    {n:"Behavioural support alongside", d:"Medication plus even brief counselling beats medication alone."}],
+  signals:["Heart rate settling 5–10 bpm lower within a fortnight — one of the few changes you can watch happen","Sleep improving after the first week","Craving spikes clustered at the same three times a day"],
+  phases:[
+    {t:"Set up", when:"Week 0", steps:["Quit date set two weeks out","Varenicline or NRT started before the date, not on it","Log the three hours that carry most of your cigarettes","Home and car cleared on the day"]},
+    {t:"First fortnight", when:"Week 1–2", steps:["Use the fast-acting NRT properly — most people use a third of what they need","Change the route that passes the shop","Short daily check-in"]},
+    {t:"Six weeks", when:"Week 3–8", steps:["Medication continues at full dose — stopping early is the usual mistake","Weekly brief counselling","Watch alcohol: it is the most common single cause of the first cigarette"]},
+    {t:"Done, and staying done", when:"Month 3+", steps:["Finish the full medication course","One cigarette is a lapse to plan for, not proof of failure","Blood pressure and lung function rechecked at six months"]}]
+},
+{
+  id:"ketamine", name:"Ketamine", ar:"الكيتامين", cls:"Dissociative", risk:"watch",
+  also:"ket, K, special K",
+  truth:"The withdrawal is mild and the organ damage is not. Heavy use scars the bladder, sometimes permanently, and the pain that follows is often what finally brings people in.",
+  danger:"Blood in your urine, needing to pass water every twenty minutes, or pain in your sides needs a urologist now, not later. Bladder damage caught early can improve; late, it does not.",
+  timeline:["1–3 days — anxiety, low mood, poor sleep, cravings","1–2 weeks — mood and memory start to clear","1–3 months — bladder symptoms improve if there is no scarring"],
+  meds:[
+    {n:"No licensed medication", d:"Psychological treatment plus urology. The bladder is the urgent half."},
+    {n:"Urology referral and imaging", d:"Kidney and bladder assessment, with an ultrasound if symptoms are established."},
+    {n:"Real pain relief for cramps", d:"Untreated bladder pain sends people back to ketamine, which is the only thing that numbs it. That loop has to be broken with proper analgesia."},
+    {n:"Screen for depression and dissociation", d:"Frequently underneath heavy ketamine use, and treatable on its own terms."}],
+  signals:["Broken nights and constant waking (bladder, not craving)","Heart-rate variability down while daytime heart rate stays normal","Long motionless daytime blocks"],
+  phases:[
+    {t:"The bladder first", when:"Week 1", steps:["Urine test and urology referral before anything else","Pain treated properly so the loop breaks","Stop or steeply cut with clinical support","Water intake tracked"]},
+    {t:"Clearing", when:"Week 2–4", steps:["Twice-weekly check-ins","Sleep support while nights are broken","Mood screen at week two"]},
+    {t:"Therapy and repair", when:"Week 5–12", steps:["Weekly CBT","Repeat urology review at six weeks","Rebuild memory-heavy tasks slowly; concentration returns"]},
+    {t:"Holding", when:"Month 4+", steps:["Monthly review","Bladder symptoms rechecked at three and six months","Lapse plan written down"]}]
+},
+{
+  id:"zolpidem", name:"Sleeping tablets", ar:"الحبوب المنومة", cls:"Z-drug", risk:"stop",
+  also:"zolpidem / Stilnox, zopiclone, zaleplon",
+  truth:"Prescribed for two weeks, taken for two years. They stop working as sleep aids long before they stop being needed, and the sleep that comes back after stopping is better than the sleep they were giving you.",
+  danger:"At high or long-term doses, stopping abruptly can cause seizures, like benzodiazepines. Taper with a doctor. Rebound insomnia in the first week is expected and is not proof you need them.",
+  timeline:["1–3 days — rebound insomnia, anxiety","1–2 weeks — worst of the sleep disruption, seizure window at high doses","2–8 weeks — natural sleep architecture returns"],
+  meds:[
+    {n:"Switch to a long-acting equivalent, then taper", d:"Same principle as benzodiazepines: small steps become possible."},
+    {n:"CBT for insomnia, started before the taper", d:"More effective than the tablets were, and it lasts after you stop."},
+    {n:"Melatonin or a sedating antihistamine, short term", d:"A bridge for the rebound week, not a replacement dependence."}],
+  signals:["Sleep that looks long but is fragmented — the shape of drugged sleep","Sleep latency spiking hard for the first week after each step","Daytime heart-rate variability dropping after bad nights"],
+  phases:[
+    {t:"Before the first cut", when:"Week 1–2", steps:["Start CBT for insomnia now, while still taking them","Single prescriber, reliable supply","Baseline sleep recorded by the band for two weeks","First taper step planned, not taken"]},
+    {t:"Stepping down", when:"Week 3–10", steps:["One reduction every one to two weeks; hold after a bad week","Rebound insomnia expected around each step — it passes in days","Fortnightly review"]},
+    {t:"Last doses", when:"Week 11–16", steps:["Smallest steps at the end, split tablets or liquid","No alcohol as a substitute — same receptor, worse sleep","Keep the CBT-I routine exactly as it is"]},
+    {t:"Sleeping without them", when:"Month 5+", steps:["Monthly review for three months","Note in your record so they are not represcribed casually","Expect sleep to keep improving for two months after the last dose"]}]
+},
+{
+  id:"other", name:"Something not listed", ar:"شيء آخر", cls:"Tell the doctor", risk:"watch",
+  also:"inhalants, synthetic cannabinoids, mixtures, something with no name",
+  truth:"Plenty of what people actually take has no clean category — a mixture, a pharmacy drug used for something else, a powder sold under three names. That is worth an appointment, not a guess from a website.",
+  danger:"If you do not know what is in it, assume it can stop your breathing and never take it alone. Inhalants and solvents can kill on a first use through heart rhythm, with no warning and no dose that is safe.",
+  timeline:["Unknown until a clinician takes a history — that is the honest answer","Bring the packet, the pill, or a photograph","Most unknowns turn out to be a mixture of things already in this list"],
+  meds:[
+    {n:"Assessment first, prescription second", d:"A same-week appointment where you describe what you take without naming it correctly. Nobody needs the right word."},
+    {n:"Toxicology where it matters", d:"A urine screen can identify most of the common classes and changes the plan immediately."}],
+  signals:["A two-week baseline is recorded before any threshold is set, since nobody can predict the pattern","The overdose escalation rule stays on regardless"],
+  phases:[
+    {t:"Get seen", when:"Week 1", steps:["Same-week appointment; bring the packaging or a photo","Never use alone until a clinician has looked at this","Band paired for a two-week baseline","Naloxone at home if there is any chance of an opioid in the mix"]},
+    {t:"Identify", when:"Week 2–3", steps:["Toxicology if useful","Plan rewritten around what is actually found","Weekly contact meanwhile"]},
+    {t:"Treat", when:"Week 4+", steps:["Follow the plan for the identified substance","Keep the check-in rhythm from the assessment"]},
+    {t:"Review", when:"Month 3+", steps:["Monthly review","Revisit the diagnosis if the pattern does not fit"]}]
+}];
+
+/* ═══ 2. intake, clinicians, alert rules ══════════════════════════════ */
+const QUESTIONS=[
+ {id:"dur", q:"How long has this been going on?",
+  opts:[["u1m","Less than a month",0],["m1_6","One to six months",1],["m6_2y","Six months to two years",2],["y2","Longer than two years",3]]},
+ {id:"freq", q:"How often, in a normal week?",
+  opts:[["rare","Less than weekly",0],["weekly","About weekly",1],["most","Most days",2],["daily","Several times a day",3]]},
+ {id:"last", q:"When did you last take it?",
+  opts:[["today","Today",2],["week","This week",1],["past","More than a week ago",0]]},
+ {id:"fits", q:"Have you ever had a seizure, a fit, or hallucinations when you stopped or cut down?",
+  opts:[["yes","Yes",4],["no","No",0],["unsure","I don't know",2]]},
+ {id:"knows", q:"Does anyone in your life already know?",
+  opts:[["one","One person knows",0],["none","Nobody knows",1],["keep","Nobody, and I want it kept that way",1]]}
+];
+
+const CLINICIANS=[
+ {n:"Dr. Farah Al-Sabti", r:"Addiction psychiatry &middot; consultant", tz:"GMT+3 &middot; Arabic, English",
+  tags:["alcohol","benzos","zolpidem","pregabalin","other"], avail:"Video, same week &middot; urgent slots held daily"},
+ {n:"Dr. Omar Haddad", r:"Addiction medicine &middot; opioid agonist prescriber", tz:"GMT+3 &middot; Arabic, English",
+  tags:["heroin","rx-opioids","pregabalin","other"], avail:"Same-day start for buprenorphine or methadone"},
+ {n:"Dr. Leena Marzouq", r:"Psychiatry &middot; stimulant programmes", tz:"GMT+3 &middot; Arabic, English, French",
+  tags:["captagon","meth","cocaine","other"], avail:"Video, twice weekly &middot; runs the contingency-management group"},
+ {n:"Dr. Nadia Osei", r:"Clinical psychology &middot; CBT and relapse prevention", tz:"GMT+1 &middot; English",
+  tags:["cannabis","cocaine","nicotine","ketamine","other"], avail:"Weekly, evenings"},
+ {n:"Dr. Yusuf Rahimi", r:"Internal medicine &middot; withdrawal and detox supervision", tz:"GMT+4 &middot; Arabic, Farsi, English",
+  tags:["alcohol","benzos","zolpidem","other"], avail:"On call for supervised detox &middot; inpatient referral"},
+ {n:"Dr. Maya Frost", r:"Urology &middot; ketamine bladder clinic", tz:"GMT+0 &middot; English",
+  tags:["ketamine"], avail:"Referral within two weeks"}
+];
+
+/* Thresholds are relative to the patient's own seven-day baseline.
+   dwell is in patient-minutes; the demo clock runs 60x real time. */
+const BASE={hr:64,hrv:62,temp:33.4,spo2:98,rr:14};
+const RULES=[
+ {id:"off", sev:"warn", who:"Doctor", b:"Band off your wrist",
+  cond:"no skin contact ≥ 20 min", dwell:20,
+  test:v=>!v.on, msg:"Band has been off the wrist for 20 minutes."},
+ {id:"off-long", sev:"crit", who:"Doctor + call", b:"Band off, and staying off",
+  cond:"no skin contact ≥ 60 min", dwell:60,
+  test:v=>!v.on, msg:"Band off the wrist for an hour. Your doctor will try to reach you."},
+ {id:"stim", sev:"warn", who:"Doctor", b:"Heart racing while you sit still",
+  cond:"HR ≥ baseline +25 bpm & motion low ≥ 10 min", dwell:10,
+  test:v=>v.on&&v.hr>=BASE.hr+25&&v.motion<0.22,
+  msg:"Resting heart rate far above baseline with no movement — a stimulant or intoxication pattern."},
+ {id:"hrv", sev:"warn", who:"Doctor", b:"Recovery signal collapsed",
+  cond:"HRV ≤ 65% of 7-day baseline ≥ 30 min", dwell:30,
+  test:v=>v.on&&v.hrv<=BASE.hrv*0.65,
+  msg:"Heart-rate variability well below your own baseline — withdrawal, a taper step taken too fast, or a bad night."},
+ {id:"od", sev:"crit", who:"Emergency", b:"Breathing too slow — overdose pattern",
+  cond:"SpO₂ < 92% & respiration < 10/min ≥ 2 min", dwell:2,
+  test:v=>v.on&&v.spo2<92&&v.rr<10,
+  msg:"Blood oxygen falling with very slow breathing. This is the one alert that goes past your doctor to an emergency response."},
+ {id:"wd", sev:"warn", who:"Doctor", b:"Withdrawal showing on your skin",
+  cond:"temp ≥ baseline +0.8°C with sweat & tremor ≥ 15 min", dwell:15,
+  test:v=>v.on&&v.temp>=BASE.temp+0.8&&v.eda>=5,
+  msg:"Skin temperature, sweat and tremor rising together — the withdrawal pattern for your substance."}
+];
+
+const STATES={
+ steady:     {hr:[64,3], hrv:[62,6],  spo2:[98,.5], temp:[33.4,.12], rr:[14,1],   motion:[.12,.07], eda:[2.1,.4]},
+ stim:       {hr:[114,6],hrv:[23,4],  spo2:[97,.6], temp:[34.3,.18], rr:[19,1.6], motion:[.30,.12], eda:[6.6,.9]},
+ opioid:     {hr:[48,4], hrv:[47,7],  spo2:[88,1.5],temp:[32.9,.18], rr:[7,1.2],  motion:[.02,.02], eda:[1.2,.3]},
+ withdrawal: {hr:[97,5], hrv:[29,5],  spo2:[97,.6], temp:[34.4,.18], rr:[20,1.8], motion:[.44,.16], eda:[7.9,1.1]}
+};
+
+/* ═══ 3. state, kept in this browser and nowhere else ═════════════════ */
+const KEY="rafeeq.v1", DEMO_SPEED=60;
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const el=(t,c,h)=>{const n=document.createElement(t);if(c)n.className=c;if(h!=null)n.innerHTML=h;return n;};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const sub=id=>SUBS.find(s=>s.id===id);
+
+function seed(){
+  const now=Date.now();
+  return {alias:"Q", demo:true, subs:["rx-opioids"], answers:{dur:"m6_2y",freq:"most",last:"today",fits:"no",knows:"none"},
+    done:{}, day:9, doctor:"Dr. Omar Haddad",
+    log:[
+      {t:now-1000*60*60*26, sev:"info", b:"Plan started", m:"Tramadol taper, step 1 of 9. Naloxone at home.", ack:"Dr. Omar Haddad"},
+      {t:now-1000*60*60*14, sev:"warn", b:"Recovery signal collapsed", m:"HRV 34 against a baseline of 62 for most of the night — second bad night since the taper step.", ack:"Dr. Omar Haddad acknowledged · taper step held"},
+      {t:now-1000*60*60*3, sev:"info", b:"Self-reported", m:"“Took two extra tablets last night.” Logged as an honest report — plan unchanged.", ack:"Dr. Omar Haddad"}
+    ]};
+}
+let S;
+try{ S=JSON.parse(localStorage.getItem(KEY)) || seed(); }catch(e){ S=seed(); }
+function save(){ try{ localStorage.setItem(KEY,JSON.stringify(S)); $("#privacyPill").classList.add("on"); }
+  catch(e){ $("#privacyPill").innerHTML='<span class="dot warn"></span> Not saved — private window'; } }
+
+/* ═══ 4. routing ══════════════════════════════════════════════════════ */
+const VIEWS=["door","choose","plan","band","clinicians","console"];
+function go(v){
+  VIEWS.forEach(n=>{ $("#view-"+n).hidden = n!==v; });
+  $$(".tab").forEach(t=>t.setAttribute("aria-current", String(t.dataset.go===v)));
+  if(v==="plan") renderPlan();
+  if(v==="clinicians") renderDocs();
+  if(v==="console") renderConsole();
+  window.scrollTo({top:0,behavior:"instant"});
+}
+document.addEventListener("click",e=>{
+  const b=e.target.closest("[data-go]"); if(b){ go(b.dataset.go); }
+});
+
+/* ═══ 5. step 1 — the substances ══════════════════════════════════════ */
+const RISK={stop:["stop","Dangerous to stop suddenly"],watch:["watch","Needs medical cover"],ok:["ok","Not dangerous to stop"]};
+function renderSubs(){
+  const wrap=$("#subs"); wrap.textContent="";
+  SUBS.forEach(s=>{
+    const on=S.subs.includes(s.id);
+    const b=el("button","sub");
+    b.type="button"; b.setAttribute("aria-pressed",String(on));
+    const [rc,rl]=RISK[s.risk];
+    b.innerHTML=`<span class="cls">${s.cls}</span>
+      <b>${s.name} <span class="ar" dir="rtl" lang="ar">${s.ar}</span></b>
+      <span class="small">${s.also}</span>
+      <span class="risk ${rc}">${rl}</span>`;
+    b.onclick=()=>{
+      S.subs = on ? S.subs.filter(x=>x!==s.id) : S.subs.concat(s.id);
+      S.demo=false; save(); renderSubs(); renderDanger(); syncHint();
+    };
+    wrap.appendChild(b);
+  });
+}
+function renderDanger(){
+  const box=$("#dangerNote"); box.textContent="";
+  S.subs.map(sub).filter(s=>s&&s.danger).forEach(s=>{
+    box.appendChild(el("div", s.risk==="stop"?"note crit":"note warn",
+      `<b>${s.name}:</b> ${s.danger}`));
+  });
+}
+function renderQuestions(){
+  const wrap=$("#questions"); wrap.textContent="";
+  QUESTIONS.forEach(q=>{
+    const fs=el("fieldset"); fs.appendChild(el("legend",null,q.q));
+    const opts=el("div","opts");
+    q.opts.forEach(([val,label])=>{
+      const id=`q-${q.id}-${val}`;
+      const lab=el("label");
+      lab.innerHTML=`<input type="radio" id="${id}" name="${q.id}" value="${val}"${S.answers[q.id]===val?" checked":""}><span>${label}</span>`;
+      lab.querySelector("input").onchange=()=>{ S.answers[q.id]=val; S.demo=false; save(); };
+      opts.appendChild(lab);
+    });
+    fs.appendChild(opts); wrap.appendChild(fs);
+  });
+}
+function syncHint(){
+  const ok=S.subs.length>0;
+  $("#chooseHint").textContent = ok
+    ? `${S.subs.length} chosen. Answers are optional.`
+    : "Choose at least one substance above.";
+  $("#intake").querySelector("button[type=submit]").disabled=!ok;
+}
+$("#intake").addEventListener("submit",e=>{ e.preventDefault(); S.demo=false; save(); go("plan"); });
+
+/* ═══ 6. the plan ═════════════════════════════════════════════════════ */
+function severity(){
+  let score=0;
+  QUESTIONS.forEach(q=>{ const a=S.answers[q.id]; const o=q.opts.find(x=>x[0]===a); if(o) score+=o[2]; });
+  return {score, band: score<=3?"light": score<=7?"moderate":"heavy"};
+}
+function planFor(){
+  const chosen=S.subs.map(sub).filter(Boolean);
+  if(!chosen.length) return null;
+  const sev=severity();
+  const hardStop=chosen.some(s=>s.risk==="stop");
+  const fits=S.answers.fits;
+  const supervised = (hardStop && sev.band!=="light") || fits==="yes" || (hardStop && fits==="unsure");
+  const lead=chosen[0];
+  const pace = sev.band==="heavy" ? "Each phase runs about a third longer than the standard plan — heavy, frequent use."
+    : sev.band==="light" ? "Slightly shorter phases — early and infrequent use, which is the best time to be doing this."
+    : "Standard pacing.";
+  const phase0 = supervised
+    ? {t:"Do not start this at home", when:"Before day one", now:true, steps:[
+        "A doctor sees you before you cut a single dose — for your substance, stopping unsupervised can cause seizures",
+        fits==="yes"?"You have had a fit or hallucinations on stopping before: this needs supervised or inpatient detox, not a home taper":"Supervised detox assessed — inpatient if you live alone",
+        "Bring or list every other drug and prescription, including alcohol",
+        "Band paired first, so the dangerous window is watched"]}
+    : {t:"The first conversation", when:"Before day one", now:true, steps:[
+        "One video call with a doctor from the list, under your alias",
+        "Agree the start date and who, if anyone, gets told",
+        "Band paired and a seven-day baseline recorded before any threshold is set",
+        "Naloxone at home if there is any opioid in the picture"]};
+  return {chosen, lead, sev, supervised, pace, phases:[phase0].concat(lead.phases.map((p,i)=>({...p, now:false, i})))};
+}
+function renderPlan(){
+  const p=planFor();
+  const head=$("#planHead");
+  if(!p){
+    head.innerHTML=`<div class="stack stack-16"><h2 style="font-size:var(--f3)">No plan yet.</h2>
+      <p class="lede">Choose what you are taking and a plan is written for it — including the parts
+      that say do not do this alone.</p>
+      <div class="row"><button class="btn" type="button" data-go="choose">Choose the substance</button></div></div>`;
+    $("#phases").textContent=""; $("#planMeds").textContent=""; $("#planWatch").textContent=""; return;
+  }
+  const open=S.log.filter(x=>!x.ack).length;
+  head.innerHTML=`<div class="stack stack-16">
+    <span class="eyebrow">${S.demo?"Example plan &middot; ":""}Plan for &ldquo;${esc(S.alias)}&rdquo; &middot; day ${S.day}</span>
+    <h2 style="font-size:var(--f3)">${p.chosen.map(s=>s.name).join(" + ")}</h2>
+    <p class="lede">${p.lead.truth}</p>
+    ${p.supervised?`<div class="note crit"><b>This plan does not start at home.</b> Your answers plus your
+      substance put you in the group where unsupervised withdrawal causes seizures. The first phase is a
+      doctor, not a taper.</div>`:""}
+    <div class="promise">
+      <div><b>Doctor</b><span class="small">${esc(S.doctor||"Not chosen yet")} &middot;
+        <button class="btn quiet sm" type="button" data-go="clinicians">change</button></span></div>
+      <div><b>Reported use</b><span class="small">${p.sev.band} &middot; ${p.pace}</span></div>
+      <div><b>Band</b><span class="small">${band.on?"On your wrist, streaming":"Not on your wrist"} &middot;
+        <button class="btn quiet sm" type="button" data-go="band">open</button></span></div>
+      <div><b>Alerts sent</b><span class="small">${S.log.length} logged, ${open} waiting on your doctor</span></div>
+    </div>
+    ${p.chosen.length>1?`<div class="note">You chose more than one. The phases below follow
+      <b>${p.chosen[0].name}</b>, which sets the pace; the rest are on your record and change the medication
+      list. Two substances at once is a doctor's conversation, not a website's.</div>`:""}
+  </div>`;
+
+  const ph=$("#phases"); ph.textContent="";
+  p.phases.forEach((phase,idx)=>{
+    const box=el("div","phase"+(phase.now?" now":""));
+    box.appendChild(el("div","phase-mark",phase.now?"●":String(idx)));
+    const body=el("div","phase-body");
+    body.appendChild(el("h3",null,phase.t));
+    body.appendChild(el("span","when",phase.when));
+    const list=el("ul","steps");
+    phase.steps.forEach((st,j)=>{
+      const key=`${p.lead.id}-${idx}-${j}`;
+      const li=el("li",S.done[key]?"done":"");
+      const cb=el("input"); cb.type="checkbox"; cb.id="step-"+key; cb.checked=!!S.done[key];
+      cb.onchange=()=>{ S.done[key]=cb.checked; save(); li.className=cb.checked?"done":""; };
+      const lab=el("label",null,esc(st)); lab.setAttribute("for","step-"+key);
+      li.append(cb,lab); list.appendChild(li);
+    });
+    body.appendChild(list); box.appendChild(body); ph.appendChild(box);
+  });
+
+  const meds=$("#planMeds");
+  meds.innerHTML=`<span class="eyebrow">What a doctor can actually prescribe</span>
+    <h3 style="font-size:var(--f2)">Medication, named plainly.</h3>
+    <p class="small">Nothing here is a prescription and none of it is orderable through this page.
+    It is the list so you know what to ask for — and so nobody tells you the only treatment is trying harder.</p>`;
+  const mwrap=el("div","meds");
+  p.chosen.forEach(s=>{
+    if(p.chosen.length>1) mwrap.appendChild(el("div","eyebrow",s.name));
+    s.meds.forEach(m=>mwrap.appendChild(el("div","med",`<b>${m.n}</b><span class="small">${m.d}</span>`)));
+  });
+  meds.appendChild(mwrap);
+  const tl=el("div","panel flat stack stack-8");
+  tl.appendChild(el("span","eyebrow","Withdrawal timeline — "+p.lead.name));
+  const ol=el("ul","steps");
+  p.lead.timeline.forEach(t=>{ const li=el("li"); li.append(el("span","num","•"), el("span",null,esc(t))); ol.appendChild(li); });
+  tl.appendChild(ol); meds.appendChild(tl);
+
+  const w=$("#planWatch");
+  w.innerHTML=`<span class="eyebrow">What the band watches for, for this substance</span>
+    <h3 style="font-size:var(--f2)">Your doctor gets told when&hellip;</h3>`;
+  const wl=el("ul","steps");
+  p.lead.signals.forEach(t=>{ const li=el("li"); li.append(el("span","num","•"), el("span",null,esc(t))); wl.appendChild(li); });
+  w.appendChild(wl);
+  w.appendChild(el("div","note","And whenever the band comes off for more than twenty minutes — which is not an accusation. Most people take it off in the shower and put it back on. The alert exists because the one time it stays off is usually the night that matters."));
+  const row=el("div","row");
+  const b1=el("button","btn"); b1.type="button"; b1.textContent="Open the band"; b1.onclick=()=>go("band");
+  const b2=el("button","btn ghost"); b2.type="button"; b2.textContent="Find a doctor for this"; b2.onclick=()=>go("clinicians");
+  row.append(b1,b2); w.appendChild(row);
+}
+
+/* ═══ 7. the band ═════════════════════════════════════════════════════
+   One engine drives both traces, the tiles and the rule checks. The demo
+   clock runs 60x real time so a rule with a 20-minute dwell fires in 20
+   seconds while you are looking at it. Patient-minutes, not seconds, are
+   what the rules count. */
+const band={
+  on:true, state:"steady", clock:0, real:null,
+  v:{hr:64,hrv:62,spo2:98,temp:33.4,rr:14,motion:.12,eda:2.1,on:true},
+  hist:{hr:[],hrv:[],spo2:[],temp:[],rr:[],motion:[]},
+  dwell:{}, fired:{}, buf:new Float32Array(900), idx:0, ph:0, lastSec:0
+};
+/* prefill the ring buffer with steady beats: the first painted frame should
+   show a full trace, not a flat line waiting to be drawn */
+(function(){
+  for(let i=0;i<band.buf.length;i++){
+    const ph=(i*(BASE.hr/60)/45)%1;
+    band.buf[i]=Math.max(0,Math.min(1,ppgSeed(ph)*0.72+0.08));
+  }
+  function ppgSeed(p){const g=(m,sd)=>Math.exp(-Math.pow((p-m)/sd,2));return g(.17,.070)+0.44*g(.34,.105)+0.15*g(.56,.16);}
+})();
+const rand=()=>(Math.random()+Math.random()+Math.random()-1.5)/1.5;
+const near=(c,t,k)=>c+(t-c)*k;
+
+const TILES=[
+ {k:"hr",   label:"Heart rate",  u:"bpm",  fmt:v=>v.toFixed(0), flag:v=>v>=BASE.hr+25?"flag":v<=50?"bad":""},
+ {k:"hrv",  label:"HRV",         u:"ms",   fmt:v=>v.toFixed(0), flag:v=>v<=BASE.hrv*0.65?"flag":""},
+ {k:"spo2", label:"Blood oxygen",u:"%",    fmt:v=>v.toFixed(0), flag:v=>v<92?"bad":v<95?"flag":""},
+ {k:"rr",   label:"Breathing",   u:"/min", fmt:v=>v.toFixed(0), flag:v=>v<10?"bad":""},
+ {k:"temp", label:"Skin temp",   u:"°C", fmt:v=>v.toFixed(1), flag:v=>v>=BASE.temp+0.8?"flag":""},
+ {k:"motion",label:"Movement",   u:"g",    fmt:v=>v.toFixed(2), flag:()=>""}
+];
+function renderTiles(){
+  const wrap=$("#tiles"); wrap.textContent="";
+  TILES.forEach(t=>{
+    const d=el("div","tile"); d.id="tile-"+t.k;
+    d.innerHTML=`<span class="k">${t.label}</span><span class="v" id="v-${t.k}">&mdash;</span>
+      <span class="u">${t.u}</span><canvas id="spark-${t.k}" aria-hidden="true"></canvas>`;
+    wrap.appendChild(d);
+  });
+}
+function fitCanvas(c,h){
+  const dpr=Math.min(window.devicePixelRatio||1,2), w=c.clientWidth||300;
+  c.width=Math.round(w*dpr); c.height=Math.round((h||c.clientHeight||60)*dpr);
+  const x=c.getContext("2d"); x.setTransform(dpr,0,0,dpr,0,0); return x;
+}
+function ppg(p){ /* one pulse: systolic peak, dicrotic notch, diastolic bump */
+  const g=(m,s)=>Math.exp(-Math.pow((p-m)/s,2));
+  return g(.17,.070)+0.44*g(.34,.105)+0.15*g(.56,.16);
+}
+function css(n){ return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
+
+function drawTrace(c,h){
+  if(!c || !c.clientWidth) return;
+  const x=c.getContext("2d"), dpr=Math.min(window.devicePixelRatio||1,2);
+  const W=c.width/dpr, H=c.height/dpr;
+  x.clearRect(0,0,W,H);
+  x.fillStyle=css("--surface"); x.fillRect(0,0,W,H);
+  x.strokeStyle=css("--line"); x.lineWidth=1;
+  for(let gy=1;gy<4;gy++){ x.beginPath(); x.moveTo(0,H*gy/4); x.lineTo(W,H*gy/4); x.stroke(); }
+  const sev = !band.on ? "line-strong" : (band.state==="opioid" ? "brick" : band.state==="steady" ? "pine" : "ochre");
+  const col=css("--"+sev);
+  const n=band.buf.length, step=W/n;
+  x.beginPath();
+  for(let i=0;i<n;i++){
+    const s=band.buf[(band.idx+i)%n];
+    const px=i*step, py=H-6-s*(H-16);
+    i?x.lineTo(px,py):x.moveTo(px,py);
+  }
+  x.strokeStyle=col; x.lineWidth=1.8; x.lineJoin="round"; x.stroke();
+  if(!band.on){
+    x.fillStyle=css("--ink-dim"); x.font="500 11px "+css("--mono").split(",")[0].replace(/"/g,"");
+    x.fillText("NO SKIN CONTACT", 10, 16);
+  }
+}
+function drawSpark(k){
+  const c=$("#spark-"+k); if(!c||!c.clientWidth) return;
+  const x=fitCanvas(c,26), dpr=Math.min(window.devicePixelRatio||1,2);
+  const W=c.width/dpr, H=c.height/dpr, d=band.hist[k];
+  x.clearRect(0,0,W,H); if(d.length<2) return;
+  const lo=Math.min(...d), hi=Math.max(...d), r=(hi-lo)||1;
+  const px=i=>i*(W/(d.length-1)), py=v=>H-2-((v-lo)/r)*(H-5);
+  x.beginPath(); d.forEach((v,i)=>i?x.lineTo(px(i),py(v)):x.moveTo(px(i),py(v)));
+  x.strokeStyle=css("--ink-dim"); x.lineWidth=1.2; x.stroke();
+  x.lineTo(W,H); x.lineTo(0,H); x.closePath(); x.fillStyle=css("--surface-2"); x.fill();
+  x.beginPath(); x.arc(px(d.length-1),py(d[d.length-1]),2.2,0,7); x.fillStyle=css("--pine"); x.fill();
+}
+
+function stepBand(dt){
+  const T=STATES[band.state]||STATES.steady;
+  const k=Math.min(dt*1.4,1);
+  if(band.on){
+    for(const p in T){ band.v[p]=near(band.v[p], T[p][0]+rand()*T[p][1]*0.5, k); }
+    if(band.real!=null) band.v.hr=band.real;
+  }
+  band.v.on=band.on;
+  /* trace samples: ~3 per frame keeps the sweep readable at any refresh rate */
+  const beats=(band.on? band.v.hr:0)/60*dt;
+  for(let i=0;i<3;i++){
+    band.ph=(band.ph+beats/3)%1;
+    const s = band.on ? ppg(band.ph)*0.72+0.08+rand()*0.012 : 0.5+rand()*0.02;
+    band.buf[band.idx]=Math.max(0,Math.min(1,s)); band.idx=(band.idx+1)%band.buf.length;
+  }
+  const mins=dt*DEMO_SPEED/60;
+  band.clock+=mins;
+  RULES.forEach(r=>{
+    if(r.test(band.v)){
+      band.dwell[r.id]=(band.dwell[r.id]||0)+mins;
+      if(band.dwell[r.id]>=r.dwell && !band.fired[r.id]){ band.fired[r.id]=true; alert_(r.sev,r.b,r.msg); }
+    } else { band.dwell[r.id]=0; band.fired[r.id]=false; }
+  });
+}
+function paintBandUi(){
+  const shown=$("#view-band").hidden===false;
+  $("#heroHr").textContent = band.on? Math.round(band.v.hr)+" bpm" : "off wrist";
+  $("#heroState").textContent = band.on? ("on wrist · "+({steady:"steady",stim:"heart racing",opioid:"breathing slow",withdrawal:"withdrawal"}[band.state])) : "band removed";
+  const sevDot = !band.on? "warn" : band.state==="opioid"? "crit" : band.state==="steady"? "" : "warn";
+  $("#heroDot").className="dot live "+sevDot; $("#bandDot").className="dot live "+sevDot;
+  if(shown){
+    $("#bandStateLabel").textContent = band.on? "On wrist" : "Off wrist";
+    const h=Math.floor(band.clock/60), m=Math.floor(band.clock%60);
+    $("#bandClock").textContent = `+${h}h ${String(m).padStart(2,"0")}m of monitoring`;
+    TILES.forEach(t=>{
+      const v=band.v[t.k], tile=$("#tile-"+t.k);
+      $("#v-"+t.k).textContent = band.on? t.fmt(v) : "—";
+      tile.className = "tile"+(band.on? (" "+t.flag(v)).trimEnd() : "");
+    });
+  }
+}
+let last=performance.now(), acc=0;
+function loop(now){
+  const dt=Math.min((now-last)/1000,0.1); last=now;
+  stepBand(dt); acc+=dt;
+  if($("#view-door").hidden===false) drawTrace($("#heroTrace"));
+  if($("#view-band").hidden===false) drawTrace($("#bandTrace"));
+  if(acc>=1){
+    acc=0;
+    for(const k in band.hist){
+      const a=band.hist[k]; a.push(band.on? band.v[k] : (a[a.length-1]??0));
+      if(a.length>60) a.shift();
+    }
+    paintBandUi();
+    if($("#view-band").hidden===false) TILES.forEach(t=>drawSpark(t.k));
+  }
+  requestAnimationFrame(loop);
+}
+
+/* ═══ 8. alerts ═══════════════════════════════════════════════════════ */
+function alert_(sev,b,m,ack){
+  S.log.unshift({t:Date.now(),sev,b,m,ack:ack||""});
+  if(S.log.length>60) S.log.pop();
+  save(); renderLog(); renderBadge();
+  if($("#view-console").hidden===false) renderConsole();
+}
+const ago=t=>{
+  const s=(Date.now()-t)/1000;
+  if(s<60) return "just now";
+  if(s<3600) return Math.round(s/60)+" min ago";
+  if(s<86400) return Math.round(s/3600)+" h ago";
+  return Math.round(s/86400)+" d ago";
+};
+function renderLog(){
+  const ul=$("#log"); ul.textContent="";
+  S.log.forEach(a=>{
+    const li=el("li",a.sev);
+    li.innerHTML=`<span class="when">${ago(a.t)} &middot; ${new Date(a.t).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"})}</span>
+      <b>${esc(a.b)}</b><span class="small">${esc(a.m)}</span>
+      ${a.ack?`<span class="ack">✓ ${esc(a.ack)}</span>`:`<span class="small" style="color:var(--ochre)">Waiting for your doctor</span>`}`;
+    ul.appendChild(li);
+  });
+}
+function renderBadge(){
+  const n=S.log.filter(a=>!a.ack).length, b=$("#bandBadge");
+  b.textContent=n; b.hidden=n===0;
+}
+$("#clearLog").onclick=()=>{ S.log=[]; save(); renderLog(); renderBadge(); renderConsole(); };
+
+/* sim + pairing */
+document.addEventListener("click",e=>{
+  const b=e.target.closest("[data-sim]"); if(!b) return;
+  const k=b.dataset.sim;
+  if(k==="report"){
+    alert_("info","Self-reported","“I used.” Sent to your doctor as a note. Your plan stays where it is and no phase resets.");
+    return;
+  }
+  if(k==="off"){ band.on=false; }
+  else { band.on=true; band.state = k==="steady"?"steady":k; }
+  band.dwell={}; band.fired={};
+  paintBandUi();
+});
+$("#simBtn").onclick=()=>{
+  band.real=null; band.on=true; band.state="steady";
+  $("#bandDevice").textContent="demo band · clock 60× real time";
+  $("#pairMsg").textContent="Demo band streaming. Rules fire 60× sooner than they would on a real wrist.";
+};
+$("#pairBtn").onclick=async()=>{
+  if(!navigator.bluetooth){
+    $("#pairMsg").textContent="This browser has no Web Bluetooth, or the page is embedded where it is blocked. The demo band works either way.";
+    return;
+  }
+  try{
+    $("#pairMsg").textContent="Choose your band in the browser dialog…";
+    const dev=await navigator.bluetooth.requestDevice({filters:[{services:["heart_rate"]}],optionalServices:["battery_service"]});
+    const gatt=await dev.gatt.connect();
+    const ch=await (await gatt.getPrimaryService("heart_rate")).getCharacteristic("heart_rate_measurement");
+    await ch.startNotifications();
+    ch.addEventListener("characteristicvaluechanged",ev=>{
+      const d=ev.target.value, flags=d.getUint8(0);
+      band.real = (flags&1) ? d.getUint16(1,true) : d.getUint8(1);
+      band.on=true;
+    });
+    dev.addEventListener("gattserverdisconnected",()=>{ band.real=null; band.on=false; $("#pairMsg").textContent="Band disconnected."; });
+    $("#bandDevice").textContent=(dev.name||"band")+" · live heart rate";
+    $("#pairMsg").textContent="Paired. Heart rate is real; the other five signals stay simulated — a phone cannot read them over this profile.";
+  }catch(err){
+    $("#pairMsg").textContent = err && err.name==="NotFoundError" ? "No band chosen." : "Pairing failed: "+(err&&err.message||"unknown");
+  }
+};
+function renderRules(){
+  const ul=$("#rules"); ul.textContent="";
+  RULES.forEach(r=>{
+    const li=el("li",r.sev);
+    li.innerHTML=`<b>${r.b}</b><span class="cond">${r.cond}</span><span class="who">${r.who}</span>`;
+    ul.appendChild(li);
+  });
+}
+
+/* ═══ 9. clinicians ═══════════════════════════════════════════════════ */
+let docFilter="mine";
+function renderDocs(){
+  const f=$("#docFilter"); f.textContent="";
+  [["mine","Matched to my choices"],["all","Everyone"]].forEach(([v,l])=>{
+    const b=el("button","btn "+(docFilter===v?"":"ghost")+" sm"); b.type="button"; b.textContent=l;
+    b.onclick=()=>{ docFilter=v; renderDocs(); }; f.appendChild(b);
+  });
+  const wrap=$("#docs"); wrap.textContent="";
+  const show=CLINICIANS.filter(c=>docFilter==="all" || !S.subs.length || S.subs.some(s=>c.tags.includes(s)));
+  if(!show.length) wrap.appendChild(el("p","small","Nobody in this placeholder list covers what you chose. In a real service that is a referral, not a dead end."));
+  show.forEach(c=>{
+    const d=el("div","doc");
+    const chosen=S.doctor===c.n;
+    d.innerHTML=`<h3>${c.n}</h3><span class="role">${c.r}</span><span class="small">${c.tz}</span>
+      <div class="tags">${c.tags.filter(t=>t!=="other").map(t=>`<span>${sub(t)?sub(t).name:t}</span>`).join("")}</div>
+      <span class="avail"><span class="dot"></span>${c.avail}</span>
+      <span class="small" style="color:var(--ochre)">Licence not verified — placeholder profile</span>`;
+    const b=el("button","btn "+(chosen?"":"ghost")+" sm"); b.type="button";
+    b.textContent=chosen?"Your doctor ✓":"Ask this doctor";
+    b.onclick=()=>{ S.doctor=c.n; save(); renderDocs();
+      alert_("info","Request sent",`Sent to ${c.n} under your alias “${S.alias}”. They see your substance, your plan and your band — not your name.`, c.n); };
+    d.appendChild(b); wrap.appendChild(d);
+  });
+}
+
+/* ═══ 10. doctor's view ═══════════════════════════════════════════════ */
+const PANEL=[
+ {alias:"M-72", subId:"alcohol", day:3, band:"on", alerts:[
+   {sev:"crit", b:"Withdrawal showing on your skin", m:"Day 3 of a supervised alcohol detox: temp +1.1°C, sweat and tremor climbing for 40 min. Seizure window.", t:Date.now()-1000*60*12}]},
+ {alias:"K-08", subId:"captagon", day:11, band:"off", alerts:[
+   {sev:"warn", b:"Band off, and staying off", m:"Off the wrist for 3 h 20 m. Last contact was a missed check-in yesterday.", t:Date.now()-1000*60*95}]},
+ {alias:"R-31", subId:"benzos", day:64, band:"on", alerts:[
+   {sev:"warn", b:"Recovery signal collapsed", m:"HRV down 41% for three nights after the last 10% reduction — step looks too fast.", t:Date.now()-1000*60*60*7}]},
+ {alias:"S-90", subId:"nicotine", day:22, band:"on", alerts:[]}
+];
+function renderConsole(){
+  const mine=S.log.filter(a=>!a.ack);
+  const all=[].concat(
+    mine.map(a=>({...a, alias:S.alias, mine:true})),
+    PANEL.flatMap(p=>p.alerts.map(a=>({...a, alias:p.alias})))
+  ).sort((a,b)=>(a.sev==="crit"?0:a.sev==="warn"?1:2)-(b.sev==="crit"?0:b.sev==="warn"?1:2) || b.t-a.t);
+
+  const crit=all.filter(a=>a.sev==="crit").length;
+  const t=$("#consoleTiles"); t.textContent="";
+  [["Open alerts",all.length,crit?"flag":""],["Emergency-level",crit,crit?"bad":""],
+   ["Patients on the band",PANEL.filter(p=>p.band==="on").length+(band.on?1:0),""],
+   ["Bands off right now",PANEL.filter(p=>p.band==="off").length+(band.on?0:1),band.on?"":"flag"]]
+  .forEach(([k,v,c])=>{
+    t.appendChild(el("div","tile "+c,`<span class="k">${k}</span><span class="v">${v}</span><span class="u">right now</span>`));
+  });
+
+  const tb=$("#panel"); tb.textContent="";
+  const rows=[{alias:S.alias, subId:S.subs[0]||"other", day:S.day, band:band.on?"on":"off", mine:true, open:mine.length}]
+    .concat(PANEL.map(p=>({...p, open:p.alerts.length})));
+  rows.forEach(r=>{
+    const tr=el("tr");
+    const st=r.open? (r.band==="off"?"warn":"crit") : "ok";
+    tr.innerHTML=`<td><b>${esc(r.alias)}</b>${r.mine?' <span class="small">(you)</span>':""}</td>
+      <td>${sub(r.subId)?sub(r.subId).name:"—"}</td>
+      <td class="num">${r.day}</td>
+      <td><span class="state ${r.band==="on"?"ok":"warn"}">${r.band==="on"?"streaming":"off wrist"}</span></td>
+      <td><span class="state ${r.open? st:"ok"}">${r.open||"clear"}</span></td>
+      <td class="small">${r.mine?"your record":"example row"}</td>`;
+    tb.appendChild(tr);
+  });
+
+  const q=$("#queue"); q.textContent="";
+  all.forEach(a=>{
+    const li=el("li",a.sev);
+    li.innerHTML=`<span class="when">${esc(a.alias)} &middot; ${ago(a.t)}${a.mine?"":" &middot; example"}</span>
+      <b>${esc(a.b)}</b><span class="small">${esc(a.m)}</span>`;
+    if(a.mine){
+      const row=el("div","row");
+      const ack=el("button","btn sm"); ack.type="button"; ack.textContent="Acknowledge & message patient";
+      ack.onclick=()=>{
+        const entry=S.log.find(x=>x.t===a.t);
+        if(entry){ entry.ack=(S.doctor||"Dr. Farah Al-Sabti")+" acknowledged · "+new Date().toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"}); }
+        save(); renderLog(); renderBadge(); renderConsole();
+      };
+      row.appendChild(ack); li.appendChild(row);
+    }
+    q.appendChild(li);
+  });
+  if(!all.length) q.appendChild(el("li","info",'<b>Queue clear.</b><span class="small">Nobody is in trouble right now.</span>'));
+}
+
+/* ═══ 11. wipe & leave ════════════════════════════════════════════════ */
+$("#panicExit").onclick=()=>{
+  if(!confirm("Wipe your alias, plan and alert log from this device and close the page? This cannot be undone.")) return;
+  try{ localStorage.removeItem(KEY); }catch(e){}
+  document.body.innerHTML=`<main class="shell" style="padding-block:4rem;max-width:44ch">
+    <h1 style="font-size:var(--f3)">Wiped.</h1>
+    <p class="lede" style="margin-block:1rem">Nothing about you is left in this browser&rsquo;s storage.</p>
+    <p class="small">Two things this page cannot clear for you: the address in your browser history, and
+    anything a shared device already synced. If someone else uses this device, clear the history for
+    this site as well, then close the tab.</p></main>`;
+};
+
+/* ═══ 12. boot ════════════════════════════════════════════════════════ */
+renderSubs(); renderDanger(); renderQuestions(); syncHint();
+renderTiles(); renderRules(); renderLog(); renderBadge();
+$("#bandDevice").textContent="demo band · clock 60× real time";
+$("#pairMsg").textContent="Not paired yet — the demo band is streaming so the page has something to show.";
+$("#heroWho").textContent=(S.demo?"example patient":"patient")+" “"+S.alias+"”";
+function sizeAll(){
+  [["#heroTrace",120],["#bandTrace",150]].forEach(([sel,h])=>{ const c=$(sel); if(c) fitCanvas(c,h); });
+  TILES.forEach(t=>drawSpark(t.k));
+}
+window.addEventListener("resize",sizeAll);
+sizeAll(); go("door"); requestAnimationFrame(loop);
+</script>
+</body>
+</html>
