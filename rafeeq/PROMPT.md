@@ -144,10 +144,26 @@ Two more pieces of content earn their place there:
   a relapse at exactly the point tolerance has fallen and the old dose can stop
   someone's breathing.
 
-No foreign clinics are named, for the same reason no unverified doctor is: a list
-on a page reads as a recommendation, and rehab abroad is easy to sell badly.
-Verification is pushed to the country's own register and to MOH's approved-hospital
-list.
+**The hospital list**, in the warning box under route one. Nine real, established
+places that treat addiction, each with its city, whether it is government or
+private, one concrete fact, and **the register to check it on** — NRC Abu Dhabi
+(WHO Collaborating Centre) and Erada and Al Amal in Dubai (verify on the DHA
+Sheryan directory), Masar in Jeddah (Saudi MOH licence), Castle Craig in Scotland
+(Care Inspectorate), Priory in the UK (CQC, per site, because quality varies by
+site), Clinic Les Alpes in Montreux (Swiss health authority licence), The Cabin in
+Chiang Mai (Thai MoPH), and Hazelden Betty Ford in the US (state licence plus
+CARF or Joint Commission).
+
+Rules for that list: the box is headed **"Names, not recommendations"** and says
+plainly that nothing is endorsed and nothing has been inspected by anyone
+connected to the page. **No prices**, except where a figure is attributable and
+sets the range honestly (Forbes on Clinic Les Alpes). No marketing claims repeated
+as fact — a clinic's own boast about itself is quoted as its own boast or left out.
+The four Arabic-speaking, nearest options come first, because for most patients
+language matters more than scenery. Egypt, Jordan and Lebanon are named as gaps
+with the `.tbd` marker rather than filled from directories that sell placements.
+Anything added later needs the same three things or it does not go in: a current
+licence, a regulator, or a named accreditation.
 
 The view closes on the option people forget: staying in Kuwait and being treated
 privately, or free at the government centre, neither of which calls anyone's

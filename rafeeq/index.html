@@ -344,6 +344,19 @@ td .num{font-size:var(--f-1)}
 .lines dd{margin:0;font-family:var(--mono);font-size:var(--f0);font-weight:500}
 .tbd{color:var(--ochre);font-family:var(--body);font-size:var(--f-1);font-weight:600}
 
+.hosp{
+  margin:.6rem 0 0;padding:0;list-style:none;
+  display:grid;gap:.4rem;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));
+}
+.hosp li{
+  background:var(--surface);border:1px solid var(--line);border-radius:8px;
+  padding:.6rem .7rem;display:grid;gap:.15rem;align-content:start;
+}
+.hosp b{font-size:var(--f-1)}
+.hosp .cond{font-family:var(--mono);font-size:var(--f-2);color:var(--ink-dim)}
+.hosp .gov{color:var(--pine-ink);font-weight:600}
+:root[data-theme="dark"] .hosp .gov{color:var(--pine)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .hosp .gov{color:var(--pine)}}
 .where{
   display:grid;gap:.35rem;justify-items:start;
   background:var(--surface);border:1px solid var(--line-strong);
@@ -681,12 +694,63 @@ footer{border-top:1px solid var(--line);padding-block:1.5rem;color:var(--ink-dim
           below matters more than the brochure.</span></div>
       </div>
       <div class="note warn">
-        <span class="demo-flag">No clinic list here yet</span><br>
-        Rafeeq does not name foreign clinics, for the same reason it does not name unverified
-        doctors: a rehab abroad is one of the easiest things in medicine to sell badly, and a list
-        on a website reads as a recommendation. Verify any clinic yourself against the register of
-        the country it sits in &mdash; and against the Ministry of Health&rsquo;s own approved-hospital
-        list if you are going through them.
+        <span class="demo-flag">Names, not recommendations</span><br>
+        Every hospital below is a real, established place that treats addiction, listed so you have
+        somewhere to start reading instead of a search engine full of paid adverts. None of them is
+        endorsed here, none has been inspected by anyone connected to this page, and prices are not
+        quoted because they change. <b>Check each one yourself on the register named beside it</b>
+        &mdash; and against the Ministry of Health&rsquo;s own approved-hospital list if you are going
+        through the funded route. The nearest four are Arabic-speaking, which for most people
+        matters more than the mountains.
+        <ul class="hosp">
+          <li><b>National Rehabilitation Center (NRC)</b>
+            <span class="cond">Abu Dhabi, UAE &middot; <span class="gov">government</span> &middot; nrc.gov.ae</span>
+            <span class="small">Set up in 2002 and a WHO Collaborating Centre for substance-use
+              treatment and prevention. The most credentialed addiction service in the Gulf, an hour
+              and a half&rsquo;s flight away.</span></li>
+          <li><b>Erada Center for Treatment and Rehabilitation</b>
+            <span class="cond">Dubai, UAE &middot; <span class="gov">government</span> &middot; check: DHA Sheryan directory</span>
+            <span class="small">Detox, residential care for around 50 inpatients, and a two-year
+              outpatient aftercare programme &mdash; the longest aftercare on this list. Reported as
+              men only; confirm when you call.</span></li>
+          <li><b>Al Amal Hospital</b>
+            <span class="cond">Dubai, UAE &middot; <span class="gov">government</span> &middot; check: DHA Sheryan directory</span>
+            <span class="small">Dubai&rsquo;s public psychiatric hospital, working alongside Erada for
+              addiction and for the psychiatric side of it.</span></li>
+          <li><b>Masar Center</b>
+            <span class="cond">Jeddah, Saudi Arabia &middot; private &middot; check: Saudi MOH licence</span>
+            <span class="small">Describes itself as the first comprehensive mental-health and
+              addiction centre in the Kingdom and the Gulf. Arabic-speaking, and close.</span></li>
+          <li><b>Castle Craig Hospital</b>
+            <span class="cond">Peeblesshire, Scotland &middot; private &middot; check: Care Inspectorate</span>
+            <span class="small">An addiction hospital since 1988, with medical detox on site and a
+              12-step programme supplemented by CBT, DBT and EMDR. Rural, residential, far from
+              anyone who knows you.</span></li>
+          <li><b>Priory</b>
+            <span class="cond">Roehampton, London, and 500-odd UK sites &middot; private &middot; check: CQC</span>
+            <span class="small">Britain&rsquo;s largest private mental-health and addiction provider.
+              Quality varies by site, which is exactly why you read that site&rsquo;s own CQC
+              inspection report before booking.</span></li>
+          <li><b>Clinic Les Alpes</b>
+            <span class="cond">Montreux, Switzerland &middot; private &middot; licensed by the Swiss health authority</span>
+            <span class="small">The top of the price range: Forbes reported programmes starting
+              around US$49,000. Included here so the range is honest, not because expensive means
+              better.</span></li>
+          <li><b>The Cabin</b>
+            <span class="cond">Chiang Mai, Thailand &middot; private &middot; check: Thai Ministry of Public Health licence</span>
+            <span class="small">Inpatient and outpatient treatment for substance and behavioural
+              addictions. Far cheaper than Europe, and far from everything, which cuts both
+              ways.</span></li>
+          <li><b>Hazelden Betty Ford Foundation</b>
+            <span class="cond">15 centres, United States &middot; non-profit &middot; check: state licence &amp; CARF/Joint Commission</span>
+            <span class="small">Non-profit, founded 1949, and the place most of modern addiction
+              treatment was written at. Visas make it the slowest option from here.</span></li>
+        </ul>
+        <p class="small" style="margin-top:.6rem"><span class="tbd">Egypt, Jordan and Lebanon all
+          have addiction hospitals, and Kuwaitis do use them, but the ones circulating online could
+          not be verified to the same standard as the nine above &mdash; a current licence, a
+          regulator, or a named accreditation. Ask the Treatment Abroad Office for its approved list
+          rather than trusting a directory that sells placements.</span></p>
       </div>
     </div>
   </div>
