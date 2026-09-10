@@ -8,9 +8,10 @@ Manchester Metropolitan University.
 - `index.html` — the whole site: a single, self-contained page (no build step, no
   dependencies beyond Google Fonts). Dark editorial layout with a sticky identity rail,
   about / education / skills / programs sections and a contact card.
-- `dives/` — **Thirteen Dives**: thirteen places in Kuwait grouped by depth in a pearl-diving
-  theme, with live 3D models (Three.js) of Kuwait Towers, Al Qurain Martyrs Museum,
-  Al Shaheed Park and Khiran Resorts. One self-contained page: `dives/index.html`.
+- `dives/` — **Thirteen Pearls**: thirteen places in Kuwait grouped by who they suit, over a
+  pearl-and-seawater backdrop, with live 3D models (Three.js) of Kuwait Towers, Al Qurain
+  Martyrs Museum, Al Shaheed Park and Khiran Resorts. One self-contained page:
+  `dives/index.html`.
 - `notes/` — the Notebook: six running logs (places in Kuwait, a car build list, a gahwa
   log, things I'm learning, read & watched, small wins). A hub page plus one page per log,
   all sharing `notes/styles.css`. Currently a **draft** — every page carries a
@@ -46,6 +47,6 @@ same shape — page head, entries, then an open-ended list — so a new entry is
 a small inline script driven by `data-tags` / `data-status`.
 
 `dives/index.html` is one file with no build step. Colours are the `:root` tokens at the top;
-each place is one `<article class="place">`; the four 3D scenes are the `build*()` functions in
+each place is one `<article class="place">`; the pearls and silt are drawn on the `#drift` canvas; the four 3D scenes are the `build*()` functions in
 the script at the bottom, sharing a single renderer harness. Three.js is loaded from cdnjs and
 the page degrades cleanly to text if that script is blocked.

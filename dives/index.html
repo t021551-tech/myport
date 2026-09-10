@@ -3,19 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Thirteen places in Kuwait grouped by depth, in a pearl-diving theme, with 3D models of Kuwait Towers, Al Qurain Martyrs Museum, Al Shaheed Park and Khiran Resorts.">
+<meta name="description" content="Thirteen places in Kuwait grouped by who they suit, with 3D models of Kuwait Towers, Al Qurain Martyrs Museum, Al Shaheed Park and Khiran Resorts.">
 <meta name="color-scheme" content="dark">
-<meta property="og:title" content="Thirteen Dives">
-<meta property="og:description" content="Thirteen places in Kuwait, grouped the way a pearl diver works.">
+<meta property="og:title" content="Thirteen Pearls">
+<meta property="og:description" content="Thirteen places in Kuwait, grouped by who they suit.">
 <meta property="og:type" content="website">
-<title>Thirteen Dives</title>
+<title>Thirteen Pearls</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,800&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
 /* ================================================================
-   Thirteen Dives — Kuwait, grouped by depth.
-   One committed visual world: the water column of a pearl dive.
+   Thirteen Pearls — thirteen places in Kuwait, grouped by who they suit.
+   One committed visual world: pearls adrift in the Gulf water column.
    Every colour is painted explicitly; nothing borrows the host ground.
    ================================================================ */
 
@@ -88,7 +88,7 @@ body{
   background:radial-gradient(120% 70% at 50% 8%, transparent 30%, rgba(1,10,15,.85) 100%);
   opacity:calc(.35 + var(--depth) * .6);
 }
-#drift{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:.75}
+#drift{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:.9}
 
 /* ---------------- page ---------------- */
 .page{
@@ -239,31 +239,6 @@ body{
 }
 .model .cap b{color:var(--glass);font-weight:500}
 
-/* ---------------- glossary ---------------- */
-.glossary{
-  margin-top:var(--s5);
-  border:1px solid var(--line);
-  background:rgba(6,34,46,.72);
-  padding:clamp(1.2rem,4vw,2rem);
-  display:flex;flex-direction:column;gap:var(--s3);
-}
-.glossary h2{
-  font-family:var(--display);font-weight:800;font-size:clamp(1.5rem,4vw,2rem);
-  letter-spacing:-.025em;margin:0;color:var(--nacre);
-}
-.glossary > p{margin:0;color:var(--silt);max-width:58ch;font-size:.95rem}
-.words{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.7rem}
-.words li{
-  display:grid;grid-template-columns:minmax(0,10rem) minmax(0,1fr);
-  gap:.15rem .95rem;align-items:baseline;
-  border-top:1px solid var(--line-soft);padding-top:.7rem;
-}
-.words li:first-child{border-top:0;padding-top:0}
-.words .w{display:flex;flex-direction:column}
-.words .lat{font-family:var(--display);font-weight:700;font-size:1.05rem;color:var(--nacre)}
-.words .arb{font-family:var(--body);font-size:.95rem;color:var(--brass)}
-.words .def{margin:0;color:#DCEAEC;font-size:.94rem}
-
 .close{
   margin-top:var(--s5);border-top:1px solid var(--line);padding-top:var(--s3);
   display:flex;flex-direction:column;gap:.5rem;
@@ -302,26 +277,25 @@ a:focus-visible{outline:2px solid var(--brass);outline-offset:3px}
 
   <header class="hero">
     <p class="eyebrow">Kuwait &middot; thirteen places</p>
-    <h1>Thirteen<em>Dives</em></h1>
-    <p class="ar-title">ثلاث عشرة غوصة</p>
-    <p class="lede">The pearl fleet sailed in June and came home in September. Everything in
-      between was measured in <em>qamah</em> &mdash; the depth of one man standing.</p>
-    <p class="sub">Thirteen places in Kuwait, grouped the way a diver works: what sits at the
-      surface first, then further down each time. Four of them you can pick up and turn around.</p>
+    <h1>Thirteen<em>Pearls</em></h1>
+    <p class="ar-title">ثلاث عشرة لؤلؤة</p>
+    <p class="lede">Thirteen places in Kuwait &mdash; towers and islands, a mirrored house, an
+      archive, a park, a house left exactly as the fighting found it.</p>
+    <p class="sub">Grouped by who they actually suit rather than by category, so you can find
+      the right one for the day you have. Four of them you can pick up and turn around.</p>
     <div class="legend">
       <span><b>13</b> places</span>
-      <span><b>5</b> depths</span>
+      <span><b>5</b> groups</span>
       <span><span class="dia">&#9671;</span> <b>4</b> in 3D &mdash; drag to turn</span>
-      <span>1 qamah &asymp; <b>1.8 m</b></span>
     </div>
   </header>
 
   <!-- ============================ DEPTH I ============================ -->
-  <section class="band" id="surface">
+  <section class="band" id="landmarks">
     <div class="band-head">
-      <span class="mark">2 qamah<span>at the surface</span></span>
+      <span class="mark">Group 01<span>two places</span></span>
       <h2>What you see from the road</h2>
-      <p class="ar">على السطح</p>
+      <p class="ar">معالم</p>
       <p class="who">The two that need no introduction and no boat. Start here, especially if
         you&rsquo;re showing someone Kuwait for the first time.</p>
     </div>
@@ -394,9 +368,9 @@ a:focus-visible{outline:2px solid var(--brass);outline-offset:3px}
   <!-- ============================ DEPTH II ============================ -->
   <section class="band" id="sea">
     <div class="band-head">
-      <span class="mark">5 qamah<span>on the dhow</span></span>
+      <span class="mark">Group 02<span>four places</span></span>
       <h2>For people who love the sea</h2>
-      <p class="ar">على السفينة</p>
+      <p class="ar">البحر</p>
       <p class="who">Four places that only make sense because Kuwait faces the water &mdash; two
         you walk into, two you need a boat or a long drive for.</p>
     </div>
@@ -518,11 +492,11 @@ a:focus-visible{outline:2px solid var(--brass);outline-offset:3px}
   </section>
 
   <!-- ============================ DEPTH III ============================ -->
-  <section class="band" id="old-ground">
+  <section class="band" id="history">
     <div class="band-head">
-      <span class="mark">9 qamah<span>the old ground</span></span>
+      <span class="mark">Group 03<span>three places</span></span>
       <h2>For people who want to see how far back it goes</h2>
-      <p class="ar">القاع القديم</p>
+      <p class="ar">التاريخ</p>
       <p class="who">Bronze Age settlements, a British agent&rsquo;s house on the seafront, and
         twelve thousand manuscripts in a reading room in Jabriya.</p>
     </div>
@@ -609,7 +583,7 @@ a:focus-visible{outline:2px solid var(--brass);outline-offset:3px}
   <!-- ============================ DEPTH IV ============================ -->
   <section class="band" id="memory">
     <div class="band-head">
-      <span class="mark">14 qamah<span>what we carry up</span></span>
+      <span class="mark">Group 04<span>three places</span></span>
       <h2>Places that ask you to remember</h2>
       <p class="ar">الذاكرة</p>
       <p class="who">A house left exactly as it was, a museum of the people who kept order, and a
@@ -712,13 +686,13 @@ a:focus-visible{outline:2px solid var(--brass);outline-offset:3px}
   </section>
 
   <!-- ============================ DEPTH V ============================ -->
-  <section class="band" id="layers">
+  <section class="band" id="land">
     <div class="band-head">
-      <span class="mark">20 qamah<span>the sea floor</span></span>
+      <span class="mark">Group 05<span>one place</span></span>
       <h2>For people who like the land itself</h2>
-      <p class="ar">الطبقات</p>
-      <p class="who">The bottom of the descent: rock, not architecture. One place, and it is the
-        hardest to get into.</p>
+      <p class="ar">الأرض</p>
+      <p class="who">Rock, not architecture &mdash; and the hardest place on this page to get
+        into.</p>
     </div>
 
     <article class="place">
@@ -749,59 +723,11 @@ a:focus-visible{outline:2px solid var(--brass);outline-offset:3px}
     </article>
   </section>
 
-  <!-- ============================ GLOSSARY ============================ -->
-  <section class="glossary">
-    <p class="eyebrow">The theme, in its own words</p>
-    <h2>Words from the diving season</h2>
-    <p>Kuwait ran on pearls before it ran on oil, and the season had its own vocabulary. These
-      are the words the grouping above borrows from.</p>
-    <ul class="words">
-      <li>
-        <span class="w"><span class="lat">Ghaus</span><span class="arb">الغوص</span></span>
-        <p class="def">The dive, and the whole season of diving &mdash; roughly June to September,
-          when the fleet was out on the banks.</p>
-      </li>
-      <li>
-        <span class="w"><span class="lat">Nokhatha</span><span class="arb">النوخذة</span></span>
-        <p class="def">The captain. He owned the voyage, chose the banks, and settled everyone&rsquo;s
-          share at the end of it.</p>
-      </li>
-      <li>
-        <span class="w"><span class="lat">Ghais</span><span class="arb">الغيص</span></span>
-        <p class="def">The diver himself &mdash; down on one breath, again and again, all day.</p>
-      </li>
-      <li>
-        <span class="w"><span class="lat">Saib</span><span class="arb">السيب</span></span>
-        <p class="def">The hauler. He held the rope, felt the signal, and pulled his diver back up.
-          The two worked as one person.</p>
-      </li>
-      <li>
-        <span class="w"><span class="lat">Fatam</span><span class="arb">الفطام</span></span>
-        <p class="def">The nose clip, cut from turtle shell or bone. Just about the only equipment a
-          diver had.</p>
-      </li>
-      <li>
-        <span class="w"><span class="lat">Nahham</span><span class="arb">النهام</span></span>
-        <p class="def">The singer on board. He set the rhythm for hauling and kept the crew going
-          &mdash; a job, not entertainment.</p>
-      </li>
-      <li>
-        <span class="w"><span class="lat">Dana</span><span class="arb">الدانة</span></span>
-        <p class="def">A large, fine pearl. The word a whole season was hoping for.</p>
-      </li>
-      <li>
-        <span class="w"><span class="lat">Qaffal</span><span class="arb">القفال</span></span>
-        <p class="def">The return &mdash; the day the fleet came home together and the town went
-          down to the shore to meet it.</p>
-      </li>
-    </ul>
-  </section>
-
   <div class="close">
     <span><b>Check before you go.</b> Opening hours, ticket prices, ferry times and permits change
       &mdash; especially for the island trips, the archive, the geopark and Mirror House, which all
       need arranging in advance.</span>
-    <span>Thirteen places &middot; five depths &middot; four models you can turn.</span>
+    <span>Thirteen places &middot; five groups &middot; four models you can turn.</span>
   </div>
 
 </div>
@@ -827,21 +753,22 @@ a:focus-visible{outline:2px solid var(--brass);outline-offset:3px}
   window.addEventListener('resize', depth);
 
   /* ---------------------------------------------------------------
-     Drifting particles — silt and bubbles in the water column.
+     The water column: fine silt, and pearls turning slowly through it.
      --------------------------------------------------------------- */
   (function drift() {
     var cv = document.getElementById('drift');
     var ctx = cv.getContext('2d');
-    var motes = [];
+    var motes = [], pearls = [];
     var w = 0, h = 0, dpr = Math.min(window.devicePixelRatio || 1, 2);
 
     function size() {
       w = cv.clientWidth; h = cv.clientHeight;
       cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      var target = Math.round(Math.min(150, (w * h) / 9000));
+
       motes = [];
-      for (var i = 0; i < target; i++) {
+      var grains = Math.round(Math.min(150, (w * h) / 9000));
+      for (var i = 0; i < grains; i++) {
         motes.push({
           x: Math.random() * w,
           y: Math.random() * h,
@@ -852,22 +779,89 @@ a:focus-visible{outline:2px solid var(--brass);outline-offset:3px}
           a: 0.12 + Math.random() * 0.4
         });
       }
+
+      pearls = [];
+      var count = Math.round(Math.min(16, Math.max(7, (w * h) / 78000)));
+      for (var j = 0; j < count; j++) {
+        pearls.push({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          r: 5 + Math.random() * 15,
+          v: 0.05 + Math.random() * 0.16,
+          sway: 0.6 + Math.random() * 1.4,
+          phase: Math.random() * Math.PI * 2,
+          a: 0.16 + Math.random() * 0.34,
+          lit: 0.55 + Math.random() * 0.5   // where the highlight sits on the pearl
+        });
+      }
+    }
+
+    /* A pearl is a nacre body with an off-centre highlight, a warmer
+       under-glow where light bounces back up, and a soft halo. */
+    function pearl(p, x, mul) {
+      var a = p.a * mul;
+      var hx = x - p.r * 0.34 * p.lit, hy = p.y - p.r * 0.38 * p.lit;
+
+      var halo = ctx.createRadialGradient(x, p.y, p.r * 0.7, x, p.y, p.r * 2.1);
+      halo.addColorStop(0, 'rgba(226,244,238,' + (a * 0.5) + ')');
+      halo.addColorStop(1, 'rgba(226,244,238,0)');
+      ctx.beginPath(); ctx.arc(x, p.y, p.r * 2.1, 0, Math.PI * 2);
+      ctx.fillStyle = halo; ctx.fill();
+
+      var body = ctx.createRadialGradient(hx, hy, p.r * 0.08, x, p.y, p.r);
+      body.addColorStop(0.00, 'rgba(255,255,253,' + Math.min(1, a + 0.5) + ')');
+      body.addColorStop(0.28, 'rgba(242,233,219,' + Math.min(1, a + 0.34) + ')');
+      body.addColorStop(0.62, 'rgba(206,222,219,' + Math.min(1, a + 0.16) + ')');
+      body.addColorStop(0.88, 'rgba(150,190,192,' + (a * 0.85) + ')');
+      body.addColorStop(1.00, 'rgba(120,168,175,' + (a * 0.5) + ')');
+      ctx.beginPath(); ctx.arc(x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = body; ctx.fill();
+
+      // light coming back up off the water below
+      var lift = ctx.createRadialGradient(x + p.r * 0.2, p.y + p.r * 0.5, 0,
+                                          x + p.r * 0.2, p.y + p.r * 0.5, p.r * 0.62);
+      lift.addColorStop(0, 'rgba(216,162,74,' + (a * 0.3) + ')');
+      lift.addColorStop(1, 'rgba(216,162,74,0)');
+      ctx.beginPath(); ctx.arc(x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = lift; ctx.fill();
+
+      // the pin of light on the shoulder
+      ctx.beginPath();
+      ctx.arc(hx, hy, Math.max(0.7, p.r * 0.15), 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(255,255,255,' + Math.min(0.9, a + 0.42) + ')';
+      ctx.fill();
     }
 
     function frame(t) {
       ctx.clearRect(0, 0, w, h);
-      for (var i = 0; i < motes.length; i++) {
-        var m = motes[i];
+      var i, m, x;
+
+      for (i = 0; i < motes.length; i++) {
+        m = motes[i];
         if (!reduced) {
           m.y -= m.v;
           if (m.y < -6) { m.y = h + 6; m.x = Math.random() * w; }
         }
-        var x = m.x + Math.sin((t / 2600) + m.phase) * m.sway * 6;
+        x = m.x + Math.sin((t / 2600) + m.phase) * m.sway * 6;
         ctx.beginPath();
         ctx.arc(x, m.y, m.r, 0, Math.PI * 2);
         ctx.fillStyle = 'rgba(198,238,232,' + m.a + ')';
         ctx.fill();
       }
+
+      for (i = 0; i < pearls.length; i++) {
+        var p = pearls[i];
+        if (!reduced) {
+          p.y -= p.v;
+          if (p.y < -p.r * 2.5) { p.y = h + p.r * 2.5; p.x = Math.random() * w; }
+        }
+        x = p.x + Math.sin((t / 5200) + p.phase) * p.sway * 9;
+        // step back behind the reading column so nothing sits under the text
+        var off = Math.abs(x - w / 2) - 300;
+        var mul = off <= 0 ? 0.16 : Math.min(1, 0.16 + (off / 220) * 0.84);
+        pearl(p, x, mul);
+      }
+
       requestAnimationFrame(frame);
     }
 
