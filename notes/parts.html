@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Car parts I want — Notebook</title>
+<meta name="description" content="A build list: the parts I want, why I want them, what they cost, and what I decided against.">
+<meta name="color-scheme" content="dark">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="bg" aria-hidden="true">
+  <div class="bg-bloom"></div>
+  <div class="bg-grid"></div>
+  <div class="bg-mark">02</div>
+  <div class="bg-veil"></div>
+  <div class="bg-edge"></div>
+</div>
+
+<div class="shell">
+
+  <nav class="topbar">
+    <a href="index.html">&larr; Notebook</a>
+    <span class="spacer"></span>
+    <span class="here">02 &middot; Parts</span>
+  </nav>
+
+  <header class="page-head">
+    <p class="eyebrow">Log 02</p>
+    <h1>The <span class="accent">build list</span></h1>
+    <p class="lede">Everything I want for the car, in the order I&rsquo;d buy it &mdash;
+      and <em>why</em>, which is the part most lists leave out.</p>
+    <div class="meta-row">
+      <span>Car: <b>2020 Nissan Patrol</b></span>
+      <span>Goal: <b>daily comfort, cleaner look</b></span>
+      <span>Spent so far: <b>310 KD</b></span>
+      <span>Still to go: <b>~745 KD</b></span>
+    </div>
+  </header>
+
+  <p class="draft-note">DRAFT &mdash; swap the car, the parts and the prices for your own.
+    The <code>data-status</code> attribute on each entry drives the filter buttons.</p>
+
+  <section>
+    <div class="sec-head">
+      <h2>Priority order</h2>
+      <span class="count">06</span>
+      <span class="hair"></span>
+    </div>
+
+    <div class="chips" role="group" aria-label="Filter parts by status">
+      <button class="chip" type="button" data-filter="all" aria-pressed="true">All</button>
+      <button class="chip" type="button" data-filter="installed" aria-pressed="false">Installed</button>
+      <button class="chip" type="button" data-filter="ordered" aria-pressed="false">Ordered</button>
+      <button class="chip" type="button" data-filter="saving" aria-pressed="false">Saving for</button>
+      <button class="chip" type="button" data-filter="researching" aria-pressed="false">Researching</button>
+    </div>
+
+    <ul class="entries" id="list">
+
+      <li class="entry" data-status="installed">
+        <div class="entry-side">
+          <span class="date">#1 &middot; DONE</span>
+          <span class="score">85<span class="of">KD</span></span>
+        </div>
+        <div class="entry-body">
+          <h3>Ceramic window tint</h3>
+          <ul class="tags">
+            <li class="tag g">Installed</li>
+            <li class="tag">Comfort</li>
+          </ul>
+          <p><strong>Why:</strong> summer here is the whole argument. Ceramic over dyed film
+            because it blocks heat without going darker than the legal limit.</p>
+          <p><strong>After:</strong> cabin is noticeably cooler on a parked afternoon and the
+            AC stops fighting for its life. Easily the best 85 KD on this list.</p>
+          <dl class="kv">
+            <div><dt>Spec</dt><dd>70% front, 35% rear</dd></div>
+            <div><dt>Cost</dt><dd>85 KD fitted</dd></div>
+            <div><dt>Source</dt><dd>Shop in Shuwaikh</dd></div>
+            <div><dt>Worth it?</dt><dd>Yes</dd></div>
+          </dl>
+        </div>
+      </li>
+
+      <li class="entry" data-status="installed">
+        <div class="entry-side">
+          <span class="date">#2 &middot; DONE</span>
+          <span class="score">225<span class="of">KD</span></span>
+        </div>
+        <div class="entry-body">
+          <h3>All-terrain tyres</h3>
+          <ul class="tags">
+            <li class="tag g">Installed</li>
+            <li class="tag">Safety</li>
+          </ul>
+          <p><strong>Why:</strong> the originals were three years old and the sidewalls were
+            starting to look their age. Tyres before anything cosmetic &mdash; non-negotiable.</p>
+          <p><strong>After:</strong> slightly louder on the highway, much better on sand.
+            Trade I&rsquo;d make again.</p>
+          <dl class="kv">
+            <div><dt>Spec</dt><dd>275/60 R18, A/T</dd></div>
+            <div><dt>Cost</dt><dd>225 KD for four</dd></div>
+            <div><dt>Fitted</dt><dd>Aug 2026</dd></div>
+            <div><dt>Worth it?</dt><dd>Yes</dd></div>
+          </dl>
+        </div>
+      </li>
+
+      <li class="entry" data-status="ordered">
+        <div class="entry-side">
+          <span class="date">#3 &middot; ORDERED</span>
+          <span class="score">45<span class="of">KD</span></span>
+        </div>
+        <div class="entry-body">
+          <h3>Front &amp; rear dashcam</h3>
+          <ul class="tags">
+            <li class="tag y">Ordered</li>
+            <li class="tag">Safety</li>
+          </ul>
+          <p><strong>Why:</strong> one afternoon on the Fahaheel Expressway explains this
+            better than I can. Wanted parking mode and proper night footage, not a toy.</p>
+          <p><strong>Status:</strong> ordered online, waiting on shipping. Hardwire kit
+            included so it isn&rsquo;t hanging off the 12V socket.</p>
+          <dl class="kv">
+            <div><dt>Spec</dt><dd>2K front, 1080p rear</dd></div>
+            <div><dt>Cost</dt><dd>45 KD + fitting</dd></div>
+            <div><dt>Source</dt><dd>Ordered in</dd></div>
+            <div><dt>ETA</dt><dd>2&ndash;3 weeks</dd></div>
+          </dl>
+        </div>
+      </li>
+
+      <li class="entry" data-status="saving">
+        <div class="entry-side">
+          <span class="date">#4 &middot; SAVING</span>
+          <span class="score">320<span class="of">KD</span></span>
+        </div>
+        <div class="entry-body">
+          <h3>Wheels &mdash; 18&quot; alloys</h3>
+          <ul class="tags">
+            <li class="tag p">Saving for</li>
+            <li class="tag">Look</li>
+          </ul>
+          <p><strong>Why:</strong> the single change that alters how the whole car reads.
+            Staying at 18&quot; on purpose &mdash; 20s look better in photos and ride worse
+            everywhere I actually drive.</p>
+          <p><strong>Blocking:</strong> price. Cast, not forged; I&rsquo;m not paying triple for
+            weight savings I&rsquo;ll never feel on a school run.</p>
+          <dl class="kv">
+            <div><dt>Spec</dt><dd>18&times;9, cast</dd></div>
+            <div><dt>Budget</dt><dd>~320 KD</dd></div>
+            <div><dt>Saved</dt><dd>140 / 320 KD</dd></div>
+            <div><dt>Fits tyres?</dt><dd>Yes, keeps current set</dd></div>
+          </dl>
+        </div>
+      </li>
+
+      <li class="entry" data-status="researching">
+        <div class="entry-side">
+          <span class="date">#5 &middot; LOOKING</span>
+          <span class="score">~250<span class="of">KD</span></span>
+        </div>
+        <div class="entry-body">
+          <h3>Speakers &amp; amp</h3>
+          <ul class="tags">
+            <li class="tag b">Researching</li>
+            <li class="tag">Sound</li>
+          </ul>
+          <p><strong>Why:</strong> the stock speakers give up entirely above half volume.
+            Front components plus a small amp; no subwoofer, I&rsquo;d rather keep the boot.</p>
+          <p><strong>Open question:</strong> whether to do sound deadening on the doors at the
+            same time. Everyone says yes, everyone also says it doubles the labour bill.</p>
+          <dl class="kv">
+            <div><dt>Spec</dt><dd>Front components + 4ch amp</dd></div>
+            <div><dt>Budget</dt><dd>~250 KD</dd></div>
+            <div><dt>Deciding</dt><dd>Deadening or not</dd></div>
+            <div><dt>Next step</dt><dd>Get two quotes</dd></div>
+          </dl>
+        </div>
+      </li>
+
+      <li class="entry" data-status="researching">
+        <div class="entry-side">
+          <span class="date">#6 &middot; LOOKING</span>
+          <span class="score">~130<span class="of">KD</span></span>
+        </div>
+        <div class="entry-body">
+          <h3>Roof rack &amp; crossbars</h3>
+          <ul class="tags">
+            <li class="tag b">Researching</li>
+            <li class="tag">Camping</li>
+          </ul>
+          <p><strong>Why:</strong> camping season. Right now everything goes in the back and
+            the back is not big enough for a tent plus four people&rsquo;s bags.</p>
+          <p><strong>Worry:</strong> wind noise. Looking for a low-profile bar rather than the
+            full basket, which I&rsquo;d use twice a year and hear every single day.</p>
+          <dl class="kv">
+            <div><dt>Spec</dt><dd>Low-profile crossbars</dd></div>
+            <div><dt>Budget</dt><dd>~130 KD</dd></div>
+            <div><dt>Season</dt><dd>Need it by Nov</dd></div>
+            <div><dt>Next step</dt><dd>Test fit locally</dd></div>
+          </dl>
+        </div>
+      </li>
+
+    </ul>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <h2>Considered and rejected</h2>
+      <span class="hair"></span>
+    </div>
+    <ul class="plain">
+      <li><span class="lbl p">No</span> Lowering springs &mdash; wrong car, wrong roads, and speed bumps would end me.</li>
+      <li><span class="lbl p">No</span> Loud exhaust &mdash; sounds great for a week, then it&rsquo;s just your daily drive being loud.</li>
+      <li><span class="lbl p">No</span> Cold air intake &mdash; the dyno numbers people quote are noise, and it drinks dust here.</li>
+      <li><span class="lbl p">No</span> 20&quot; wheels &mdash; harsher ride, dearer tyres, more kerb anxiety. Staying at 18.</li>
+      <li><span class="lbl b">Later</span> Underglow / ambient lighting &mdash; not against it, just last in line.</li>
+    </ul>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <h2>Running total</h2>
+      <span class="hair"></span>
+    </div>
+    <div class="card pin">
+      <h3>310 KD spent &middot; <span>~745 KD to go</span></h3>
+      <p>Tint and tyres are done. Dashcam is paid for and in transit. Wheels are the big one
+        and I&rsquo;m about halfway saved &mdash; everything after that waits its turn.</p>
+      <dl class="kv">
+        <div><dt>Installed</dt><dd>310 KD</dd></div>
+        <div><dt>Ordered</dt><dd>45 KD</dd></div>
+        <div><dt>Saving for</dt><dd>320 KD</dd></div>
+        <div><dt>Researching</dt><dd>~380 KD</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <footer>
+    <span>&copy; 2026 Fatemah Adel Shamsah</span>
+    <a href="index.html">Notebook</a>
+    <a href="../index.html">Portfolio</a>
+  </footer>
+
+</div>
+
+<script>
+  // Status filter: each entry carries a single key in data-status.
+  (function () {
+    var chips = document.querySelectorAll('.chip');
+    var entries = document.querySelectorAll('#list .entry');
+
+    chips.forEach(function (chip) {
+      chip.addEventListener('click', function () {
+        var want = chip.dataset.filter;
+
+        chips.forEach(function (c) {
+          c.setAttribute('aria-pressed', String(c === chip));
+        });
+
+        entries.forEach(function (entry) {
+          entry.hidden = want !== 'all' && entry.dataset.status !== want;
+        });
+      });
+    });
+  })();
+</script>
+</body>
+</html>
