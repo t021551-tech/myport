@@ -12,8 +12,13 @@ Build a website for people who are addicted and are afraid to look for help.
 One self-contained page, no build step, no frameworks, no dependencies beyond
 Google Fonts. It has to do five things:
 
-1. **Take fear seriously as the first design problem.** No name, no phone
-   number, no next-of-kin field. An alias, and a one-press **Wipe & leave**.
+1. **Take fear seriously as the first design problem.** One ID number and
+   nothing else — no name, no phone number, no address, no next-of-kin field.
+   The ID exists because a doctor cannot lawfully prescribe a controlled
+   medication to an alias and because it stops two prescribers writing the same
+   script for the same person; it goes to the prescriber and nowhere else, and
+   everywhere else on the service the patient is an alias. One-press
+   **Wipe & leave** clears it.
 2. **Let the patient say what they are taking** — a wide library of substances,
    multi-select, because most people are honest about one and quiet about the
    second.
@@ -24,13 +29,30 @@ Google Fonts. It has to do five things:
 5. **Show the doctor's side** — an alias-only queue, sorted worst-first, where
    acknowledging an alert writes back into the patient's log.
 
-## The one thing the site must never pretend
+## Detection: what the band claims, and how
 
-**A wrist band cannot detect drugs in the blood.** No consumer wearable can.
-What it measures is heart rate, HRV, skin temperature, blood oxygen, respiration,
-sweat (EDA), tremor and motion — plus whether it is on the wrist. The site flags
-the *pattern*, never the substance, and says so on the landing page in a
-critical-styled note. Any copy that implies a drug test is a bug.
+**The band detects drug use from body signs.** Seven signals — heart rate, HRV,
+blood oxygen, respiration, skin temperature, sweat (EDA), and tremor/motion —
+sampled continuously against the patient's own seven-day baseline. Each drug
+class moves that set of seven in its own direction, and the *combination* is what
+identifies the class.
+
+`SIGNATURES` holds one direction vector per class (opioid, stimulant, sedative,
+cannabinoid, plus withdrawal, which is the absence of the dose rather than a
+class). `detect()` turns the live reading into the same kind of vector — each
+signal divided by its baseline spread in `SPREAD` — and compares the two by
+angle, scaled by how far the body has actually moved. So a detection depends on
+the shape of the whole pattern, not one number crossing a line, and the readout
+names the class, the match strength, and the three signals carrying the match
+with their live values beside the baseline. Where the matched class is one of the
+patient's own chosen substances, the readout names *that substance*.
+
+Two honesty constraints hold in the code, not just the copy: match strength is
+capped at **97%**, because a body-signal match is not a chemical assay and must
+never print as certainty; and confirming which drug it was is the doctor's call,
+which is why a detection routes to a clinician rather than into a verdict. The
+landing page shows the full signature table so the mechanism is legible rather
+than magic.
 
 ## Design system
 
@@ -45,7 +67,7 @@ dark surveillance console. Neutrals are biased green toward the accent.
 | `--ink-dim` | `#65756E` | `#8B9C94` | secondary, green-biased grey |
 | `--pine` | `#1C6B58` | `#54BCA0` | the single accent |
 | `--ochre` | `#9C6412` | `#D9A34B` | warning severity |
-| `--brick` | `#9C2F24` | `#E37F6E` | critical severity |
+| `--brick` | `#9C2F24` | `#E37F6E` | critical severity, opioid detection |
 | `--steady` | `#2F7D6A` | `#5DC0A4` | good / clear |
 | `--on-accent` | `#F6FBF8` | `#08120F` | text on a pine fill |
 | `--link` | `#0F4B3D` | `#8FD8C3` | links, hero emphasis |
@@ -111,12 +133,19 @@ not an illustration: it is the most characteristic object in this subject's worl
 - **The demo clock runs 60× real time**, labelled as such, so a rule with a
   20-patient-minute dwell fires in 20 seconds while someone is looking at it.
   Rules count patient-minutes, never frames.
-- **Six rules**, each with a dwell and a one-shot latch that clears when the
+- **The classifier fires first**: a signature match ≥ 60% held for ≥ 3
+  patient-minutes sends "Drug use detected from body signs" with the class, the
+  match strength and the three contributing signals. A change of class restarts
+  the dwell, so a shape passed through in transit between two states cannot
+  fire.
+- **Four threshold rules** under it, each with a dwell and a one-shot latch that clears when the
   condition clears: band off ≥20 min, band off ≥60 min, HR ≥ baseline +25 with
   low motion ≥10 min, HRV ≤65% of baseline ≥30 min, SpO₂ <92% with respiration
   <10 for 2 min (the only rule that escalates past the doctor), and skin temp
   ≥ baseline +0.8 °C with sweat ≥15 min. Thresholds are relative to the
-  patient's own seven-day baseline, never a population average.
+  patient's own seven-day baseline, never a population average. The two rules
+  the classifier replaced (a bare resting-HR threshold and a bare skin-temp
+  threshold) were removed rather than left to double-alert alongside it.
 - **Real pairing** is Web Bluetooth against the standard Heart Rate service
   (`0x180D` / `0x2A37`). Heart rate becomes real; the other five signals stay
   simulated, and the page says so. It degrades to the demo band wherever Web
@@ -124,6 +153,10 @@ not an illustration: it is the most characteristic object in this subject's worl
 - **The PPG waveform** is three Gaussians — systolic peak, dicrotic notch,
   diastolic bump — into a 900-sample ring buffer, prefilled at boot so the first
   painted frame shows a full trace.
+- **The ID number** lives in `S.id`, is digits only (8–14), is masked to its
+  last four everywhere except the prescribing doctor's own row, and gates
+  requesting a doctor — asking for one without it sends the patient back to the
+  field with the reason.
 - **State** lives in `localStorage` under `rafeeq.v1` and nowhere else. That is
   a privacy decision, not a shortcut: nothing about the patient leaves the
   device, and the privacy pill in the rail reflects it (including failing

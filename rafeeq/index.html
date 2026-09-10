@@ -260,6 +260,40 @@ legend{padding:0;font-weight:600;font-size:var(--f0)}
 .tile.bad{border-color:var(--brick);background:var(--brick-soft)}
 .tile.bad .v{color:var(--brick)}
 
+.detect{
+  display:grid;gap:.6rem;border:1px solid var(--line);border-radius:var(--r);
+  background:var(--surface);padding:.9rem 1rem;
+}
+.detect.hit{border-color:var(--ochre);background:var(--ochre-soft)}
+.detect.hit.crit{border-color:var(--brick);background:var(--brick-soft)}
+.detect-top{display:flex;flex-wrap:wrap;gap:.5rem 1rem;align-items:baseline}
+.detect-name{font-family:var(--display);font-size:var(--f2);line-height:1.15}
+.detect-conf{font-family:var(--mono);font-size:var(--f1);margin-inline-start:auto}
+.bar{height:6px;border-radius:99px;background:var(--surface-2);overflow:hidden;border:1px solid var(--line)}
+.bar i{display:block;height:100%;background:var(--steady);transition:width .35s ease}
+.detect.hit .bar i{background:var(--ochre)}
+.detect.hit.crit .bar i{background:var(--brick)}
+.chips{display:flex;flex-wrap:wrap;gap:.3rem}
+.chips span{
+  font-family:var(--mono);font-size:var(--f-2);background:var(--surface-2);
+  border:1px solid var(--line);border-radius:4px;padding:.1rem .45rem;
+}
+.detect.hit .chips span{background:var(--surface)}
+input.field{
+  font:inherit;font-family:var(--mono);letter-spacing:.06em;
+  padding:.55rem .7rem;border:1px solid var(--line-strong);border-radius:8px;
+  background:var(--surface);color:var(--ink);max-width:20ch;
+}
+input.field:focus-visible{border-color:var(--pine)}
+.sig{display:grid;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.sig>div{background:var(--surface);padding:.7rem .85rem;display:grid;gap:.15rem}
+.sig b{font-size:var(--f-1)}
+.sig .cond{font-family:var(--mono);font-size:var(--f-2);color:var(--ink-dim)}
+@media(min-width:720px){
+  .sig{grid-template-columns:1fr 1fr}
+  /* withdrawal is the absence of the drug, not a class: it closes the grid full-width */
+  .sig>div:last-child{grid-column:1/-1}
+}
 .rules{margin:0;padding:0;list-style:none;display:grid;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
 .rules li{background:var(--surface);padding:.7rem .85rem;display:grid;gap:.2rem;grid-template-columns:1fr auto;align-items:start}
 .rules b{font-weight:600;font-size:var(--f-1)}
@@ -349,9 +383,10 @@ footer{border-top:1px solid var(--line);padding-block:1.5rem;color:var(--ink-dim
       <h1>You can start treatment without <em>saying your name</em> to anybody.</h1>
       <p class="lede">
         Pick what you&rsquo;re taking. Get a staged plan written for that substance, not a
-        motivational poster. Pair a wrist band, and it tells a doctor when your body says
-        you&rsquo;re in trouble &mdash; including when you take it off. Nothing here asks for
-        your name, your number, or your family.
+        motivational poster. Pair a wrist band and it reads your body signs &mdash; pulse,
+        breathing, oxygen, skin, tremor &mdash; to detect when you have used, which drug class it
+        matches, and when the band comes off. Your doctor is told the same minute. All it asks
+        for is one ID number.
       </p>
       <div class="row">
         <button class="btn" type="button" data-go="choose">Choose the substance</button>
@@ -376,9 +411,11 @@ footer{border-top:1px solid var(--line);padding-block:1.5rem;color:var(--ink-dim
     <h2 style="font-size:var(--f3);max-width:30ch">Four promises, and one thing we refuse to pretend.</h2>
     <div class="promise">
       <div>
-        <b>No name, no ID, no phone number.</b>
-        <span class="small">You get an alias. Your doctor treats an alias. Nothing is posted, shared,
-        or shown to anyone in your life.</span>
+        <b>One ID number. Nothing else.</b>
+        <span class="small">No name, no phone number, no address, no email. Your ID number is
+        what lets a doctor legally prescribe to you and stops the same controlled prescription
+        being issued twice &mdash; it goes to your prescriber and to nobody else. Everywhere else
+        on the service, including the doctor&rsquo;s queue, you are an alias.</span>
       </div>
       <div>
         <b>Your family cannot be notified.</b>
@@ -396,12 +433,18 @@ footer{border-top:1px solid var(--line);padding-block:1.5rem;color:var(--ink-dim
         resets your plan to day one. Hiding it is what the band is for.</span>
       </div>
     </div>
-    <div class="note crit">
-      <b>A wrist band cannot detect drugs in your blood.</b> No consumer wearable can, and any
-      product that claims to is lying to you. What a band measures is your heart rate, heart-rate
-      variability, skin temperature, blood oxygen, breathing rate, sweat and tremor &mdash; and
-      whether it is on your wrist at all. Rafeeq flags the <em>pattern</em>, not the substance. A
-      flag is a reason for your doctor to check on you. It is not a test result and it is not proof.
+    <div class="stack stack-12">
+      <b>The band detects drug use from your body signs.</b>
+      <p class="small" style="max-width:66ch">Seven signals, sampled continuously: heart rate,
+        heart-rate variability, blood oxygen, breathing rate, skin temperature, sweat, and tremor
+        and movement. Each drug class moves that set of seven in its own direction, and the
+        combination is what identifies it &mdash; an opioid drops breathing and oxygen while the
+        pulse slows, a stimulant drives the pulse up and flattens recovery while the skin heats
+        and sweats. Rafeeq compares the live pattern against your own seven-day baseline, names
+        the class it matches and how strong the match is, and sends it to your doctor the same
+        minute. Confirming which drug it was, and what to do about it, is your doctor&rsquo;s call
+        &mdash; the band is what tells them to make it.</p>
+      <div class="sig" id="sigTable"></div>
     </div>
   </div>
 
@@ -445,11 +488,21 @@ footer{border-top:1px solid var(--line);padding-block:1.5rem;color:var(--ink-dim
   <div class="band">
     <form class="stack stack-24" id="intake">
       <div class="stack stack-8">
-        <span class="eyebrow">Step 2 of 2 &middot; five questions, no names</span>
+        <span class="eyebrow">Step 2 of 2 &middot; one ID number, five questions</span>
         <h2 style="font-size:var(--f3)">How it has been going.</h2>
-        <p class="small">Answers only change the plan&rsquo;s pace and whether a doctor has to see you
-          before day one. Skip any question you don&rsquo;t want to answer.</p>
+        <p class="small">The answers only change the plan&rsquo;s pace and whether a doctor has to see
+          you before day one. Skip any question you don&rsquo;t want to answer.</p>
       </div>
+      <fieldset class="stack stack-8">
+        <legend>Your ID number</legend>
+        <p class="small" style="max-width:62ch">The only identifier this service holds. A doctor
+          cannot prescribe a controlled medication to an alias, and this is what stops two
+          prescribers writing the same script for the same person. It is not checked against your
+          name here, and it is never shown to anyone in your life.</p>
+        <input class="field" id="idnum" inputmode="numeric" autocomplete="off" maxlength="14"
+          placeholder="12 digits" aria-describedby="idmsg">
+        <span class="small" id="idmsg"></span>
+      </fieldset>
       <div class="qs" id="questions"></div>
       <div class="row">
         <button class="btn" type="submit">Build my plan</button>
@@ -484,6 +537,7 @@ footer{border-top:1px solid var(--line);padding-block:1.5rem;color:var(--ink-dim
         </div>
         <canvas class="trace" id="bandTrace" style="height:150px" aria-label="Live pulse trace"></canvas>
       </div>
+      <div class="detect" id="detect"></div>
       <div class="tiles" id="tiles"></div>
       <div class="row">
         <button class="btn" type="button" id="pairBtn">Pair a real band (Bluetooth)</button>
@@ -540,7 +594,8 @@ footer{border-top:1px solid var(--line);padding-block:1.5rem;color:var(--ink-dim
       <span class="eyebrow">Doctors</span>
       <h2 style="font-size:var(--f3)">Addiction medicine, by substance.</h2>
       <p class="lede">Filtered by what you chose, because an alcohol detox and a Captagon crash are
-        not the same specialty. You see them; they see an alias.</p>
+        not the same specialty. They see your alias, your plan, your band and — if they prescribe
+        — your ID number. Never your name.</p>
       <div class="note warn">
         <span class="demo-flag">Placeholder profiles</span><br>
         These six are the shape of the directory, not real people. Real profiles need a verified
@@ -560,8 +615,9 @@ footer{border-top:1px solid var(--line);padding-block:1.5rem;color:var(--ink-dim
       <span class="eyebrow">Doctor&rsquo;s view</span>
       <h2 style="font-size:var(--f3)">The other side of the alert.</h2>
       <p class="lede">This is the clinician&rsquo;s queue: no names, an alias per patient, sorted so the
-        person in the most trouble is at the top. Acknowledging an alert writes back into the
-        patient&rsquo;s log, so they can see that someone actually looked.</p>
+        person in the most trouble is at the top. The ID number is visible only to the doctor
+        prescribing for that patient. Acknowledging an alert writes back into the patient&rsquo;s log,
+        so they can see that someone actually looked.</p>
       <div class="tiles" id="consoleTiles"></div>
       <div class="tablewrap">
         <table>
@@ -570,7 +626,7 @@ footer{border-top:1px solid var(--line);padding-block:1.5rem;color:var(--ink-dim
             &ldquo;Q&rdquo;, which is you.
           </caption>
           <thead>
-            <tr><th>Alias</th><th>Substance</th><th>Day</th><th>Band</th><th>Open alerts</th><th></th></tr>
+            <tr><th>Alias</th><th>ID number</th><th>Substance</th><th>Day</th><th>Band</th><th>Open alerts</th><th></th></tr>
           </thead>
           <tbody id="panel"></tbody>
         </table>
@@ -872,10 +928,6 @@ const RULES=[
  {id:"off-long", sev:"crit", who:"Doctor + call", b:"Band off, and staying off",
   cond:"no skin contact ≥ 60 min", dwell:60,
   test:v=>!v.on, msg:"Band off the wrist for an hour. Your doctor will try to reach you."},
- {id:"stim", sev:"warn", who:"Doctor", b:"Heart racing while you sit still",
-  cond:"HR ≥ baseline +25 bpm & motion low ≥ 10 min", dwell:10,
-  test:v=>v.on&&v.hr>=BASE.hr+25&&v.motion<0.22,
-  msg:"Resting heart rate far above baseline with no movement — a stimulant or intoxication pattern."},
  {id:"hrv", sev:"warn", who:"Doctor", b:"Recovery signal collapsed",
   cond:"HRV ≤ 65% of 7-day baseline ≥ 30 min", dwell:30,
   test:v=>v.on&&v.hrv<=BASE.hrv*0.65,
@@ -883,12 +935,60 @@ const RULES=[
  {id:"od", sev:"crit", who:"Emergency", b:"Breathing too slow — overdose pattern",
   cond:"SpO₂ < 92% & respiration < 10/min ≥ 2 min", dwell:2,
   test:v=>v.on&&v.spo2<92&&v.rr<10,
-  msg:"Blood oxygen falling with very slow breathing. This is the one alert that goes past your doctor to an emergency response."},
- {id:"wd", sev:"warn", who:"Doctor", b:"Withdrawal showing on your skin",
-  cond:"temp ≥ baseline +0.8°C with sweat & tremor ≥ 15 min", dwell:15,
-  test:v=>v.on&&v.temp>=BASE.temp+0.8&&v.eda>=5,
-  msg:"Skin temperature, sweat and tremor rising together — the withdrawal pattern for your substance."}
+  msg:"Blood oxygen falling with very slow breathing. This is the one alert that goes past your doctor to an emergency response."}
 ];
+
+/* ═══ 2b. the classifier ═════════════════════════
+   Seven signals move in a different direction for each drug class. Each
+   signature below is that direction, written in units of the patient's own
+   baseline spread; the live reading becomes the same kind of vector and the
+   two are compared by angle, so a detection depends on the shape of the whole
+   pattern rather than one number crossing a line. */
+const SIGNATURES=[
+ {k:"opioid", name:"Opioid", ids:["heroin","rx-opioids"],
+  sig:{hr:-0.8, rr:-1.7, spo2:-1.7, motion:-0.6, eda:-0.4},
+  says:"Breathing and blood oxygen falling together while the pulse slows and movement stops."},
+ {k:"stimulant", name:"Stimulant", ids:["captagon","meth","cocaine"],
+  sig:{hr:1.8, hrv:-1.3, temp:1.0, eda:1.2, rr:0.8, motion:0.5},
+  says:"Pulse far above baseline with recovery flattened, skin hot and sweating."},
+ {k:"sedative", name:"Sedative", ids:["benzos","zolpidem","pregabalin","alcohol"],
+  sig:{hr:-0.3, rr:-0.9, motion:-1.4, hrv:-0.7},
+  says:"Movement gone and breathing shallow with recovery down — the sedation shape."},
+ {k:"cannabinoid", name:"Cannabinoid", ids:["cannabis"],
+  sig:{hr:1.2, hrv:-0.6, motion:-0.7, temp:0.2},
+  says:"Pulse climbing while you sit still, without the heat and sweat of a stimulant."},
+ {k:"withdrawal", name:"Withdrawal", ids:[],
+  sig:{hr:1.2, hrv:-1.2, temp:1.5, eda:1.7, motion:1.2, rr:1.0},
+  says:"Temperature, sweat and tremor climbing together — your body asking for the dose."}
+];
+const SPREAD={hr:25, hrv:25, spo2:5, rr:6, temp:0.8, eda:4, motion:0.3};
+const NEUTRAL={hr:BASE.hr, hrv:BASE.hrv, spo2:BASE.spo2, rr:BASE.rr, temp:BASE.temp, eda:2.1, motion:0.12};
+function deviation(v){ const d={}; for(const k in SPREAD) d[k]=(v[k]-NEUTRAL[k])/SPREAD[k]; return d; }
+function detect(v){
+  if(!v.on) return {k:"off", name:"Band off the wrist", label:"Band off the wrist", conf:0, why:[],
+    says:"Nothing to read — the band is not touching skin. Your doctor is told when that lasts."};
+  const d=deviation(v);
+  let best=null;
+  SIGNATURES.forEach(sg=>{
+    let dot=0, sn=0, dn=0;
+    Object.keys(sg.sig).forEach(k=>{ dot+=sg.sig[k]*(d[k]||0); sn+=sg.sig[k]*sg.sig[k]; dn+=(d[k]||0)*(d[k]||0); });
+    const cos=dot/(Math.sqrt(sn)*Math.sqrt(dn)+1e-6);
+    const strength=Math.min(1, Math.sqrt(dn)/Math.sqrt(sn));
+    const conf=Math.min(0.97, Math.max(0,cos)*Math.min(1,strength*1.2)); /* a body-signal match is never certainty */
+    if(!best||conf>best.conf) best=Object.assign({},sg,{conf});
+  });
+  const mag=Math.hypot.apply(null, Object.keys(SPREAD).map(k=>d[k]));
+  if(mag<0.75 || !best || best.conf<0.35)
+    return {k:"clear", name:"No drug signature", label:"No drug signature", conf:0, why:[],
+      says:"All seven signals sit inside your own baseline."};
+  /* the three signals carrying the match, so nobody has to trust a number alone */
+  best.why=Object.keys(best.sig).map(k=>({k, w:Math.abs(best.sig[k]*(d[k]||0))}))
+    .sort((a,b)=>b.w-a.w).slice(0,3).map(x=>x.k);
+  /* name it as the patient's own substance wherever the class matches their plan */
+  const mine=S.subs.find(id=>best.ids.indexOf(id)>-1);
+  best.label = mine ? sub(mine).name : best.name;
+  return best;
+}
 
 const STATES={
  steady:     {hr:[64,3], hrv:[62,6],  spo2:[98,.5], temp:[33.4,.12], rr:[14,1],   motion:[.12,.07], eda:[2.1,.4]},
@@ -907,7 +1007,7 @@ const sub=id=>SUBS.find(s=>s.id===id);
 function seed(){
   const now=Date.now();
   return {alias:"Q", demo:true, subs:["rx-opioids"], answers:{dur:"m6_2y",freq:"most",last:"today",fits:"no",knows:"none"},
-    done:{}, day:9, doctor:"Dr. Omar Haddad",
+    done:{}, day:9, doctor:"Dr. Omar Haddad", id:"290071104417",
     log:[
       {t:now-1000*60*60*26, sev:"info", b:"Plan started", m:"Tramadol taper, step 1 of 9. Naloxone at home.", ack:"Dr. Omar Haddad"},
       {t:now-1000*60*60*14, sev:"warn", b:"Recovery signal collapsed", m:"HRV 34 against a baseline of 62 for most of the night — second bad night since the taper step.", ack:"Dr. Omar Haddad acknowledged · taper step held"},
@@ -916,6 +1016,8 @@ function seed(){
 }
 let S;
 try{ S=JSON.parse(localStorage.getItem(KEY)) || seed(); }catch(e){ S=seed(); }
+const maskId=v=>v? "•".repeat(Math.max(0,v.length-4))+v.slice(-4) : "not given yet";
+const idOk=v=>/^\d{8,14}$/.test(v||"");
 function save(){ try{ localStorage.setItem(KEY,JSON.stringify(S)); $("#privacyPill").classList.add("on"); }
   catch(e){ $("#privacyPill").innerHTML='<span class="dot warn"></span> Not saved — private window'; } }
 
@@ -975,6 +1077,20 @@ function renderQuestions(){
     fs.appendChild(opts); wrap.appendChild(fs);
   });
 }
+function syncId(){
+  const i=$("#idnum"), m=$("#idmsg");
+  if(!i) return;
+  i.value=S.id||"";
+  const paint=()=>{
+    const v=i.value.replace(/\D/g,"").slice(0,14);
+    i.value=v; S.id=v; save();
+    m.textContent = !v ? "Needed before a doctor can prescribe — nothing else is."
+      : idOk(v) ? "Held as "+maskId(v)+". Your prescriber sees it; the rest of the service sees your alias."
+      : "An ID number is 8 to 14 digits. Nothing is checked against a name here.";
+    m.style.color = v && !idOk(v) ? "var(--ochre)" : "var(--ink-dim)";
+  };
+  i.oninput=paint; paint();
+}
 function syncHint(){
   const ok=S.subs.length>0;
   $("#chooseHint").textContent = ok
@@ -1026,13 +1142,14 @@ function renderPlan(){
   }
   const open=S.log.filter(x=>!x.ack).length;
   head.innerHTML=`<div class="stack stack-16">
-    <span class="eyebrow">${S.demo?"Example plan &middot; ":""}Plan for &ldquo;${esc(S.alias)}&rdquo; &middot; day ${S.day}</span>
+    <span class="eyebrow">${S.demo?"Example plan &middot; ":""}Plan for &ldquo;${esc(S.alias)}&rdquo; &middot; ID ${maskId(S.id)} &middot; day ${S.day}</span>
     <h2 style="font-size:var(--f3)">${p.chosen.map(s=>s.name).join(" + ")}</h2>
     <p class="lede">${p.lead.truth}</p>
     ${p.supervised?`<div class="note crit"><b>This plan does not start at home.</b> Your answers plus your
       substance put you in the group where unsupervised withdrawal causes seizures. The first phase is a
       doctor, not a taper.</div>`:""}
     <div class="promise">
+      <div><b>ID number</b><span class="small">${maskId(S.id)} &middot; held for your prescriber only</span></div>
       <div><b>Doctor</b><span class="small">${esc(S.doctor||"Not chosen yet")} &middot;
         <button class="btn quiet sm" type="button" data-go="clinicians">change</button></span></div>
       <div><b>Reported use</b><span class="small">${p.sev.band} &middot; ${p.pace}</span></div>
@@ -1082,8 +1199,8 @@ function renderPlan(){
   tl.appendChild(ol); meds.appendChild(tl);
 
   const w=$("#planWatch");
-  w.innerHTML=`<span class="eyebrow">What the band watches for, for this substance</span>
-    <h3 style="font-size:var(--f2)">Your doctor gets told when&hellip;</h3>`;
+  w.innerHTML=`<span class="eyebrow">How the band detects this substance</span>
+    <h3 style="font-size:var(--f2)">The body signs that identify it</h3>`;
   const wl=el("ul","steps");
   p.lead.signals.forEach(t=>{ const li=el("li"); li.append(el("span","num","•"), el("span",null,esc(t))); wl.appendChild(li); });
   w.appendChild(wl);
@@ -1103,7 +1220,10 @@ const band={
   on:true, state:"steady", clock:0, real:null,
   v:{hr:64,hrv:62,spo2:98,temp:33.4,rr:14,motion:.12,eda:2.1,on:true},
   hist:{hr:[],hrv:[],spo2:[],temp:[],rr:[],motion:[]},
-  dwell:{}, fired:{}, buf:new Float32Array(900), idx:0, ph:0, lastSec:0
+  dwell:{}, fired:{}, buf:new Float32Array(900), idx:0, ph:0, lastSec:0,
+  det:{k:"clear", name:"No drug signature", label:"No drug signature", conf:0, why:[],
+       says:"All seven signals sit inside your own baseline."},
+  detDwell:0, detFired:null
 };
 /* prefill the ring buffer with steady beats: the first painted frame should
    show a full trace, not a flat line waiting to be drawn */
@@ -1181,6 +1301,30 @@ function drawSpark(k){
   x.beginPath(); x.arc(px(d.length-1),py(d[d.length-1]),2.2,0,7); x.fillStyle=css("--pine"); x.fill();
 }
 
+const SIGNAL_NAMES={hr:"heart rate", hrv:"HRV", spo2:"blood oxygen", rr:"breathing rate",
+  temp:"skin temperature", eda:"sweat", motion:"tremor and movement"};
+const SIGNAL_FMT={hr:v=>v.toFixed(0)+" bpm", hrv:v=>v.toFixed(0)+" ms", spo2:v=>v.toFixed(0)+"%",
+  rr:v=>v.toFixed(0)+"/min", temp:v=>v.toFixed(1)+"°C", eda:v=>v.toFixed(1)+" µS", motion:v=>v.toFixed(2)+" g"};
+function renderDetect(){
+  const box=$("#detect"); if(!box) return;
+  const d=band.det, pct=Math.round(d.conf*100), hit=d.conf>=0.6;
+  box.className="detect"+(hit?" hit":"")+(hit&&d.k==="opioid"?" crit":"");
+  const chips=(d.why||[]).map(k=>
+    `<span>${SIGNAL_NAMES[k]} ${SIGNAL_FMT[k](band.v[k])} · baseline ${SIGNAL_FMT[k](NEUTRAL[k])}</span>`).join("");
+  const sent = hit && band.detFired===d.k
+    ? "Sent to "+esc(S.doctor||"your doctor")+", with the three signals above attached."
+    : hit ? "Holding "+Math.max(0,3-band.detDwell).toFixed(1)+" more patient-minutes before your doctor is told — one odd minute is not an accusation."
+    : "Nothing to send. A quiet readout is the good outcome.";
+  box.innerHTML=`<div class="detect-top">
+      <span class="eyebrow">Detected from body signs</span>
+      <span class="detect-conf">${d.conf?pct+"% match":"—"}</span>
+    </div>
+    <span class="detect-name">${esc(d.label||d.name)}</span>
+    <div class="bar"><i style="width:${Math.max(2,pct)}%"></i></div>
+    <span class="small">${esc(d.says)}</span>
+    ${chips?`<div class="chips">${chips}</div>`:""}
+    <span class="small">${sent}</span>`;
+}
 function stepBand(dt){
   const T=STATES[band.state]||STATES.steady;
   const k=Math.min(dt*1.4,1);
@@ -1198,6 +1342,19 @@ function stepBand(dt){
   }
   const mins=dt*DEMO_SPEED/60;
   band.clock+=mins;
+  /* classify first: the detection is the headline, the thresholds are the floor */
+  const wasClass=band.det.k;
+  band.det=detect(band.v);
+  if(band.det.k!==wasClass) band.detDwell=0;
+  if(band.det.conf>=0.6){
+    band.detDwell+=mins;
+    if(band.detDwell>=3 && band.detFired!==band.det.k){
+      band.detFired=band.det.k;
+      const d=band.det, pct=Math.round(d.conf*100);
+      alert_(d.k==="opioid"?"crit":"warn", "Drug use detected from body signs",
+        d.label+" — "+pct+"% match on "+d.why.map(w=>SIGNAL_NAMES[w]).join(", ")+". "+d.says);
+    }
+  } else { band.detDwell=0; band.detFired=null; }
   RULES.forEach(r=>{
     if(r.test(band.v)){
       band.dwell[r.id]=(band.dwell[r.id]||0)+mins;
@@ -1208,8 +1365,11 @@ function stepBand(dt){
 function paintBandUi(){
   const shown=$("#view-band").hidden===false;
   $("#heroHr").textContent = band.on? Math.round(band.v.hr)+" bpm" : "off wrist";
-  $("#heroState").textContent = band.on? ("on wrist · "+({steady:"steady",stim:"heart racing",opioid:"breathing slow",withdrawal:"withdrawal"}[band.state])) : "band removed";
-  const sevDot = !band.on? "warn" : band.state==="opioid"? "crit" : band.state==="steady"? "" : "warn";
+  $("#heroState").textContent = band.on
+    ? (band.det.conf>=0.5 ? "detected: "+String(band.det.label||band.det.name).toLowerCase()+" · "+Math.round(band.det.conf*100)+"%"
+                          : "on wrist · no drug signature")
+    : "band removed";
+  const sevDot = !band.on? "warn" : (band.det.k==="opioid"&&band.det.conf>=0.5)? "crit" : band.det.conf>=0.5? "warn" : "";
   $("#heroDot").className="dot live "+sevDot; $("#bandDot").className="dot live "+sevDot;
   if(shown){
     $("#bandStateLabel").textContent = band.on? "On wrist" : "Off wrist";
@@ -1235,7 +1395,7 @@ function loop(now){
       if(a.length>60) a.shift();
     }
     paintBandUi();
-    if($("#view-band").hidden===false) TILES.forEach(t=>drawSpark(t.k));
+    if($("#view-band").hidden===false){ renderDetect(); TILES.forEach(t=>drawSpark(t.k)); }
   }
   requestAnimationFrame(loop);
 }
@@ -1311,8 +1471,20 @@ $("#pairBtn").onclick=async()=>{
     $("#pairMsg").textContent = err && err.name==="NotFoundError" ? "No band chosen." : "Pairing failed: "+(err&&err.message||"unknown");
   }
 };
+function renderSigTable(){
+  const w=$("#sigTable"); if(!w) return; w.textContent="";
+  SIGNATURES.forEach(sg=>{
+    const dir=Object.keys(sg.sig).map(k=>SIGNAL_NAMES[k]+" "+(sg.sig[k]>0?"↑":"↓")).join(" · ");
+    w.appendChild(el("div",null,`<b>${sg.name}</b><span class="cond">${dir}</span><span class="small">${sg.says}</span>`));
+  });
+}
 function renderRules(){
   const ul=$("#rules"); ul.textContent="";
+  const first=el("li","warn");
+  first.innerHTML=`<b>Drug use detected from body signs</b>
+    <span class="cond">signature match ≥ 60% held ≥ 3 min</span>
+    <span class="who">Doctor</span>`;
+  ul.appendChild(first);
   RULES.forEach(r=>{
     const li=el("li",r.sev);
     li.innerHTML=`<b>${r.b}</b><span class="cond">${r.cond}</span><span class="who">${r.who}</span>`;
@@ -1340,21 +1512,31 @@ function renderDocs(){
       <span class="small" style="color:var(--ochre)">Licence not verified — placeholder profile</span>`;
     const b=el("button","btn "+(chosen?"":"ghost")+" sm"); b.type="button";
     b.textContent=chosen?"Your doctor ✓":"Ask this doctor";
-    b.onclick=()=>{ S.doctor=c.n; save(); renderDocs();
-      alert_("info","Request sent",`Sent to ${c.n} under your alias “${S.alias}”. They see your substance, your plan and your band — not your name.`, c.n); };
+    b.onclick=()=>{
+      if(!idOk(S.id)){
+        go("choose");
+        setTimeout(()=>{ const i=$("#idnum"); if(i){ i.focus();
+          $("#idmsg").textContent="A doctor cannot prescribe without this. It is the only thing asked for.";
+          $("#idmsg").style.color="var(--ochre)"; } },60);
+        return;
+      }
+      S.doctor=c.n; save(); renderDocs();
+      alert_("info","Request sent",
+        "Sent to "+c.n+" under your alias “"+S.alias+"” with ID "+maskId(S.id)+
+        ". They see your substance, your plan, your band and the ID they need to prescribe — not your name.", c.n); };
     d.appendChild(b); wrap.appendChild(d);
   });
 }
 
 /* ═══ 10. doctor's view ═══════════════════════════════════════════════ */
 const PANEL=[
- {alias:"M-72", subId:"alcohol", day:3, band:"on", alerts:[
+ {alias:"M-72", id:"287110240031", subId:"alcohol", day:3, band:"on", alerts:[
    {sev:"crit", b:"Withdrawal showing on your skin", m:"Day 3 of a supervised alcohol detox: temp +1.1°C, sweat and tremor climbing for 40 min. Seizure window.", t:Date.now()-1000*60*12}]},
- {alias:"K-08", subId:"captagon", day:11, band:"off", alerts:[
+ {alias:"K-08", id:"301040911774", subId:"captagon", day:11, band:"off", alerts:[
    {sev:"warn", b:"Band off, and staying off", m:"Off the wrist for 3 h 20 m. Last contact was a missed check-in yesterday.", t:Date.now()-1000*60*95}]},
- {alias:"R-31", subId:"benzos", day:64, band:"on", alerts:[
+ {alias:"R-31", id:"276092130648", subId:"benzos", day:64, band:"on", alerts:[
    {sev:"warn", b:"Recovery signal collapsed", m:"HRV down 41% for three nights after the last 10% reduction — step looks too fast.", t:Date.now()-1000*60*60*7}]},
- {alias:"S-90", subId:"nicotine", day:22, band:"on", alerts:[]}
+ {alias:"S-90", id:"294051820915", subId:"nicotine", day:22, band:"on", alerts:[]}
 ];
 function renderConsole(){
   const mine=S.log.filter(a=>!a.ack);
@@ -1373,12 +1555,16 @@ function renderConsole(){
   });
 
   const tb=$("#panel"); tb.textContent="";
-  const rows=[{alias:S.alias, subId:S.subs[0]||"other", day:S.day, band:band.on?"on":"off", mine:true, open:mine.length}]
+  const rows=[{alias:S.alias, subId:S.subs[0]||"other", day:S.day, band:band.on?"on":"off", mine:true, open:mine.length, id:S.id}]
     .concat(PANEL.map(p=>({...p, open:p.alerts.length})));
   rows.forEach(r=>{
     const tr=el("tr");
     const st=r.open? (r.band==="off"?"warn":"crit") : "ok";
     tr.innerHTML=`<td><b>${esc(r.alias)}</b>${r.mine?' <span class="small">(you)</span>':""}</td>
+      <td class="num">${r.mine
+        ? (idOk(S.id)? esc(S.id)+' <span class="small" style="font-family:var(--body)">prescriber</span>'
+                     : '<span class="small" style="font-family:var(--body);color:var(--ochre)">not given</span>')
+        : maskId(r.id||"")}</td>
       <td>${sub(r.subId)?sub(r.subId).name:"—"}</td>
       <td class="num">${r.day}</td>
       <td><span class="state ${r.band==="on"?"ok":"warn"}">${r.band==="on"?"streaming":"off wrist"}</span></td>
@@ -1421,7 +1607,7 @@ $("#panicExit").onclick=()=>{
 
 /* ═══ 12. boot ════════════════════════════════════════════════════════ */
 renderSubs(); renderDanger(); renderQuestions(); syncHint();
-renderTiles(); renderRules(); renderLog(); renderBadge();
+renderTiles(); renderRules(); renderSigTable(); renderLog(); renderBadge(); syncId(); renderDetect();
 $("#bandDevice").textContent="demo band · clock 60× real time";
 $("#pairMsg").textContent="Not paired yet — the demo band is streaming so the page has something to show.";
 $("#heroWho").textContent=(S.demo?"example patient":"patient")+" “"+S.alias+"”";

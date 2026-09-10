@@ -11,12 +11,14 @@ Manchester Metropolitan University.
 - `dives/` — **Thirteen Pearls**: thirteen places in Kuwait grouped by who they suit, over a
   pearl-and-seawater backdrop. Every place carries a live 3D model (Three.js), each built
   from a photograph of the real place. One self-contained page: `dives/index.html`.
-- `rafeeq/` — **Rafeeq** (رفيق): a private front door to addiction treatment. Pick the
-  substance from a library of twelve, get a staged plan with the medications a doctor can
-  actually prescribe, pair a wrist band, and watch the alert rules fire into a doctor's
-  queue. One self-contained page (`rafeeq/index.html`) plus `rafeeq/PROMPT.md`, the build
-  brief. It is a **prototype**: no real clinicians, placeholder clinician profiles, and one
-  marked placeholder helpline number. All state stays in `localStorage`.
+- `rafeeq/` — **Rafeeq** (رفيق): a private front door to addiction treatment. It asks for one
+  ID number and nothing else. Pick the substance from a library of twelve, get a staged plan
+  with the medications a doctor can actually prescribe, pair a wrist band, and the band
+  detects drug use from seven body signs — naming the drug class, the match strength and the
+  signals behind it — then sends it to a doctor's queue. One self-contained page
+  (`rafeeq/index.html`) plus `rafeeq/PROMPT.md`, the build brief. It is a **prototype**: no
+  real clinicians, placeholder clinician profiles, and one marked placeholder helpline
+  number. All state stays in `localStorage`.
 - `notes/` — the Notebook: six running logs (places in Kuwait, a car build list, a gahwa
   log, things I'm learning, read & watched, small wins). A hub page plus one page per log,
   all sharing `notes/styles.css`. Currently a **draft** — every page carries a
@@ -55,8 +57,11 @@ a small inline script driven by `data-tags` / `data-status`.
 both dark blocks); the substance library, the intake questions, the alert rules and the
 clinician list are the four data arrays at the top of the script, so adding a substance
 means adding one object with its own phases, medications, timeline and band signals.
-A single `requestAnimationFrame` loop drives the traces, the vital tiles and the rule
-checks; the demo clock runs 60× real time so a 20-minute rule fires in 20 seconds. Real
+A single `requestAnimationFrame` loop drives the traces, the vital tiles, the detection
+readout and the rule checks; the demo clock runs 60× real time so a 20-minute rule fires in
+20 seconds. Detection itself is `SIGNATURES` plus `detect()`: one direction vector per drug
+class across the seven signals, compared by angle against the live deviation from the
+patient's own baseline, capped at a 97% match because body signs are not a lab test. Real
 band pairing uses Web Bluetooth's Heart Rate service and degrades to the demo band. The
 whole design brief, including the rules about what the site must never claim a wrist band
 can do, is in `rafeeq/PROMPT.md`.
