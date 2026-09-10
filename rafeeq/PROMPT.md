@@ -100,10 +100,55 @@ not an illustration: it is the most characteristic object in this subject's worl
    list, withdrawal timeline, and what the band watches for *this* substance.
 4. **The band** — trace, six vital tiles with sparklines, pairing, the detection
    readout, the alert rules, the alert log.
-5. **Abroad** — the two routes out of the country and what is genuinely online
+5. **After** — aftercare: the monitoring step-down, the psychologist track with
+   a working PHQ-9, and volunteering in Kuwait (see below).
+6. **Abroad** — the two routes out of the country and what is genuinely online
    with the Ministry of Health (see below).
-6. **Doctors** — directory filtered by the chosen substances.
-7. **Doctor's view** — panel table, summary tiles, alert queue with acknowledge.
+7. **Doctors** — directory filtered by the chosen substances.
+8. **Doctor's view** — panel table, summary tiles, alert queue with acknowledge.
+
+## The After view
+
+Built on one fact: relapse risk peaks in the first ninety days and stays raised
+for a year, so the day a patient is declared clean is the worst possible day to
+stop paying attention.
+
+**The step-down** (`STEPDOWN`) is the shape of that: months 0–3 continuous band,
+weekly doctor, weekly-then-fortnightly psychologist, every rule live; months 4–6
+thresholds re-set to the *recovered* baseline; months 7–12 nights-only band if
+preferred, monthly doctor, psychologist every six weeks; year 2 quarterly, band
+by choice, overdose escalation only; year 3+ optional band, an annual slot held,
+and a return that resumes the plan rather than restarting it. Every row is a
+**default the patient can end**, never a condition of treatment — and ending it
+tells the doctor that monitoring stopped, not why, and not as an alarm. The
+overdose escalation stays on for as long as the band is worn, because tolerance
+falls with abstinence and the old dose can kill someone who has been clean a
+year. Severity colour marks alert scope, not vigilance: nothing in this table is
+red, because red must keep meaning "something is wrong".
+
+**The psychologist track** is framed around what actually drives relapse — the
+depression, anxiety, PTSD, ADHD or grief the drug was answering — with trauma
+work explicitly deferred past the first month, and family sessions offered but
+never arranged behind the patient.
+
+**The PHQ-9** is implemented properly, not as decoration: the nine standard
+items, four response options, 0–27 scored into the standard bands, saved locally
+with a date so direction of travel is visible, and filed to the psychologist as
+an `info` note or a `warn` at 15 or above. **Item nine is the reason it needs
+care.** Any answer above "not at all" on the self-harm item replaces the score
+panel entirely with the crisis routing — 2462 1770, 112 out of hours, and the
+Shuwaikh address — before a number is ever shown, because a score is not what
+that answer needs. Never "fix" that by showing the total instead.
+
+**Volunteering** (`ORGS`) lists six real Kuwaiti organisations that take
+volunteers: LOYAC (whose *Service is My Joy* placements open several other
+doors), Kuwait Red Crescent Society, KACCH & Bayt Abdullah, the Kuwait Dive Team,
+Alnowair, and the Kuwait Society for the Handicapped. The reasoning is clinical,
+not sentimental: using consumes hours and getting clean returns them all at once,
+and an empty Thursday beats more people than a craving does. Two rules are
+stated as a warning: no role that puts someone near their substance, and no peer
+mentoring inside the first year. Nothing about the patient reaches these
+organisations — they are a volunteer there, not a case.
 
 ## The Abroad view
 

@@ -344,19 +344,40 @@ td .num{font-size:var(--f-1)}
 .lines dd{margin:0;font-family:var(--mono);font-size:var(--f0);font-weight:500}
 .tbd{color:var(--ochre);font-family:var(--body);font-size:var(--f-1);font-weight:600}
 
-.hosp{
+.hosp,.orgs{
   margin:.6rem 0 0;padding:0;list-style:none;
   display:grid;gap:.4rem;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));
 }
-.hosp li{
+.orgs{grid-template-columns:repeat(auto-fill,minmax(265px,1fr));margin-top:0}
+.hosp li,.orgs li{
   background:var(--surface);border:1px solid var(--line);border-radius:8px;
   padding:.6rem .7rem;display:grid;gap:.15rem;align-content:start;
 }
-.hosp b{font-size:var(--f-1)}
-.hosp .cond{font-family:var(--mono);font-size:var(--f-2);color:var(--ink-dim)}
+.hosp b,.orgs b{font-size:var(--f-1)}
+.hosp .cond,.orgs .cond{font-family:var(--mono);font-size:var(--f-2);color:var(--ink-dim)}
 .hosp .gov{color:var(--pine-ink);font-weight:600}
 :root[data-theme="dark"] .hosp .gov{color:var(--pine)}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .hosp .gov{color:var(--pine)}}
+/* the mood check: nine questions, kept dense enough to finish */
+.phq{display:grid;gap:.1rem;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.phq-q{background:var(--surface);padding:.6rem .8rem;display:grid;gap:.4rem}
+.phq-q p{font-size:var(--f-1)}
+.phq-q.last{background:var(--surface-2)}
+.phq-opts{display:flex;flex-wrap:wrap;gap:.3rem}
+.phq-opts label{
+  border:1px solid var(--line-strong);border-radius:999px;padding:.2rem .6rem;
+  font-size:var(--f-2);cursor:pointer;background:var(--surface);
+}
+.phq-opts input{position:absolute;opacity:0;width:0;height:0}
+.phq-opts label:has(input:checked){background:var(--pine-soft);border-color:var(--pine);color:var(--pine-ink);font-weight:600}
+.phq-opts input:focus-visible+span{outline:2.5px solid var(--pine);outline-offset:3px;border-radius:3px}
+.score{
+  display:grid;gap:.3rem;background:var(--surface);border:1px solid var(--line-strong);
+  border-radius:var(--r);padding:.8rem 1rem;
+}
+.score .v{font-family:var(--mono);font-size:var(--f3);line-height:1}
+.score.mid{border-color:var(--ochre);background:var(--ochre-soft)}
+.score.high{border-color:var(--brick);background:var(--brick-soft)}
 .where{
   display:grid;gap:.35rem;justify-items:start;
   background:var(--surface);border:1px solid var(--line-strong);
@@ -393,6 +414,7 @@ footer{border-top:1px solid var(--line);padding-block:1.5rem;color:var(--ink-dim
     <button class="tab" type="button" data-go="choose">What I&rsquo;m taking</button>
     <button class="tab" type="button" data-go="plan">My plan</button>
     <button class="tab" type="button" data-go="band">The band<span class="badge" id="bandBadge" hidden>0</span></button>
+    <button class="tab" type="button" data-go="after">After</button>
     <button class="tab" type="button" data-go="abroad">Abroad</button>
     <button class="tab" type="button" data-go="clinicians">Doctors</button>
     <button class="tab" type="button" data-go="console">Doctor&rsquo;s view</button>
@@ -657,6 +679,121 @@ footer{border-top:1px solid var(--line);padding-block:1.5rem;color:var(--ink-dim
         <button class="btn quiet sm" type="button" id="clearLog">Clear log</button>
       </div>
       <ul class="log" id="log"></ul>
+    </div>
+  </div>
+</section>
+
+<!-- ══ AFTER ════════════════════════════════════════════ -->
+<section class="view" id="view-after" hidden>
+  <div class="band" style="border-top:0">
+    <div class="stack stack-16">
+      <span class="eyebrow">After the plan ends</span>
+      <h2 style="font-size:var(--f3)">Clean is not the finish line. It is the point where most
+        services stop paying attention, and this one does not.</h2>
+      <p class="lede">Relapse risk is highest in the first ninety days and stays raised for a year.
+        That is not a warning about your character &mdash; it is what the numbers do, for everybody.
+        So the band stays on, the doctor keeps a slot, and a psychologist keeps checking the part of
+        this that was never about the drug. You can end any of it whenever you want. Until you do,
+        it continues by default, because the day you feel finished is exactly the day this tends to
+        come back.</p>
+    </div>
+  </div>
+
+  <div class="band">
+    <div class="stack stack-16">
+      <span class="eyebrow">Monitoring after you are drug-free</span>
+      <h3 style="font-size:var(--f2)">It steps down. It does not switch off.</h3>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>When</th><th>The band</th><th>Doctor</th><th>Psychologist</th><th>Alerts</th></tr></thead>
+          <tbody id="stepdown"></tbody>
+        </table>
+      </div>
+      <div class="promise">
+        <div><b>Why it keeps running</b><span class="small">The band knows your recovered baseline
+          by now, which makes it far better at spotting a return than it ever was at the start. A
+          single night of the old pattern shows up against twelve months of the new one.</span></div>
+        <div><b>What it is not</b><span class="small">Not a probation officer and not a condition of
+          your treatment. Nothing you do is scored, no report goes to anyone but the clinician you
+          chose, and nobody is told you looked well or badly this week.</span></div>
+        <div><b>Turning it off</b><span class="small">One press, any time, no explanation asked. Your
+          doctor sees that monitoring ended &mdash; not why, and not as an alarm &mdash; because
+          otherwise silence would read as everything being fine.</span></div>
+        <div><b>Coming back</b><span class="small">A return does not restart you at day one. The plan
+          resumes at the phase that fits, with the history intact, and the first appointment is
+          within the week.</span></div>
+      </div>
+      <p class="small">After a long clean stretch your tolerance is gone. If you do use again, the
+        dose that felt normal a year ago can stop your breathing &mdash; which is the one reason the
+        overdose escalation stays switched on for as long as you keep the band, whatever else you
+        turn off.</p>
+    </div>
+  </div>
+
+  <div class="band">
+    <div class="stack stack-16">
+      <span class="eyebrow">The psychologist</span>
+      <h3 style="font-size:var(--f2)">Somebody whose whole job is the part that was never the drug.</h3>
+      <p class="lede">Most people who get clean and relapse do not relapse because the drug won.
+        They relapse because the thing underneath &mdash; a depression, an anxiety nobody named, a
+        trauma, an undiagnosed ADHD, a grief &mdash; is still there and the drug was the only thing
+        answering it. A psychologist is on your team from week two for that reason, not as a reward
+        for good behaviour.</p>
+      <div class="sig">
+        <div><b>Relapse prevention, in the specific</b>
+          <span class="cond">weekly at first, then monthly</span>
+          <span class="small">Your three real triggers by place and hour, and what you do instead
+            &mdash; written down while you are well, not improvised at 2am.</span></div>
+        <div><b>Screening for what was underneath</b>
+          <span class="cond">day 14, week 6, then every 6 weeks in year one</span>
+          <span class="small">Depression, anxiety, PTSD and ADHD are all common under long substance
+            use, all treatable, and all missed when everyone is watching the drug.</span></div>
+        <div><b>Trauma work, when you are ready for it</b>
+          <span class="cond">not in the first month</span>
+          <span class="small">Opening this too early destabilises people. A good psychologist will
+            tell you to wait, and that is competence, not avoidance.</span></div>
+        <div><b>The people around you</b>
+          <span class="cond">only if you ask</span>
+          <span class="small">Family sessions are offered, never arranged behind you. Nobody is
+            contacted because a clinician thought it would help.</span></div>
+      </div>
+
+      <div class="stack stack-12" style="margin-top:.5rem">
+        <span class="eyebrow">Your mental-health check &middot; PHQ-9</span>
+        <p class="small">The standard nine-question depression screen, the same one a clinic would
+          hand you on paper. Two minutes. It is a <b>screen, not a diagnosis</b>: the score tells
+          your psychologist where to start, and it is stored on this device with the date so the two
+          of you can see the direction of travel rather than one bad Tuesday.</p>
+        <p class="small"><b>Over the last two weeks, how often have you been bothered by any of the
+          following?</b></p>
+        <div class="phq" id="phq"></div>
+        <div id="phqScore"></div>
+        <div id="phqHist"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="band">
+    <div class="stack stack-16">
+      <span class="eyebrow">Giving the hours back</span>
+      <h3 style="font-size:var(--f2)">Volunteering in Kuwait &mdash; because empty time is the
+        thing that beats people.</h3>
+      <p class="lede">Using takes up hours. Getting clean hands them back all at once, and an empty
+        Thursday is more dangerous than a craving. Work that is needed, on a schedule somebody else
+        depends on, is one of the few things that reliably fills that space &mdash; and being useful
+        to a community you were hiding from does something to shame that no session can. These are
+        real Kuwaiti organisations that take volunteers.</p>
+      <ul class="orgs" id="orgs"></ul>
+      <div class="note warn">
+        <b>Two rules before you sign up.</b> Do not take a role that puts you near your substance
+        &mdash; not a pharmacy stockroom, not a hospital drug cupboard, not a bar shift, however
+        much they need the help. And do not mentor other addicts in your first year: peer work is
+        genuinely powerful and it is also the fastest way back for someone still finding their own
+        footing. A year of stability first, then it is one of the most useful things you will ever
+        do.
+      </div>
+      <p class="small">None of these organisations is told anything about you, by this site or by
+        your doctor. You are a volunteer there, not a patient.</p>
     </div>
   </div>
 </section>
@@ -1209,7 +1346,13 @@ const CLINICIANS=[
  {n:"Dr. Yusuf Rahimi", r:"Internal medicine &middot; withdrawal and detox supervision", tz:"GMT+4 &middot; Arabic, Farsi, English",
   tags:["alcohol","benzos","zolpidem","other"], avail:"On call for supervised detox &middot; inpatient referral"},
  {n:"Dr. Maya Frost", r:"Urology &middot; ketamine bladder clinic", tz:"GMT+0 &middot; English",
-  tags:["ketamine"], avail:"Referral within two weeks"}
+  tags:["ketamine"], avail:"Referral within two weeks"},
+ {n:"Dr. Hessa Al-Duaij", r:"Clinical psychology &middot; trauma and long-term aftercare", tz:"GMT+3 &middot; Arabic, English",
+  tags:["alcohol","heroin","rx-opioids","benzos","captagon","meth","cocaine","cannabis","ketamine","zolpidem","pregabalin","nicotine","other"],
+  avail:"Year-one aftercare &middot; every six weeks, longer sessions"},
+ {n:"Dr. Ibrahim Salem", r:"Clinical psychology &middot; ADHD, anxiety and what was underneath", tz:"GMT+3 &middot; Arabic, English",
+  tags:["cannabis","captagon","meth","cocaine","nicotine","rx-opioids","other"],
+  avail:"Assessment for the diagnosis nobody made"}
 ];
 
 /* Thresholds are relative to the patient's own seven-day baseline.
@@ -1316,11 +1459,12 @@ function save(){ try{ localStorage.setItem(KEY,JSON.stringify(S)); $("#privacyPi
   catch(e){ $("#privacyPill").innerHTML='<span class="dot warn"></span> Not saved — private window'; } }
 
 /* ═══ 4. routing ══════════════════════════════════════════════════════ */
-const VIEWS=["door","choose","plan","band","abroad","clinicians","console"];
+const VIEWS=["door","choose","plan","band","after","abroad","clinicians","console"];
 function go(v){
   VIEWS.forEach(n=>{ $("#view-"+n).hidden = n!==v; });
   $$(".tab").forEach(t=>t.setAttribute("aria-current", String(t.dataset.go===v)));
   if(v==="plan") renderPlan();
+  if(v==="after"){ renderStepdown(); renderPhq(); renderOrgs(); }
   if(v==="clinicians") renderDocs();
   if(v==="console") renderConsole();
   window.scrollTo({top:0,behavior:"instant"});
@@ -1887,6 +2031,144 @@ function renderConsole(){
   if(!all.length) q.appendChild(el("li","info",'<b>Queue clear.</b><span class="small">Nobody is in trouble right now.</span>'));
 }
 
+/* ═══ 10b. after the plan ═════════════════════════════════════════════
+   The step-down is the honest shape of aftercare: attention tapers with
+   risk instead of stopping the day someone is declared clean. Every row
+   is a default the patient can end, not a condition imposed on them. */
+const STEPDOWN=[
+ {when:"Months 0\u20133", band:"On, continuously", doc:"Weekly", psy:"Weekly, then fortnightly",
+  alerts:"All rules live", state:"warn", note:"the ninety days that carry most relapses"},
+ {when:"Months 4\u20136", band:"On, thresholds re-set to your recovered baseline", doc:"Fortnightly",
+  psy:"Every 3 weeks", alerts:"All rules live", state:"warn", note:""},
+ {when:"Months 7\u201312", band:"On \u00B7 nights only, if you prefer", doc:"Monthly",
+  psy:"Every 6 weeks", alerts:"Detection + overdose", state:"warn", note:""},
+ {when:"Year 2", band:"Your choice, and most people keep it", doc:"Quarterly",
+  psy:"Quarterly", alerts:"Overdose escalation only", state:"ok", note:""},
+ {when:"Year 3 and after", band:"Optional \u00B7 the account stays open either way", doc:"Annual, and a slot held",
+  psy:"On request", alerts:"Overdose escalation only", state:"ok", note:"a return resumes the plan, it does not restart it"}
+];
+function renderStepdown(){
+  const tb=$("#stepdown"); if(!tb) return; tb.textContent="";
+  STEPDOWN.forEach(r=>{
+    const tr=el("tr");
+    tr.innerHTML=`<td><b>${r.when}</b>${r.note?`<br><span class="small">${r.note}</span>`:""}</td>
+      <td>${r.band}</td><td class="num">${r.doc}</td><td class="num">${r.psy}</td>
+      <td><span class="state ${r.state}">${r.alerts}</span></td>`;
+    tb.appendChild(tr);
+  });
+}
+
+/* PHQ-9. Item nine is the reason this is built carefully: any answer above
+   "not at all" opens the crisis panel before it shows a score, because a
+   number is not what that answer needs. */
+const PHQ=[
+ "Little interest or pleasure in doing things",
+ "Feeling down, depressed, or hopeless",
+ "Trouble falling or staying asleep, or sleeping too much",
+ "Feeling tired or having little energy",
+ "Poor appetite or overeating",
+ "Feeling bad about yourself \u2014 or that you are a failure, or have let yourself or your family down",
+ "Trouble concentrating on things, such as reading or watching television",
+ "Moving or speaking so slowly that other people could have noticed \u2014 or the opposite, being so restless that you move around far more than usual",
+ "Thoughts that you would be better off dead, or of hurting yourself in some way"
+];
+const PHQ_OPTS=[["0","Not at all"],["1","Several days"],["2","More than half the days"],["3","Nearly every day"]];
+const PHQ_BANDS=[[4,"Minimal","ok"],[9,"Mild","ok"],[14,"Moderate","mid"],[19,"Moderately severe","high"],[27,"Severe","high"]];
+S.phq = S.phq || {a:{}, history:[]};
+function renderPhq(){
+  const wrap=$("#phq"); if(!wrap) return; wrap.textContent="";
+  PHQ.forEach((q,i)=>{
+    const row=el("div","phq-q"+(i===8?" last":""));
+    row.appendChild(el("p",null,(i+1)+". "+q+(i===8?" <b>(read the note below before you answer)</b>":"")));
+    const opts=el("div","phq-opts");
+    PHQ_OPTS.forEach(([v,label])=>{
+      const id=`phq-${i}-${v}`, lab=el("label");
+      lab.innerHTML=`<input type="radio" id="${id}" name="phq-${i}" value="${v}"${String(S.phq.a[i])===v?" checked":""}><span>${label}</span>`;
+      lab.querySelector("input").onchange=()=>{ S.phq.a[i]=+v; save(); scorePhq(); };
+      opts.appendChild(lab);
+    });
+    row.appendChild(opts);
+    if(i===8) row.appendChild(el("span","small",
+      "If this one is anything other than \u201Cnot at all\u201D, please stop and call <b>2462 1770</b>, or <b>112</b> outside 9am\u20135pm, or go to the address on the front page. It is common in the first weeks and it passes \u2014 but it is not something to score and file."));
+    wrap.appendChild(row);
+  });
+  scorePhq(); renderPhqHist();
+}
+function scorePhq(){
+  const box=$("#phqScore"); if(!box) return;
+  const a=S.phq.a, answered=Object.keys(a).length;
+  if(a[8]>0){
+    box.innerHTML=`<div class="note crit"><b>Before anything else.</b> You answered that you have had
+      thoughts of being better off dead or of hurting yourself. Please call
+      <a href="tel:+96524621770">2462 1770</a> now, or <a href="tel:112">112</a> outside 9am&ndash;5pm,
+      or go to the Kuwait Center for Mental Health &mdash; Sabah Health Region, Jamal Abdul Nasser
+      Street, Shuwaikh. You do not need an appointment and you do not need to explain yourself
+      first. This answer is the one thing on this whole site that should not wait for your next
+      appointment.</div>`;
+    return;
+  }
+  if(answered<9){
+    box.innerHTML=`<p class="small">${answered} of 9 answered. The score appears once all nine are done.</p>`;
+    return;
+  }
+  const total=PHQ.reduce((n,_,i)=>n+(a[i]||0),0);
+  const band=PHQ_BANDS.find(b=>total<=b[0]);
+  box.innerHTML=`<div class="score ${band[2]}">
+      <span class="eyebrow">PHQ-9 &middot; screen, not a diagnosis</span>
+      <span class="v">${total}<span style="font-size:var(--f-1);color:var(--ink-dim)"> / 27</span></span>
+      <b>${band[1]} range</b>
+      <span class="small">What this changes: your psychologist starts here rather than asking you to
+        summarise a month from memory. A score is a direction, not a verdict, and the same number
+        means different things in week one of withdrawal and in month eight.</span>
+      <div class="row">
+        <button class="btn sm" type="button" id="phqSend">Save it and send to my psychologist</button>
+        <button class="btn ghost sm" type="button" id="phqReset">Clear answers</button>
+      </div>
+    </div>`;
+  $("#phqSend").onclick=()=>{
+    S.phq.history.unshift({t:Date.now(), total, band:band[1]});
+    S.phq.history=S.phq.history.slice(0,8); S.phq.a={}; save();
+    alert_(total>=15?"warn":"info","Mental-health check filed",
+      `PHQ-9 ${total} of 27 \u2014 ${band[1].toLowerCase()} range. ${total>=15?"Above the threshold where a psychologist should see this within the week.":"For review at the next session."}`);
+    renderPhq();
+  };
+  $("#phqReset").onclick=()=>{ S.phq.a={}; save(); renderPhq(); };
+}
+function renderPhqHist(){
+  const box=$("#phqHist"); if(!box) return;
+  const h=S.phq.history;
+  if(!h.length){ box.innerHTML=`<p class="small">No checks filed yet. The first one is the baseline the rest are read against.</p>`; return; }
+  box.innerHTML=`<span class="eyebrow">Filed checks</span>
+    <ul class="log" style="margin-top:.4rem">${h.map(x=>`<li class="${x.total>=15?"warn":"info"}">
+      <span class="when">${new Date(x.t).toLocaleDateString([], {day:"numeric",month:"short",year:"numeric"})}</span>
+      <b>PHQ-9 ${x.total} / 27 &middot; ${x.band.toLowerCase()}</b></li>`).join("")}</ul>`;
+}
+
+/* Volunteering: real Kuwaiti organisations that take volunteers. Nothing
+   about the patient reaches them — they are a volunteer there, not a case. */
+const ORGS=[
+ {n:"LOYAC", w:"Youth development, Kuwait City", u:"apply.loyac.org",
+  d:"Kuwait\u2019s best-known youth non-profit. Its <em>Service is My Joy</em> programme places volunteers in other centres \u2014 children\u2019s hospitals, Down syndrome and disability centres, foster care, elderly care \u2014 so one application opens several doors."},
+ {n:"Kuwait Red Crescent Society", w:"Humanitarian relief, nationwide", u:"krcs.org.kw/join-us/volunteer-with-us",
+  d:"Volunteering is one of the society\u2019s stated pillars: relief campaigns, distribution, logistics, first aid. Structured shifts and a rota, which is exactly what an empty week needs."},
+ {n:"KACCH &amp; Bayt Abdullah", w:"Children\u2019s hospitals and hospice", u:"kacch.org",
+  d:"Founded 1989; therapeutic play and child-life programmes across seven government hospitals, and Kuwait\u2019s children\u2019s hospice. Volunteers give companionship and help run activities, with a flexible commitment. Emotionally heavy work \u2014 worth choosing deliberately, not in week two."},
+ {n:"Kuwait Dive Team", w:"Marine environment, the coast", u:"beach and underwater clean-ups",
+  d:"Volunteers who clean and protect Kuwait\u2019s sea: beach clean-ups, underwater recovery, reef and turtle work. Physical, outdoors, early mornings \u2014 the best fit on this list for someone whose sleep is still resetting."},
+ {n:"Alnowair", w:"Positive-attitude non-profit, Kuwait", u:"alnowair.com",
+  d:"Founded 2013, runs attitude and wellbeing programmes in schools and workplaces plus the EcoCitizens strand. Useful if what you want to give back is the thing you have just learned about your own head."},
+ {n:"Kuwait Society for the Handicapped", w:"Disability support, Kuwait", u:"reachable through LOYAC placements",
+  d:"Long-running disability service and one of the placements LOYAC volunteers are sent to. Regular, patient, unglamorous work with people who will be glad you turned up."}
+];
+function renderOrgs(){
+  const ul=$("#orgs"); if(!ul) return; ul.textContent="";
+  ORGS.forEach(o=>{
+    const li=el("li");
+    li.innerHTML=`<b>${o.n}</b><span class="cond">${o.w} &middot; ${o.u}</span><span class="small">${o.d}</span>`;
+    ul.appendChild(li);
+  });
+}
+
 /* ═══ 11. wipe & leave ════════════════════════════════════════════════ */
 $("#panicExit").onclick=()=>{
   if(!confirm("Wipe your alias, plan and alert log from this device and close the page? This cannot be undone.")) return;
@@ -1902,6 +2184,7 @@ $("#panicExit").onclick=()=>{
 /* ═══ 12. boot ════════════════════════════════════════════════════════ */
 renderSubs(); renderDanger(); renderQuestions(); syncHint();
 renderTiles(); renderRules(); renderSigTable(); renderLog(); renderBadge(); syncId(); renderDetect();
+renderStepdown(); renderPhq(); renderOrgs();
 $("#bandDevice").textContent="demo band · clock 60× real time";
 $("#pairMsg").textContent="Not paired yet — the demo band is streaming so the page has something to show.";
 $("#heroWho").textContent=(S.demo?"example patient":"patient")+" “"+S.alias+"”";
