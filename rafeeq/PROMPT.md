@@ -121,8 +121,17 @@ not an illustration: it is the most characteristic object in this subject's worl
   clinicians are marked placeholder profiles with unverified licences. Real
   profiles need a licence number, an issuing authority and a telehealth licence
   valid where the patient is.
-- Helpline numbers that *are* printed must be verifiable: 112, 999, 911,
-  SAMHSA 1-800-662-4357, 988, Samaritans 116 123, FRANK 0300 123 6600.
+- **Kuwait numbers only.** The crisis strip carries `112` (ambulance, police,
+  fire) and `2462 1770`, the Ministry of Health hotline at the Kuwait Center for
+  Mental Health — free, Arabic or English, doctors on the line during the day,
+  and the centre where government addiction treatment sits. Both are `tel:`
+  links. The strip states plainly that 2462 1770 is the mental-health line
+  rather than a dedicated 24-hour addiction line, because that is what it is.
+- The Al-Sabah health region addiction centre is listed as a place to walk into
+  or be referred to, with **no direct number**: the numbers circulating for it
+  disagree with each other across sources, and a wrong number in a crisis strip
+  is worse than no number. Confirm it with the Ministry of Health before
+  printing one, and keep the `.tbd` marker until then.
 
 ## Demo mechanics
 
