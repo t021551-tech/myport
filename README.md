@@ -15,7 +15,9 @@ Manchester Metropolitan University.
   ID number and nothing else. Pick the substance from a library of twelve, get a staged plan
   with the medications a doctor can actually prescribe, pair a wrist band, and the band
   detects drug use from seven body signs — naming the drug class, the match strength and the
-  signals behind it — then sends it to a doctor's queue. Two doctors cover every day in twelve-hour
+  signals behind it — then sends it to a doctor's queue. The app writes short bilingual notes to the patient, chosen for the day
+  they are on and what the band just saw, with milestone notes that name a physical fact about
+  their own body rather than offering encouragement. Two doctors cover every day in twelve-hour
   shifts, so a 3am alert is routed to whoever is actually awake rather than into a morning
   queue. An aftercare section keeps the
   monitoring running after the patient is drug-free on a published step-down, carries a working

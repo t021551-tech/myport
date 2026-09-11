@@ -97,7 +97,8 @@ not an illustration: it is the most characteristic object in this subject's worl
    drugs" note, and the crisis strip.
 2. **What I'm taking** — the substance grid, then five intake questions.
 3. **My plan** — generated: phase 0 plus the substance's four phases, medication
-   list, withdrawal timeline, and what the band watches for *this* substance.
+   list, withdrawal timeline, what the band watches for *this* substance, and the
+   messages panel.
 4. **The band** — trace, six vital tiles with sparklines, pairing, the detection
    readout, the alert rules, the alert log.
 5. **After** — aftercare: the monitoring step-down, the psychologist track with
@@ -107,6 +108,39 @@ not an illustration: it is the most characteristic object in this subject's worl
 7. **Doctors** — who is awake right now, the seven-day on-call rota, then the
    directory filtered by the chosen substances.
 8. **Doctor's view** — panel table, summary tiles, alert queue with acknowledge.
+
+## Messages
+
+The app writes short notes to the patient, and the whole design problem is tone:
+generic cheerleading is the main reason people mute a recovery app, and a note
+that claims to know how someone feels is worse than silence. So the library is
+written to rules, and they are not negotiable: **no exclamation marks, no
+"you've got this", nothing that asserts how the patient feels, and nothing
+signed by a clinician who did not write it** — every card says *written by the
+app, not by your doctor*, and says the doctor never sees them.
+
+Notes are chosen for context rather than shuffled: `MSG` holds sets for the
+ambient note, the middle of the night, a self-reported lapse, a band detection,
+a band that has come off, a high PHQ-9, and a ticked plan step. `MILES` holds
+the milestones, and those are the strongest ones because each names **a physical
+fact about the patient's own body** — day three of alcohol closing the seizure
+window, a week off opioids leaving sleep and mood as the treatable remainder,
+two weeks off stimulants being when mood returns in patches, ninety days being
+the end of the stretch that carries most relapses *and* the point tolerance is
+gone. Substance-specific where the fact is specific, general where it is not.
+A fact about their liver beats a compliment.
+
+**Every note exists in English and Arabic**, switchable with one press, set in
+the Arabic face with `dir="rtl"` — half the country would rather be spoken to in
+Arabic, and a translated motivational line is not a motivational line.
+
+Frequency is the patient's: a few a day, one a day, milestones only, or none.
+Ambient notes are rate-limited (3h or 20h by setting) while responses to
+something that just happened always land. Turning them off says so and promises
+not to ask again — an app that re-prompts after a no has not taken the no.
+Browser notifications are opt-in, requested only on a press, suppressed between
+23:00 and 07:00 *unless the note was written for the middle of the night*, and
+they degrade silently where the page is embedded and cannot show them.
 
 ## The After view
 

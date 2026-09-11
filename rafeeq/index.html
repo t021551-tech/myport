@@ -378,6 +378,26 @@ td .num{font-size:var(--f-1)}
 .score .v{font-family:var(--mono);font-size:var(--f3);line-height:1}
 .score.mid{border-color:var(--ochre);background:var(--ochre-soft)}
 .score.high{border-color:var(--brick);background:var(--brick-soft)}
+/* messages: a note, not a notification badge */
+.msg-now{
+  display:grid;gap:.5rem;background:var(--pine-soft);border:1px solid transparent;
+  border-radius:var(--r);padding:1rem 1.15rem;
+}
+.msg-now .t{font-family:var(--display);font-size:var(--f2);line-height:1.3;color:var(--pine-ink)}
+.msg-now .ar{font-size:var(--f1);color:var(--pine-ink);line-height:1.9}
+:root[data-theme="dark"] .msg-now .t,:root[data-theme="dark"] .msg-now .ar{color:var(--pine-ink)}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]) .msg-now .t,:root:not([data-theme="light"]) .msg-now .ar{color:var(--pine-ink)}
+}
+.msg-now .from{font-size:var(--f-2);letter-spacing:.08em;text-transform:uppercase;font-weight:600;color:var(--ink-dim)}
+.feed{margin:0;padding:0;list-style:none;display:grid;gap:.4rem;max-height:20rem;overflow-y:auto}
+.feed li{
+  background:var(--surface);border:1px solid var(--line);border-radius:8px;
+  padding:.55rem .75rem;display:grid;gap:.15rem;
+}
+.feed .when{font-family:var(--mono);font-size:var(--f-2);color:var(--ink-dim)}
+.feed .kind{font-size:var(--f-2);letter-spacing:.06em;text-transform:uppercase;font-weight:600;color:var(--pine-ink)}
+.feed:empty::after{content:"No messages yet.";color:var(--ink-dim);font-size:var(--f-1)}
 .where{
   display:grid;gap:.35rem;justify-items:start;
   background:var(--surface);border:1px solid var(--line-strong);
@@ -620,6 +640,22 @@ footer{border-top:1px solid var(--line);padding-block:1.5rem;color:var(--ink-dim
   </div></div>
   <div class="band"><div class="stack stack-16" id="planMeds"></div></div>
   <div class="band"><div class="stack stack-16" id="planWatch"></div></div>
+  <div class="band">
+    <div class="stack stack-16">
+      <span class="eyebrow">Messages</span>
+      <h3 style="font-size:var(--f2)">Rafeeq writes to you. It does not cheer at you.</h3>
+      <p class="lede">Short notes, in English or Arabic, timed to where you actually are &mdash; the
+        day you are on, the substance you chose, and what the band has just seen. A milestone note
+        tells you what has physically changed in your body, because that is worth more than
+        &ldquo;you&rsquo;ve got this&rdquo;. Nothing is ever signed by a doctor who did not write it.</p>
+      <div id="msgNow"></div>
+      <div class="stack stack-8" id="msgCtrls"></div>
+      <div class="stack stack-8">
+        <span class="eyebrow">Recent notes</span>
+        <ul class="feed" id="msgFeed"></ul>
+      </div>
+    </div>
+  </div>
 </section>
 
 <!-- ══ BAND ══════════════════════════════════════════════ -->
@@ -1548,7 +1584,7 @@ const VIEWS=["door","choose","plan","band","after","abroad","clinicians","consol
 function go(v){
   VIEWS.forEach(n=>{ $("#view-"+n).hidden = n!==v; });
   $$(".tab").forEach(t=>t.setAttribute("aria-current", String(t.dataset.go===v)));
-  if(v==="plan") renderPlan();
+  if(v==="plan"){ renderPlan(); milestoneCheck(); renderMsgs(); }
   if(v==="after"){ renderStepdown(); renderPhq(); renderOrgs(); }
   if(v==="clinicians"){ renderDocs(); renderOncall(); }
   if(v==="console") renderConsole();
@@ -1697,7 +1733,8 @@ function renderPlan(){
       const key=`${p.lead.id}-${idx}-${j}`;
       const li=el("li",S.done[key]?"done":"");
       const cb=el("input"); cb.type="checkbox"; cb.id="step-"+key; cb.checked=!!S.done[key];
-      cb.onchange=()=>{ S.done[key]=cb.checked; save(); li.className=cb.checked?"done":""; };
+      cb.onchange=()=>{ S.done[key]=cb.checked; save(); li.className=cb.checked?"done":"";
+        if(cb.checked) pushMsg("step"); };
       const lab=el("label",null,esc(st)); lab.setAttribute("for","step-"+key);
       li.append(cb,lab); list.appendChild(li);
     });
@@ -1876,12 +1913,16 @@ function stepBand(dt){
       const d=band.det, pct=Math.round(d.conf*100);
       alert_(d.k==="opioid"?"crit":"warn", "Drug use detected from body signs",
         d.label+" — "+pct+"% match on "+d.why.map(w=>SIGNAL_NAMES[w]).join(", ")+". "+d.says);
+      pushMsg("detect");
     }
   } else { band.detDwell=0; band.detFired=null; }
   RULES.forEach(r=>{
     if(r.test(band.v)){
       band.dwell[r.id]=(band.dwell[r.id]||0)+mins;
-      if(band.dwell[r.id]>=r.dwell && !band.fired[r.id]){ band.fired[r.id]=true; alert_(r.sev,r.b,r.msg); }
+      if(band.dwell[r.id]>=r.dwell && !band.fired[r.id]){
+        band.fired[r.id]=true; alert_(r.sev,r.b,r.msg);
+        if(r.id==="off") pushMsg("off");
+      }
     } else { band.dwell[r.id]=0; band.fired[r.id]=false; }
   });
 }
@@ -1961,6 +2002,7 @@ document.addEventListener("click",e=>{
   const k=b.dataset.sim;
   if(k==="report"){
     alert_("info","Self-reported","“I used.” Sent to your doctor as a note. Your plan stays where it is and no phase resets.");
+    pushMsg("lapse");
     return;
   }
   if(k==="off"){ band.on=false; }
@@ -2264,6 +2306,7 @@ function scorePhq(){
   $("#phqSend").onclick=()=>{
     S.phq.history.unshift({t:Date.now(), total, band:band[1]});
     S.phq.history=S.phq.history.slice(0,8); S.phq.a={}; save();
+    if(total>=15) pushMsg("phq");
     alert_(total>=15?"warn":"info","Mental-health check filed",
       `PHQ-9 ${total} of 27 \u2014 ${band[1].toLowerCase()} range. ${total>=15?"Above the threshold where a psychologist should see this within the week.":"For review at the next session."}`);
     renderPhq();
@@ -2305,6 +2348,205 @@ function renderOrgs(){
   });
 }
 
+/* ═══ 10c. messages ═══════════════════════════════════════════════════
+   Rules this library is written to: no exclamation marks, no "you've got
+   this", nothing that claims to know how the patient feels, and nothing
+   signed by a clinician who did not write it. A milestone note states a
+   physical fact about the patient's own body, which is the one kind of
+   encouragement that cannot be waved away as flattery. Both languages,
+   because half this country would rather be spoken to in Arabic. */
+const MSG={
+ daily:[
+  ["Nothing is required of you today except the next thing on the plan.",
+   "لا شيء مطلوب منك اليوم سوى الخطوة التالية في خطتك."],
+  ["A craving peaks for about twenty minutes. You can outlast twenty minutes.",
+   "ذروة الرغبة تدوم نحو عشرين دقيقة، وأنت تستطيع الصبر عشرين دقيقة."],
+  ["Sleep is treatment, not a luxury. Protect it the way you would protect medication.",
+   "النوم علاج لا رفاهية. احمِه كما تحمي دواءك."],
+  ["If today is bad, let it be bad. A bad day is not a relapse.",
+   "إن كان اليوم سيئًا فليكن سيئًا. اليوم السيئ ليس انتكاسة."],
+  ["You are not behind. There is no schedule here that you are failing.",
+   "أنت لست متأخرًا. لا يوجد جدول هنا تفشل فيه."],
+  ["You have told almost no one, and you are still doing this. It counts for more than it feels like.",
+   "لم تخبر أحدًا تقريبًا، ومع ذلك أنت تفعل هذا. هذا يُحتسب لك أكثر مما تشعر."],
+  ["Eat something and drink water. Half of what feels unbearable is neither.",
+   "كُل شيئًا واشرب ماءً. نصف ما يبدو لا يُحتمل ليس منه شيء."]],
+ night:[
+  ["It is the middle of the night. Nothing has to be decided now.",
+   "نحن في منتصف الليل. لا شيء يجب أن يُقرَّر الآن."],
+  ["Bad nights end. So will this one.",
+   "الليالي الصعبة تنتهي، وهذه ستنتهي."],
+  ["If you cannot sleep, that is withdrawal doing its work. It is not a sign you have failed.",
+   "إن لم تستطع النوم فذلك الانسحاب يأخذ مجراه، وليس دليلًا على فشلك."],
+  ["Whatever you are thinking at 4am, decide it at 10am instead.",
+   "أيًّا كان ما تفكر فيه الآن، أجِّل قراره إلى الصباح."]],
+ lapse:[
+  ["You told your doctor yourself. That is the strongest thing in this whole file, and most people cannot do it.",
+   "أخبرت طبيبك بنفسك. هذا أقوى ما في ملفك كله، وكثيرون لا يقدرون عليه."],
+  ["One use is information, not a verdict. Your plan stays exactly where it was.",
+   "مرة واحدة معلومة لا حكم. خطتك باقية كما هي."]],
+ detect:[
+  ["Your band flagged something and your doctor has it. Nobody is coming to accuse you.",
+   "رصد السوار شيئًا ووصل إلى طبيبك. لا أحد قادم لاتهامك."],
+  ["What the band saw is a pattern, not a confession. What comes next is a conversation.",
+   "ما رآه السوار نمط لا اعتراف. وما سيأتي حديث لا محاكمة."]],
+ off:[
+  ["Your band is off your wrist. Put it back on when you can — no explanation needed.",
+   "السوار ليس على معصمك. أعده حين تستطيع، دون أي تفسير."]],
+ phq:[
+  ["That score is a treatable thing, not your character. Your psychologist has it and will start there.",
+   "تلك الدرجة شيء قابل للعلاج، وليست طبيعتك. وصلت إلى أخصائيك النفسي وسيبدأ منها."]],
+ step:[
+  ["One step ticked. This is the only way the whole plan ever gets done.",
+   "خطوة أُنجزت. بهذا وحده تُنجز الخطة كلها."]]
+};
+/* Milestones name what has changed in the body. Substance-specific where
+   the fact is specific, otherwise the honest general one. */
+const MILES=[
+ {d:1,  t:["One day. The hardest single day of this is now behind you.",
+           "يوم واحد. أصعب يوم في هذا كله صار خلفك."]},
+ {d:3,  ids:["alcohol"], t:["Day three. The seizure window that frightens people most is closing behind you — and you spent it supervised, which is why it passed quietly.",
+           "اليوم الثالث. نافذة الاختلاجات التي يخشاها الناس تُغلق خلفك، وقد أمضيتها تحت إشراف طبي، ولهذا مرَّت بهدوء."]},
+ {d:3,  t:["Three days. Your body is doing the loudest part of this work right now.",
+           "ثلاثة أيام. جسدك يؤدي أصعب جزء من هذا العمل الآن."]},
+ {d:7,  ids:["heroin","rx-opioids"], t:["One week. The physical part is mostly finished. What is left is sleep and mood, and both are treatable — ask for them to be treated.",
+           "أسبوع. الجزء الجسدي كاد ينتهي. ما بقي هو النوم والمزاج، وكلاهما قابل للعلاج، فاطلب علاجه."]},
+ {d:7,  ids:["cannabis"], t:["One week. Nights three to six were the worst of it and they are gone. Sleep starts returning from about here.",
+           "أسبوع. الليالي من الثالثة إلى السادسة كانت الأسوأ وقد مضت، والنوم يبدأ بالعودة من هنا."]},
+ {d:7,  ids:["nicotine"], t:["One week. Carbon monoxide cleared your blood in the first two days, and taste and smell are already coming back.",
+           "أسبوع. تخلَّص دمك من أول أكسيد الكربون في أول يومين، وحاسّتا الذوق والشم تعودان الآن."]},
+ {d:7,  t:["One week. Seven days ago this looked impossible from where you were sitting.",
+           "أسبوع. قبل سبعة أيام كان هذا يبدو مستحيلًا من حيث كنت."]},
+ {d:14, ids:["captagon","meth","cocaine"], t:["Two weeks. The flatness is the crash, not your new personality — mood starts coming back in patches from about now. If it does not, that is depression, and it is treated separately.",
+           "أسبوعان. هذا الخمول هو الانهيار بعد التوقف وليس شخصيتك الجديدة. يبدأ المزاج بالعودة تدريجيًا من الآن، وإن لم يعد فذلك اكتئاب يُعالج على حِدة."]},
+ {d:14, ids:["alcohol"], t:["Two weeks. Sleep architecture is starting to rebuild, and your liver began before that.",
+           "أسبوعان. بنية نومك تبدأ بالتعافي، وكبدك بدأ قبل ذلك."]},
+ {d:14, t:["Two weeks. The part that runs on willpower is over. From here it runs on routine.",
+           "أسبوعان. انتهى الجزء الذي يعمل بقوة الإرادة، وما بعده يعمل بالروتين."]},
+ {d:30, t:["A month. Whatever you believe about yourself, a month is a month, and it is on the record.",
+           "شهر. أيًّا كان ما تظنه عن نفسك، الشهر شهر، وهو مثبَّت في سجلك."]},
+ {d:60, t:["Two months. Concentration and sleep keep improving for months yet — you are not at the ceiling.",
+           "شهران. التركيز والنوم يتحسنان لأشهر قادمة، ولم تصل إلى الحد الأقصى بعد."]},
+ {d:90, t:["Ninety days. The stretch that carries most relapses is behind you. Keep the band on anyway: your tolerance is gone, and that is the risk now.",
+           "تسعون يومًا. المرحلة التي تحمل أكثر الانتكاسات صارت خلفك. أبقِ السوار مع ذلك، فتحمّلك للجرعة انتهى وهذا هو الخطر الآن."]},
+ {d:180, t:["Six months. Most of the people who reach here did not believe they would either.",
+           "ستة أشهر. معظم من وصلوا إلى هنا لم يكونوا يصدقون أنهم سيصلون."]},
+ {d:365, t:["One year. Keep the band, keep the naloxone in the drawer, and take the credit for this.",
+           "سنة. أبقِ السوار، وأبقِ النالوكسون في الدرج، وخُذ الفضل في هذا."]}
+];
+const FREQ=[["few","A few a day"],["daily","One a day"],["miles","Milestones only"],["off","None"]];
+const KIND_LABEL={daily:"Note",night:"Night",lapse:"You reported",detect:"The band",off:"Band off",phq:"Mood check",step:"Step done",mile:"Milestone"};
+S.msgs = S.msgs || {on:true, freq:"daily", lang:"en", notify:false, feed:[], last:0, miles:{}};
+
+const msgText=p=>S.msgs.lang==="ar" ? p[1] : p[0];
+const pickMsg=kind=>{ const pool=MSG[kind]||MSG.daily; return pool[Math.floor(Math.random()*pool.length)]; };
+
+function pushMsg(kind,pair){
+  const m=S.msgs;
+  if(!m.on || m.freq==="off") return;
+  if(m.freq==="miles" && kind!=="mile") return;
+  /* a response to something that just happened always lands; the ambient
+     notes are rate-limited, because an app that talks too much gets muted */
+  const chatter = kind==="daily" || kind==="night";
+  const gap = m.freq==="few" ? 3*36e5 : 20*36e5;
+  if(chatter && Date.now()-m.last < gap) return;
+  const p = pair || pickMsg(kind);
+  m.feed.unshift({t:Date.now(), kind, en:p[0], ar:p[1]});
+  m.feed=m.feed.slice(0,20);
+  if(chatter) m.last=Date.now();
+  save(); renderMsgs(); notifyMsg(kind,p);
+}
+/* The only outward-facing part, opt-in, and quiet 23:00-07:00 unless the
+   note was written for the middle of the night. */
+function notifyMsg(kind,p){
+  const h=new Date().getHours();
+  if(!S.msgs.notify || kind==="daily") return;
+  if((h>=23||h<7) && kind!=="night") return;
+  try{
+    if(window.Notification && Notification.permission==="granted")
+      new Notification("Rafeeq", {body:msgText(p), tag:"rafeeq-"+kind, silent:kind!=="mile"});
+  }catch(e){}
+}
+function milestoneCheck(){
+  const key="d"+S.day;
+  if(S.msgs.miles[key]) return;
+  const lead=S.subs[0];
+  const hit = MILES.find(x=>x.d===S.day && x.ids && x.ids.indexOf(lead)>-1)
+           || MILES.find(x=>x.d===S.day && !x.ids);
+  if(!hit) return;
+  S.msgs.miles[key]=1; save();
+  pushMsg("mile", hit.t);
+}
+function nextMilestone(){
+  const n=MILES.filter(x=>x.d>S.day).map(x=>x.d).sort((a,b)=>a-b)[0];
+  return n ? {d:n, inDays:n-S.day} : null;
+}
+function renderMsgs(){
+  const now=$("#msgNow"); if(!now) return;
+  const m=S.msgs, latest=m.feed[0];
+  if(!m.on || m.freq==="off"){
+    now.innerHTML=`<div class="note">Messages are off. Nothing will be sent, and you will not be
+      asked about this again — turn them back on below whenever you want.</div>`;
+  } else if(latest){
+    now.innerHTML=`<div class="msg-now">
+      <span class="from">Rafeeq &middot; ${KIND_LABEL[latest.kind]||"Note"} &middot; ${ago(latest.t)}</span>
+      ${m.lang==="ar" ? `<p class="ar" dir="rtl" lang="ar">${esc(latest.ar)}</p>`
+                      : `<p class="t">${esc(latest.en)}</p>`}
+      <span class="small">Written by the app, not by your doctor. Your doctor does not see these,
+        and none of them is a reply to anything you typed.</span>
+    </div>`;
+  } else {
+    now.innerHTML=`<div class="note">No note yet. The next one arrives with your next milestone
+      — or press below.</div>`;
+  }
+  const nm=nextMilestone(), ctrls=$("#msgCtrls");
+  ctrls.innerHTML=`
+    <div class="row">
+      ${FREQ.map(([v,l])=>`<button class="btn ${m.freq===v&&m.on?"":"ghost"} sm" type="button" data-freq="${v}">${l}</button>`).join("")}
+    </div>
+    <div class="row">
+      <button class="btn ghost sm" type="button" data-lang="en"${m.lang==="en"?' style="border-color:var(--pine)"':""}>English</button>
+      <button class="btn ghost sm" type="button" data-lang="ar"${m.lang==="ar"?' style="border-color:var(--pine)"':""}><span class="ar" dir="rtl" lang="ar">العربية</span></button>
+      <button class="btn sm" type="button" id="msgSend">Send one now</button>
+      <button class="btn ghost sm" type="button" id="msgNotify">${m.notify?"Phone alerts on":"Also send to my phone"}</button>
+    </div>
+    <span class="small" id="msgNote">${nm
+      ? `Next milestone note: day ${nm.d}, ${nm.inDays} day${nm.inDays===1?"":"s"} from now. Phone alerts stay quiet between 11pm and 7am unless the note was written for the middle of the night.`
+      : "Phone alerts stay quiet between 11pm and 7am unless the note was written for the middle of the night."}</span>`;
+  ctrls.querySelectorAll("[data-freq]").forEach(b=>b.onclick=()=>{
+    S.msgs.freq=b.dataset.freq; S.msgs.on=b.dataset.freq!=="off"; save(); renderMsgs();
+  });
+  ctrls.querySelectorAll("[data-lang]").forEach(b=>b.onclick=()=>{
+    S.msgs.lang=b.dataset.lang; save(); renderMsgs();
+  });
+  $("#msgSend").onclick=()=>{
+    const h=new Date().getHours();
+    S.msgs.last=0; S.msgs.on=true;
+    if(S.msgs.freq==="off"||S.msgs.freq==="miles") S.msgs.freq="daily";
+    pushMsg((h>=23||h<5) ? "night" : "daily");
+  };
+  $("#msgNotify").onclick=async()=>{
+    if(!window.Notification){
+      $("#msgNote").textContent="This browser cannot show notifications, or the page is embedded where they are blocked. The notes still arrive here.";
+      return;
+    }
+    if(Notification.permission==="granted"){ S.msgs.notify=!S.msgs.notify; save(); renderMsgs(); return; }
+    try{
+      const r=await Notification.requestPermission();
+      S.msgs.notify = r==="granted"; save(); renderMsgs();
+      if(r!=="granted") $("#msgNote").textContent="Notifications were not allowed, which is fine — the notes still arrive on this page.";
+    }catch(e){ $("#msgNote").textContent="Notifications are blocked here. The notes still arrive on this page."; }
+  };
+  const feed=$("#msgFeed"); feed.textContent="";
+  m.feed.forEach(x=>{
+    const li=el("li");
+    li.innerHTML=`<span class="when">${ago(x.t)}</span>
+      <span class="kind">${KIND_LABEL[x.kind]||"Note"}</span>
+      ${m.lang==="ar"?`<span class="ar" dir="rtl" lang="ar">${esc(x.ar)}</span>`:`<span>${esc(x.en)}</span>`}`;
+    feed.appendChild(li);
+  });
+}
+
 /* ═══ 11. wipe & leave ════════════════════════════════════════════════ */
 $("#panicExit").onclick=()=>{
   if(!confirm("Wipe your alias, plan and alert log from this device and close the page? This cannot be undone.")) return;
@@ -2320,7 +2562,7 @@ $("#panicExit").onclick=()=>{
 /* ═══ 12. boot ════════════════════════════════════════════════════════ */
 renderSubs(); renderDanger(); renderQuestions(); syncHint();
 renderTiles(); renderRules(); renderSigTable(); renderLog(); renderBadge(); syncId(); renderDetect();
-renderStepdown(); renderPhq(); renderOrgs(); renderOncall();
+renderStepdown(); renderPhq(); renderOrgs(); renderOncall(); milestoneCheck(); renderMsgs();
 $("#bandDevice").textContent="demo band · clock 60× real time";
 $("#pairMsg").textContent="Not paired yet — the demo band is streaming so the page has something to show.";
 $("#heroWho").textContent=(S.demo?"example patient":"patient")+" “"+S.alias+"”";
