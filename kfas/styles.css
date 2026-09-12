@@ -3,6 +3,7 @@
    committed palette, no framework. */
 
 :root{
+  color-scheme:light;
   --ground:#F5F3EE;
   --ground-2:#EDEAE2;
   --card:#FFFFFF;
