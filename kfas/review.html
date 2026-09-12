@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Interview review &mdash; Munsif</title>
+<meta name="description" content="Listen to the recording, check the scores against the evidence, clarify unscripted questions, and sign off.">
+<meta name="color-scheme" content="light">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <a class="brand" href="index.html">
+      <span class="mark" aria-hidden="true">م</span>
+      <span><b>Munsif <span class="ar" lang="ar">مُنصِف</span></b><small>Interview review &middot; KFAS</small></span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html">Overview</a>
+      <a href="queue.html" aria-current="page">Review queue</a>
+      <a href="questions.html">Question bank</a>
+      <a href="fairness.html">Fairness</a>
+    </nav>
+    <div class="whoami"><span>Acting as</span><select id="who" aria-label="Acting as"></select></div>
+  </div>
+</header>
+
+<div class="notice"><div>Concept prototype prepared for KFAS &mdash; not an official KFAS system. This recording, its transcript excerpts and every score below are fictional sample data.</div></div>
+
+<div class="wrap">
+
+  <p class="small" style="margin-bottom:.8rem"><a href="queue.html">&larr; Review queue</a></p>
+
+  <div class="page-head" id="head"></div>
+
+  <div class="split">
+    <div>
+      <!-- the recording -->
+      <section class="player" aria-label="Interview recording">
+        <div class="player-head">
+          <div style="flex:1 1 220px">
+            <p class="eyebrow" style="margin:0">The recording</p>
+            <p class="small muted" style="margin:.2rem 0 0" id="rec-note"></p>
+          </div>
+          <div class="legend" aria-hidden="true">
+            <span><i style="background:var(--green)"></i>Candidate speaking (above the line)</span>
+            <span><i style="background:var(--blue)"></i>Panel speaking (below)</span>
+            <span><i style="background:rgba(169,59,38,.25)"></i>Flagged</span>
+          </div>
+        </div>
+        <canvas class="wave" id="wave" tabindex="0" role="slider" aria-label="Recording position — arrow keys move by fifteen seconds, space plays" aria-valuemin="0" aria-valuenow="0"></canvas>
+        <div class="player-bar">
+          <button class="play" id="play" type="button" aria-label="Play the recording">
+            <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" id="play-icon"><path d="M4 2.5v11l9-5.5z" fill="currentColor"></path></svg>
+          </button>
+          <span class="time mono" id="time">0:00 / 0:00</span>
+          <div class="coverage" title="How much of this recording you have heard"><i id="cov-bar"></i></div>
+          <span class="small muted mono" id="cov-txt">0%</span>
+          <div class="speeds" role="group" aria-label="Playback speed">
+            <button type="button" data-rate="1" aria-pressed="true">1&times;</button>
+            <button type="button" data-rate="1.5" aria-pressed="false">1.5&times;</button>
+            <button type="button" data-rate="2" aria-pressed="false">2&times;</button>
+          </div>
+        </div>
+      </section>
+
+      <details class="card" style="margin-top:.8rem">
+        <summary style="cursor:pointer;font-weight:600;font-size:.9rem">Attach a real recording</summary>
+        <p class="hint" style="margin-top:.7rem">No audio ships with this prototype, so the transport runs against the sample timings. Pick an audio file and the same controls will drive it &mdash; the file stays in this browser and is not uploaded anywhere.</p>
+        <input type="file" id="audio-file" accept="audio/*" style="margin-top:.5rem">
+        <hr class="rule" style="margin:1rem 0">
+        <p class="hint" style="margin:0 0 .5rem"><strong>Demo shortcut.</strong> Sign-off is locked until you have heard 80% of the recording, which is 30&ndash;40 minutes of real listening. So that the rest of the workflow can be shown, this button fills in your listening record. It would not exist in a real deployment &mdash; there, the only way past the gate is to listen.</p>
+        <button class="btn ghost sm" type="button" id="heard">Mark this recording as heard</button>
+      </details>
+
+      <!-- the questions -->
+      <section class="sec" aria-labelledby="h-segments">
+        <div class="sec-head"><h2 id="h-segments">What was asked</h2><span class="hair"></span></div>
+        <p class="small muted" id="seg-note"></p>
+        <ul class="segments" id="segments"></ul>
+      </section>
+
+      <!-- the scorecard -->
+      <section class="sec" aria-labelledby="h-score">
+        <div class="sec-head"><h2 id="h-score">Scorecard</h2><span class="hair"></span></div>
+        <p class="small muted" id="score-note"></p>
+        <div id="criteria"></div>
+      </section>
+    </div>
+
+    <!-- sign-off rail -->
+    <aside>
+      <div class="card">
+        <h3>Before sign-off</h3>
+        <p class="small muted" style="margin:.2rem 0 0">Everything here has to be true before this interview can be approved.</p>
+        <ul class="checklist" id="checks"></ul>
+      </div>
+
+      <div class="card" id="actions"></div>
+
+      <div class="card">
+        <h3>Sign-off history</h3>
+        <div id="history"></div>
+      </div>
+
+      <div class="card">
+        <h3>Panel</h3>
+        <div id="panel-list" class="small"></div>
+      </div>
+    </aside>
+  </div>
+
+</div>
+
+<footer class="site">
+  <div class="fwrap">
+    <span>Munsif &mdash; concept prototype &middot; sample data only</span>
+    <span><button class="btn ghost sm" id="reset-demo" type="button">Reset demo data</button></span>
+    <span><a href="../index.html">&larr; Back to the portfolio</a></span>
+  </div>
+</footer>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script src="review.js"></script>
+
+</body>
+</html>

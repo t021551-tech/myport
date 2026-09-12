@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Munsif &mdash; interview review and fairness workspace for KFAS</title>
+<meta name="description" content="A concept prototype for KFAS: one rubric for every candidate, recordings a second reviewer must listen to before sign-off, unscripted questions that have to be explained, and fairness measured from the record.">
+<meta name="color-scheme" content="light">
+<meta property="og:title" content="Munsif — interview review for KFAS">
+<meta property="og:description" content="Objective scoring, panel sign-off from the recording, and fairness measured from the record.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <a class="brand" href="index.html">
+      <span class="mark" aria-hidden="true">م</span>
+      <span><b>Munsif <span class="ar" lang="ar">مُنصِف</span></b><small>Interview review &middot; KFAS</small></span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html" aria-current="page">Overview</a>
+      <a href="queue.html">Review queue</a>
+      <a href="questions.html">Question bank</a>
+      <a href="fairness.html">Fairness</a>
+    </nav>
+    <div class="whoami"><span>Acting as</span><select id="who" aria-label="Acting as"></select></div>
+  </div>
+</header>
+
+<div class="notice"><div>Concept prototype prepared for KFAS &mdash; not an official KFAS system. Every candidate, panellist, score, recording and transcript excerpt in it is fictional sample data.</div></div>
+
+<div class="wrap">
+
+  <section class="hero">
+    <p class="ar-title"><span lang="ar" dir="rtl">مُنصِف &mdash; مراجعة المقابلات الوظيفية</span></p>
+    <h1>Interviews anyone in the organisation can check.</h1>
+    <p class="lede">Munsif holds every interview to one rubric, keeps the recording beside the scores so a second person can listen before anything is signed off, makes a panellist explain any question that was not in the approved bank, and measures fairness across the round instead of assuming it.</p>
+    <div class="btn-row" style="margin-top:1.4rem">
+      <a class="btn" href="queue.html">Open the review queue</a>
+      <a class="btn ghost" href="fairness.html">See the fairness report</a>
+    </div>
+  </section>
+
+  <section class="sec" aria-label="This round at a glance">
+    <div class="grid g4" id="stats"></div>
+  </section>
+
+  <hr class="rule">
+
+  <section class="sec">
+    <div class="sec-head"><h2>What it fixes</h2><span class="hair"></span></div>
+    <div class="grid g2">
+      <article class="pillar">
+        <p class="num">01</p>
+        <h3>Selection becomes objective</h3>
+        <p>Each vacancy has a published rubric: named criteria, weights that add to 100, and anchors describing what a 1, a 3 and a 5 actually sound like. A panellist cannot save a score without citing the moment in the recording it came from, and the weighted result is computed, never negotiated at the end of the day.</p>
+      </article>
+      <article class="pillar">
+        <p class="num">02</p>
+        <h3>Other people listen, then approve</h3>
+        <p>Every interview is recorded and sits in a queue for reviewers outside the panel. The workspace tracks how much of the recording each reviewer has actually heard, and sign-off stays locked until they have covered the interview and all of its flagged answers. Approvals are signed and timestamped.</p>
+      </article>
+      <article class="pillar">
+        <p class="num">03</p>
+        <h3>Unusual questions get explained</h3>
+        <p>Questions come from an approved bank, each tied to a criterion. Anything asked outside it is recorded as unscripted and appears on the review screen with its timestamp. A reviewer can ask the panellist to clarify it, and HR rules on the answer: allowed, excluded from scoring, or referred for retraining.</p>
+      </article>
+      <article class="pillar">
+        <p class="num">04</p>
+        <h3>Fairness is measured</h3>
+        <p>The fairness page reads the same records the panel filled in: did every candidate get the same questions, how far apart were the panellists, does one panellist score consistently higher than the room, did the candidate get to speak, and did the last interview of the day score worse than the first.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="sec-head"><h2>How a round runs</h2><span class="hair"></span></div>
+    <div class="split">
+      <ol class="steps">
+        <li><span><b>Publish the rubric and the question bank</b><p>Before the first interview. Criteria, weights, anchors and the questions tied to each criterion are fixed for the whole round, so a later candidate cannot be assessed on a different basis.</p></span></li>
+        <li><span><b>Interview and record</b><p>With consent taken at invitation. The recording is chaptered against the bank, so the record shows which question each stretch of audio answers.</p></span></li>
+        <li><span><b>Score against evidence</b><p>Each panellist scores independently, and each score needs a line of evidence with a timestamp. Panellists do not see each other&rsquo;s scores until all are in.</p></span></li>
+        <li><span><b>Independent review</b><p>A reviewer outside the panel listens, checks the scores against what they heard, and either approves or returns it with what needs fixing.</p></span></li>
+        <li><span><b>Rule on anything flagged</b><p>Unscripted or prohibited questions are ruled on by HR before the interview can be signed off, and the ruling is part of the record.</p></span></li>
+        <li><span><b>Decide, then look at the round</b><p>The sponsor records the decision against the weighted scores, and the fairness report is read across the whole round, not one candidate at a time.</p></span></li>
+      </ol>
+      <aside class="card">
+        <h3>Gates the workspace enforces</h3>
+        <ul class="checklist" id="gates">
+          <li class="done"><span class="box">&check;</span><span>A score without evidence cannot be submitted.</span></li>
+          <li class="done"><span class="box">&check;</span><span>An interview missing a core question cannot be approved.</span></li>
+          <li class="done"><span class="box">&check;</span><span>An open flag blocks sign-off.</span></li>
+          <li class="done"><span class="box">&check;</span><span>Panel scores more than two points apart go back to the panel.</span></li>
+          <li class="done"><span class="box">&check;</span><span>A reviewer who has not listened cannot approve.</span></li>
+          <li class="done"><span class="box">&check;</span><span>Approvals are signed, timestamped and cannot be edited afterwards.</span></li>
+        </ul>
+        <p class="hint" style="margin-top:.9rem">Every one of these is live in this prototype &mdash; try approving an interview that fails one.</p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="sec-head"><h2>What this prototype is, and is not</h2><span class="hair"></span></div>
+    <div class="card">
+      <p>It is a working front end with the fairness maths implemented: the numbers on the fairness page are computed from the interview records, so changing a score or resolving a flag moves them. What you do is saved in your own browser only.</p>
+      <p style="margin-bottom:.4rem"><strong>A production system at KFAS would still need:</strong></p>
+      <ul class="small" style="color:var(--ink-2);margin:0;padding-inline-start:1.1rem">
+        <li>Recorded consent from candidates at invitation, a stated retention period, and deletion on schedule.</li>
+        <li>A server with real accounts (KFAS SSO), roles, and an append-only audit trail rather than browser storage.</li>
+        <li>Secure storage for the recordings themselves, and access limited to the panel, reviewers and HR.</li>
+        <li>A full Arabic interface, not only Arabic labels, and rubrics reviewed in both languages.</li>
+        <li>Sign-off from HR and legal on what is recorded, who may listen, and how long a candidate may appeal.</li>
+      </ul>
+      <p class="hint" style="margin-top:.9rem">No real recordings are included. The player runs against the sample timings; attach an audio file on a review page to drive the same transport with a real one.</p>
+    </div>
+  </section>
+
+</div>
+
+<footer class="site">
+  <div class="fwrap">
+    <span>Munsif &mdash; concept prototype &middot; sample data only</span>
+    <span><button class="btn ghost sm" id="reset-demo" type="button">Reset demo data</button></span>
+    <span><a href="../index.html">&larr; Back to the portfolio</a></span>
+  </div>
+</footer>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script>
+(function () {
+  var m = M.metrics();
+  var awaiting = m.interviews.filter(function (i) { return i.status === 'awaiting-review'; }).length;
+  var cards = [
+    { k: 'Interviews in the round', n: m.interviews.length, sub: 'across three vacancies', cls: '' },
+    { k: 'Awaiting a listener', n: awaiting, sub: 'nobody outside the panel has signed these off yet', cls: awaiting ? 'warn' : 'good' },
+    { k: 'Open question flags', n: m.openFlags, sub: 'unscripted questions waiting on a ruling', cls: m.openFlags ? 'bad' : 'good' },
+    { k: 'Scores citing the recording', n: M.pct(m.evidence), sub: 'the rest cannot be checked by anyone else', cls: m.evidence > 0.95 ? 'good' : 'warn' }
+  ];
+  document.getElementById('stats').innerHTML = cards.map(function (c) {
+    return '<div class="stat ' + c.cls + '"><span class="k">' + c.k + '</span>' +
+           '<span class="n">' + c.n + '</span><p class="sub">' + c.sub + '</p></div>';
+  }).join('');
+})();
+</script>
+
+</body>
+</html>

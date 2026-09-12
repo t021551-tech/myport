@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Review queue &mdash; Munsif</title>
+<meta name="description" content="Interviews waiting to be listened to and signed off, with what each one is missing.">
+<meta name="color-scheme" content="light">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <a class="brand" href="index.html">
+      <span class="mark" aria-hidden="true">م</span>
+      <span><b>Munsif <span class="ar" lang="ar">مُنصِف</span></b><small>Interview review &middot; KFAS</small></span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html">Overview</a>
+      <a href="queue.html" aria-current="page">Review queue</a>
+      <a href="questions.html">Question bank</a>
+      <a href="fairness.html">Fairness</a>
+    </nav>
+    <div class="whoami"><span>Acting as</span><select id="who" aria-label="Acting as"></select></div>
+  </div>
+</header>
+
+<div class="notice"><div>Concept prototype prepared for KFAS &mdash; not an official KFAS system. All candidates, panellists and recordings are fictional sample data.</div></div>
+
+<div class="wrap">
+
+  <div class="page-head">
+    <p class="eyebrow">Review queue</p>
+    <h1>Interviews waiting to be heard</h1>
+    <p class="lede" id="intro"></p>
+  </div>
+
+  <div class="card" style="margin-bottom:1.2rem">
+    <div class="btn-row">
+      <div style="flex:1 1 190px">
+        <label for="f-role">Vacancy</label>
+        <select id="f-role"><option value="">All vacancies</option></select>
+      </div>
+      <div style="flex:1 1 190px">
+        <label for="f-status">Status</label>
+        <select id="f-status">
+          <option value="">Any status</option>
+          <option value="scoring">Scoring in progress</option>
+          <option value="awaiting-review">Awaiting review</option>
+          <option value="changes-requested">Changes requested</option>
+          <option value="approved">Approved</option>
+          <option value="decided">Decision recorded</option>
+        </select>
+      </div>
+      <div style="flex:1 1 190px">
+        <label for="f-mine">Show</label>
+        <select id="f-mine">
+          <option value="all">Everything in the round</option>
+          <option value="todo">Needs me</option>
+          <option value="flagged">Has an open flag</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <caption class="sr" style="position:absolute;left:-9999px">Interviews in this hiring round</caption>
+      <thead>
+        <tr>
+          <th scope="col">Candidate</th>
+          <th scope="col">Vacancy</th>
+          <th scope="col">Recorded</th>
+          <th scope="col">Panel score</th>
+          <th scope="col">Questions</th>
+          <th scope="col">Status</th>
+          <th scope="col">Your listening</th>
+          <th scope="col"><span class="sr" style="position:absolute;left:-9999px">Open</span></th>
+        </tr>
+      </thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+  <p class="empty" id="none" hidden>Nothing matches those filters.</p>
+
+  <section class="sec">
+    <div class="sec-head"><h2>Reading this queue</h2><span class="hair"></span></div>
+    <div class="grid g3">
+      <div class="card"><h3>Panel score</h3><p class="small muted">The weighted rubric result out of 100, computed from the panellists&rsquo; scores. It is never typed in by hand, and it changes the moment a score is revised.</p></div>
+      <div class="card"><h3>Questions</h3><p class="small muted">How many of the approved core questions this candidate was actually asked, and how many questions were asked outside the bank.</p></div>
+      <div class="card"><h3>Your listening</h3><p class="small muted">How much of this recording you personally have heard. Sign-off unlocks at 80% of the interview and all of any flagged answer.</p></div>
+    </div>
+  </section>
+
+</div>
+
+<footer class="site">
+  <div class="fwrap">
+    <span>Munsif &mdash; concept prototype &middot; sample data only</span>
+    <span><button class="btn ghost sm" id="reset-demo" type="button">Reset demo data</button></span>
+    <span><a href="../index.html">&larr; Back to the portfolio</a></span>
+  </div>
+</footer>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script>
+(function () {
+  var roleSel = document.getElementById('f-role');
+  M.state.roles.forEach(function (r) {
+    var o = document.createElement('option');
+    o.value = r.id; o.textContent = r.title;
+    roleSel.appendChild(o);
+  });
+
+  var me = M.me();
+  document.getElementById('intro').textContent =
+    'You are acting as ' + me.name + ', ' + me.job + '. ' +
+    (M.can('review')
+      ? 'You can listen to any interview here and sign it off once nothing is outstanding.'
+      : 'As a panel member you can score your own interviews here, but sign-off sits with a reviewer outside the panel.');
+
+  function needsMe(iv) {
+    if (M.can('review')) {
+      var mine = iv.approvals.filter(function (a) { return a.by === M.meId; }).length;
+      return iv.status === 'awaiting-review' && !mine;
+    }
+    if (M.can('score')) {
+      if (iv.panel.indexOf(M.meId) === -1) return false;
+      return M.checks(iv).filter(function (c) { return c.id === 'scored' || c.id === 'evidence'; })
+        .some(function (c) { return !c.ok; });
+    }
+    return false;
+  }
+
+  function render() {
+    var role = roleSel.value, status = document.getElementById('f-status').value,
+        show = document.getElementById('f-mine').value;
+
+    var list = M.state.interviews.filter(function (iv) {
+      if (role && iv.roleId !== role) return false;
+      if (status && iv.status !== status) return false;
+      if (show === 'todo' && !needsMe(iv)) return false;
+      if (show === 'flagged' && !M.openFlags(iv).length) return false;
+      return true;
+    });
+
+    document.getElementById('none').hidden = list.length > 0;
+
+    document.getElementById('rows').innerHTML = list.map(function (iv) {
+      var r = M.role(iv.roleId);
+      var w = M.weighted(iv);
+      var core = M.askedCore(iv), asked = core.filter(function (c) { return c.asked; }).length;
+      var uns = M.unscripted(iv).length, open = M.openFlags(iv).length;
+      var cov = M.coverage(iv, M.meId);
+
+      var qCell = '<span class="mono">' + asked + '/' + core.length + '</span> core';
+      if (uns) qCell += '<br><span class="pill red" style="margin-top:.25rem">' + uns + ' unscripted' +
+                        (open ? ' &middot; ' + open + ' open' : '') + '</span>';
+      else if (asked < core.length) qCell += '<br><span class="pill amber" style="margin-top:.25rem">' +
+                        (core.length - asked) + ' not asked</span>';
+
+      return '<tr>' +
+        '<td><span class="who mono">' + iv.code + '</span><br><span class="small muted">' +
+          (needsMe(iv) ? '<span class="pill blue">Needs you</span>' : 'slot ' + iv.slot + ' of the day') + '</span></td>' +
+        '<td>' + M.esc(r.title) + '<br><span class="small muted">' + M.esc(r.dept) + '</span></td>' +
+        '<td class="small">' + iv.date + '<br><span class="muted mono">' + M.mins(iv.durationSec) + '</span></td>' +
+        '<td class="mono">' + (w == null ? '<span class="muted">&mdash;</span>' : w.toFixed(0)) + '</td>' +
+        '<td class="small">' + qCell + '</td>' +
+        '<td>' + M.statusPill(iv.status) + '</td>' +
+        '<td style="min-width:110px"><div class="coverage"><i style="width:' + (cov * 100) + '%"></i></div>' +
+          '<span class="small muted mono">' + M.pct(cov) + '</span></td>' +
+        '<td><a class="btn sm ghost" href="review.html?id=' + iv.id + '">Open</a></td>' +
+        '</tr>';
+    }).join('');
+  }
+
+  ['f-role', 'f-status', 'f-mine'].forEach(function (id) {
+    document.getElementById(id).addEventListener('change', render);
+  });
+  render();
+})();
+</script>
+
+</body>
+</html>

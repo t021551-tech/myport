@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Question bank &mdash; Munsif</title>
+<meta name="description" content="The approved questions for each vacancy, the unscripted ones waiting to be explained, and the questions that have been retired.">
+<meta name="color-scheme" content="light">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <a class="brand" href="index.html">
+      <span class="mark" aria-hidden="true">م</span>
+      <span><b>Munsif <span class="ar" lang="ar">مُنصِف</span></b><small>Interview review &middot; KFAS</small></span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html">Overview</a>
+      <a href="queue.html">Review queue</a>
+      <a href="questions.html" aria-current="page">Question bank</a>
+      <a href="fairness.html">Fairness</a>
+    </nav>
+    <div class="whoami"><span>Acting as</span><select id="who" aria-label="Acting as"></select></div>
+  </div>
+</header>
+
+<div class="notice"><div>Concept prototype prepared for KFAS &mdash; not an official KFAS system. The questions, flags and clarifications below are fictional sample data.</div></div>
+
+<div class="wrap">
+
+  <div class="page-head">
+    <p class="eyebrow">Question bank</p>
+    <h1>Every question, tied to something it measures</h1>
+    <p class="lede">A question that is not in the bank cannot be scored, because there is no criterion for the answer to land on. When one is asked anyway, it is recorded against the recording and the panellist has to account for it here.</p>
+  </div>
+
+  <section class="sec" aria-labelledby="h-clar">
+    <div class="sec-head"><h2 id="h-clar">Questions waiting to be explained</h2><span class="hair"></span></div>
+    <p class="small muted" id="clar-note"></p>
+    <div id="clarifications" class="grid" style="gap:.9rem"></div>
+  </section>
+
+  <section class="sec" aria-labelledby="h-bank">
+    <div class="sec-head"><h2 id="h-bank">The approved bank</h2><span class="hair"></span></div>
+    <div id="bank"></div>
+  </section>
+
+  <section class="sec" aria-labelledby="h-propose">
+    <div class="sec-head"><h2 id="h-propose">Propose a question</h2><span class="hair"></span></div>
+    <div class="card">
+      <p class="small muted">A new question joins the bank only after HR has approved it, and only against a criterion that already exists for that vacancy. That is what stops a panel inventing a question between candidates.</p>
+      <div class="grid g2" style="margin-top:.8rem">
+        <div class="field"><label for="p-role">Vacancy</label><select id="p-role"></select></div>
+        <div class="field"><label for="p-crit">It measures</label><select id="p-crit"></select></div>
+      </div>
+      <div class="field"><label for="p-text">The question</label>
+        <textarea id="p-text" placeholder="Write it as it would be asked out loud."></textarea></div>
+      <button class="btn" type="button" id="p-add">Propose it</button>
+      <div id="proposed" style="margin-top:1rem"></div>
+    </div>
+  </section>
+
+  <section class="sec" aria-labelledby="h-retired">
+    <div class="sec-head"><h2 id="h-retired">Retired questions</h2><span class="hair"></span></div>
+    <p class="small muted">Kept visible on purpose. A retired question with its reason attached is how a panel learns why it was a problem.</p>
+    <div id="retired" class="grid g2"></div>
+  </section>
+
+</div>
+
+<footer class="site">
+  <div class="fwrap">
+    <span>Munsif &mdash; concept prototype &middot; sample data only</span>
+    <span><button class="btn ghost sm" id="reset-demo" type="button">Reset demo data</button></span>
+    <span><a href="../index.html">&larr; Back to the portfolio</a></span>
+  </div>
+</footer>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script src="questions.js"></script>
+
+</body>
+</html>

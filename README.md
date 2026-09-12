@@ -11,6 +11,11 @@ Manchester Metropolitan University.
 - `dives/` — **Thirteen Pearls**: thirteen places in Kuwait grouped by who they suit, over a
   pearl-and-seawater backdrop. Every place carries a live 3D model (Three.js), each built
   from a photograph of the real place. One self-contained page: `dives/index.html`.
+- `kfas/` — **Munsif** (مُنصِف): a concept prototype prepared as a proposal for KFAS — an
+  interview review and fairness workspace. Five pages sharing `kfas/styles.css` and
+  `kfas/app.js`: an overview, a review queue, the review screen itself (recording player,
+  scorecard, question flags, sign-off), the question bank, and a fairness report. All sample
+  data is fictional and lives in `kfas/data.js`; the build brief is `kfas/PROMPT.md`.
 - `notes/` — the Notebook: six running logs (places in Kuwait, a car build list, a gahwa
   log, things I'm learning, read & watched, small wins). A hub page plus one page per log,
   all sharing `notes/styles.css`. Currently a **draft** — every page carries a
@@ -39,6 +44,15 @@ Everything for the portfolio lives in `index.html`:
   purely decorative and marked `aria-hidden`.
 - Content sections are plain HTML under `<main>`; add a program by copying one `<li>`
   in the `.index` list and changing its `.tag` class (`prog`, `lead` or `tech`).
+
+Munsif is five static pages with no build step. `kfas/data.js` holds the seed — people,
+vacancies with their rubrics, the question bank and the interviews with their segment
+timings, scores and flags — and everything on screen is derived from it: `kfas/app.js` has
+the state store (localStorage, reseeded whenever `data.js` changes its `version`), the
+fairness maths (`M.metrics`), the sign-off gates (`M.checks`) and the recording player.
+Page logic is one file each: `review.js`, `questions.js`, `fairness.js`, with the queue and
+overview scripts inline. To change what the demo shows, edit `kfas/data.js` and bump its
+`version`. See `kfas/PROMPT.md` for the brief the build followed.
 
 For the Notebook, colours and components live in `notes/styles.css`. Every log page has the
 same shape — page head, entries, then an open-ended list — so a new entry is a copy of one

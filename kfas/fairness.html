@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fairness report &mdash; Munsif</title>
+<meta name="description" content="Fairness measured from the interview records: question parity, panel agreement, panellist calibration, talk time and order effects.">
+<meta name="color-scheme" content="light">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <a class="brand" href="index.html">
+      <span class="mark" aria-hidden="true">م</span>
+      <span><b>Munsif <span class="ar" lang="ar">مُنصِف</span></b><small>Interview review &middot; KFAS</small></span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html">Overview</a>
+      <a href="queue.html">Review queue</a>
+      <a href="questions.html">Question bank</a>
+      <a href="fairness.html" aria-current="page">Fairness</a>
+    </nav>
+    <div class="whoami"><span>Acting as</span><select id="who" aria-label="Acting as"></select></div>
+  </div>
+</header>
+
+<div class="notice"><div>Concept prototype prepared for KFAS &mdash; not an official KFAS system. Every figure below is computed from the fictional sample interviews in this demo.</div></div>
+
+<div class="wrap">
+
+  <div class="page-head">
+    <p class="eyebrow">Fairness report</p>
+    <h1>Fairness you can check, not assume</h1>
+    <p class="lede">Nothing on this page is entered by hand. Every figure is computed from the interview records &mdash; the questions actually asked, the scores actually given and the evidence actually cited &mdash; so changing a score on a review page moves these numbers.</p>
+    <div class="btn-row" style="margin-top:1rem">
+      <div style="flex:0 1 260px">
+        <label for="f-role">Read this for</label>
+        <select id="f-role"><option value="">The whole round</option></select>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid g4" id="stats"></div>
+
+  <section class="sec" aria-labelledby="h-find">
+    <div class="sec-head"><h2 id="h-find">What the record shows</h2><span class="hair"></span></div>
+    <ul class="findings" id="findings"></ul>
+  </section>
+
+  <section class="sec">
+    <div class="split">
+      <div class="card">
+        <h3>Did every candidate get the same questions?</h3>
+        <p class="small muted">A core question that was never put to a candidate is a criterion scored on nothing. This is the check that catches it.</p>
+        <div id="parity" style="margin-top:.9rem"></div>
+      </div>
+      <div class="card">
+        <h3>Panellist calibration</h3>
+        <p class="small muted">How far each panellist sits from the panel&rsquo;s own average on the same answer. A steady gap in either direction is a person to calibrate, not a candidate to re-score.</p>
+        <div id="leniency" style="margin-top:.9rem"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="split">
+      <div class="card">
+        <h3>Who was doing the talking?</h3>
+        <p class="small muted">A candidate who spoke for less than half of their own interview was not given the same chance to show evidence as one who spoke for three quarters of it.</p>
+        <div id="talk" style="margin-top:.9rem"></div>
+      </div>
+      <div class="card">
+        <h3>Did the time of day matter?</h3>
+        <p class="small muted">Mean weighted score by interview slot. A steady fall across the day is panel fatigue, not candidate quality.</p>
+        <div class="dist" id="slots" style="margin-top:.9rem"></div>
+        <p class="small muted" id="order-note" style="margin-top:.6rem"></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="split">
+      <div class="card">
+        <h3>Where the scores sit</h3>
+        <p class="small muted">Every individual score given in this round, 1 to 5. A panel that only ever uses 3 and 4 is not discriminating between candidates.</p>
+        <div class="dist" id="dist" style="margin-top:.9rem"></div>
+      </div>
+      <div class="card">
+        <h3>What this page cannot tell you</h3>
+        <p class="small muted">Being straight about the limits is part of the method:</p>
+        <ul class="small" style="color:var(--ink-2);padding-inline-start:1.1rem;margin:.5rem 0 0">
+          <li>These are small numbers. A gap across six interviews is a prompt to look, not proof of bias.</li>
+          <li>Nothing here measures outcomes by gender, nationality or age. That needs diversity data collected separately, with consent, and reported in aggregate &mdash; never shown next to a named candidate.</li>
+          <li>A consistent panel can still be consistently wrong. This checks that the process was followed, not that the rubric is the right one.</li>
+          <li>Talk time is a proxy. A short answer can be a good one; the number is there to prompt a listen, not to score anybody.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer class="site">
+  <div class="fwrap">
+    <span>Munsif &mdash; concept prototype &middot; sample data only</span>
+    <span><button class="btn ghost sm" id="reset-demo" type="button">Reset demo data</button></span>
+    <span><a href="../index.html">&larr; Back to the portfolio</a></span>
+  </div>
+</footer>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script src="fairness.js"></script>
+
+</body>
+</html>
