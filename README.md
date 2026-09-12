@@ -13,7 +13,8 @@ Manchester Metropolitan University.
   from a photograph of the real place. One self-contained page: `dives/index.html`.
 - `kfas/` — **Munsif** (مُنصِف): a concept prototype prepared as a proposal for KFAS — an
   interview review and fairness workspace. Five pages sharing `kfas/styles.css` and
-  `kfas/app.js`: an overview, a review queue, the review screen itself (recording player,
+  `kfas/app.js`: an overview, a live recorder that transcribes the room and checks each
+  question as it is asked, a review queue, the review screen itself (recording player,
   scorecard, question flags, sign-off), the question bank, and a fairness report. All sample
   data is fictional and lives in `kfas/data.js`; the build brief is `kfas/PROMPT.md`.
 - `notes/` — the Notebook: six running logs (places in Kuwait, a car build list, a gahwa
@@ -50,8 +51,14 @@ vacancies with their rubrics, the question bank and the interviews with their se
 timings, scores and flags — and everything on screen is derived from it: `kfas/app.js` has
 the state store (localStorage, reseeded whenever `data.js` changes its `version`), the
 fairness maths (`M.metrics`), the sign-off gates (`M.checks`) and the recording player.
-Page logic is one file each: `review.js`, `questions.js`, `fairness.js`, with the queue and
-overview scripts inline. To change what the demo shows, edit `kfas/data.js` and bump its
+Page logic is one file each: `review.js`, `questions.js`, `fairness.js`, `live.js`, with the
+queue and overview scripts inline. `live.js` holds the live capture: the browser's own speech
+recognition for the transcript, `MediaRecorder` for the audio, and the question check itself —
+a token-overlap match against the approved bank plus the prohibited-question categories, all
+of it in the browser with no key and no network. Its pure functions are exposed as
+`window.LiveCheck` so they can be exercised directly. Where the page is published somewhere
+`claude.use('sample')` resolves, the transcript is also sent to Claude for a second reading,
+shown against each turn and labelled as such; everywhere else the rule check stands alone. To change what the demo shows, edit `kfas/data.js` and bump its
 `version`. See `kfas/PROMPT.md` for the brief the build followed.
 
 For the Notebook, colours and components live in `notes/styles.css`. Every log page has the

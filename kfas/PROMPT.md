@@ -32,6 +32,7 @@ localStorage.
 | File | What it is |
 |---|---|
 | `index.html` | Overview: the four pillars, how a round runs, the gates the workspace enforces, and an honest list of what a production system would still need. Live counts read from the data. |
+| `live.html` | Turn the microphone on and the room is transcribed live. Each question is checked as it is asked — in the bank, near a bank question, outside it, retired, or one that should not have been asked — and each answer is captured under it. Stopping writes the whole thing into the review queue with flags already raised. |
 | `queue.html` | The review queue: every interview with its weighted score, question coverage, status and how much of it you personally have heard. Filters by vacancy, status, and "needs me". |
 | `review.html` | The core screen. Recording player, the questions as chapters, the scorecard, flags and their clarification threads, and the sign-off rail. |
 | `questions.html` | The approved bank per vacancy and criterion, the flags waiting to be explained, a propose-a-question form, and the retired questions with their reasons. |
@@ -77,6 +78,27 @@ Everything on screen derives from this file. All of it is fictional.
   split, and a short excerpt.
 
 Bump `version` after editing, or saved browser state will shadow the change.
+
+## The live check — `live.js`
+
+Two tiers, and the page says which one is running.
+
+**The rule tier** always runs, in the browser, with no key and no network. A question is
+matched against the approved bank by Dice coefficient over content words: 0.5 and above is
+the bank question, 0.32 to 0.5 is "near — confirm it", below is unscripted. Separately it
+tests eight categories that are not a matter of taste — family and pregnancy, age,
+nationality and religion, health, gender framing, home life and commute, politics, pay
+history — in English and Arabic, and flags leading phrasing. Answers get signals, never a
+score: length, whether a specific case is named, reasoning, a limitation admitted, figures
+cited.
+
+**The model tier** runs where `claude.use('sample')` resolves (a published Artifact). The
+transcript, the bank and the criteria go to Claude, which returns a note per turn and a
+paragraph on the interview as a whole. It is shown beside the rule verdict, labelled
+"Claude's read", never merged into it.
+
+Transcription is the browser's own speech recognition (Chrome and Edge today). Elsewhere the
+microphone still records and a transcript can be pasted; the same checks run over it.
 
 ## The rules the code enforces
 
