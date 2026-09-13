@@ -14,28 +14,26 @@
    be met by a dark surveillance console. Neutrals are biased
    green, toward the pine accent, so nothing reads as stock grey. */
 :root{
-  --ground:#F2F9F5;
-  --ground-2:#E6F4EC;
-  --surface:#FFFFFF;
-  --surface-2:#EDF7F1;
-  --ink:#0F231C;
-  --ink-2:#31514A;
-  --ink-dim:#55736B;
-  --line:#D5E9DE;
-  --line-strong:#AFD3C0;
-  --pine:#0C7E59;          /* the accent, dark enough to carry white text */
-  --pine-soft:#D4F5E4;
-  --pine-ink:#0A6A4B;
-  --spark:#14B37C;         /* the bright one — decoration only, never small text */
-  --display-accent:#0E9E6E; /* display-size text only: 3:1 is its bar, not 4.5:1 */
-  --ochre:#A15C00;         /* warning */
-  --ochre-soft:#FFF0D4;
-  --brick:#B3261E;         /* critical */
-  --brick-soft:#FFE3DE;
-  --steady:#0B7C55;        /* good */
-  --steady-soft:#D6F6E5;
-  --on-accent:#FFFFFF;     /* text sitting on a pine fill */
-  --link:#0A6A4B;
+  --ground:#EDF1EE;
+  --ground-2:#E3E9E4;
+  --surface:#FAFCFA;
+  --surface-2:#F2F6F2;
+  --ink:#14201C;
+  --ink-2:#3A4A44;
+  --ink-dim:#65756E;
+  --line:#D2DBD4;
+  --line-strong:#B6C3BB;
+  --pine:#1C6B58;          /* the single accent */
+  --pine-soft:#DCEAE3;
+  --pine-ink:#0F4B3D;
+  --ochre:#9C6412;         /* warning */
+  --ochre-soft:#F5E9D3;
+  --brick:#9C2F24;         /* critical */
+  --brick-soft:#F6DFDA;
+  --steady:#2F7D6A;        /* good */
+  --steady-soft:#DAECE4;
+  --on-accent:#F6FBF8;     /* text sitting on a pine fill */
+  --link:#0F4B3D;
 
   --display:"Spectral","Hoefler Text",Georgia,serif;
   --body:"IBM Plex Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
@@ -49,27 +47,25 @@
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --ground:#0B1813; --ground-2:#102019; --surface:#14251E; --surface-2:#1A3028;
-    --ink:#E8F5EE; --ink-2:#BCD6C9; --ink-dim:#8DAEA0;
-    --line:#29423A; --line-strong:#3D5C50;
-    --pine:#3FD69E; --pine-soft:#10352A; --pine-ink:#6FE9BB; --spark:#4FE3AC;
-    --display-accent:#5FE8B4;
-    --ochre:#F0B356; --ochre-soft:#3A2A10;
-    --brick:#FF8A78; --brick-soft:#3E1A16;
-    --steady:#4FD9A3; --steady-soft:#12332A;
-    --on-accent:#05231A; --link:#6FE9BB;
+    --ground:#0E1613; --ground-2:#131D19; --surface:#16211D; --surface-2:#1B2823;
+    --ink:#E5EDE8; --ink-2:#BCCAC3; --ink-dim:#8B9C94;
+    --line:#26332D; --line-strong:#38473F;
+    --pine:#54BCA0; --pine-soft:#17332B; --pine-ink:#8FD8C3;
+    --ochre:#D9A34B; --ochre-soft:#33280F;
+    --brick:#E37F6E; --brick-soft:#371914;
+    --steady:#5DC0A4; --steady-soft:#152E27;
+    --on-accent:#08120F; --link:#8FD8C3;
   }
 }
 :root[data-theme="dark"]{
-  --ground:#0B1813; --ground-2:#102019; --surface:#14251E; --surface-2:#1A3028;
-  --ink:#E8F5EE; --ink-2:#BCD6C9; --ink-dim:#8DAEA0;
-  --line:#29423A; --line-strong:#3D5C50;
-  --pine:#3FD69E; --pine-soft:#10352A; --pine-ink:#6FE9BB; --spark:#4FE3AC;
-  --display-accent:#5FE8B4;
-  --ochre:#F0B356; --ochre-soft:#3A2A10;
-  --brick:#FF8A78; --brick-soft:#3E1A16;
-  --steady:#4FD9A3; --steady-soft:#12332A;
-  --on-accent:#05231A; --link:#6FE9BB;
+  --ground:#0E1613; --ground-2:#131D19; --surface:#16211D; --surface-2:#1B2823;
+  --ink:#E5EDE8; --ink-2:#BCCAC3; --ink-dim:#8B9C94;
+  --line:#26332D; --line-strong:#38473F;
+  --pine:#54BCA0; --pine-soft:#17332B; --pine-ink:#8FD8C3;
+  --ochre:#D9A34B; --ochre-soft:#33280F;
+  --brick:#E37F6E; --brick-soft:#371914;
+  --steady:#5DC0A4; --steady-soft:#152E27;
+  --on-accent:#08120F; --link:#8FD8C3;
 }
 
 *{box-sizing:border-box}
@@ -112,7 +108,7 @@ button{font:inherit;color:inherit}
   padding:.28rem .6rem;border-radius:999px;border:1px solid var(--line-strong);color:var(--ink-2);
 }
 .pill.on{background:var(--pine-soft);border-color:transparent;color:var(--pine-ink)}
-.dot{width:.5rem;height:.5rem;border-radius:50%;background:var(--spark);flex:none}
+.dot{width:.5rem;height:.5rem;border-radius:50%;background:var(--steady);flex:none}
 .dot.warn{background:var(--ochre)}.dot.crit{background:var(--brick)}
 .dot.live{animation:beat 1.9s ease-in-out infinite}
 @keyframes beat{0%,100%{opacity:1}50%{opacity:.35}}
@@ -177,7 +173,7 @@ button{font:inherit;color:inherit}
 /* ── hero ─────────────────────────────────────────────── */
 .hero{display:grid;gap:clamp(1.25rem,3vw,2rem);padding-block:clamp(1.75rem,4vw,3rem)}
 .hero h1{font-size:var(--f4);max-width:26ch}
-.hero h1 em{font-style:italic;color:var(--display-accent)}
+.hero h1 em{font-style:italic;color:var(--link)}
 .trace-frame{
   border:1px solid var(--line);border-radius:var(--r);background:var(--surface);
   overflow:hidden;
@@ -274,7 +270,7 @@ legend{padding:0;font-weight:600;font-size:var(--f0)}
 .detect-name{font-family:var(--display);font-size:var(--f2);line-height:1.15}
 .detect-conf{font-family:var(--mono);font-size:var(--f1);margin-inline-start:auto}
 .bar{height:6px;border-radius:99px;background:var(--surface-2);overflow:hidden;border:1px solid var(--line)}
-.bar i{display:block;height:100%;background:var(--spark);transition:width .35s ease}
+.bar i{display:block;height:100%;background:var(--steady);transition:width .35s ease}
 .detect.hit .bar i{background:var(--ochre)}
 .detect.hit.crit .bar i{background:var(--brick)}
 .chips{display:flex;flex-wrap:wrap;gap:.3rem}
@@ -380,14 +376,12 @@ td .num{font-size:var(--f-1)}
   border-radius:var(--r);padding:.8rem 1rem;
 }
 .score .v{font-family:var(--mono);font-size:var(--f3);line-height:1}
-.score{border-inline-start:4px solid var(--spark)}
-.score.mid{border-color:var(--ochre);border-inline-start-color:var(--ochre);background:var(--ochre-soft)}
-.score.high{border-color:var(--brick);border-inline-start-color:var(--brick);background:var(--brick-soft)}
+.score.mid{border-color:var(--ochre);background:var(--ochre-soft)}
+.score.high{border-color:var(--brick);background:var(--brick-soft)}
 /* messages: a note, not a notification badge */
 .msg-now{
-  display:grid;gap:.5rem;border:1px solid transparent;border-radius:var(--r);
-  padding:1rem 1.15rem;border-inline-start:4px solid var(--spark);
-  background:linear-gradient(135deg, var(--pine-soft), var(--surface-2));
+  display:grid;gap:.5rem;background:var(--pine-soft);border:1px solid transparent;
+  border-radius:var(--r);padding:1rem 1.15rem;
 }
 .msg-now .t{font-family:var(--display);font-size:var(--f2);line-height:1.3;color:var(--pine-ink)}
 .msg-now .ar{font-size:var(--f1);color:var(--pine-ink);line-height:1.9}
@@ -1840,7 +1834,7 @@ function drawTrace(c,h){
   x.fillStyle=css("--surface"); x.fillRect(0,0,W,H);
   x.strokeStyle=css("--line"); x.lineWidth=1;
   for(let gy=1;gy<4;gy++){ x.beginPath(); x.moveTo(0,H*gy/4); x.lineTo(W,H*gy/4); x.stroke(); }
-  const sev = !band.on ? "line-strong" : (band.state==="opioid" ? "brick" : band.state==="steady" ? "spark" : "ochre");
+  const sev = !band.on ? "line-strong" : (band.state==="opioid" ? "brick" : band.state==="steady" ? "pine" : "ochre");
   const col=css("--"+sev);
   const n=band.buf.length, step=W/n;
   x.beginPath();
