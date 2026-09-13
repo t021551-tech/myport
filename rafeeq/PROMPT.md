@@ -404,8 +404,13 @@ them re-opens a finding.
 Retiring the demonstration means retiring all of these, not one:
 
 1. Vercel, at `/rafeeq/`.
-2. GitHub Pages — `.github/workflows/pages.yml` uploads the whole repository.
-3. Any Artifact link published from a Claude Code session.
+2. Any Artifact link published from a Claude Code session.
+
+Not GitHub Pages, despite `.github/workflows/pages.yml` existing: Pages has never
+been enabled on the repository, so every run of that workflow has failed with a
+404 and nothing has ever been served from it. Either enable it in
+**Settings → Pages** and treat it as a third place to retire, or delete the
+workflow so the repository stops reporting a failing build on every push.
 
 The portfolio links to it from `index.html` (the contact row and the footer).
 
