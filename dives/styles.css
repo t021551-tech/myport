@@ -286,7 +286,8 @@ body{
   display:grid;grid-template-columns:1.6rem minmax(0,1fr);gap:.2rem .8rem;
   border-left:2px solid var(--brass);padding:.1rem 0 .1rem .8rem;
 }
-.plan-item .n{font-family:var(--mono);font-size:.72rem;color:var(--silt);grid-row:1/span 3}
+.plan-item .n{font-family:var(--mono);font-size:.72rem;color:var(--silt);grid-column:1;grid-row:1}
+.plan-item > *:not(.n){grid-column:2}
 .plan-item h4{
   font-family:var(--display);font-weight:700;font-size:1.05rem;margin:0;color:var(--nacre);
 }
@@ -352,3 +353,20 @@ a:focus-visible{outline:2px solid var(--brass);outline-offset:3px}
 @media (prefers-reduced-motion:reduce){
   .rays{animation:none}
 }
+
+/* A booking link the operator only serves over plain http. Said plainly,
+   next to the link, so nobody clicks through to a "not secure" page
+   without being told first. Both grids put it in the text column. */
+.book .bk-warn,
+.plan-item .bk-warn{
+  grid-column:2;
+  margin:.5rem 0 0!important;
+  max-width:56ch;
+  font-size:.82rem!important;
+  line-height:1.6;
+  color:var(--brass)!important;
+  border-left:2px solid rgba(216,162,74,.4);
+  padding-left:.7rem;
+}
+.bk-warn code{font-family:var(--mono);font-size:.92em}
+.bk-warn a{color:inherit}

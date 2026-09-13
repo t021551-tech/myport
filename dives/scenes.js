@@ -2355,7 +2355,8 @@
     { id: 'khiran', name: 'Khiran Resorts', group: 'The sea',
       how: 'Chalets are booked through Touristic Enterprises Company.',
       url: 'http://www.kuwaittourism.com/KhiranResort.html', label: 'Khiran Resort',
-      tel: '1806806', telText: '1806806', lead: 'Weeks ahead for the cool months — the waterside chalets go first.' },
+      tel: '1806806', telText: '1806806', lead: 'Weeks ahead for the cool months — the waterside chalets go first.',
+      warn: 'That operator’s page is not encrypted, so the browser will call it “not secure”. On public wi-fi, ring them instead.' },
     { id: 'failaka', name: 'Failaka Island', group: 'History',
       how: 'Ferry tickets are sold at the office in Ras Al-Ardh, around KD 15 return. Ask for the last boat back before you buy.',
       url: '', label: '', tel: '', telText: '',
@@ -2395,15 +2396,26 @@
   var said = document.getElementById('planSaid');
   if (!picker || !out) return;
 
+  // The picks, the date and the party size are worth remembering between
+  // visits. The name is not: it is a person's name on a shared or borrowed
+  // machine, so it lives for this visit only and is never written to disk.
   var state = { picked: [], date: '', people: '2', name: '' };
   try {
     var saved = JSON.parse(localStorage.getItem(KEY) || 'null');
-    if (saved && Object.prototype.toString.call(saved.picked) === '[object Array]') state = saved;
+    if (saved && Object.prototype.toString.call(saved.picked) === '[object Array]') {
+      state.picked = saved.picked;
+      state.date = typeof saved.date === 'string' ? saved.date : '';
+      state.people = typeof saved.people === 'string' ? saved.people : '2';
+    }
   } catch (e) { /* private window, cleared storage — carry on with defaults */ }
 
   function remember() {
-    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { /* not essential */ }
+    try {
+      localStorage.setItem(KEY, JSON.stringify(
+        { picked: state.picked, date: state.date, people: state.people }));
+    } catch (e) { /* not essential */ }
   }
+  remember();   // drop any name an older version of this page left behind
   function say(msg) {
     said.textContent = msg || '';
     if (msg) window.setTimeout(function () { said.textContent = ''; }, 4000);
@@ -2436,7 +2448,7 @@
 
   elDate.value = state.date || '';
   elPeople.value = state.people || '2';
-  elName.value = state.name || '';
+  elName.value = '';
   [[elDate, 'date'], [elPeople, 'people'], [elName, 'name']].forEach(function (pair) {
     pair[0].addEventListener('input', function () {
       state[pair[1]] = pair[0].value; remember(); render();
@@ -2512,6 +2524,12 @@
         go.appendChild(none);
       }
       item.appendChild(go);
+      if (pl.warn) {
+        var w = document.createElement('p');
+        w.className = 'bk-warn';
+        w.textContent = pl.warn;
+        item.appendChild(w);
+      }
       out.appendChild(item);
     });
   }
@@ -2529,6 +2547,7 @@
       lines.push('   When: ' + pl.lead);
       if (pl.url) lines.push('   Book: ' + pl.url);
       if (pl.tel) lines.push('   Call: ' + pl.telText + ' (' + pl.tel + ')');
+      if (pl.warn) lines.push('   Note: ' + pl.warn);
       lines.push('');
     });
     lines.push('Confirm hours, prices and ferry times with each place before travelling.');
