@@ -362,6 +362,53 @@ intentions.
   device, and the privacy pill in the rail reflects it (including failing
   honestly in a private window).
 
+## Safety and privacy rules (from the security review)
+
+These came out of a read-only audit and they are load-bearing. Breaking one of
+them re-opens a finding.
+
+- **Nothing may claim a clinician is receiving anything.** A banner sits above
+  everything, on every screen, saying no doctor receives anything and no band is
+  monitored. Alerts read "Would go to Dr X — nothing left this device", the
+  on-call pill is prefixed "example rota", and the overdose rule says plainly
+  that in a real overdose the number to call is 112. The Kuwait numbers and the
+  hospital address are singled out as the only real things on the page, because
+  they are.
+- **The page makes zero network requests.** No webfonts, no scripts, no images,
+  no analytics. Typography is a system stack per role. This is what makes
+  "nothing leaves this page" true rather than nearly true — do not reintroduce
+  a Google Fonts link to get the old typefaces back.
+- **Storage is session-only by default.** State goes to `sessionStorage` and
+  disappears with the tab. The pill in the rail switches to `localStorage` if
+  the patient asks, and switching back deletes what was on disk. State a previous
+  version left in `localStorage` is migrated off disk on load.
+- **The ID number is never written to storage, in either mode.** `save()` strips
+  it. The field also tells the reader not to type a real one, because there is no
+  prescriber to need it.
+- **The exit button leaves.** No confirmation dialog, no farewell screen: it
+  erases storage, sets a neutral title and replaces the history entry with an
+  ordinary website, so Back does not return and whoever walked into the room sees
+  nothing. Escape three times does the same. If navigation is blocked, it goes
+  blank rather than explaining itself.
+- **Notifications carry no words** — title "Reminder", empty body — so a lock
+  screen preview gives nothing away.
+- **Everything from a person is escaped**, including digits-only fields, so the
+  habit holds when the first free-text field is added.
+- **The page is `noindex, nofollow`**, in a meta tag and in the Vercel header, so
+  nobody arrives here searching for real help.
+- **The clinician screen says it has no sign-in** and that the real one needs a
+  server-side check of which patients that clinician may see.
+
+## Where this is published
+
+Retiring the demonstration means retiring all of these, not one:
+
+1. Vercel, at `/rafeeq/`.
+2. GitHub Pages — `.github/workflows/pages.yml` uploads the whole repository.
+3. Any Artifact link published from a Claude Code session.
+
+The portfolio links to it from `index.html` (the contact row and the footer).
+
 ## Rules
 
 - The page must read at rest, with the example patient "Q" loaded so the plan,

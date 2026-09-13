@@ -4,10 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Rafeeq Recovery Companion</title>
-<meta name="description" content="A private way to start treatment for addiction: choose the substance, get a staged plan, and let a paired band tell your doctor when you are in trouble.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Arabic:wght@400;600&display=swap">
+<meta name="description" content="A design demonstration of a private front door to addiction treatment. Nothing in it is connected to a clinician.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<!-- No webfonts, no scripts, no images, no analytics: this page makes zero network
+     requests, so "nothing leaves your browser" is literally true and not nearly true.
+     Typography is the best system stack on each platform instead. -->
 <style>
 /* ── tokens ──────────────────────────────────────────────
    Light is the primary world: someone frightened should not
@@ -35,10 +37,10 @@
   --on-accent:#F6FBF8;     /* text sitting on a pine fill */
   --link:#0F4B3D;
 
-  --display:"Spectral","Hoefler Text",Georgia,serif;
-  --body:"IBM Plex Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
-  --mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
-  --arabic:"IBM Plex Sans Arabic","Noto Naskh Arabic",serif;
+  --display:"Hoefler Text","Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+  --body:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono","SFMono-Regular",Menlo,Consolas,"Liberation Mono",monospace;
+  --arabic:"Geeza Pro","Noto Naskh Arabic","Segoe UI",Tahoma,serif;
 
   --f-2:.72rem; --f-1:.82rem; --f0:.98rem; --f1:1.12rem;
   --f2:1.4rem;  --f3:1.85rem; --f4:clamp(2.1rem,1.4rem + 2.6vw,3.1rem);
@@ -94,6 +96,16 @@ button{font:inherit;color:inherit}
 .row{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center}
 
 /* ── rail ─────────────────────────────────────────────── */
+.demo-bar{
+  background:var(--ochre-soft);border-bottom:1px solid var(--ochre);
+  color:var(--ink);position:relative;z-index:21;
+}
+.demo-bar .shell{display:flex;gap:.5rem 1rem;align-items:baseline;flex-wrap:wrap;padding-block:.6rem}
+.demo-bar .tag{
+  font-size:var(--f-2);letter-spacing:.1em;text-transform:uppercase;color:var(--ochre);
+  font-weight:700;border:1px solid var(--ochre);border-radius:4px;padding:.1rem .45rem;flex:none;
+}
+.demo-bar p{font-size:var(--f-1);line-height:1.5;max-width:78ch}
 .rail{
   position:sticky;top:0;z-index:20;background:var(--surface);
   border-bottom:1px solid var(--line);
@@ -416,6 +428,16 @@ footer{border-top:1px solid var(--line);padding-block:1.5rem;color:var(--ink-dim
 </head>
 <body>
 
+<div class="demo-bar">
+  <div class="shell">
+    <span class="tag">Demonstration</span>
+    <p><b>No doctor receives anything from this page, and no band is being monitored.</b> Every
+      clinician, alert and shift on it is invented, and nothing you enter is sent anywhere. It is a
+      design for a service that has not been built. <b>The Kuwait phone numbers and the hospital
+      address are the only real things here</b> &mdash; those work, and you can use them now.</p>
+  </div>
+</div>
+
 <header class="rail">
   <div class="shell rail-in">
     <div class="brand">
@@ -423,11 +445,12 @@ footer{border-top:1px solid var(--line);padding-block:1.5rem;color:var(--ink-dim
       <span class="ar" dir="rtl" lang="ar">رفيق</span>
       <span class="small" style="margin-inline-start:.35rem">a companion, not a file</span>
     </div>
-    <span class="pill on" id="privacyPill"><span class="dot"></span> On this device only</span>
+    <button class="pill on" id="privacyPill" type="button" style="cursor:pointer"><span class="dot"></span> This tab only</button>
     <button class="pill" id="oncallPill" type="button" data-go="clinicians"
       style="cursor:pointer;background:none" title="Two doctors cover every day, twelve hours each">
       <span class="dot live"></span> <span id="oncallWho">on call</span></button>
-    <button class="exit" id="panicExit" type="button" title="Wipe everything on this device and leave">Wipe &amp; leave</button>
+      <button class="exit" id="panicExit" type="button"
+      title="Leaves this site immediately for an ordinary page and erases what is stored. No confirmation. Pressing Escape three times does the same.">Leave now</button>
   </div>
 </header>
 
@@ -456,8 +479,9 @@ footer{border-top:1px solid var(--line);padding-block:1.5rem;color:var(--ink-dim
         Pick what you&rsquo;re taking. Get a staged plan written for that substance, not a
         motivational poster. Pair a wrist band and it reads your body signs &mdash; pulse,
         breathing, oxygen, skin, tremor &mdash; to detect when you have used, which drug class it
-        matches, and when the band comes off. Your doctor is told the same minute. All it asks
-        for is one ID number.
+        matches, and when the band comes off. In the finished service your doctor would be told the
+        same minute, and all it would ask for is one ID number. <b>This page is the design for that
+        service, not the service.</b> Nothing on it reaches a clinician.
       </p>
       <div class="row">
         <button class="btn" type="button" data-go="choose">Choose the substance</button>
@@ -494,9 +518,13 @@ footer{border-top:1px solid var(--line);padding-block:1.5rem;color:var(--ink-dim
         can remove them &mdash; except in an overdose escalation, which is spelled out on the band page.</span>
       </div>
       <div>
-        <b>Everything on this page stays in this browser.</b>
-        <span class="small">Your choice, your plan and your alert log are written to local storage on this
-        device. Nothing is uploaded. <b>Wipe &amp; leave</b>, top right, clears it in one press.</span>
+        <b>Nothing leaves this page. Nothing is kept after you close the tab.</b>
+        <span class="small">This page makes no network requests at all &mdash; no fonts, no analytics,
+        nothing. Your plan is held for this tab only and your ID number is never written to the device.
+        <b>Two things it cannot clear for you: the address in your browser history, and anything a
+        shared device has synced.</b> On a shared device, use a private window. <b>Leave now</b>, top
+        right, erases what is stored and sends the browser to an ordinary page immediately &mdash; so
+        does pressing Escape three times.</span>
       </div>
       <div>
         <b>Telling us you used is not punished.</b>
@@ -614,10 +642,12 @@ footer{border-top:1px solid var(--line);padding-block:1.5rem;color:var(--ink-dim
       </div>
       <fieldset class="stack stack-8">
         <legend>Your ID number</legend>
-        <p class="small" style="max-width:62ch">The only identifier this service holds. A doctor
-          cannot prescribe a controlled medication to an alias, and this is what stops two
-          prescribers writing the same script for the same person. It is not checked against your
-          name here, and it is never shown to anyone in your life.</p>
+        <p class="small" style="max-width:62ch">In the finished service this would be the only
+          identifier held, because a doctor cannot prescribe a controlled medication to an alias and
+          because it stops two prescribers writing the same script for the same person.</p>
+        <div class="note warn"><b>Do not type a real ID number into this demonstration.</b> There is no
+          prescriber at the other end to need it. Any digits are fine. Whatever you type stays in this
+          tab, is never written to the device, and disappears when the tab closes.</div>
         <input class="field" id="idnum" inputmode="numeric" autocomplete="off" maxlength="14"
           placeholder="12 digits" aria-describedby="idmsg">
         <span class="small" id="idmsg"></span>
@@ -1115,6 +1145,10 @@ footer{border-top:1px solid var(--line);padding-block:1.5rem;color:var(--ink-dim
     <div class="stack stack-16">
       <span class="eyebrow">Doctor&rsquo;s view</span>
       <h2 style="font-size:var(--f3)">The other side of the alert.</h2>
+      <div class="note warn"><b>This screen has no sign-in, and in the finished service it would need
+        one.</b> It is open here because every row on it is invented and the one real row never left
+        your browser. A clinician&rsquo;s screen showing real patients needs its own login and a check,
+        made on a server, of which patients that clinician is allowed to see.</div>
       <p class="lede">This is the clinician&rsquo;s queue: no names, an alias per patient, sorted so the
         person in the most trouble is at the top. The ID number is visible only to the doctor
         prescribing for that patient. Acknowledging an alert writes back into the patient&rsquo;s log,
@@ -1451,7 +1485,7 @@ const RULES=[
  {id:"od", sev:"crit", who:"Emergency", b:"Breathing too slow — overdose pattern",
   cond:"SpO₂ < 92% & respiration < 10/min ≥ 2 min", dwell:2,
   test:v=>v.on&&v.spo2<92&&v.rr<10,
-  msg:"Blood oxygen falling with very slow breathing. This is the one alert that goes past your doctor to an emergency response."}
+  msg:"Blood oxygen falling with very slow breathing. In the finished service this is the one alert that would go past your doctor to an emergency response. Here it goes nowhere \u2014 in a real overdose, call 112."}
 ];
 
 /* ═══ 2b. the classifier ═════════════════════════
@@ -1557,7 +1591,7 @@ function recipientFor(sev){
 }
 
 /* ═══ 3. state, kept in this browser and nowhere else ═════════════════ */
-const KEY="rafeeq.v1", DEMO_SPEED=60;
+const KEY="rafeeq.v1", REMEMBER="rafeeq.remember", EXIT_URL="https://www.google.com/", DEMO_SPEED=60;
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const el=(t,c,h)=>{const n=document.createElement(t);if(c)n.className=c;if(h!=null)n.innerHTML=h;return n;};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -1566,19 +1600,58 @@ const sub=id=>SUBS.find(s=>s.id===id);
 function seed(){
   const now=Date.now();
   return {alias:"Q", demo:true, subs:["rx-opioids"], answers:{dur:"m6_2y",freq:"most",last:"today",fits:"no",knows:"none"},
-    done:{}, day:9, doctor:"Dr. Omar Haddad", id:"290071104417",
+    done:{}, day:9, doctor:"Dr. Omar Haddad", id:"12345678",
     log:[
       {t:now-1000*60*60*26, sev:"info", b:"Plan started", m:"Tramadol taper, step 1 of 9. Naloxone at home.", ack:"Dr. Omar Haddad"},
       {t:now-1000*60*60*14, sev:"warn", b:"Recovery signal collapsed", m:"HRV 34 against a baseline of 62 for most of the night — second bad night since the taper step.", ack:"Dr. Omar Haddad acknowledged · taper step held"},
       {t:now-1000*60*60*3, sev:"info", b:"Self-reported", m:"“Took two extra tablets last night.” Logged as an honest report — plan unchanged.", ack:"Dr. Omar Haddad"}
     ]};
 }
-let S;
-try{ S=JSON.parse(localStorage.getItem(KEY)) || seed(); }catch(e){ S=seed(); }
+/* Storage is session-only unless the patient asks otherwise. What someone types
+   here is the most dangerous thing in their life; it should not outlive the tab
+   by default, and the ID number is never written to disk at all. */
+let remember=false;
+try{ remember = localStorage.getItem(REMEMBER)==="1"; }catch(e){}
+const store=()=>{ try{ return remember? localStorage : sessionStorage; }catch(e){ return null; } };
+function readState(){
+  try{
+    const here=(remember? localStorage : sessionStorage).getItem(KEY);
+    if(here) return JSON.parse(here);
+    /* anything a previous visit left on disk is moved off it, not just ignored */
+    if(!remember){
+      const stale=localStorage.getItem(KEY);
+      if(stale){ localStorage.removeItem(KEY); sessionStorage.setItem(KEY,stale); return JSON.parse(stale); }
+    }
+  }catch(e){}
+  return null;
+}
+let S = readState() || seed();
 const maskId=v=>v? "•".repeat(Math.max(0,v.length-4))+v.slice(-4) : "not given yet";
 const idOk=v=>/^\d{8,14}$/.test(v||"");
-function save(){ try{ localStorage.setItem(KEY,JSON.stringify(S)); $("#privacyPill").classList.add("on"); }
-  catch(e){ $("#privacyPill").innerHTML='<span class="dot warn"></span> Not saved — private window'; } }
+function save(){
+  const copy=Object.assign({},S);
+  delete copy.id;                       /* the ID number lives in this tab and nowhere else */
+  try{ store().setItem(KEY,JSON.stringify(copy)); paintPrivacy(); }
+  catch(e){ $("#privacyPill").innerHTML='<span class="dot warn"></span> Not saved \u2014 private window'; }
+}
+function paintPrivacy(){
+  const pill=$("#privacyPill"); if(!pill) return;
+  pill.classList.toggle("on", !remember);
+  pill.innerHTML=remember
+    ? '<span class="dot warn"></span> Saved on this device'
+    : '<span class="dot"></span> This tab only';
+  pill.title=remember
+    ? "Your plan is kept on this device until you wipe it. Press to stop remembering."
+    : "Your plan disappears when this tab closes, and your ID number is never written to the device at all. Press to remember it here instead.";
+}
+function toggleRemember(){
+  const now=!remember;
+  try{
+    if(now){ localStorage.setItem(REMEMBER,"1"); sessionStorage.removeItem(KEY); }
+    else { localStorage.removeItem(REMEMBER); localStorage.removeItem(KEY); }
+  }catch(e){}
+  remember=now; save(); paintPrivacy();
+}
 
 /* ═══ 4. routing ══════════════════════════════════════════════════════ */
 const VIEWS=["door","choose","plan","band","after","abroad","clinicians","console"];
@@ -1702,14 +1775,14 @@ function renderPlan(){
   }
   const open=S.log.filter(x=>!x.ack).length;
   head.innerHTML=`<div class="stack stack-16">
-    <span class="eyebrow">${S.demo?"Example plan &middot; ":""}Plan for &ldquo;${esc(S.alias)}&rdquo; &middot; ID ${maskId(S.id)} &middot; day ${S.day}</span>
+    <span class="eyebrow">${S.demo?"Example plan &middot; ":""}Plan for &ldquo;${esc(S.alias)}&rdquo; &middot; ID ${esc(maskId(S.id))} &middot; day ${esc(S.day)}</span>
     <h2 style="font-size:var(--f3)">${p.chosen.map(s=>s.name).join(" + ")}</h2>
     <p class="lede">${p.lead.truth}</p>
     ${p.supervised?`<div class="note crit"><b>This plan does not start at home.</b> Your answers plus your
       substance put you in the group where unsupervised withdrawal causes seizures. The first phase is a
       doctor, not a taper.</div>`:""}
     <div class="promise">
-      <div><b>ID number</b><span class="small">${maskId(S.id)} &middot; held for your prescriber only</span></div>
+      <div><b>ID number</b><span class="small">${esc(maskId(S.id))} &middot; this tab only, never written to the device</span></div>
       <div><b>Doctor</b><span class="small">${esc(S.doctor||"Not chosen yet")} &middot;
         <button class="btn quiet sm" type="button" data-go="clinicians">change</button></span></div>
       <div><b>Reported use</b><span class="small">${p.sev.band} &middot; ${p.pace}</span></div>
@@ -1985,7 +2058,7 @@ function renderLog(){
     const li=el("li",a.sev);
     li.innerHTML=`<span class="when">${ago(a.t)} &middot; ${new Date(a.t).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"})}</span>
       <b>${esc(a.b)}</b><span class="small">${esc(a.m)}</span>
-      ${a.to?`<span class="small">Sent to ${esc(a.to)}</span>`:""}
+      ${a.to?`<span class="small">Would go to ${esc(a.to)} \u2014 nothing left this device</span>`:""}
       ${a.ack?`<span class="ack">✓ ${esc(a.ack)}</span>`
              :`<span class="small" style="color:var(--ochre)">Waiting for ${esc(a.to?a.to.replace(/ \(.*$/,""):"your doctor")}</span>`}`;
     ul.appendChild(li);
@@ -2070,7 +2143,7 @@ const surname=n=>String(n||"").replace(/^Dr\.\s*/,"").split(" ").slice(-1)[0];
 function renderOncall(){
   const oc=onCallNow(), left=minsLeft();
   const w=$("#oncallWho");
-  if(w) w.textContent=oc.shift.label.toLowerCase()+" on call \u00B7 Dr. "+surname(oc.doctor.n);
+  if(w) w.textContent="example rota \u00B7 "+oc.shift.label.toLowerCase()+" \u00B7 Dr. "+surname(oc.doctor.n);
   const now=$("#oncallNow");
   if(now){
     const h=Math.floor(left/60), m=left%60;
@@ -2081,8 +2154,9 @@ function renderOncall(){
       <address>${oc.shift.label} shift &middot; ${String(oc.shift.from).padStart(2,"0")}:00&ndash;${String(oc.shift.to).padStart(2,"0")}:00<br>
         ${h?h+"h ":""}${m}m left on this shift<br>
         backup: ${esc(oc.backup.n)}</address>
-      <span class="small">A critical alert from your band reaches this doctor now, whatever the hour.
-        If they do not answer, it escalates to the backup automatically.</span>
+      <span class="small">In the finished service a critical alert would reach this doctor now,
+        whatever the hour, and escalate to the backup if they did not answer. This is an invented
+        rota on a demonstration page: it reaches nobody.</span>
     </div>`;
   }
   const tb=$("#rota");
@@ -2132,9 +2206,10 @@ function renderDocs(){
         return;
       }
       S.doctor=c.n; save(); renderDocs();
-      alert_("info","Request sent",
-        "Sent to "+c.n+" under your alias “"+S.alias+"” with ID "+maskId(S.id)+
-        ". They see your substance, your plan, your band and the ID they need to prescribe — not your name.", c.n); };
+      alert_("info","Request would be sent",
+        "In the finished service this would go to "+c.n+" under your alias “"+S.alias+"” with ID "+maskId(S.id)+
+        ", showing your substance, your plan, your band and the ID needed to prescribe — never your name. "+
+        "Nothing was sent: this clinician does not exist.", c.n); };
     d.appendChild(b); wrap.appendChild(d);
   });
 }
@@ -2465,7 +2540,9 @@ function notifyMsg(kind,p){
   if((h>=23||h<7) && kind!=="night") return;
   try{
     if(window.Notification && Notification.permission==="granted")
-      new Notification("Rafeeq", {body:msgText(p), tag:"rafeeq-"+kind, silent:kind!=="mile"});
+      /* No text: a lock screen preview must give nothing away to whoever picks up the phone.
+         The note itself is readable only once the page is open. */
+      new Notification("Reminder", {tag:"rafeeq-note", silent:true});
   }catch(e){}
 }
 function milestoneCheck(){
@@ -2509,8 +2586,10 @@ function renderMsgs(){
       <button class="btn ghost sm" type="button" data-lang="en"${m.lang==="en"?' style="border-color:var(--pine)"':""}>English</button>
       <button class="btn ghost sm" type="button" data-lang="ar"${m.lang==="ar"?' style="border-color:var(--pine)"':""}><span class="ar" dir="rtl" lang="ar">العربية</span></button>
       <button class="btn sm" type="button" id="msgSend">Send one now</button>
-      <button class="btn ghost sm" type="button" id="msgNotify">${m.notify?"Phone alerts on":"Also send to my phone"}</button>
+      <button class="btn ghost sm" type="button" id="msgNotify">${m.notify?"Phone alerts on":"Also nudge my phone"}</button>
     </div>
+    <span class="small">A phone alert carries no words — it says &ldquo;Reminder&rdquo; and nothing
+      else, so a lock screen shows nothing about you. The note itself is only readable here.</span>
     <span class="small" id="msgNote">${nm
       ? `Next milestone note: day ${nm.d}, ${nm.inDays} day${nm.inDays===1?"":"s"} from now. Phone alerts stay quiet between 11pm and 7am unless the note was written for the middle of the night.`
       : "Phone alerts stay quiet between 11pm and 7am unless the note was written for the middle of the night."}</span>`;
@@ -2549,21 +2628,35 @@ function renderMsgs(){
 }
 
 /* ═══ 11. wipe & leave ════════════════════════════════════════════════ */
-$("#panicExit").onclick=()=>{
-  if(!confirm("Wipe your alias, plan and alert log from this device and close the page? This cannot be undone.")) return;
-  try{ localStorage.removeItem(KEY); }catch(e){}
-  document.body.innerHTML=`<main class="shell" style="padding-block:4rem;max-width:44ch">
-    <h1 style="font-size:var(--f3)">Wiped.</h1>
-    <p class="lede" style="margin-block:1rem">Nothing about you is left in this browser&rsquo;s storage.</p>
-    <p class="small">Two things this page cannot clear for you: the address in your browser history, and
-    anything a shared device already synced. If someone else uses this device, clear the history for
-    this site as well, then close the tab.</p></main>`;
-};
+/* No confirmation dialog, no farewell screen, no trace on screen. A panic button
+   that announces the panic is worse than none: whoever just walked into the room
+   must see an ordinary page, so this leaves for one and replaces the history entry
+   so Back does not come back here. */
+function leaveNow(){
+  try{ localStorage.removeItem(KEY); localStorage.removeItem(REMEMBER); }catch(e){}
+  try{ sessionStorage.removeItem(KEY); }catch(e){}
+  document.title="New tab";
+  try{ (window.top||window).location.replace(EXIT_URL); }
+  catch(e){ try{ location.replace(EXIT_URL); }catch(e2){} }
+  /* if the page is embedded somewhere that blocks leaving, go blank rather than explain */
+  setTimeout(()=>{ document.documentElement.innerHTML=
+    '<head><title>New tab</title></head><body style="background:#fff"></body>'; }, 200);
+}
+$("#panicExit").onclick=leaveNow;
+/* Escape three times does the same, for when the mouse is too slow */
+let escN=0, escT=0;
+addEventListener("keydown",e=>{
+  if(e.key!=="Escape") return;
+  escN++; clearTimeout(escT); escT=setTimeout(()=>{ escN=0; },1200);
+  if(escN>=3) leaveNow();
+});
 
 /* ═══ 12. boot ════════════════════════════════════════════════════════ */
 renderSubs(); renderDanger(); renderQuestions(); syncHint();
 renderTiles(); renderRules(); renderSigTable(); renderLog(); renderBadge(); syncId(); renderDetect();
 renderStepdown(); renderPhq(); renderOrgs(); renderOncall(); milestoneCheck(); renderMsgs();
+paintPrivacy();
+$("#privacyPill").onclick=toggleRemember;
 $("#bandDevice").textContent="demo band · clock 60× real time";
 $("#pairMsg").textContent="Not paired yet — the demo band is streaming so the page has something to show.";
 $("#heroWho").textContent=(S.demo?"example patient":"patient")+" “"+S.alias+"”";

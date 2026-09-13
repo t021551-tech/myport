@@ -27,7 +27,10 @@ Manchester Metropolitan University.
   actually private, and about which MOH steps can be done online and which cannot. One self-contained page
   (`rafeeq/index.html`) plus `rafeeq/PROMPT.md`, the build brief. It is a **prototype**: no
   real clinicians, placeholder clinician profiles, and one marked placeholder helpline
-  number. All state stays in `localStorage`.
+  number. It carries a demonstration banner on every screen, makes no network requests at all,
+  keeps state for the tab only unless asked otherwise, never writes the ID number to the device,
+  and is marked `noindex`. `vercel.json` adds a content-security policy for the whole site and a
+  stricter one for `/rafeeq/`.
 - `notes/` — the Notebook: six running logs (places in Kuwait, a car build list, a gahwa
   log, things I'm learning, read & watched, small wins). A hub page plus one page per log,
   all sharing `notes/styles.css`. Currently a **draft** — every page carries a
