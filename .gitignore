@@ -1,0 +1,4 @@
+# Security review output. Deliberately not committed: this repository is
+# public, and the report describes weaknesses that are not fixed yet.
+# Keep it local, hand it over directly.
+SECURITY-REVIEW.md
