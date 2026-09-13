@@ -57,20 +57,33 @@ than magic.
 ## Design system
 
 **Palette** — light-first, because a frightened person should not be met by a
-dark surveillance console. Neutrals are biased green toward the accent.
+dark surveillance console, and *bright*: white cards on a mint-tinted ground, a
+saturated emerald accent, and clean warm severities. Neutrals are biased green
+toward the accent.
 
 | token | light | dark | role |
 |---|---|---|---|
-| `--ground` | `#EDF1EE` | `#0E1613` | page ground |
-| `--surface` | `#FAFCFA` | `#16211D` | panels, cards, trace frame |
-| `--ink` | `#14201C` | `#E5EDE8` | body text |
-| `--ink-dim` | `#65756E` | `#8B9C94` | secondary, green-biased grey |
-| `--pine` | `#1C6B58` | `#54BCA0` | the single accent |
-| `--ochre` | `#9C6412` | `#D9A34B` | warning severity |
-| `--brick` | `#9C2F24` | `#E37F6E` | critical severity, opioid detection |
-| `--steady` | `#2F7D6A` | `#5DC0A4` | good / clear |
-| `--on-accent` | `#F6FBF8` | `#08120F` | text on a pine fill |
-| `--link` | `#0F4B3D` | `#8FD8C3` | links, hero emphasis |
+| `--ground` | `#F2F9F5` | `#0B1813` | page ground |
+| `--surface` | `#FFFFFF` | `#14251E` | panels, cards, trace frame |
+| `--ink` | `#0F231C` | `#E8F5EE` | body text |
+| `--ink-dim` | `#55736B` | `#8DAEA0` | secondary, green-biased grey |
+| `--pine` | `#0C7E59` | `#3FD69E` | the accent, and every filled button |
+| `--spark` | `#14B37C` | `#4FE3AC` | the bright one: bars, dots, the steady trace |
+| `--display-accent` | `#0E9E6E` | `#5FE8B4` | display-size text only |
+| `--ochre` | `#A15C00` | `#F0B356` | warning severity |
+| `--brick` | `#B3261E` | `#FF8A78` | critical severity, opioid detection |
+| `--steady` | `#0B7C55` | `#4FD9A3` | good / clear |
+| `--on-accent` | `#FFFFFF` | `#05231A` | text on a pine fill |
+| `--link` | `#0A6A4B` | `#6FE9BB` | links |
+
+**Brightness has a floor, and it is contrast.** Every foreground/background pair
+in that table was checked against WCAG before it shipped, and the split into
+three greens is what makes the brightness safe: `--pine` is dark enough to carry
+white button text (5.1:1), `--display-accent` clears 3:1 and is therefore allowed
+*only* on display-size text such as the hero emphasis, and `--spark` is never
+text at all — bars, dots, the steady pulse trace. Brightening a small-text colour
+to match `--spark` is the way this palette breaks. Check any new pair rather than
+trusting how it looks on a good screen.
 
 Severity colour is separate from the accent and is the only place colour
 carries meaning. Every colour is declared in the bare `:root` block first, then
