@@ -2,3 +2,6 @@
 # public, and the report describes weaknesses that are not fixed yet.
 # Keep it local, hand it over directly.
 SECURITY-REVIEW.md
+
+# the shim builds into here
+deploy/thirteenpearls/public/
