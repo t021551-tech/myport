@@ -3,5 +3,6 @@
 # Keep it local, hand it over directly.
 SECURITY-REVIEW.md
 
-# the shim builds into here
-deploy/thirteenpearls/public/
+# the shim builds into here; the placeholder page is tracked, its output is not
+deploy/thirteenpearls/public/*
+!deploy/thirteenpearls/public/index.html
