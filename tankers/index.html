@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kuwaiti Oil Tankers — a fleet dataset</title>
+<meta name="description" content="A database and dataset for the Kuwait Oil Tanker Company fleet: thirty vessels, the ports they serve and the grades they lift, published as CSV, JSON and SQL.">
+<meta name="color-scheme" content="dark">
+<meta property="og:title" content="Kuwaiti Oil Tankers">
+<meta property="og:description" content="A fleet register for the Kuwait Oil Tanker Company, as CSV, JSON and SQL.">
+<meta property="og:type" content="website">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body data-palette="#3987e5,#d95926,#199e70,#c98500,#d55181">
+
+<div class="bg" aria-hidden="true"><div class="bg-grid"></div><div class="bg-swell"></div></div>
+
+<div class="shell">
+
+  <header class="masthead">
+    <p class="eyebrow"><a href="../index.html">Fatemah Adel Shamsah</a> &middot; dataset</p>
+    <h1>Kuwaiti Oil&nbsp;Tankers</h1>
+    <p class="arabic" lang="ar" dir="rtl">ناقلات النفط الكويتية</p>
+    <p class="lede">
+      The <strong>Kuwait Oil Tanker Company</strong> owns and manages the ships that carry
+      Kuwait&rsquo;s crude oil, refined products and LPG. This is its fleet as a dataset &mdash;
+      thirty hulls, the terminals they load at, the grades they lift &mdash; published as
+      CSV, JSON and a relational schema you can load and query.
+    </p>
+    <p class="btn-row">
+      <a class="btn" href="data/vessels.csv" download>vessels.csv</a>
+      <a class="btn ghost" href="data/fleet.json" download>fleet.json</a>
+      <a class="btn ghost" href="schema.sql">schema.sql</a>
+      <a class="btn ghost" href="README.md">Data dictionary &rarr;</a>
+    </p>
+  </header>
+
+  <section class="callout" aria-labelledby="provenance-heading">
+    <h2 id="provenance-heading">What is real here, and what is not</h2>
+    <p>
+      The vessel register, the ports and the cargo grades are <strong>real</strong>, compiled
+      in September 2026 from KOTC&rsquo;s own material, trade press and AIS-derived vessel
+      registries. Port coordinates and sea distances are approximate, and crude assay
+      figures are nominal.
+    </p>
+    <p>
+      The voyage table is <strong>synthetic</strong>. It is generated from a fixed seed so
+      the register can be queried as a fleet rather than read as a list, and every row in it
+      carries <code>data_source = 'synthetic'</code>. No row describes a real shipment.
+      Anything on this page drawn from it is marked.
+    </p>
+    <p>
+      Ten of the thirty deadweight figures are carried across from a confirmed sister ship
+      rather than published for that hull, and four vessels carry an AIS registration that
+      disagrees with their recorded flag. Both are flagged in the data. The full account is
+      in the <a href="README.md">data dictionary</a>.
+    </p>
+  </section>
+
+  <div class="status" id="status" role="status">Loading the fleet&hellip;</div>
+
+  <main id="app" hidden>
+
+    <section class="tiles" aria-label="Fleet at a glance">
+      <div class="tile"><p class="tile-value" id="stat-hulls"></p><p class="tile-label">hulls in the register</p></div>
+      <div class="tile"><p class="tile-value" id="stat-dwt"></p><p class="tile-label">tonnes deadweight, combined</p></div>
+      <div class="tile"><p class="tile-value" id="stat-age"></p><p class="tile-label">average age, years</p></div>
+      <div class="tile"><p class="tile-value" id="stat-yards"></p><p class="tile-label">shipyards built the fleet</p></div>
+    </section>
+
+    <section class="chart-block" aria-labelledby="h-type">
+      <h2 id="h-type">Carrying capacity by class</h2>
+      <p class="sub">
+        Combined deadweight, tonnes. Thirteen VLCCs carry most of it &mdash; one of them
+        lifts roughly seven times what a medium-range product tanker does.
+      </p>
+      <div class="bars" id="chart-type"></div>
+    </section>
+
+    <section class="chart-block" aria-labelledby="h-year">
+      <h2 id="h-year">Deliveries, by year and class</h2>
+      <p class="sub">
+        Hulls delivered. The fleet arrived in phases: crude carriers in 2006&ndash;2007 and
+        again in 2010&ndash;2011, a mixed batch in 2014, then gas carriers and product
+        tankers in 2019&ndash;2021.
+      </p>
+      <div class="legend" id="legend-year"></div>
+      <div class="columns" id="chart-year"></div>
+    </section>
+
+    <section class="chart-block" aria-labelledby="h-lanes">
+      <h2 id="h-lanes">Where the cargo goes <span class="badge">synthetic</span></h2>
+      <p class="sub">
+        Tonnes discharged by region across the generated 2023&ndash;2025 voyage set.
+        This describes the model, not KOTC&rsquo;s actual trade.
+      </p>
+      <div class="bars" id="chart-lanes"></div>
+    </section>
+
+    <section class="table-block" aria-labelledby="h-register">
+      <h2 id="h-register">The register</h2>
+      <p class="sub">
+        Every row, sortable and searchable. This is <code>data/vessels.csv</code> as it
+        stands; the same thirty rows load into <code>schema.sql</code> unchanged.
+      </p>
+
+      <div class="filters">
+        <label class="field">
+          <span>Search</span>
+          <input type="search" id="f-search" placeholder="name, IMO, builder&hellip;" autocomplete="off">
+        </label>
+        <label class="field">
+          <span>Class</span>
+          <select id="f-type"><option value="">All classes</option></select>
+        </label>
+        <label class="field">
+          <span>Cargo</span>
+          <select id="f-cargo"><option value="">All cargoes</option></select>
+        </label>
+        <label class="field checkbox">
+          <input type="checkbox" id="f-flagged">
+          <span>Only rows with a caveat</span>
+        </label>
+        <p class="count" id="f-count" role="status"></p>
+      </div>
+
+      <div class="table-scroll">
+        <table id="register">
+          <caption class="visually-hidden">
+            KOTC fleet register. Click a column heading to sort.
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col"><button type="button" data-sort="name">Vessel</button></th>
+              <th scope="col"><button type="button" data-sort="vessel_type">Class</button></th>
+              <th scope="col" class="num"><button type="button" data-sort="imo">IMO</button></th>
+              <th scope="col" class="num"><button type="button" data-sort="dwt">DWT</button></th>
+              <th scope="col" class="num"><button type="button" data-sort="built_year">Built</button></th>
+              <th scope="col"><button type="button" data-sort="builder">Builder</button></th>
+              <th scope="col"><button type="button" data-sort="flag">Flag</button></th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <p class="note" id="register-note"></p>
+    </section>
+
+    <section class="chart-block" aria-labelledby="h-yards">
+      <h2 id="h-yards">Who built them</h2>
+      <p class="sub">Hulls delivered, by shipyard. Two Korean groups account for most of the fleet.</p>
+      <div class="bars" id="chart-yards"></div>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>
+      Compiled September 2026 from KOTC company material, trade press and AIS-derived
+      vessel registries. Sources are listed in full in the
+      <a href="README.md">data dictionary</a>. The fleet changes &mdash; re-check before
+      relying on it.
+    </p>
+    <p class="foot-links">
+      <a href="../index.html">Portfolio</a>
+      <a href="README.md">README</a>
+      <a href="queries.sql">queries.sql</a>
+      <a href="build.py">build.py</a>
+    </p>
+  </footer>
+
+</div>
+
+<div class="tip" id="tip" role="tooltip" hidden></div>
+
+<script src="app.js"></script>
+</body>
+</html>

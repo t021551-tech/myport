@@ -1,0 +1,25 @@
+port_id,name,name_ar,country,country_iso2,region,latitude,longitude,role,sea_distance_from_ahmadi_nm,notes
+mina-al-ahmadi,Mina Al-Ahmadi,ميناء الأحمدي,Kuwait,KW,Arabian Gulf,29.07,48.15,load,0,Principal Kuwaiti port for crude products and gas. North Pier South Pier New Oil Pier SBMs and a solid sulphur pier. Crude SBMs operated by KOC; product and gas berths by KNPC.
+mina-abdullah,Mina Abdullah,ميناء عبدالله,Kuwait,KW,Arabian Gulf,29.03,48.14,load,15,Refinery port serving the Mina Abdullah refinery.
+mina-al-zour,Mina Al-Zour,ميناء الزور,Kuwait,KW,Arabian Gulf,28.72,48.38,load,35,Serves the Al-Zour refinery.
+shuaiba,Shuaiba,الشعيبة,Kuwait,KW,Arabian Gulf,29.04,48.15,load,18,Industrial port; the Shuaiba refinery closed in 2017.
+shuwaikh,Shuwaikh,الشويخ,Kuwait,KW,Arabian Gulf,29.35,47.93,load,45,Kuwait City general cargo port; bunkering and coastal movements.
+fujairah,Fujairah,الفجيرة,United Arab Emirates,AE,Gulf of Oman,25.17,56.37,bunker,590,Bunkering and storage hub outside the Strait of Hormuz.
+sikka,Sikka,,India,IN,Arabian Sea,22.43,69.84,discharge,1150,Terminal serving the Jamnagar refining complex.
+karachi,Karachi,,Pakistan,PK,Arabian Sea,24.82,66.97,discharge,1050,
+jnpt-mumbai,Jawaharlal Nehru Port,,India,IN,Arabian Sea,18.95,72.95,discharge,1450,
+colombo,Colombo,,Sri Lanka,LK,Indian Ocean,6.95,79.84,discharge,2250,
+mombasa,Mombasa,,Kenya,KE,Indian Ocean,-4.06,39.66,discharge,2700,
+ain-sokhna,Ain Sokhna,العين السخنة,Egypt,EG,Red Sea,29.60,32.35,discharge,3400,Southern terminal of the SUMED pipeline.
+singapore,Singapore,,Singapore,SG,Southeast Asia,1.26,103.83,discharge,3900,
+augusta,Augusta,,Italy,IT,Mediterranean,37.21,15.22,discharge,4100,
+trieste,Trieste,,Italy,IT,Mediterranean,45.65,13.76,discharge,4500,Head of the Transalpine pipeline.
+durban,Durban,,South Africa,ZA,Indian Ocean,-29.87,31.03,discharge,4600,
+ningbo-zhoushan,Ningbo-Zhoushan,,China,CN,East Asia,29.95,121.85,discharge,5900,
+qingdao,Qingdao,,China,CN,East Asia,36.07,120.32,discharge,6200,
+yeosu,Yeosu,,South Korea,KR,East Asia,34.75,127.75,discharge,6200,
+ulsan,Ulsan,,South Korea,KR,East Asia,35.50,129.38,discharge,6300,
+rotterdam,Rotterdam,,Netherlands,NL,North West Europe,51.95,4.14,discharge,6400,Routed via Suez.
+chiba,Chiba,,Japan,JP,East Asia,35.57,140.10,discharge,6700,
+kawasaki,Kawasaki,,Japan,JP,East Asia,35.51,139.72,discharge,6700,
+houston,Houston,,United States,US,US Gulf,29.73,-95.28,discharge,11500,Routed via the Cape of Good Hope.

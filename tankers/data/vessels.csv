@@ -1,0 +1,31 @@
+vessel_id,name,name_ar,imo,mmsi,call_sign,vessel_type,cargo_class,dwt,dwt_basis,capacity_cbm,loa_m,beam_m,built_year,builder,builder_country,flag,operator,status,notes
+al-siddeeq,Al Siddeeq,الصديق,9853486,447305000,,VLCC,crude,323514,reported,,333,60,2021,Bohai Shipbuilding Heavy Industry,China,Kuwait,KOTC,in_service,Delivered May 2021; cargo cited as roughly 2.25 million barrels.
+al-kout,Al Kout,الكوت,9653434,447189000,9KFO,VLCC,crude,317300,reported,,333,60,2014,Daewoo Shipbuilding & Marine Engineering,South Korea,Kuwait,KOTC,in_service,Fourth and final VLCC of the KOTC Phase III newbuilding programme; handed over 30 October 2014.
+al-yarmouk,Al Yarmouk,اليرموك,9653422,447188000,,VLCC,crude,317300,reported,,333,60,2014,Daewoo Shipbuilding & Marine Engineering,South Korea,Kuwait,KOTC,in_service,KOTC Phase III newbuilding programme.
+al-derwazah,Al Derwazah,الدروازة,9653410,447190000,,VLCC,crude,317300,sister_vessel_class,,333,60,2014,Daewoo Shipbuilding & Marine Engineering,South Korea,Kuwait,KOTC,in_service,KOTC Phase III newbuilding programme; deadweight taken from the confirmed sister vessels.
+al-funtas,Al Funtas,الفنطاس,9653408,447184000,,VLCC,crude,317300,sister_vessel_class,,333,60,2014,Daewoo Shipbuilding & Marine Engineering,South Korea,Kuwait,KOTC,in_service,KOTC Phase III newbuilding programme; deadweight taken from the confirmed sister vessels.
+al-riqqa,Al Riqqa,الرقة,9534808,447143000,,VLCC,crude,319761,sister_vessel_class,,333,60,2011,Daewoo Shipbuilding & Marine Engineering,South Korea,Kuwait,KOTC,in_service,Deadweight taken from sister vessel Dar Salwa.
+al-salmi,Al Salmi,السالمي,9534793,447097000,,VLCC,crude,319761,sister_vessel_class,,333,60,2011,Daewoo Shipbuilding & Marine Engineering,South Korea,Kuwait,KOTC,in_service,Deadweight taken from sister vessel Dar Salwa.
+umm-al-aish,Umm Al Aish,أم العيش,9534781,447025000,9KEL,VLCC,crude,319761,sister_vessel_class,,333,60,2011,Daewoo Shipbuilding & Marine Engineering,South Korea,Kuwait,KOTC,in_service,Deadweight taken from sister vessel Dar Salwa.
+dar-salwa,Dar Salwa,دار سلوى,9534779,447131000,,VLCC,crude,319761,reported,,333,60,2010,Daewoo Shipbuilding & Marine Engineering,South Korea,Kuwait,KOTC,in_service,Lead vessel of the 2010-2011 DSME VLCC series.
+al-jabriyah-ii,Al Jabriyah II,الجابرية,9329708,447163000,,VLCC,crude,317570,reported,,333,60,2007,,,Kuwait,KOTC,in_service,Registered owner recorded as Kuwait Oil Tanker Co SAK.
+kazimah-iii,Kazimah III,كاظمة,9329693,447152000,,VLCC,crude,317250,reported,,333,60,2006,,,Kuwait,KOTC,in_service,
+al-shegaya,Al Shegaya,الشقايا,9162887,447042000,,VLCC,crude,,,,,,1998,,,Kuwait,KOTC,flag_unverified,AIS records carry both a Kuwaiti MMSI and a St Kitts and Nevis registration; current flag not confirmed.
+al-salheia,Al Salheia,الصالحية,9162875,447041000,,VLCC,crude,,,,,,1998,,,Kuwait,KOTC,flag_unverified,AIS records carry both a Kuwaiti MMSI and a second-registry entry; current flag not confirmed.
+al-dasma,Al Dasma,الدسمة,9653446,447187000,,Aframax,products,109719,reported,,250,42,2014,Daewoo Shipbuilding & Marine Engineering,South Korea,Kuwait,KOTC,in_service,The Aframax of the KOTC Phase III newbuilding programme; epoxy-coated LR2.
+bahra,Bahra,بحرة,9595008,447069000,,Aframax,products,110761,reported,,250,42,2012,,,Kuwait,KOTC,in_service,Epoxy-coated LR2.
+bneider,Bneider,بنيدر,9595010,447089000,,Aframax,products,110587,reported,,250,42,2012,,,Kuwait,KOTC,in_service,Epoxy-coated LR2.
+wafrah,Wafrah,الوفرة,9332535,309845000,,Aframax,products,113849,reported,,249.9,44,2007,Daewoo Shipbuilding & Marine Engineering,South Korea,,KOTC,flag_unverified,Built October 2007 at Geoje. The AIS MMSI is in a Bahamas series; current flag and ownership not confirmed.
+burgan,Burgan,برقان,9656022,447180000,,MR Product Tanker,products,46330,reported,,,,2014,Hyundai Mipo Dockyard,South Korea,Kuwait,KOTC,in_service,
+bubyan,Bubyan,بوبيان,9656034,,,MR Product Tanker,products,46330,sister_vessel_class,,,,2014,Hyundai Mipo Dockyard,South Korea,Kuwait,KOTC,in_service,Deadweight taken from sister vessel Burgan.
+kaifan,Kaifan,كيفان,9656046,447173000,,MR Product Tanker,products,46330,sister_vessel_class,,,,2014,Hyundai Mipo Dockyard,South Korea,Kuwait,KOTC,in_service,Deadweight taken from sister vessel Burgan.
+mutriba,Mutriba,المطربة,9656058,447186000,,MR Product Tanker,products,46330,sister_vessel_class,,,,2014,Hyundai Mipo Dockyard,South Korea,Kuwait,KOTC,in_service,Deadweight taken from sister vessel Burgan.
+al-yamamah,Al Yamamah,اليمامة,9856696,447277000,9KJY,MR Product Tanker,products,48579,reported,,183,,2020,HD Hyundai Mipo Dockyard,South Korea,Kuwait,KOTC,in_service,Handed over 31 March 2020; one of four ordered in April 2018. Service speed 15 knots.
+shegardiah,Shegardiah,الشقردية,9856701,447278000,,MR Product Tanker,products,48578,reported,,183,,2020,HD Hyundai Mipo Dockyard,South Korea,Kuwait,KOTC,in_service,Received 28 April 2020; sister of Al Yamamah.
+gas-al-mubarakiah,Gas Al Mubarakiah,غاز المباركية,9849617,447273000,,VLGC,lpg,54520,reported,82500,229,36,2019,Hyundai Heavy Industries,South Korea,Kuwait,KOTC,in_service,First of three 82500 cbm VLGCs; delivered November 2019.
+gas-al-ahmadiah,Gas Al Ahmadiah,غاز الأحمدية,9849629,,,VLGC,lpg,54520,sister_vessel_class,82500,229,36,2020,Hyundai Heavy Industries,South Korea,Kuwait,KOTC,in_service,Second of three 82500 cbm VLGCs; delivered January 2020.
+gas-umm-al-rowaisat,Gas Umm Al Rowaisat,غاز أم الرويصات,9849631,447274000,9KJV,VLGC,lpg,54520,sister_vessel_class,82500,228,36,2020,HD Hyundai Heavy Industries Gunsan,South Korea,Kuwait,KOTC,in_service,Third of three 82500 cbm VLGCs; delivered March 2020.
+gas-al-kuwait-ii,Gas Al Kuwait II,غاز الكويت,9329710,447161000,9KEF,VLGC,lpg,,,,,,2007,,,Kuwait,KOTC,in_service,
+gas-al-negeh,Gas Al Negeh,غاز النجاة,9329722,447087000,,VLGC,lpg,,,,,,2007,,,Kuwait,KOTC,in_service,Fully refrigerated.
+gas-al-gurain,Gas Al Gurain,غاز القرين,9005065,447002000,,LPG Carrier,lpg,,,,,,1993,,,Kuwait,KOTC,in_service,
+gas-al-mutlaa,Gas Al Mutlaa,غاز المطلاع,9005053,374994000,9KKC,LPG Carrier,lpg,49874,reported,,,,1993,Mitsubishi Heavy Industries Nagasaki,Japan,,KOTC,flag_unverified,Gross tonnage recorded as 44868. The AIS MMSI is in a Panama series; current flag not confirmed.

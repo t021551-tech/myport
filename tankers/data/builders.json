@@ -1,0 +1,37 @@
+[
+  {
+    "builder_id": "bohai-shipbuilding-heavy-industry",
+    "name": "Bohai Shipbuilding Heavy Industry",
+    "country": "China"
+  },
+  {
+    "builder_id": "daewoo-shipbuilding-marine-engineering",
+    "name": "Daewoo Shipbuilding & Marine Engineering",
+    "country": "South Korea"
+  },
+  {
+    "builder_id": "hd-hyundai-heavy-industries-gunsan",
+    "name": "HD Hyundai Heavy Industries Gunsan",
+    "country": "South Korea"
+  },
+  {
+    "builder_id": "hd-hyundai-mipo-dockyard",
+    "name": "HD Hyundai Mipo Dockyard",
+    "country": "South Korea"
+  },
+  {
+    "builder_id": "hyundai-heavy-industries",
+    "name": "Hyundai Heavy Industries",
+    "country": "South Korea"
+  },
+  {
+    "builder_id": "hyundai-mipo-dockyard",
+    "name": "Hyundai Mipo Dockyard",
+    "country": "South Korea"
+  },
+  {
+    "builder_id": "mitsubishi-heavy-industries-nagasaki",
+    "name": "Mitsubishi Heavy Industries Nagasaki",
+    "country": "Japan"
+  }
+]

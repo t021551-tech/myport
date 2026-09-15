@@ -31,6 +31,21 @@ Manchester Metropolitan University.
   keeps state for the tab only unless asked otherwise, never writes the ID number to the device,
   and is marked `noindex`. `vercel.json` adds a content-security policy for the whole site and a
   stricter one for `/rafeeq/`.
+- `tankers/` — **Kuwaiti Oil Tankers**: a fleet register for the Kuwait Oil Tanker Company
+  (ناقلات النفط الكويتية), published as a dataset and as a database. Thirty vessels with IMO
+  and MMSI numbers, deadweight, dimensions, build year and yard; the five Kuwaiti loading
+  terminals and nineteen ports beyond Kuwait; and the crude grades, products and gases the fleet
+  lifts. Ships as CSV and JSON, plus `schema.sql` (five tables, three views, keys, indexes and
+  CHECK constraints, portable across SQLite and PostgreSQL), a generated `seed.sql` and eleven
+  worked queries. `build.py` validates the three hand-curated source CSVs against the schema
+  and regenerates everything else. `tankers/index.html` browses it: stat tiles, three charts and
+  a sortable, searchable register. The vessel, port and cargo rows are **real**, compiled
+  September 2026 and sourced in `tankers/README.md`; the 1,167-row voyage table is
+  **synthetic**, generated from a fixed seed so the register can be queried as a fleet, and
+  every row carries `data_source = 'synthetic'`. Deadweights carried across from a sister ship
+  and hulls whose AIS registration disagrees with their recorded flag are both marked in the
+  data and on the page.
+
 - `notes/` — the Notebook: six running logs (places in Kuwait, a car build list, a gahwa
   log, things I'm learning, read & watched, small wins). A hub page plus one page per log,
   all sharing `notes/styles.css`. Currently a **draft** — every page carries a
@@ -59,6 +74,15 @@ Everything for the portfolio lives in `index.html`:
   purely decorative and marked `aria-hidden`.
 - Content sections are plain HTML under `<main>`; add a program by copying one `<li>`
   in the `.index` list and changing its `.tag` class (`prog`, `lead` or `tech`).
+
+The tankers dataset is edited at the source, not at the output: change
+`tankers/data/vessels.csv`, `ports.csv` or `cargo_types.csv` and run
+`python3 tankers/build.py`, which re-validates and rewrites the JSON, the derived tables,
+`seed.sql` and the bundle the page loads. The page itself is `tankers/index.html` plus
+`styles.css` and `app.js`; it reads `data/fleet.json` over fetch, so serve the folder rather
+than opening the file directly. Its five series colours are the dark-mode steps of a
+validated categorical palette, assigned to vessel classes in a fixed order so a class keeps
+its colour when the table is filtered.
 
 For the Notebook, colours and components live in `notes/styles.css`. Every log page has the
 same shape — page head, entries, then an open-ended list — so a new entry is a copy of one

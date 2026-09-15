@@ -1,0 +1,12 @@
+cargo_code,name,category,api_gravity,sulphur_pct,typical_carrier,notes
+KEC,Kuwait Export Crude,crude,30.5,2.6,VLCC,The main Kuwaiti export grade. Medium sour.
+KSLC,Kuwait Super Light Crude,crude,48.0,0.1,Aframax,Condensate-range light sweet grade.
+KHAFJI,Khafji Blend,crude,28.5,2.85,VLCC,Produced in the Partitioned Neutral Zone shared with Saudi Arabia.
+EOCENE,Eocene Blend,crude,18.6,4.55,VLCC,Heavy high-sulphur grade from the Partitioned Neutral Zone.
+GASOIL,Gasoil,product,,,MR Product Tanker,Middle distillate; low-sulphur grades for road and marine use.
+JETA1,Jet A-1,product,,,MR Product Tanker,Aviation turbine fuel.
+NAPHTHA,Naphtha,product,,,Aframax,Petrochemical and gasoline blending feedstock.
+GASOLINE,Gasoline,product,,,MR Product Tanker,
+FUELOIL,Fuel Oil,product,,,Aframax,Residual fuel including low-sulphur marine grades.
+PROPANE,Propane,lpg,,,VLGC,Carried fully refrigerated.
+BUTANE,Butane,lpg,,,VLGC,Carried fully refrigerated.

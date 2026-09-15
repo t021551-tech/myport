@@ -1,0 +1,101 @@
+[
+  {
+    "cargo_code": "KEC",
+    "name": "Kuwait Export Crude",
+    "category": "crude",
+    "api_gravity": 30.5,
+    "sulphur_pct": 2.6,
+    "typical_carrier": "VLCC",
+    "notes": "The main Kuwaiti export grade. Medium sour."
+  },
+  {
+    "cargo_code": "KSLC",
+    "name": "Kuwait Super Light Crude",
+    "category": "crude",
+    "api_gravity": 48.0,
+    "sulphur_pct": 0.1,
+    "typical_carrier": "Aframax",
+    "notes": "Condensate-range light sweet grade."
+  },
+  {
+    "cargo_code": "KHAFJI",
+    "name": "Khafji Blend",
+    "category": "crude",
+    "api_gravity": 28.5,
+    "sulphur_pct": 2.85,
+    "typical_carrier": "VLCC",
+    "notes": "Produced in the Partitioned Neutral Zone shared with Saudi Arabia."
+  },
+  {
+    "cargo_code": "EOCENE",
+    "name": "Eocene Blend",
+    "category": "crude",
+    "api_gravity": 18.6,
+    "sulphur_pct": 4.55,
+    "typical_carrier": "VLCC",
+    "notes": "Heavy high-sulphur grade from the Partitioned Neutral Zone."
+  },
+  {
+    "cargo_code": "GASOIL",
+    "name": "Gasoil",
+    "category": "product",
+    "api_gravity": null,
+    "sulphur_pct": null,
+    "typical_carrier": "MR Product Tanker",
+    "notes": "Middle distillate; low-sulphur grades for road and marine use."
+  },
+  {
+    "cargo_code": "JETA1",
+    "name": "Jet A-1",
+    "category": "product",
+    "api_gravity": null,
+    "sulphur_pct": null,
+    "typical_carrier": "MR Product Tanker",
+    "notes": "Aviation turbine fuel."
+  },
+  {
+    "cargo_code": "NAPHTHA",
+    "name": "Naphtha",
+    "category": "product",
+    "api_gravity": null,
+    "sulphur_pct": null,
+    "typical_carrier": "Aframax",
+    "notes": "Petrochemical and gasoline blending feedstock."
+  },
+  {
+    "cargo_code": "GASOLINE",
+    "name": "Gasoline",
+    "category": "product",
+    "api_gravity": null,
+    "sulphur_pct": null,
+    "typical_carrier": "MR Product Tanker",
+    "notes": null
+  },
+  {
+    "cargo_code": "FUELOIL",
+    "name": "Fuel Oil",
+    "category": "product",
+    "api_gravity": null,
+    "sulphur_pct": null,
+    "typical_carrier": "Aframax",
+    "notes": "Residual fuel including low-sulphur marine grades."
+  },
+  {
+    "cargo_code": "PROPANE",
+    "name": "Propane",
+    "category": "lpg",
+    "api_gravity": null,
+    "sulphur_pct": null,
+    "typical_carrier": "VLGC",
+    "notes": "Carried fully refrigerated."
+  },
+  {
+    "cargo_code": "BUTANE",
+    "name": "Butane",
+    "category": "lpg",
+    "api_gravity": null,
+    "sulphur_pct": null,
+    "typical_carrier": "VLGC",
+    "notes": "Carried fully refrigerated."
+  }
+]
