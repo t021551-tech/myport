@@ -367,21 +367,30 @@
     el('app').hidden = false;
   }
 
-  fetch('data/fleet.json')
-    .then(function (response) {
-      if (!response.ok) throw new Error('HTTP ' + response.status);
-      return response.json();
-    })
-    .then(draw)
-    .catch(function (error) {
-      var status = el('status');
-      status.className = 'status error';
-      status.replaceChildren(
-        make('p', null, 'Could not load data/fleet.json — ' + error.message + '.'),
-        make('p', null,
-          'This page reads the dataset over fetch, so it needs to be served rather ' +
-          'than opened from the filesystem. From the repository root: ' +
-          'python3 -m http.server 8000, then open http://localhost:8000/tankers/.')
-      );
-    });
+  function fail(error) {
+    var status = el('status');
+    status.className = 'status error';
+    status.replaceChildren(
+      make('p', null, 'Could not load the dataset — ' + error.message + '.'),
+      make('p', null,
+        'This page reads data/fleet.json over fetch, so it needs to be served rather ' +
+        'than opened from the filesystem. From the repository root: ' +
+        'python3 -m http.server 8000, then open http://localhost:8000/tankers/.'));
+  }
+
+  // Served from the repository, the data sits beside the page and is fetched.
+  // In a single self-contained copy it rides along in a JSON block instead, so
+  // the page draws with no requests at all.
+  var embedded = el('fleet-data');
+  if (embedded) {
+    try { draw(JSON.parse(embedded.textContent)); } catch (error) { fail(error); }
+  } else {
+    fetch('data/fleet.json')
+      .then(function (response) {
+        if (!response.ok) throw new Error('HTTP ' + response.status);
+        return response.json();
+      })
+      .then(draw)
+      .catch(fail);
+  }
 })();
