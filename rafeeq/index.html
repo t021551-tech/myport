@@ -410,6 +410,24 @@ td .num{font-size:var(--f-1)}
 .feed .when{font-family:var(--mono);font-size:var(--f-2);color:var(--ink-dim)}
 .feed .kind{font-size:var(--f-2);letter-spacing:.06em;text-transform:uppercase;font-weight:600;color:var(--pine-ink)}
 .feed:empty::after{content:"No messages yet.";color:var(--ink-dim);font-size:var(--f-1)}
+.split{display:grid;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.split>div{background:var(--surface);padding:.9rem 1rem;display:grid;gap:.45rem;align-content:start}
+.split h4{font-family:var(--display);font-size:var(--f1);font-weight:600;margin:0}
+.split ul{margin:0;padding:0;list-style:none;display:grid;gap:.3rem}
+.split li{display:grid;grid-template-columns:1.1rem 1fr;gap:.4rem;font-size:var(--f-1);align-items:start}
+.split .mark{font-family:var(--mono);font-weight:600}
+.split .no .mark{color:var(--brick)}
+.split .yes .mark{color:var(--steady)}
+@media(min-width:720px){.split{grid-template-columns:1fr 1fr}}
+.cluster{
+  display:grid;gap:.3rem;background:var(--surface);border:1px solid var(--line);
+  border-inline-start:4px solid var(--ochre);border-radius:0 8px 8px 0;padding:.6rem .8rem;
+}
+.cluster b{font-size:var(--f-1)}
+.bars{display:grid;gap:.3rem}
+.bar-row{display:grid;grid-template-columns:9rem 1fr auto;gap:.5rem;align-items:center;font-size:var(--f-1)}
+.bar-row i{display:block;height:.6rem;border-radius:99px;background:var(--pine);min-width:2px}
+.bar-row .n{font-family:var(--mono);font-size:var(--f-2);color:var(--ink-dim)}
 .where{
   display:grid;gap:.35rem;justify-items:start;
   background:var(--surface);border:1px solid var(--line-strong);
@@ -464,6 +482,7 @@ footer{border-top:1px solid var(--line);padding-block:1.5rem;color:var(--ink-dim
     <button class="tab" type="button" data-go="abroad">Abroad</button>
     <button class="tab" type="button" data-go="clinicians">Doctors</button>
     <button class="tab" type="button" data-go="console">Doctor&rsquo;s view</button>
+    <button class="tab" type="button" data-go="moi">MOI link</button>
   </div>
 </nav>
 
@@ -1174,6 +1193,129 @@ footer{border-top:1px solid var(--line);padding-block:1.5rem;color:var(--ink-dim
   </div>
 </section>
 
+<!-- ══ MOI LINK ══════════════════════════════════════════ -->
+<section class="view" id="view-moi" hidden>
+  <div class="band" style="border-top:0">
+    <div class="stack stack-16">
+      <span class="eyebrow">Ministry of Interior &middot; Drug Control</span>
+      <h2 style="font-size:var(--f3)">Connected to the MOI on the supply side, and only on the
+        supply side.</h2>
+      <p class="lede">Treating one person does not reduce the amount of Captagon in Kuwait. The
+        supply does. Rafeeq passes what it learns about <em>sellers</em> to the Ministry of Interior
+        and passes nothing at all about <em>patients</em> &mdash; and that separation is the design,
+        not a promise. A patient who never opens this screen is treated exactly the same.</p>
+      <div class="note warn">
+        <span class="demo-flag">Design concept</span><br>
+        No such link exists. This screen shows what it would look like and, more importantly, where
+        the wall between the two sides would have to sit. Building it for real needs the Drug Control
+        General Department on the other end and a lawyer on both sides.
+      </div>
+    </div>
+  </div>
+
+  <div class="band">
+    <div class="stack stack-16">
+      <span class="eyebrow">The wall</span>
+      <h3 style="font-size:var(--f2)">What crosses, and what never does.</h3>
+      <div class="split">
+        <div>
+          <h4>Never leaves the patient&rsquo;s side</h4>
+          <ul>
+            <li class="no"><span class="mark">✕</span><span>Their name, alias or ID number</span></li>
+            <li class="no"><span class="mark">✕</span><span>Which substance they take, or that they take one at all</span></li>
+            <li class="no"><span class="mark">✕</span><span>Their plan, their doctor, their band, their alerts</span></li>
+            <li class="no"><span class="mark">✕</span><span>That the report and the patient are the same person &mdash; a report carries no account link, so there is nothing to join them on later</span></li>
+            <li class="no"><span class="mark">✕</span><span>Anything at all, if they never fill the form in</span></li>
+          </ul>
+        </div>
+        <div>
+          <h4>What a report carries</h4>
+          <ul>
+            <li class="yes"><span class="mark">✓</span><span>Governorate and area</span></li>
+            <li class="yes"><span class="mark">✓</span><span>How it was sold: delivery, meeting, a shop front, a messaging app</span></li>
+            <li class="yes"><span class="mark">✓</span><span>What the product looked like &mdash; packaging, stamp, colour, pill markings</span></li>
+            <li class="yes"><span class="mark">✓</span><span>Price, and the date</span></li>
+            <li class="yes"><span class="mark">✓</span><span>The handle or number the seller used, if the patient has it</span></li>
+          </ul>
+        </div>
+      </div>
+      <p class="small"><b>Why it is built this way, and not the obvious way.</b> A treatment service
+        that hands patient records to the police is a treatment service nobody uses, and the people
+        it loses are exactly the people with something to hide &mdash; which is all of them. Kuwait&rsquo;s
+        own 2025 drug law makes the same bet: Article 61 files no case against someone who comes
+        forward for treatment first. So the patient side stays sealed, and what crosses the wall is
+        supply-side description that no single patient can be identified from.</p>
+      <p class="small">Sellers are not caught by one person&rsquo;s testimony anyway. They are caught by
+        the same area, the same method and the same packaging arriving from twenty people who have
+        never met. That is a pattern, and a pattern needs no names.</p>
+    </div>
+  </div>
+
+  <div class="band">
+    <div class="stack stack-16">
+      <span class="eyebrow">Patient side &middot; entirely optional</span>
+      <h3 style="font-size:var(--f2)">Where did it come from?</h3>
+      <p class="small">Nothing here is required, nothing here affects the plan, and skipping it
+        changes no part of the treatment. There is no field for who you are, because there is no
+        version of this where that helps you.</p>
+      <form class="stack stack-12" id="tipForm">
+        <fieldset class="stack stack-8">
+          <legend>Governorate</legend>
+          <div class="opts" id="tipArea"></div>
+        </fieldset>
+        <fieldset class="stack stack-8">
+          <legend>How was it sold?</legend>
+          <div class="opts" id="tipHow"></div>
+        </fieldset>
+        <fieldset class="stack stack-8">
+          <legend>What did it look like?</legend>
+          <input class="field" id="tipLook" maxlength="80" style="max-width:34ch"
+            placeholder="packaging, stamp, colour" autocomplete="off">
+        </fieldset>
+        <fieldset class="stack stack-8">
+          <legend>Seller&rsquo;s handle or number, if you have it</legend>
+          <input class="field" id="tipHandle" maxlength="40" style="max-width:28ch"
+            placeholder="optional" autocomplete="off">
+        </fieldset>
+        <div class="row">
+          <button class="btn" type="submit">Send to Drug Control</button>
+          <span class="small" id="tipMsg">Sent without your name, your ID or anything from your record.</span>
+        </div>
+      </form>
+      <div id="tipOut"></div>
+    </div>
+  </div>
+
+  <div class="band">
+    <div class="stack stack-16">
+      <span class="eyebrow">Ministry side &middot; what Drug Control would see</span>
+      <h3 style="font-size:var(--f2)">Patterns, not people.</h3>
+      <div class="tiles" id="moiTiles"></div>
+      <div class="stack stack-8">
+        <span class="eyebrow">Reports by governorate</span>
+        <div class="bars" id="moiBars"></div>
+      </div>
+      <div class="stack stack-8">
+        <span class="eyebrow">Clusters worth a knock on a door</span>
+        <div class="stack stack-8" id="moiClusters"></div>
+      </div>
+      <div class="tablewrap">
+        <table>
+          <caption class="small" style="text-align:start;padding:.6rem .8rem">
+            Incoming reports &mdash; <span class="demo-flag">example rows</span>, plus anything you
+            send above. Note what is missing from every column: there is no person in this table.
+          </caption>
+          <thead><tr><th>Ref</th><th>Area</th><th>Method</th><th>Description</th><th>Handle</th><th>When</th></tr></thead>
+          <tbody id="moiRows"></tbody>
+        </table>
+      </div>
+      <p class="small"><span class="tbd">The Drug Control General Department&rsquo;s public reporting
+        line is deliberately not printed here: confirm the current number with the Ministry before
+        this screen shows one, rather than shipping a number that might be wrong.</span></p>
+    </div>
+  </div>
+</section>
+
 <footer class="shell stack stack-8">
   <p><b>Rafeeq</b> <span class="ar" dir="rtl" lang="ar">رفيق</span> &mdash; a working prototype.
     Not a medical device, not a diagnosis, and not connected to any real clinician. Nothing typed
@@ -1654,7 +1796,7 @@ function toggleRemember(){
 }
 
 /* ═══ 4. routing ══════════════════════════════════════════════════════ */
-const VIEWS=["door","choose","plan","band","after","abroad","clinicians","console"];
+const VIEWS=["door","choose","plan","band","after","abroad","clinicians","console","moi"];
 function go(v){
   VIEWS.forEach(n=>{ $("#view-"+n).hidden = n!==v; });
   $$(".tab").forEach(t=>t.setAttribute("aria-current", String(t.dataset.go===v)));
@@ -1662,6 +1804,7 @@ function go(v){
   if(v==="after"){ renderStepdown(); renderPhq(); renderOrgs(); }
   if(v==="clinicians"){ renderDocs(); renderOncall(); }
   if(v==="console") renderConsole();
+  if(v==="moi"){ renderTips(); renderMoi(); }
   window.scrollTo({top:0,behavior:"instant"});
 }
 document.addEventListener("click",e=>{
@@ -2627,6 +2770,125 @@ function renderMsgs(){
   });
 }
 
+/* ═══ 10d. the MOI supply link ════════════════════════════════════════
+   A design concept, and the concept is the wall: a report is described
+   supply, never a described patient. Nothing here reads S.id, S.subs,
+   S.log or anything else from the patient record — not because it is
+   filtered out later, but because it is never put in. A seller is caught
+   by twenty descriptions agreeing, which needs no names at all. */
+const AREAS=["Capital","Hawalli","Farwaniya","Mubarak Al-Kabeer","Ahmadi","Jahra"];
+const HOWS=["Delivered to me","Met in person","Shop front","Messaging app"];
+const TIPS_SEED=[
+ {ref:"RF-26-0412", area:"Hawalli", how:"Messaging app", look:"blue tablet, crown stamp", handle:"@_____91", t:Date.now()-864e5*2},
+ {ref:"RF-26-0418", area:"Hawalli", how:"Messaging app", look:"blue tablet, crown stamp", handle:"@_____91", t:Date.now()-864e5*2},
+ {ref:"RF-26-0423", area:"Hawalli", how:"Delivered to me", look:"blue tablet, crown stamp", handle:"", t:Date.now()-864e5},
+ {ref:"RF-26-0431", area:"Hawalli", how:"Messaging app", look:"blue tablets, crown", handle:"@_____91", t:Date.now()-864e5},
+ {ref:"RF-26-0402", area:"Farwaniya", how:"Delivered to me", look:"white powder, folded paper", handle:"", t:Date.now()-864e5*5},
+ {ref:"RF-26-0407", area:"Farwaniya", how:"Delivered to me", look:"white powder, folded paper", handle:"", t:Date.now()-864e5*4},
+ {ref:"RF-26-0415", area:"Capital", how:"Shop front", look:"pregabalin boxes, no pharmacy label", handle:"", t:Date.now()-864e5*3},
+ {ref:"RF-26-0428", area:"Ahmadi", how:"Met in person", look:"brown resin block", handle:"", t:Date.now()-864e5}
+];
+S.tips = S.tips || [];
+const allTips = () => S.tips.concat(TIPS_SEED);
+
+function renderTips(){
+  const area=$("#tipArea"), how=$("#tipHow");
+  if(!area) return;
+  if(!area.childNodes.length){
+    AREAS.forEach((a,i)=>{
+      const lab=el("label");
+      lab.innerHTML=`<input type="radio" name="tip-area" value="${esc(a)}"${i===0?" checked":""}><span>${esc(a)}</span>`;
+      area.appendChild(lab);
+    });
+    HOWS.forEach((h,i)=>{
+      const lab=el("label");
+      lab.innerHTML=`<input type="radio" name="tip-how" value="${esc(h)}"${i===0?" checked":""}><span>${esc(h)}</span>`;
+      how.appendChild(lab);
+    });
+    $("#tipForm").addEventListener("submit",e=>{
+      e.preventDefault();
+      const tip={
+        ref:"RF-26-"+String(500+S.tips.length*7+Math.floor(Math.random()*6)).padStart(4,"0"),
+        area:(document.querySelector('input[name="tip-area"]:checked')||{}).value||AREAS[0],
+        how:(document.querySelector('input[name="tip-how"]:checked')||{}).value||HOWS[0],
+        look:$("#tipLook").value.trim().slice(0,80),
+        handle:$("#tipHandle").value.trim().slice(0,40),
+        t:Date.now(), mine:true
+      };
+      S.tips.unshift(tip); save();
+      $("#tipLook").value=""; $("#tipHandle").value="";
+      $("#tipMsg").textContent="Sent. Reference "+tip.ref+".";
+      $("#tipOut").innerHTML=`<div class="where" style="border-inline-start-color:var(--steady)">
+        <span class="eyebrow">Sent to Drug Control</span>
+        <b>${esc(tip.ref)}</b>
+        <address>${esc(tip.area)} &middot; ${esc(tip.how)}<br>
+          ${esc(tip.look||"no description given")}<br>
+          ${esc(tip.handle||"no handle given")}</address>
+        <span class="small">That is the whole report. Your alias, your ID number, your substance,
+          your plan and your band data were not attached to it, and there is no field in the record
+          that would let anyone join this back to you later. Keep the reference if you want to follow
+          it up; nothing is holding it against your name, because it does not have one.</span>
+      </div>`;
+      renderMoi();
+    });
+  }
+  renderMoi();
+}
+
+function renderMoi(){
+  const rows=$("#moiRows"); if(!rows) return;
+  const tips=allTips();
+
+  /* clusters: same area + same method + a description that agrees */
+  const key=t=>t.area+"|"+t.how;
+  const groups={};
+  tips.forEach(t=>{ (groups[key(t)]=groups[key(t)]||[]).push(t); });
+  const clusters=Object.keys(groups).map(k=>groups[k]).filter(g=>g.length>=2)
+    .sort((a,b)=>b.length-a.length);
+
+  const t=$("#moiTiles"); t.textContent="";
+  [["Reports held",tips.length,""],
+   ["Clusters forming",clusters.length,clusters.length?"flag":""],
+   ["Patients identified",0,""],
+   ["Names in the file",0,""]].forEach(([k,v,c])=>{
+    t.appendChild(el("div","tile "+c,
+      `<span class="k">${k}</span><span class="v">${v}</span><span class="u">${k==="Names in the file"?"by design":"right now"}</span>`));
+  });
+
+  const bars=$("#moiBars"); bars.textContent="";
+  const max=Math.max.apply(null, AREAS.map(a=>tips.filter(x=>x.area===a).length).concat([1]));
+  AREAS.forEach(a=>{
+    const n=tips.filter(x=>x.area===a).length;
+    const row=el("div","bar-row");
+    row.innerHTML=`<span>${esc(a)}</span><span><i style="width:${Math.round(n/max*100)}%"></i></span><span class="n">${n}</span>`;
+    bars.appendChild(row);
+  });
+
+  const cl=$("#moiClusters"); cl.textContent="";
+  if(!clusters.length) cl.appendChild(el("p","small","Nothing has repeated yet. One report is an anecdote."));
+  clusters.slice(0,3).forEach(g=>{
+    const look=g.map(x=>x.look).filter(Boolean)[0]||"no description";
+    const handles=g.map(x=>x.handle).filter(Boolean);
+    const d=el("div","cluster");
+    d.innerHTML=`<b>${esc(g[0].area)} &middot; ${esc(g[0].how.toLowerCase())} &middot; ${g.length} reports</b>
+      <span class="small">All describing: ${esc(look)}.${handles.length
+        ? " Same handle named by "+handles.length+" of them: <span class=\"num\">"+esc(handles[0])+"</span>."
+        : " No handle given by any of them."}</span>
+      <span class="small">This is what an arrest is built from: ${g.length} people who have never met
+        describing the same seller the same way. Not one of them is named in this file.</span>`;
+    cl.appendChild(d);
+  });
+
+  rows.textContent="";
+  tips.slice().sort((a,b)=>b.t-a.t).forEach(x=>{
+    const tr=el("tr");
+    tr.innerHTML=`<td class="num">${esc(x.ref)}</td><td>${esc(x.area)}</td><td>${esc(x.how)}</td>
+      <td class="small">${esc(x.look||"—")}</td><td class="num">${esc(x.handle||"—")}</td>
+      <td class="small">${ago(x.t)}${x.mine?" &middot; yours":""}</td>`;
+    rows.appendChild(tr);
+  });
+}
+
 /* ═══ 11. wipe & leave ════════════════════════════════════════════════ */
 /* No confirmation dialog, no farewell screen, no trace on screen. A panic button
    that announces the panic is worse than none: whoever just walked into the room
@@ -2657,6 +2919,7 @@ renderTiles(); renderRules(); renderSigTable(); renderLog(); renderBadge(); sync
 renderStepdown(); renderPhq(); renderOrgs(); renderOncall(); milestoneCheck(); renderMsgs();
 paintPrivacy();
 $("#privacyPill").onclick=toggleRemember;
+renderTips();
 $("#bandDevice").textContent="demo band · clock 60× real time";
 $("#pairMsg").textContent="Not paired yet — the demo band is streaming so the page has something to show.";
 $("#heroWho").textContent=(S.demo?"example patient":"patient")+" “"+S.alias+"”";

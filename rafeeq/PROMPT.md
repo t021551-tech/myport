@@ -277,6 +277,37 @@ doctor same day for the rest — with a `.tbd` marker, because response times ne
 a staffed rota and a contract behind them before they are promises rather than
 intentions.
 
+## The MOI link (design concept)
+
+A ninth view, built for a presentation and labelled as a concept, showing what a
+link to the Ministry of Interior's Drug Control would look like. It exists
+because "treat one patient" and "reduce the supply" are different problems, and
+the second one is where enforcement belongs.
+
+**The wall is the whole design, and it is enforced in the code, not promised in
+the copy.** A report object has exactly seven fields: reference, governorate,
+method, description, handle, timestamp, and whether it was yours. `renderTips()`
+and `renderMoi()` never read `S.id`, `S.subs`, `S.log`, `S.doctor` or `S.phq` —
+the patient record is not filtered out of a report, it is never put in, so there
+is no key to join the two on afterwards. A verification in the browser confirms
+the stored report contains no identifier.
+
+Reporting is optional, changes nothing about the plan, and a patient who never
+opens the view is treated identically. The page says so in those words.
+
+**Never rebuild this the obvious way.** A treatment service that hands patient
+records to police is a service nobody uses, and the people it loses are the
+people with something to hide, which is all of them. Kuwait's own 2025 drug law
+makes the same bet in Article 61: no case is filed against someone who presents
+for treatment first. The ministry-side screen makes the point visually — the
+tiles read "Patients identified: 0" and "Names in the file: 0 — by design" —
+and the clusters show what actually catches a seller: the same area, method and
+packaging arriving from several people who have never met. A pattern needs no
+names.
+
+The Drug Control reporting line is deliberately not printed, with a `.tbd`
+marker, rather than shipping a number that might be wrong.
+
 ## Content rules
 
 - **Clinical safety comes before encouragement.** For alcohol, benzodiazepines,
