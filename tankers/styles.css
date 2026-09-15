@@ -3,8 +3,9 @@
 
    Palette note. The five categorical series colours are the dark-mode steps of
    the reference data-viz palette, validated as a set against this page's
-   surface (#0E0E14): lightness band, chroma floor, CVD separation (worst
+   navy surface (#0A1228): lightness band, chroma floor, CVD separation (worst
    adjacent ΔE 8.4), normal-vision separation (19.3) and 3:1 contrast all pass.
+   Re-run that check if the ground changes — the surface is an input to it.
    They are assigned to vessel classes in a fixed order and never cycled, so a
    class keeps its colour when the data is filtered.
    --------------------------------------------------------------------------- */
