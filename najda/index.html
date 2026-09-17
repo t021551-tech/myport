@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Najda — automatic crash alert</title>
+<title>Najda Crash Alert</title>
 <meta name="description" content="A design demonstration of a crash-detection service that links a car and a phone, decides whether an impact was a crash, and calls the police operations room and one chosen person. Nothing on this page reaches anybody.">
 <meta name="robots" content="noindex, nofollow">
 <meta name="referrer" content="no-referrer">
@@ -107,7 +107,8 @@ button{font:inherit;color:inherit}
   font-weight:700;border:1px solid var(--caution);border-radius:4px;padding:.1rem .45rem;flex:none;
 }
 .demo-bar p{font-size:var(--f-1);line-height:1.5;max-width:82ch}
-.rail{position:sticky;top:0;z-index:20;background:var(--surface);border-bottom:1px solid var(--line)}
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20}
+.rail{background:var(--surface);border-bottom:1px solid var(--line)}
 .rail-in{display:flex;align-items:center;gap:.6rem;padding-block:.6rem;flex-wrap:wrap}
 .brand{display:flex;align-items:baseline;gap:.5rem;margin-inline-end:auto}
 .brand b{font-family:var(--display);font-size:var(--f1);font-weight:700;letter-spacing:.005em}
@@ -128,7 +129,7 @@ button.pill{cursor:pointer}
 @media(prefers-reduced-motion:reduce){.dot.live{animation:none}}
 
 /* ── tabs ─────────────────────────────────────────────── */
-.tabs{display:flex;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid var(--line);background:var(--surface);position:sticky;top:0;z-index:19}
+.tabs{display:flex;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid var(--line);background:var(--surface)}
 .tabs::-webkit-scrollbar{display:none}
 .tabs-in{display:flex;gap:.15rem;min-width:max-content}
 .tab{
@@ -339,6 +340,7 @@ footer.foot .shell{display:flex;gap:.6rem 1.25rem;flex-wrap:wrap;align-items:bas
   </div>
 </div>
 
+<div class="topbar">
 <header class="rail">
   <div class="shell rail-in">
     <div class="brand">
@@ -365,6 +367,7 @@ footer.foot .shell{display:flex;gap:.6rem 1.25rem;flex-wrap:wrap;align-items:bas
     <button class="tab" type="button" data-go="limits">What it can&rsquo;t do</button>
   </div>
 </nav>
+</div>
 
 <main class="shell">
 
