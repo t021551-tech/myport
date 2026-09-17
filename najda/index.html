@@ -1,0 +1,1494 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Najda — automatic crash alert</title>
+<meta name="description" content="A design demonstration of a crash-detection service that links a car and a phone, decides whether an impact was a crash, and calls the police operations room and one chosen person. Nothing on this page reaches anybody.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="color-scheme" content="light dark">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=IBM+Plex+Sans+Arabic:wght@400;600&display=swap">
+
+<style>
+/* ── tokens ──────────────────────────────────────────────
+   Light is the primary world: this page is read in daylight,
+   by someone deciding whether to trust it, far more often than
+   it is read in a crashed car. Neutrals are biased blue, toward
+   the signal accent. Severity colour (steady / caution / crit)
+   is kept separate from the accent, so colour means one thing. */
+:root{
+  --ground:#EDF0F4;
+  --ground-2:#E3E8EE;
+  --surface:#FAFCFD;
+  --surface-2:#F1F5F8;
+  --ink:#101720;
+  --ink-2:#37424F;
+  --ink-dim:#5F6C7B;
+  --line:#D3DBE3;
+  --line-strong:#B2BECB;
+  --signal:#1B5FB0;        /* the single accent: links, dispatch, the brand */
+  --signal-soft:#DEEAF8;
+  --signal-ink:#124479;
+  --steady:#1B6B4F;        /* clear / no action */
+  --steady-soft:#D9EDE4;
+  --caution:#8A5206;       /* possible crash, waiting */
+  --caution-soft:#FAEBD4;
+  --crit:#A32218;          /* crash, dispatched */
+  --crit-soft:#F8DEDA;
+  --on-accent:#F7FBFF;     /* text sitting on a signal fill */
+  --link:#124479;
+
+  --display:"Archivo","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --body:"Inter","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --arabic:"IBM Plex Sans Arabic","Noto Naskh Arabic","Segoe UI",Tahoma,sans-serif;
+
+  --f-2:.72rem; --f-1:.82rem; --f0:.98rem; --f1:1.12rem;
+  --f2:1.4rem;  --f3:1.85rem; --f4:clamp(2.1rem,1.4rem + 2.6vw,3.15rem);
+  --pad:clamp(1rem,3.5vw,2.5rem);
+  --r:10px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#0B1016; --ground-2:#101822; --surface:#141C26; --surface-2:#1A2430;
+    --ink:#E7EDF4; --ink-2:#BCC8D6; --ink-dim:#8A98A8;
+    --line:#24303D; --line-strong:#35434F;
+    --signal:#74B4FF; --signal-soft:#11253C; --signal-ink:#A8D0FF;
+    --steady:#4FC08D; --steady-soft:#10291F;
+    --caution:#E9A742; --caution-soft:#34260D;
+    --crit:#F08074; --crit-soft:#3A1714;
+    --on-accent:#08111A; --link:#A8D0FF;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0B1016; --ground-2:#101822; --surface:#141C26; --surface-2:#1A2430;
+  --ink:#E7EDF4; --ink-2:#BCC8D6; --ink-dim:#8A98A8;
+  --line:#24303D; --line-strong:#35434F;
+  --signal:#74B4FF; --signal-soft:#11253C; --signal-ink:#A8D0FF;
+  --steady:#4FC08D; --steady-soft:#10291F;
+  --caution:#E9A742; --caution-soft:#34260D;
+  --crit:#F08074; --crit-soft:#3A1714;
+  --on-accent:#08111A; --link:#A8D0FF;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--ground);color:var(--ink);
+  font-family:var(--body);font-size:var(--f0);line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{font-family:var(--display);font-weight:600;line-height:1.16;letter-spacing:-.015em;text-wrap:balance;margin:0}
+p{margin:0}
+a{color:var(--link);text-underline-offset:3px}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2.5px solid var(--signal);outline-offset:2px;border-radius:3px}
+.ar{font-family:var(--arabic);font-size:.95em}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.shell{max-width:1080px;margin:0 auto;padding-inline:var(--pad)}
+.eyebrow{font-size:var(--f-2);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-dim);font-weight:600}
+.lede{font-size:var(--f1);color:var(--ink-2);max-width:64ch}
+.small{font-size:var(--f-1);color:var(--ink-dim)}
+.stack{display:flex;flex-direction:column}
+.stack-4{gap:.25rem}.stack-8{gap:.5rem}.stack-12{gap:.75rem}
+.stack-16{gap:1rem}.stack-24{gap:1.5rem}.stack-32{gap:2rem}
+.row{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center}
+.grid-2{display:grid;gap:1rem}
+@media(min-width:800px){.grid-2{grid-template-columns:1fr 1fr}}
+
+/* ── demo bar + rail ─────────────────────────────────── */
+.demo-bar{background:var(--caution-soft);border-bottom:1px solid var(--caution);color:var(--ink);position:relative;z-index:21}
+.demo-bar .shell{display:flex;gap:.5rem 1rem;align-items:baseline;flex-wrap:wrap;padding-block:.6rem}
+.demo-bar .tag{
+  font-size:var(--f-2);letter-spacing:.1em;text-transform:uppercase;color:var(--caution);
+  font-weight:700;border:1px solid var(--caution);border-radius:4px;padding:.1rem .45rem;flex:none;
+}
+.demo-bar p{font-size:var(--f-1);line-height:1.5;max-width:82ch}
+.rail{position:sticky;top:0;z-index:20;background:var(--surface);border-bottom:1px solid var(--line)}
+.rail-in{display:flex;align-items:center;gap:.6rem;padding-block:.6rem;flex-wrap:wrap}
+.brand{display:flex;align-items:baseline;gap:.5rem;margin-inline-end:auto}
+.brand b{font-family:var(--display);font-size:var(--f1);font-weight:700;letter-spacing:.005em}
+.brand .ar{color:var(--ink-dim)}
+.pill{
+  display:inline-flex;align-items:center;gap:.4rem;background:none;
+  font-size:var(--f-2);letter-spacing:.06em;text-transform:uppercase;font-weight:600;
+  padding:.28rem .6rem;border-radius:999px;border:1px solid var(--line-strong);color:var(--ink-2);
+}
+.pill.on{background:var(--signal-soft);border-color:transparent;color:var(--signal-ink)}
+.pill.off{color:var(--ink-dim)}
+.pill.live-crit{background:var(--crit-soft);border-color:transparent;color:var(--crit)}
+button.pill{cursor:pointer}
+.dot{width:.5rem;height:.5rem;border-radius:50%;background:var(--steady);flex:none}
+.dot.warn{background:var(--caution)}.dot.crit{background:var(--crit)}.dot.off{background:var(--line-strong)}
+.dot.live{animation:beat 1.9s ease-in-out infinite}
+@keyframes beat{0%,100%{opacity:1}50%{opacity:.35}}
+@media(prefers-reduced-motion:reduce){.dot.live{animation:none}}
+
+/* ── tabs ─────────────────────────────────────────────── */
+.tabs{display:flex;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid var(--line);background:var(--surface);position:sticky;top:0;z-index:19}
+.tabs::-webkit-scrollbar{display:none}
+.tabs-in{display:flex;gap:.15rem;min-width:max-content}
+.tab{
+  background:none;border:0;border-bottom:2.5px solid transparent;
+  padding:.6rem .8rem;cursor:pointer;font-size:var(--f-1);font-weight:500;
+  color:var(--ink-dim);white-space:nowrap;
+}
+.tab:hover{color:var(--ink)}
+.tab[aria-current="true"]{color:var(--ink);border-bottom-color:var(--signal)}
+.tab .badge{font-family:var(--mono);font-size:var(--f-2);background:var(--crit);color:#fff;border-radius:999px;padding:0 .35rem;margin-inline-start:.35rem}
+.tab .badge[hidden]{display:none!important}
+
+/* ── buttons ──────────────────────────────────────────── */
+.btn{
+  display:inline-flex;align-items:center;gap:.45rem;cursor:pointer;
+  border-radius:var(--r);padding:.6rem 1rem;font-weight:500;font-size:var(--f0);
+  background:var(--signal);color:var(--on-accent);border:1px solid transparent;
+}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:none;color:var(--ink);border-color:var(--line-strong)}
+.btn.ghost:hover{background:var(--surface-2);filter:none}
+.btn.quiet{background:none;color:var(--ink-2);border-color:transparent;padding-inline:.4rem}
+.btn.quiet:hover{color:var(--ink);text-decoration:underline}
+.btn.danger{background:var(--crit);color:#fff}
+.btn.safe{background:var(--steady);color:#fff}
+.btn.sm{padding:.35rem .7rem;font-size:var(--f-1)}
+.btn:disabled{opacity:.45;cursor:not-allowed;filter:none}
+
+/* ── surfaces ─────────────────────────────────────────── */
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:clamp(1rem,2.5vw,1.5rem)}
+.panel.flat{background:var(--surface-2)}
+.band{padding-block:clamp(1.9rem,5vw,3rem);border-top:1px solid var(--line)}
+.view[hidden]{display:none!important}
+.note{border-inline-start:3px solid var(--line-strong);padding-inline-start:.85rem;color:var(--ink-2);font-size:var(--f-1)}
+.note.warn{border-color:var(--caution);background:var(--caution-soft);padding:.7rem .85rem;border-radius:0 var(--r) var(--r) 0}
+.note.crit{border-color:var(--crit);background:var(--crit-soft);padding:.7rem .85rem;border-radius:0 var(--r) var(--r) 0}
+.note.ok{border-color:var(--steady);background:var(--steady-soft);padding:.7rem .85rem;border-radius:0 var(--r) var(--r) 0}
+
+/* ── hero ─────────────────────────────────────────────── */
+.hero{display:grid;gap:clamp(1.25rem,3vw,2rem);padding-block:clamp(1.75rem,4vw,3rem)}
+@media(min-width:1000px){.hero{grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);align-items:center;gap:clamp(1.5rem,4vw,3rem)}}
+.hero h1{font-size:var(--f4);max-width:20ch}
+.hero h1 em{font-style:normal;color:var(--signal-ink)}
+.trace-frame{border:1px solid var(--line);border-radius:var(--r);background:var(--surface);overflow:hidden}
+.trace-head{
+  display:flex;gap:.75rem;align-items:center;flex-wrap:wrap;
+  padding:.55rem .8rem;border-bottom:1px solid var(--line);background:var(--surface-2);
+  font-size:var(--f-2);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-dim);font-weight:600;
+}
+.trace-head .num{letter-spacing:0;text-transform:none;font-size:var(--f-1);color:var(--ink)}
+canvas.trace{display:block;width:100%;height:150px;max-width:100%}
+.trace-foot{display:flex;gap:.6rem 1.1rem;flex-wrap:wrap;padding:.5rem .8rem;border-top:1px solid var(--line);font-size:var(--f-2);color:var(--ink-dim)}
+.trace-foot b{color:var(--ink-2);font-weight:600}
+
+/* ── the four moves ───────────────────────────────────── */
+.moves{display:grid;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.moves>div{background:var(--surface);padding:.95rem 1rem;display:grid;gap:.25rem;align-content:start}
+.moves .n{font-family:var(--mono);font-size:var(--f-2);color:var(--signal);font-weight:500}
+.moves b{font-weight:600}
+.moves p{font-size:var(--f-1);color:var(--ink-2)}
+@media(min-width:760px){.moves{grid-template-columns:repeat(4,1fr)}}
+
+/* ── devices ──────────────────────────────────────────── */
+.devices{display:grid;gap:1rem}
+@media(min-width:800px){.devices{grid-template-columns:1fr 1fr}}
+.dev{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:1rem 1.1rem;display:grid;gap:.6rem;align-content:start}
+.dev.on{border-color:var(--signal);box-shadow:inset 0 0 0 1px var(--signal)}
+.dev-head{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+.dev-head b{font-family:var(--display);font-size:var(--f1);font-weight:600}
+.dev-head .pill{margin-inline-start:auto}
+.sig-list{display:grid;gap:.3rem;margin:0;padding:0;list-style:none;font-size:var(--f-1)}
+.sig-list li{display:flex;gap:.5rem;align-items:baseline;color:var(--ink-2)}
+.sig-list .k{font-family:var(--mono);font-size:var(--f-2);color:var(--ink-dim);min-width:8.5rem;flex:none}
+
+/* ── tiles ────────────────────────────────────────────── */
+.tiles{display:grid;gap:.6rem;grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:.7rem .8rem;display:grid;gap:.15rem}
+.tile .lab{font-size:var(--f-2);letter-spacing:.07em;text-transform:uppercase;color:var(--ink-dim);font-weight:600}
+.tile .val{font-family:var(--mono);font-size:var(--f2);font-variant-numeric:tabular-nums;line-height:1.1}
+.tile .sub{font-size:var(--f-2);color:var(--ink-dim);font-family:var(--mono)}
+.tile.hot{border-color:var(--crit);background:var(--crit-soft)}
+.tile.hot .val{color:var(--crit)}
+.tile.warm{border-color:var(--caution);background:var(--caution-soft)}
+.tile.warm .val{color:var(--caution)}
+.tile.dead{opacity:.5}
+
+/* ── verdict ──────────────────────────────────────────── */
+.verdict{border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--surface)}
+.verdict-head{display:flex;gap:.75rem;align-items:baseline;flex-wrap:wrap;padding:.85rem 1rem;border-bottom:1px solid var(--line);background:var(--surface-2)}
+.verdict-head b{font-family:var(--display);font-size:var(--f2);font-weight:600}
+.verdict.crit .verdict-head{background:var(--crit-soft)}
+.verdict.crit .verdict-head b{color:var(--crit)}
+.verdict.warn .verdict-head{background:var(--caution-soft)}
+.verdict.warn .verdict-head b{color:var(--caution)}
+.verdict.ok .verdict-head{background:var(--steady-soft)}
+.verdict.ok .verdict-head b{color:var(--steady)}
+.conf{margin-inline-start:auto;font-family:var(--mono);font-size:var(--f-1);color:var(--ink-2)}
+.verdict-body{padding:.9rem 1rem;display:grid;gap:.7rem}
+.chans{display:grid;gap:.4rem}
+.chan{display:grid;grid-template-columns:auto 1fr auto;gap:.6rem;align-items:baseline;font-size:var(--f-1)}
+.chan .nm{font-family:var(--mono);font-size:var(--f-2);color:var(--ink-dim)}
+.chan .why{color:var(--ink-2)}
+.chan .vv{font-family:var(--mono);font-variant-numeric:tabular-nums;color:var(--ink)}
+.chan.for .nm{color:var(--crit)}
+.chan.against .nm{color:var(--steady)}
+
+/* ── event buttons ────────────────────────────────────── */
+.events{display:grid;gap:.5rem;grid-template-columns:repeat(auto-fill,minmax(190px,1fr))}
+.ev{text-align:start;cursor:pointer;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:.65rem .75rem;display:grid;gap:.15rem}
+.ev:hover{border-color:var(--signal);background:var(--surface-2)}
+.ev b{font-size:var(--f-1);font-weight:600}
+.ev .hint{font-size:var(--f-2);color:var(--ink-dim);line-height:1.45}
+.ev.real{border-inline-start:3px solid var(--crit)}
+.ev.fake{border-inline-start:3px solid var(--steady)}
+
+/* ── thresholds table ─────────────────────────────────── */
+.tbl{width:100%;border-collapse:collapse;font-size:var(--f-1)}
+.tbl th,.tbl td{text-align:start;padding:.5rem .6rem;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl th{font-size:var(--f-2);letter-spacing:.07em;text-transform:uppercase;color:var(--ink-dim);font-weight:600}
+.tbl td.n{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.tbl tr:last-child td{border-bottom:0}
+.scroll-x{overflow-x:auto}
+
+/* ── countdown ────────────────────────────────────────── */
+.count{display:grid;gap:1rem;align-items:center;justify-items:center;text-align:center;padding:clamp(1.25rem,4vw,2.25rem) 1rem}
+.count .big{font-family:var(--mono);font-size:clamp(3.5rem,12vw,6rem);line-height:1;font-variant-numeric:tabular-nums;font-weight:500}
+.count.crit .big{color:var(--crit)}
+.count.warn .big{color:var(--caution)}
+.ring{--p:0;width:clamp(150px,38vw,196px);aspect-ratio:1;border-radius:50%;display:grid;place-items:center;
+  background:conic-gradient(var(--c,var(--crit)) calc(var(--p)*1%), var(--line) 0);}
+.ring>div{width:calc(100% - 16px);aspect-ratio:1;border-radius:50%;background:var(--surface);display:grid;place-items:center}
+.count .what{font-size:var(--f1);max-width:42ch;color:var(--ink-2)}
+.count .row{justify-content:center}
+
+/* ── packet ───────────────────────────────────────────── */
+.packet{display:grid;gap:1rem}
+@media(min-width:900px){.packet{grid-template-columns:1fr 1fr}}
+.card{border:1px solid var(--line);border-radius:var(--r);background:var(--surface);overflow:hidden}
+.card-head{padding:.6rem .85rem;border-bottom:1px solid var(--line);background:var(--surface-2);display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
+.card-head b{font-size:var(--f-1);font-weight:600}
+.card-head .to{font-family:var(--mono);font-size:var(--f-2);color:var(--ink-dim);margin-inline-start:auto}
+.card-body{padding:.85rem;display:grid;gap:.5rem}
+.kv{display:grid;grid-template-columns:9.5rem 1fr;gap:.25rem .7rem;font-size:var(--f-1)}
+.kv dt{font-family:var(--mono);font-size:var(--f-2);color:var(--ink-dim)}
+.kv dd{margin:0;color:var(--ink)}
+.msg{background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r);padding:.8rem;font-size:var(--f-1);line-height:1.55;white-space:pre-wrap}
+.msg.ar{font-family:var(--arabic);text-align:start}
+.chain{display:grid;gap:.35rem;margin:0;padding:0;list-style:none;font-size:var(--f-1)}
+.chain li{display:flex;gap:.55rem;align-items:baseline;color:var(--ink-2)}
+.chain .st{font-family:var(--mono);font-size:var(--f-2);flex:none;min-width:5.5rem}
+.chain .ok{color:var(--steady)}.chain .no{color:var(--ink-dim)}.chain .try{color:var(--caution)}
+
+/* ── dispatch console ─────────────────────────────────── */
+.console{background:var(--ground-2);border:1px solid var(--line);border-radius:var(--r);padding:.75rem;display:grid;gap:.75rem}
+@media(min-width:880px){.console{grid-template-columns:minmax(0,19rem) minmax(0,1fr);align-items:start}}
+.queue{display:grid;gap:.4rem;max-height:32rem;overflow:auto}
+.inc{text-align:start;cursor:pointer;background:var(--surface);border:1px solid var(--line);border-inline-start:3px solid var(--line-strong);border-radius:6px;padding:.55rem .7rem;display:grid;gap:.15rem}
+.inc:hover{background:var(--surface-2)}
+.inc[aria-pressed="true"]{border-color:var(--signal);border-inline-start-color:var(--signal);box-shadow:inset 0 0 0 1px var(--signal)}
+.inc.p1{border-inline-start-color:var(--crit)}
+.inc.p2{border-inline-start-color:var(--caution)}
+.inc.p3{border-inline-start-color:var(--steady)}
+.inc .top{display:flex;gap:.5rem;align-items:baseline}
+.inc .sev{font-size:var(--f-2);font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.inc.p1 .sev{color:var(--crit)}.inc.p2 .sev{color:var(--caution)}.inc.p3 .sev{color:var(--steady)}
+.inc .t{font-family:var(--mono);font-size:var(--f-2);color:var(--ink-dim);margin-inline-start:auto}
+.inc .wh{font-size:var(--f-1);color:var(--ink)}
+.inc .st{font-size:var(--f-2);color:var(--ink-dim)}
+.detail{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:.9rem 1rem;display:grid;gap:.75rem;align-content:start}
+.map{position:relative;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--surface-2)}
+.map canvas{display:block;width:100%;height:190px}
+.map .pin{position:absolute;bottom:.4rem;inset-inline-start:.5rem;font-family:var(--mono);font-size:var(--f-2);color:var(--ink-dim);background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:.1rem .35rem}
+
+/* ── log ──────────────────────────────────────────────── */
+.log{display:grid;gap:.35rem;margin:0;padding:0;list-style:none;font-size:var(--f-1);max-height:22rem;overflow:auto}
+.log li{display:grid;grid-template-columns:5.5rem 1fr;gap:.6rem;padding:.35rem 0;border-bottom:1px solid var(--line)}
+.log .t{font-family:var(--mono);font-size:var(--f-2);color:var(--ink-dim)}
+.log .m{color:var(--ink-2)}
+.log li.hit .m{color:var(--crit)}
+.log li.good .m{color:var(--steady)}
+.log li:last-child{border-bottom:0}
+
+/* ── contacts ─────────────────────────────────────────── */
+.people{display:grid;gap:.6rem;grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
+.person{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:.8rem .9rem;display:grid;gap:.25rem}
+.person b{font-size:var(--f0)}
+.person .rel{font-size:var(--f-2);letter-spacing:.07em;text-transform:uppercase;color:var(--ink-dim);font-weight:600}
+.person .ph{font-family:var(--mono);font-size:var(--f-1);color:var(--ink-2)}
+.person .ord{font-family:var(--mono);font-size:var(--f-2);color:var(--signal)}
+.limits{display:grid;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.limits>div{background:var(--surface);padding:.9rem 1rem;display:grid;gap:.25rem}
+.limits b{font-weight:600}
+.limits p{font-size:var(--f-1);color:var(--ink-2)}
+@media(min-width:760px){.limits{grid-template-columns:1fr 1fr}}
+
+footer.foot{border-top:1px solid var(--line);margin-top:clamp(2rem,5vw,3rem);padding-block:1.5rem 3rem;color:var(--ink-dim);font-size:var(--f-1)}
+footer.foot .shell{display:flex;gap:.6rem 1.25rem;flex-wrap:wrap;align-items:baseline}
+</style>
+</head>
+<body>
+
+<div class="demo-bar">
+  <div class="shell">
+    <span class="tag">Demonstration</span>
+    <p><b>No police operations room receives anything from this page, no car is linked to it, and no message is sent to anybody.</b>
+      Every vehicle, incident, officer and contact on it is invented, and the page makes no network requests at all beyond loading its fonts.
+      It is the design for a service that has not been built. <b>The one real thing here is 112</b> &mdash; Kuwait&rsquo;s emergency number, which you should call yourself if you are reading this after a crash.</p>
+  </div>
+</div>
+
+<header class="rail">
+  <div class="shell rail-in">
+    <div class="brand">
+      <b>Najda</b>
+      <span class="ar" dir="rtl" lang="ar">نجدة</span>
+      <span class="small" style="margin-inline-start:.35rem">the call you cannot make yourself</span>
+    </div>
+    <button class="pill" id="carPill" type="button" data-go="pair"><span class="dot" id="carDot"></span> <span id="carPillTxt">car</span></button>
+    <button class="pill" id="phonePill" type="button" data-go="pair"><span class="dot" id="phoneDot"></span> <span id="phonePillTxt">phone</span></button>
+    <span class="pill" id="statePill"><span class="dot live" id="stateDot"></span> <span id="stateTxt">watching</span></span>
+    <button class="pill" id="themeBtn" type="button" title="Switch between the light and dark theme">theme</button>
+  </div>
+</header>
+
+<nav class="tabs" aria-label="Sections">
+  <div class="shell tabs-in" style="padding-inline:var(--pad)">
+    <button class="tab" type="button" data-go="drive" aria-current="true">The drive</button>
+    <button class="tab" type="button" data-go="pair">Car &amp; phone</button>
+    <button class="tab" type="button" data-go="sense">What it watches</button>
+    <button class="tab" type="button" data-go="wait">The 30 seconds<span class="badge" id="waitBadge" hidden>!</span></button>
+    <button class="tab" type="button" data-go="alert">What gets sent</button>
+    <button class="tab" type="button" data-go="police">Police view<span class="badge" id="policeBadge" hidden>1</span></button>
+    <button class="tab" type="button" data-go="contacts">Contacts</button>
+    <button class="tab" type="button" data-go="limits">What it can&rsquo;t do</button>
+  </div>
+</nav>
+
+<main class="shell">
+
+<!-- ══ THE DRIVE ═════════════════════════════════════════ -->
+<section class="view" id="view-drive">
+  <div class="hero">
+    <div class="stack stack-16">
+      <span class="eyebrow">Automatic crash alert &middot; car + phone</span>
+      <h1>Nobody calls for help from <em>inside</em> a bad crash.</h1>
+      <p class="lede">
+        Najda runs in two places at once &mdash; in the car, on its own crash bus, and in the phone in your pocket.
+        It reads both, decides within a second whether what just happened was a crash or a pothole, and then asks you
+        whether you are alright. If you answer, it stops there. If you don&rsquo;t, it sends your position, your vehicle
+        and your medical card to the <b>112 operations room</b> and a plain-language message to the person you chose.
+        <b>This page is the design for that service, not the service.</b> Nothing on it reaches anybody.
+      </p>
+      <div class="row">
+        <button class="btn" type="button" id="heroCrash">Stage a crash</button>
+        <button class="btn ghost" type="button" data-go="sense">See what it watches</button>
+        <button class="btn quiet" type="button" data-go="police">See what the police see</button>
+      </div>
+      <p class="small">The demo clock runs at real speed, so a 30-second window really does take 30 seconds. Nothing here is recorded.</p>
+    </div>
+
+    <div class="trace-frame">
+      <div class="trace-head">
+        <span><span class="dot live" id="heroDot"></span> Live telemetry</span>
+        <span class="num" id="heroSpeed">&mdash;</span>
+        <span class="num" id="heroG">&mdash;</span>
+        <span class="num" id="heroState">watching</span>
+        <span style="margin-inline-start:auto" class="num" id="heroVeh">example vehicle &middot; 4 8 2 1 9 / 3</span>
+      </div>
+      <canvas class="trace" id="heroTrace" aria-label="Live acceleration and speed trace from the example vehicle"></canvas>
+      <div class="trace-foot">
+        <span><b>Blue</b> speed, km/h</span>
+        <span><b>Red</b> resultant acceleration, g</span>
+        <span><b>Dashed</b> the 4 g line where an event starts being examined</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="band stack stack-16">
+    <span class="eyebrow">The whole service in four moves</span>
+    <h2 style="font-size:var(--f3);max-width:30ch">Sense, decide, wait, dispatch.</h2>
+    <div class="moves">
+      <div>
+        <span class="n">01</span><b>Sense</b>
+        <p>Eight channels at 100 samples a second: three axes of acceleration, rotation, wheel speed, the restraint line, occupant movement and cabin sound.</p>
+      </div>
+      <div>
+        <span class="n">02</span><b>Decide</b>
+        <p>A crash is a shape, not a number. Speed lost in milliseconds, direction of the blow, whether the car stopped and whether the restraints fired &mdash; together, not one at a time.</p>
+      </div>
+      <div>
+        <span class="n">03</span><b>Wait</b>
+        <p>Thirty seconds to say you&rsquo;re fine. Ten if the airbag fired. Nothing at all if the car rolled and nobody has moved since.</p>
+      </div>
+      <div>
+        <span class="n">04</span><b>Dispatch</b>
+        <p>Two different messages: everything the operations room needs, and only what your contact needs. Delivered over whichever radio is still alive.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="band stack stack-16">
+    <span class="eyebrow">What it refuses to pretend</span>
+    <h2 style="font-size:var(--f3);max-width:32ch">Four things this design will not claim.</h2>
+    <div class="limits">
+      <div>
+        <b>It never says whether you are hurt.</b>
+        <p>It knows what happened to the car. It does not know what happened to you, and a system that guesses at injuries over the radio makes the operations room trust it less, not more. Severity here describes the impact and nothing else.</p>
+      </div>
+      <div>
+        <b>It asks before it calls.</b>
+        <p>Every dispatch is preceded by a window you can close with one press. The only time it skips the question is when asking is pointless: restraints fired, the car is still, and nobody inside has moved for ten seconds.</p>
+      </div>
+      <div>
+        <b>One device is not enough.</b>
+        <p>A phone on its own cannot tell a crash from a phone thrown into a footwell. Phone-only mode still works, waits longer, and says on screen that its confidence is capped.</p>
+      </div>
+      <div>
+        <b>It is silent on an ordinary drive.</b>
+        <p>No position, no speed and no audio leaves the car unless a crash has been confirmed and the window has closed. The rest of the time the data lives and dies inside the vehicle.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CAR & PHONE ═══════════════════════════════════════ -->
+<section class="view" id="view-pair" hidden>
+  <div class="band" style="border-top:0">
+    <div class="stack stack-16">
+      <span class="eyebrow">Two devices, one judgement</span>
+      <h2 style="font-size:var(--f3);max-width:30ch">The car knows what it hit. The phone knows what happened to you.</h2>
+      <p class="lede">Neither one is enough on its own. The car&rsquo;s bus reports the impact and the restraints but has no idea whether anyone moved afterwards; the phone feels every bump in your pocket and cannot tell a crash from a fall. Najda is the argument between the two. Unlink either below and watch what the rest of the page does about it.</p>
+
+      <div class="devices">
+        <div class="dev" id="devCar">
+          <div class="dev-head">
+            <b>The car</b>
+            <span class="pill" id="carStatus"><span class="dot"></span> linked</span>
+          </div>
+          <p class="small">Reached over the diagnostic port or the manufacturer&rsquo;s own telematics unit. In a finished build this is where a factory eCall module would sit.</p>
+          <ul class="sig-list">
+            <li><span class="k">accel.xyz</span><span>Three axes at 100 Hz, from the car&rsquo;s own crash sensors rather than a pocket.</span></li>
+            <li><span class="k">gyro.z</span><span>Yaw and roll rate &mdash; the channel that separates a spin from a roll.</span></li>
+            <li><span class="k">wheel.speed</span><span>Ground truth for speed, independent of satellites.</span></li>
+            <li><span class="k">restraint</span><span>Airbag squib and belt pretensioner lines. The single most reliable bit in the system.</span></li>
+            <li><span class="k">fuel.pump</span><span>Cut-off state, which tells the operations room whether fuel is still being pumped.</span></li>
+            <li><span class="k">doors</span><span>Whether a door has opened since the impact &mdash; somebody got out.</span></li>
+          </ul>
+          <div class="row">
+            <button class="btn ghost sm" type="button" id="carToggle">Unlink the car</button>
+            <span class="small" id="carNote">Full confidence available.</span>
+          </div>
+        </div>
+
+        <div class="dev" id="devPhone">
+          <div class="dev-head">
+            <b>The phone</b>
+            <span class="pill" id="phoneStatus"><span class="dot"></span> linked</span>
+          </div>
+          <p class="small">The part that survives the car losing power, and the only part that can hear the cabin or notice that you have stopped moving.</p>
+          <ul class="sig-list">
+            <li><span class="k">imu</span><span>Accelerometer and gyroscope, used to confirm the car&rsquo;s reading, never alone if the car is there.</span></li>
+            <li><span class="k">gnss</span><span>Position, heading and the road it was matched to.</span></li>
+            <li><span class="k">occupant</span><span>Movement after the impact. Ten seconds of complete stillness is what removes the question.</span></li>
+            <li><span class="k">cabin.audio</span><span>A single acoustic feature &mdash; the broadband transient of deforming metal and glass. No recording is kept or sent.</span></li>
+            <li><span class="k">radio</span><span>Mobile signal and battery, so the delivery chain knows what it still has.</span></li>
+            <li><span class="k">voice</span><span>The speaker and microphone the operations room uses to talk to the cabin once a patrol is assigned.</span></li>
+          </ul>
+          <div class="row">
+            <button class="btn ghost sm" type="button" id="phoneToggle">Unlink the phone</button>
+            <span class="small" id="phoneNote">Confirming the car.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel stack stack-12">
+        <span class="eyebrow">What the link state changes</span>
+        <div class="scroll-x">
+          <table class="tbl">
+            <thead><tr><th>Linked</th><th>Confidence cap</th><th>Window</th><th>What is lost</th></tr></thead>
+            <tbody>
+              <tr><td><b>Car + phone</b></td><td class="n">98%</td><td class="n">30 s / 10 s</td><td>Nothing. The restraint line and occupant stillness are both available, so the hard cases resolve.</td></tr>
+              <tr><td><b>Car only</b></td><td class="n">94%</td><td class="n">30 s</td><td>No occupant movement, no cabin audio, no voice channel, and position falls back to the car&rsquo;s own receiver.</td></tr>
+              <tr><td><b>Phone only</b></td><td class="n">79%</td><td class="n">45 s</td><td>No restraints, no wheel speed, no doors. A dropped phone can look like a minor impact, so the window is longer and nothing below <i>moderate</i> is ever dispatched.</td></tr>
+              <tr><td><b>Neither</b></td><td class="n">&mdash;</td><td class="n">&mdash;</td><td>There is no service. The page says so rather than pretending to watch.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="note">A real build pairs over Bluetooth to an OBD-II adapter, or through the manufacturer&rsquo;s API where the car has its own modem. Both are shown here as toggles because a browser page cannot reach a car, and a demo that mimed a connection would be lying about the hardest part of the product.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ WHAT IT WATCHES ═══════════════════════════════════ -->
+<section class="view" id="view-sense" hidden>
+  <div class="band" style="border-top:0">
+    <div class="stack stack-16">
+      <span class="eyebrow">Detection</span>
+      <h2 style="font-size:var(--f3);max-width:32ch">A crash is a shape, not a number.</h2>
+      <p class="lede">Eight channels, sampled continuously. Press anything below &mdash; the harmless events are deliberately violent enough to fool a simpler system, and the readout says which channel refused to agree.</p>
+
+      <div class="trace-frame">
+        <div class="trace-head">
+          <span><span class="dot live"></span> Sensor window &middot; last 6 seconds</span>
+          <span class="num" id="senseSpeed">&mdash;</span>
+          <span class="num" id="senseG">&mdash;</span>
+          <span style="margin-inline-start:auto" class="num" id="senseMode">car + phone</span>
+        </div>
+        <canvas class="trace" id="senseTrace" aria-label="Live acceleration and speed trace"></canvas>
+      </div>
+
+      <div class="tiles" id="tiles"></div>
+
+      <div class="verdict" id="verdict">
+        <div class="verdict-head">
+          <b id="vTitle">Nothing to report</b>
+          <span id="vSub" class="small">Ordinary driving. No event in the window.</span>
+          <span class="conf" id="vConf"></span>
+        </div>
+        <div class="verdict-body">
+          <div class="chans" id="vChans"></div>
+          <p class="small" id="vFoot">Confidence is capped at 98% while both devices are linked. It describes how certain the system is that a crash happened &mdash; never how badly anyone is hurt.</p>
+        </div>
+      </div>
+
+      <div class="stack stack-8">
+        <span class="eyebrow">Stage something</span>
+        <div class="events" id="events"></div>
+      </div>
+
+      <div class="panel stack stack-12">
+        <span class="eyebrow">The rules, in full</span>
+        <div class="scroll-x">
+          <table class="tbl">
+            <thead><tr><th>Class</th><th>Peak</th><th>&Delta;v in 150 ms</th><th>Also required</th><th>What happens</th></tr></thead>
+            <tbody>
+              <tr><td><b>Road event</b></td><td class="n">&lt; 4 g</td><td class="n">&lt; 8 km/h</td><td>&mdash;</td><td>Logged in the car, nothing sent, no window.</td></tr>
+              <tr><td><b>Harsh event</b></td><td class="n">4&ndash;8 g</td><td class="n">&lt; 8 km/h</td><td>Speed recovers within 3 s</td><td>Logged. Braking hard and kerbing a wheel both land here.</td></tr>
+              <tr><td><b>Minor collision</b></td><td class="n">&ge; 5 g</td><td class="n">8&ndash;16 km/h</td><td>Vehicle stops, no restraint event</td><td>45-second window, then the contact only. The operations room is not called for a car park.</td></tr>
+              <tr><td><b>Collision</b></td><td class="n">&ge; 8 g</td><td class="n">16&ndash;30 km/h</td><td>Vehicle stops</td><td>30-second window, then 112 and every contact.</td></tr>
+              <tr><td><b>Severe collision</b></td><td class="n">&ge; 12 g</td><td class="n">&ge; 30 km/h</td><td>or any restraint deployment</td><td>10-second window, then 112 with priority 1.</td></tr>
+              <tr><td><b>Rollover</b></td><td class="n">any</td><td class="n">any</td><td>Roll beyond 60&deg; held for 1 s</td><td>10-second window, priority 1, and the fuel cut-off state is sent with it.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="note warn"><b>Why two thresholds and not one.</b> A pothole at speed can put 6 g through a phone in a door pocket while the car loses nothing at all; a 30 km/h wall is 12 g and takes the speed with it. The pair &mdash; how hard, and how much speed went with it &mdash; is what separates them, and the restraint line settles whatever is left. Every rejection below is a channel disagreeing, and the readout names it.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ THE 30 SECONDS ════════════════════════════════════ -->
+<section class="view" id="view-wait" hidden>
+  <div class="band" style="border-top:0">
+    <div class="stack stack-16">
+      <span class="eyebrow">The window</span>
+      <h2 style="font-size:var(--f3);max-width:32ch">The part of the design that decides whether anyone trusts it.</h2>
+      <p class="lede">A system that calls the police every time you hit a kerb gets switched off within a week, and then it is not there on the day it matters. So every dispatch goes through a window you can close with one press &mdash; and the window gets shorter as the evidence gets harder.</p>
+
+      <div class="panel" id="windowPanel">
+        <div class="count" id="countBox">
+          <div class="ring" id="ring" role="img" aria-label="Countdown to dispatch"><div><span class="big" id="countNum">&mdash;</span></div></div>
+          <p class="what" id="countWhat">Nothing is waiting. Stage a crash and the window opens here.</p>
+          <div class="row">
+            <button class="btn safe" type="button" id="btnOkay" disabled>I&rsquo;m okay &mdash; cancel</button>
+            <button class="btn danger" type="button" id="btnNow" disabled>Send now</button>
+            <button class="btn ghost" type="button" id="btnStage">Stage a severe crash</button>
+          </div>
+          <p class="small" id="countNote">Cancelling still writes the event to the car&rsquo;s own log, so a workshop can read it later.</p>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="panel stack stack-12">
+          <span class="eyebrow">How long the window is</span>
+          <div class="scroll-x">
+            <table class="tbl">
+              <thead><tr><th>Situation</th><th>Window</th><th>Why</th></tr></thead>
+              <tbody>
+                <tr><td>Minor collision</td><td class="n">45 s</td><td>Most of these end with two drivers exchanging numbers. Give them time to close it.</td></tr>
+                <tr><td>Collision</td><td class="n">30 s</td><td>Long enough to find the button, short enough that help is moving while you are still deciding.</td></tr>
+                <tr><td>Severe, restraints fired</td><td class="n">10 s</td><td>The airbag is physical evidence. There is nothing left to establish.</td></tr>
+                <tr><td>Severe, and nobody has moved</td><td class="n">0 s</td><td>Ten seconds of complete stillness after a restraint deployment. Asking a still cabin a question wastes the only minutes that matter.</td></tr>
+                <tr><td>Phone-only mode</td><td class="n">+15 s</td><td>Weaker evidence gets more benefit of the doubt, because the cost of a false call is a service nobody keeps switched on.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="panel stack stack-12">
+          <span class="eyebrow">Event log</span>
+          <ul class="log" id="log"><li><span class="t">&mdash;&mdash;:&mdash;&mdash;</span><span class="m">Watching. Nothing has happened yet.</span></li></ul>
+          <div class="row">
+            <button class="btn ghost sm" type="button" id="btnReset">Reset the demo</button>
+            <span class="small">The log is what a workshop or an insurer would read afterwards.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ WHAT GETS SENT ════════════════════════════════════ -->
+<section class="view" id="view-alert" hidden>
+  <div class="band" style="border-top:0">
+    <div class="stack stack-16">
+      <span class="eyebrow">The packet</span>
+      <h2 style="font-size:var(--f3);max-width:34ch">Two messages, because an operations room and your mother need different things.</h2>
+      <p class="lede">The operations room gets everything that helps a patrol and an ambulance arrive prepared. Your contact gets where you are, that help is already coming, and nothing about your medical record. This is what left the car in the last dispatch &mdash; or what would leave it, if you staged one.</p>
+
+      <div class="packet">
+        <div class="card">
+          <div class="card-head">
+            <span class="dot crit"></span><b>To the 112 operations room</b>
+            <span class="to">Ministry of the Interior &middot; invented link</span>
+          </div>
+          <div class="card-body">
+            <dl class="kv" id="policePacket"></dl>
+            <p class="small">Sent as structured data, not a phone call, so it lands in the dispatcher&rsquo;s queue already sorted by severity. The voice channel to the cabin opens on top of it.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <span class="dot warn"></span><b>To your emergency contact</b>
+            <span class="to" id="contactTo">&mdash;</span>
+          </div>
+          <div class="card-body">
+            <div class="msg" id="contactMsgEn">&mdash;</div>
+            <div class="msg ar" id="contactMsgAr" dir="rtl" lang="ar">&mdash;</div>
+            <p class="small">Both languages, every time, because the person who answers is not always the person you saved. The map link is a position, not a tracker &mdash; it stops updating the moment a patrol is assigned.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="panel stack stack-12">
+          <span class="eyebrow">Delivery</span>
+          <p class="small">Tried in order, and it stops at the first one that gets an acknowledgement. The chain matters more than the packet: the crashes that need this most are the ones that break the aerial.</p>
+          <ul class="chain" id="chain"></ul>
+        </div>
+
+        <div class="panel stack stack-12">
+          <span class="eyebrow">What is deliberately not sent</span>
+          <ul class="sig-list">
+            <li><span class="k">audio</span><span>No recording of the cabin. One number &mdash; whether an impact transient was heard &mdash; and it is discarded after the decision.</span></li>
+            <li><span class="k">history</span><span>No route, no previous trips, no speeding record. The operations room gets the last 20 seconds and nothing before it.</span></li>
+            <li><span class="k">medical &rarr; contact</span><span>Blood type, allergies and medication go to the operations room only. Your contact is told where you are, not what you take.</span></li>
+            <li><span class="k">anything, normally</span><span>On a drive with no crash, the answer to every one of these is: nothing leaves the car.</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ POLICE VIEW ═══════════════════════════════════════ -->
+<section class="view" id="view-police" hidden>
+  <div class="band" style="border-top:0">
+    <div class="stack stack-16">
+      <span class="eyebrow">The other end of the radio</span>
+      <h2 style="font-size:var(--f3);max-width:34ch">An operations room does not want an app. It wants a line in a queue.</h2>
+      <p class="lede">This is the supply side: what a dispatcher would see if Najda were allowed to write into the 112 queue. Sorted worst-first, one line each, the whole incident beside it. Acknowledging one writes back into the driver&rsquo;s own log &mdash; the phone in the car says <i>a patrol has been assigned</i> in the same second.</p>
+
+      <div class="console">
+        <div class="queue" id="queue"></div>
+        <div class="detail" id="detail"></div>
+      </div>
+
+      <p class="note warn"><b>No such link exists.</b> Writing into a national emergency queue is a legal arrangement before it is a technical one, and it is the part of this product that would take the longest. The console is drawn here to be honest about what the service is asking for, not to suggest it has been granted.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CONTACTS ══════════════════════════════════════════ -->
+<section class="view" id="view-contacts" hidden>
+  <div class="band" style="border-top:0">
+    <div class="stack stack-16">
+      <span class="eyebrow">Who is told, and in what order</span>
+      <h2 style="font-size:var(--f3);max-width:32ch">Three people, ranked, and a card only a paramedic sees.</h2>
+      <p class="lede">Contacts are tried in order until one of them acknowledges, then the rest get the same message marked <i>already answered</i> so nobody drives to the scene twice. All of these are invented.</p>
+
+      <div class="people" id="people"></div>
+
+      <div class="grid-2">
+        <div class="panel stack stack-12">
+          <span class="eyebrow">Medical card</span>
+          <p class="small">Goes to the operations room with the dispatch and to nobody else. Four fields, because a field that is usually blank is a field a paramedic stops reading.</p>
+          <dl class="kv" id="medical"></dl>
+          <p class="note">In a finished service this is entered once, encrypted on the phone, and released only by a confirmed dispatch &mdash; not readable by the app on an ordinary day.</p>
+        </div>
+
+        <div class="panel stack stack-12">
+          <span class="eyebrow">The rules around them</span>
+          <ul class="sig-list">
+            <li><span class="k">order</span><span>Tried one at a time, twelve seconds apart, not all at once &mdash; three phones ringing produces three people who each assume the other is going.</span></li>
+            <li><span class="k">content</span><span>Where, when, how bad, and that 112 already has it. Never a guess about injuries.</span></li>
+            <li><span class="k">minor</span><span>A minor collision reaches the contacts and stops there. The operations room is not told about a car park.</span></li>
+            <li><span class="k">cancel</span><span>If you close the window, no contact is ever told an event happened.</span></li>
+            <li><span class="k">after</span><span>Position updates stop when a patrol is assigned. The contact gets a scene, not a live location on you.</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ LIMITS ════════════════════════════════════════════ -->
+<section class="view" id="view-limits" hidden>
+  <div class="band" style="border-top:0">
+    <div class="stack stack-16">
+      <span class="eyebrow">Honesty</span>
+      <h2 style="font-size:var(--f3);max-width:32ch">Where this design fails, written down before anybody ships it.</h2>
+      <p class="lede">Every one of these is a real failure mode of automatic crash alerting, and none of them is solved by the page you are reading. They are listed because a safety product that only describes its good day is not a safety product.</p>
+
+      <div class="limits">
+        <div><b>It cannot tell whether you are injured.</b><p>Two identical impacts, two very different people. The system reports what it measured and leaves the medicine to the people who arrive.</p></div>
+        <div><b>A phone in a footwell looks like a crash.</b><p>Which is why phone-only mode caps confidence at 79%, waits longer, and will not dispatch a minor event at all. It is a fallback, not the product.</p></div>
+        <div><b>No signal, no alert.</b><p>Under a tunnel or out in the desert the chain runs out. The design keeps trying and sends the moment the radio returns, with the original timestamp attached &mdash; late help is still help, and a false timestamp is worse than a late one.</p></div>
+        <div><b>The phone can be destroyed.</b><p>That is the argument for the car&rsquo;s own modem carrying the first attempt: the part bolted to the vehicle usually survives the part resting on the seat.</p></div>
+        <div><b>A stationary car with a dead battery says nothing.</b><p>If the crash takes the electrical system and the phone is off, there is no service. No design on this page changes that.</p></div>
+        <div><b>Somebody has to answer at the other end.</b><p>Without a real agreement with the Ministry of the Interior this is an app that calls your mother. That is worth something, and it is not what it claims to be on the front page.</p></div>
+      </div>
+
+      <div class="panel stack stack-12">
+        <span class="eyebrow">Status of this page</span>
+        <p><b>Najda is a prototype.</b> Every vehicle, incident, contact, officer and coordinate on it is invented. No car is linked, no operations room is connected, no message has ever been sent from it, and it makes no network requests beyond loading its fonts. It keeps nothing after you close the tab.</p>
+        <p class="note crit"><b>If you are in a real emergency in Kuwait, call 112.</b> That number is the only thing on this page that reaches anybody.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="shell">
+    <span>Najda <span class="ar" dir="rtl" lang="ar">نجدة</span></span>
+    <span>A design prototype &mdash; nothing here is connected</span>
+    <span>Emergencies in Kuwait: <b>112</b></span>
+    <span><a href="../index.html">Back to the portfolio</a></span>
+  </div>
+</footer>
+
+<script>
+"use strict";
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+
+/* ═══ 1. the invented world ═══════════════════════════════════════════
+   Everything in this block is made up. Kept together at the top so it is
+   obvious there is no real vehicle, person or incident behind the page. */
+const VEH={plate:"4 8 2 1 9 / 3",model:"Toyota Land Cruiser, 2021",colour:"White",
+           vin:"VIN ending 4417",tank:"Petrol"};
+const OWNER={name:"Fatemah A.",civil:"Civil ID ending 0812",phone:"+965 9000 7788",
+             ar:"فاطمة",blood:"O positive",allergy:"Penicillin",meds:"None",note:"Wears contact lenses"};
+const CONTACTS=[
+  {n:1,name:"Sara",rel:"Mother",phone:"+965 9000 1122"},
+  {n:2,name:"Abdullah",rel:"Brother",phone:"+965 9000 3344"},
+  {n:3,name:"Dana",rel:"Friend",phone:"+965 9000 5566"}
+];
+const PLACE={road:"Route 30 — Fahaheel Expressway",
+             detail:"northbound, 1.2 km before the Egaila exit",
+             lat:29.1544,lon:48.0961,gov:"Al-Ahmadi Governorate"};
+
+/* Channels shown as live tiles. src says which device supplies each one, which
+   is what makes an unlinked device visibly cost something. */
+const TILES=[
+  {k:"peak", lab:"Peak accel",   unit:"g",    src:"car",   base:()=>sim.g},
+  {k:"dv",   lab:"Δv / 150 ms",  unit:"km/h", src:"car",   base:()=>0},
+  {k:"speed",lab:"Wheel speed",  unit:"km/h", src:"car",   base:()=>sim.speed},
+  {k:"rot",  lab:"Rotation",     unit:"°/s",  src:"car",   base:()=>sim.rot},
+  {k:"belt", lab:"Restraints",   unit:"",     src:"car",   base:()=>"armed"},
+  {k:"occ",  lab:"Occupant",     unit:"",     src:"phone", base:()=>"moving"},
+  {k:"aud",  lab:"Cabin sound",  unit:"",     src:"phone", base:()=>"ordinary"},
+  {k:"gnss", lab:"Position",     unit:"",     src:"phone", base:()=>"locked"}
+];
+
+/* Staged events. peak/dv are what the CAR measures; pPeak/pDv are what the PHONE
+   measures, and the two disagreeing is the whole point of the pothole and the
+   dropped phone. dir: 0 frontal, 90 near side, 180 rear, 270 off side. */
+const EVENTS=[
+  {id:"pothole",  kind:"fake", lab:"Pothole at 95 km/h",
+   hint:"Violent, vertical, and the car keeps every km/h it had.",
+   peak:5.4,dv:1.4,pPeak:6.8,pDv:2.1,dir:null,rot:14,roll:0,airbag:false,stop:false,after:93,aud:false,still:false},
+  {id:"bump",     kind:"fake", lab:"Speed bump, taken too fast",
+   hint:"A jolt through the suspension with the brakes already on.",
+   peak:3.6,dv:2.8,pPeak:4.1,pDv:3.0,dir:null,rot:9,roll:0,airbag:false,stop:false,after:34,aud:false,still:false},
+  {id:"brake",    kind:"fake", lab:"Emergency braking",
+   hint:"The car really does stop — it just takes 2.8 seconds to do it.",
+   peak:1.1,dv:5.6,pPeak:1.3,pDv:5.9,dir:0,rot:4,roll:0,airbag:false,stop:true,after:0,aud:false,still:false,slow:2.8},
+  {id:"drop",     kind:"fake", lab:"Phone dropped in the footwell",
+   hint:"7.9 g on the phone. Nothing at all on the car.",
+   peak:0.3,dv:0.2,pPeak:7.9,pDv:9.6,dir:null,rot:3,roll:0,airbag:false,stop:false,after:88,aud:true,still:false},
+  {id:"door",     kind:"fake", lab:"Door slammed while parked",
+   hint:"A loud transient with no movement anywhere.",
+   peak:1.4,dv:0.1,pPeak:2.2,pDv:0.4,dir:null,rot:2,roll:0,airbag:false,stop:false,after:0,aud:true,still:false},
+  {id:"tap",      kind:"real", lab:"Car park tap",
+   hint:"Low speed, real contact, nobody needs a patrol.",
+   peak:6.2,dv:11,pPeak:6.9,pDv:11.8,dir:0,rot:6,roll:0,airbag:false,stop:true,after:0,aud:true,still:false},
+  {id:"side",     kind:"real", lab:"Side impact at a junction",
+   hint:"Struck on the near side. Curtain bag deploys.",
+   peak:14.6,dv:24,pPeak:13.9,pDv:22,dir:90,rot:88,roll:14,airbag:true,stop:true,after:0,aud:true,still:false},
+  {id:"frontal",  kind:"real", lab:"Frontal impact at speed",
+   hint:"Both front bags, the speed gone in a tenth of a second.",
+   peak:26.4,dv:46,pPeak:24.1,pDv:41,dir:0,rot:22,roll:0,airbag:true,stop:true,after:0,aud:true,still:false},
+  {id:"rollover", kind:"real", lab:"Rollover, nobody moving",
+   hint:"Past 60° and held there. This is the one that skips the question.",
+   peak:9.8,dv:18,pPeak:9.2,pDv:17,dir:270,rot:146,roll:112,airbag:true,stop:true,after:0,aud:true,still:true}
+];
+
+/* Synthetic queue, so the console is not empty before you stage anything. */
+const SEED=[
+  {id:"KW-4471",sev:"severe",dir:0,dv:52,peak:29.1,airbag:true,roll:0,
+   road:"Route 80 — Jahra Road",detail:"westbound, after the Sulaibiya interchange",
+   lat:29.3162,lon:47.7214,veh:"Nissan Patrol, 2019, Silver",occ:"2 belted, front",
+   t:"04:12",status:"Patrol 27 on scene · ambulance en route",ack:true,
+   blood:"A positive",allergy:"None recorded",meds:"None"},
+  {id:"KW-4472",sev:"collision",dir:180,dv:21,peak:9.4,airbag:false,roll:0,
+   road:"Route 30 — Fahaheel Expressway",detail:"southbound at the Fintas exit",
+   lat:29.1761,lon:48.1063,veh:"Hyundai Elantra, 2022, Grey",occ:"1 belted, driver",
+   t:"04:26",status:"Acknowledged · awaiting patrol assignment",ack:true,
+   blood:"O negative",allergy:"Penicillin",meds:"Salbutamol inhaler"},
+  {id:"KW-4473",sev:"severe",dir:90,dv:33,peak:17.8,airbag:true,roll:0,
+   road:"Route 50 — Sixth Ring Road",detail:"eastbound near the Rai interchange",
+   lat:29.2835,lon:47.9327,veh:"Toyota Hilux, 2020, White",occ:"1 belted, driver",
+   t:"04:31",status:"New · not yet acknowledged",ack:false,
+   blood:"B positive",allergy:"None recorded",meds:"None"}
+];
+
+/* ═══ 2. state ════════════════════════════════════════════════════════ */
+const S={car:true,phone:true,phase:"idle",verdict:null,ev:null,
+         windowEnd:0,windowLen:0,dispatch:null,log:[],sel:"KW-4473",timers:[]};
+const sim={speed:96,target:96,g:.04,rot:2,dv:0,belt:"armed",occ:"moving",aud:"ordinary",
+           pulse:null,slowing:null,frozen:false};
+const BUF={g:[],v:[]},BUFN=360;
+
+function mode(){ return S.car&&S.phone?"both":S.car?"car":S.phone?"phone":"none"; }
+function cap(){ const m=mode(); return m==="both"?.98:m==="car"?.94:m==="phone"?.79:0; }
+function modeLabel(){ const m=mode(); return m==="both"?"car + phone":m==="car"?"car only":m==="phone"?"phone only":"nothing linked"; }
+function clock(){ return new Date().toLocaleTimeString("en-GB",{hour12:false}); }
+function hhmm(){ return new Date().toLocaleTimeString("en-GB",{hour12:false,hour:"2-digit",minute:"2-digit"}); }
+function later(fn,ms){ S.timers.push(setTimeout(fn,ms)); }
+function clearTimers(){ S.timers.forEach(clearTimeout); S.timers=[]; }
+
+function logIt(msg,cls){
+  S.log.unshift({t:clock(),m:msg,c:cls||""});
+  if(S.log.length>60) S.log.pop();
+  renderLog();
+}
+
+/* ═══ 3. detection ════════════════════════════════════════════════════
+   The reading depends on which devices are linked: the phone's own numbers
+   are noisier, and with the car gone there is no restraint line to settle
+   anything. Classification is the rules table on the sensing view, in order. */
+function reading(e){
+  const carOn=S.car;
+  return {
+    peak: carOn? e.peak : e.pPeak,
+    dv:   carOn? e.dv   : e.pDv,
+    dir:  e.dir, rot:e.rot, roll:e.roll,
+    belt: carOn? e.airbag : null,
+    stop: carOn? e.stop : (e.stop&&!e.slow),
+    slow: e.slow||0,
+    occ:  S.phone? (e.still?"still":"moving") : null,
+    aud:  S.phone? (e.aud?"impact transient":"ordinary") : null,
+    carFelt: e.peak, phoneFelt: e.pPeak
+  };
+}
+
+const DIRNAME={0:"frontal",90:"near side",180:"rear",270:"off side"};
+const DIRAR={0:"أمامياً",90:"جانبياً",180:"خلفياً",270:"جانبياً"};
+
+function classify(e){
+  const r=reading(e), m=mode(), ch=[], cap_=cap();
+  const add=(nm,why,vv,side)=>ch.push({nm,why,vv,side});
+  let cls="road", sev="none", conf=.1;
+
+  if(r.roll>=60){ cls="rollover"; sev="severe"; conf=.93; }
+  else if(r.belt===true){ cls="severe"; sev="severe"; conf=.95; }
+  else if(r.dv>=30&&r.peak>=12){ cls="severe"; sev="severe"; conf=.9; }
+  else if(r.dv>=16&&r.peak>=8&&r.stop){ cls="collision"; sev="collision"; conf=.85; }
+  else if(r.dv>=8&&r.peak>=5&&r.stop&&!r.slow){ cls="minor"; sev="minor"; conf=.72; }
+  else if(r.peak>=4){ cls="harsh"; sev="none"; conf=.4; }
+
+  /* the phone alone cannot see a restraint line, so a big number with no
+     corroboration is exactly where it is weakest — and it says so */
+  if(m==="phone"&&sev!=="none"){ conf=Math.min(conf,.79); }
+
+  /* channels, for and against, in the order a person would read them */
+  add("accel.peak",r.peak>=4?"a hard hit":"nothing the suspension can't take",
+      r.peak.toFixed(1)+" g"+(r.dir!==null&&r.peak>=4?" · "+DIRNAME[r.dir]:""), r.peak>=8?"for":r.peak>=4?"":"against");
+  add("Δv 150 ms", r.dv>=16?"speed gone in a tenth of a second":r.dv>=8?"a real exchange of speed":"the car kept its speed",
+      r.dv.toFixed(1)+" km/h", r.dv>=16?"for":r.dv>=8?"":"against");
+  if(S.car){
+    add("restraint", r.belt?"deployed — the car is certain something hit it":"quiet, no deployment",
+        r.belt?"FIRED":"armed", r.belt?"for":"against");
+    add("wheel.speed", r.slow?("stopped, but over "+r.slow+" s — that is braking, not a wall")
+        :(r.stop?"stopped dead and has not moved":"still rolling"),
+        r.stop?"0 km/h":Math.round(sim.speed)+" km/h", r.stop&&!r.slow?"for":"against");
+  } else {
+    add("restraint","no car linked — the strongest signal in the system is missing","unavailable","");
+    add("gnss.speed", r.stop?"satellite speed dropped to zero and stayed there"
+        :"satellite speed says the car is still moving — on a phone this is the only channel keeping it from a false alarm",
+        r.stop?"0 km/h":Math.round(sim.speed)+" km/h", r.stop?"for":"against");
+  }
+  if(r.roll>0) add("gyro.roll", r.roll>=60?"past 60° and held there":"rocked but recovered",
+                   Math.round(r.roll)+"°", r.roll>=60?"for":"against");
+  if(S.phone){
+    add("occupant", r.occ==="still"?"no movement in the cabin since the impact":"moving in the cabin",
+        r.occ, r.occ==="still"?"for":"");
+    add("cabin.audio", r.aud==="ordinary"?"nothing but road noise":"broadband transient, consistent with an impact",
+        r.aud, r.aud!=="ordinary"?"":"against");
+  }
+  if(S.car&&S.phone&&Math.abs(r.phoneFelt-r.carFelt)>3)
+    add("cross-check","the phone felt "+r.phoneFelt.toFixed(1)+" g and the car felt "+r.carFelt.toFixed(1)+" g — the phone moved, the car did not",
+        "mismatch", "against");
+
+  /* agreement adjusts confidence: every corroborating channel a little up,
+     every contradicting one hard down. Never above the cap for this mode. */
+  ch.forEach(c=>{ if(c.side==="for") conf+=.02; if(c.side==="against"&&sev!=="none") conf-=.09; });
+  conf=Math.max(.05,Math.min(cap_,conf));
+
+  /* window length, and the one case that has no window at all */
+  let win=null, sends=null;
+  if(sev==="minor"){ win=45; sends="contacts"; }
+  if(sev==="collision"){ win=30; sends="both"; }
+  if(sev==="severe"){ win=10; sends="both"; }
+  if(m==="phone"&&win!==null){ win+=15; if(sev==="minor"){ win=null; sends=null; } }
+  if(sev==="severe"&&r.occ==="still"&&r.belt===true){ win=0; sends="both"; }
+
+  return {cls,sev,conf,ch,win,sends,r,mode:m,ev:e};
+}
+
+const CLSNAME={road:"Road event",harsh:"Harsh event",minor:"Minor collision",
+               collision:"Collision",severe:"Severe collision",rollover:"Rollover"};
+/* Arabic takes the accusative after رصد, and the adjectives in the other
+   order: اصطداماً أمامياً شديداً, not "severe frontal impact" word for word. */
+function arPhrase(d){
+  if(d.cls==="rollover") return "انقلاب المركبة";
+  if(d.sev==="minor") return "اصطداماً بسيطاً";
+  return "اصطداماً"+(d.dir!==null&&d.dir!==undefined?" "+DIRAR[d.dir]:"")+(d.sev==="severe"?" شديداً":"");
+}
+
+/* ═══ 4. simulation ═══════════════════════════════════════════════════ */
+function tick(dt){
+  if(sim.pulse){
+    const p=sim.pulse; p.t+=dt;
+    const k=Math.exp(-Math.pow((p.t-.06)/.055,2));
+    sim.g=Math.max(.04,p.peak*k);
+    sim.rot=Math.max(2,p.rot*k*1.2);
+    if(p.t>.5){ sim.g=.04; sim.rot=2; sim.pulse=null; }
+  } else if(!sim.frozen){
+    sim.g=.04+Math.random()*.11;
+    sim.rot=1+Math.random()*3;
+  }
+  if(sim.slowing){
+    const s=sim.slowing; s.t+=dt;
+    const f=Math.min(1,s.t/s.dur);
+    sim.speed=s.from+(s.to-s.from)*f;
+    if(f>=1){ sim.speed=s.to; sim.slowing=null; }
+  } else if(!sim.frozen&&sim.speed>0){
+    sim.target+=(Math.random()-.5)*2.5;
+    sim.target=Math.max(88,Math.min(108,sim.target));
+    sim.speed+=(sim.target-sim.speed)*Math.min(1,dt*1.5);
+  }
+  BUF.g.push(sim.g); BUF.v.push(sim.speed);
+  while(BUF.g.length>BUFN){ BUF.g.shift(); BUF.v.shift(); }
+}
+
+function inject(e){
+  sim.pulse={t:0,peak:S.car?e.peak:e.pPeak,rot:e.rot};
+  sim.dv=S.car?e.dv:e.pDv;
+  if(e.stop||e.after!==undefined)
+    sim.slowing={from:sim.speed,to:e.after,dur:e.slow||.18,t:0};
+  sim.belt=e.airbag?"FIRED":"armed";
+  sim.occ=e.still?"still":"moving";
+  sim.aud=e.aud?"impact transient":"ordinary";
+}
+
+/* ═══ 5. traces ═══════════════════════════════════════════════════════ */
+function fit(c,h){
+  const r=Math.min(devicePixelRatio||1,2), w=c.clientWidth||600;
+  c.width=w*r; c.height=h*r; c.style.height=h+"px";
+  const x=c.getContext("2d"); x.setTransform(r,0,0,r,0,0); return x;
+}
+const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function drawTrace(c){
+  if(!c||!c.clientWidth) return;
+  const h=parseFloat(c.style.height)||150, w=c.clientWidth, x=c.getContext("2d");
+  x.setTransform(Math.min(devicePixelRatio||1,2),0,0,Math.min(devicePixelRatio||1,2),0,0);
+  x.clearRect(0,0,w,h);
+  const n=BUF.g.length; if(!n) return;
+  const gy=v=>h-4-(Math.log10(1+Math.min(v,30))/Math.log10(31))*(h-14);
+  const vy=v=>h-4-(Math.min(v,160)/160)*(h-14);
+  /* gridlines */
+  x.strokeStyle=css("--line"); x.lineWidth=1;
+  [40,80,120].forEach(v=>{ x.beginPath(); x.moveTo(0,vy(v)); x.lineTo(w,vy(v)); x.stroke(); });
+  /* the 4 g examination line */
+  x.save(); x.setLineDash([4,5]); x.strokeStyle=css("--caution"); x.globalAlpha=.75;
+  x.beginPath(); x.moveTo(0,gy(4)); x.lineTo(w,gy(4)); x.stroke(); x.restore();
+  const plot=(arr,fn,col,wd)=>{
+    x.beginPath(); x.lineWidth=wd; x.strokeStyle=col; x.lineJoin="round";
+    for(let i=0;i<n;i++){ const px=i/(BUFN-1)*w, py=fn(arr[i]); i?x.lineTo(px,py):x.moveTo(px,py); }
+    x.stroke();
+  };
+  plot(BUF.v,vy,css("--signal"),1.6);
+  plot(BUF.g,gy,css("--crit"),1.8);
+}
+
+/* ═══ 6. rendering ════════════════════════════════════════════════════ */
+function renderTiles(){
+  const v=S.verdict, r=v&&v.r, held=v&&!sim.pulse?v.r:null;
+  $("#tiles").innerHTML=TILES.map(t=>{
+    const dead=(t.src==="car"&&!S.car)||(t.src==="phone"&&!S.phone);
+    let val="—",sub=t.src,hot="";
+    if(dead){ val="—"; sub=t.src+" unlinked"; }
+    else{
+      if(t.k==="peak"){ const g=held?held.peak:sim.g; val=g.toFixed(2);
+        sub=held?"g · peak in window":"g · "+(sim.g>=4?"examining":"normal");
+        if(g>=8)hot="hot"; else if(g>=4)hot="warm"; }
+      if(t.k==="dv"){ val=(r?r.dv:0).toFixed(1); sub="km/h in 150 ms"; if(r&&r.dv>=16)hot="hot"; else if(r&&r.dv>=8)hot="warm"; }
+      if(t.k==="speed"){ val=Math.round(sim.speed); sub="km/h · wheels"; }
+      if(t.k==="rot"){ val=Math.round(held?held.rot:sim.rot); sub="°/s · roll "+(r?Math.round(r.roll):0)+"°"; if(r&&r.roll>=60)hot="hot"; }
+      if(t.k==="belt"){ val=sim.belt; sub=sim.belt==="FIRED"?"driver + passenger":"no deployment"; if(sim.belt==="FIRED")hot="hot"; }
+      if(t.k==="occ"){ val=sim.occ; sub=sim.occ==="still"?"no movement":"movement in cabin"; if(sim.occ==="still")hot="warm"; }
+      if(t.k==="aud"){ val=sim.aud==="ordinary"?"ordinary":"transient"; sub=sim.aud==="ordinary"?"road noise":"impact-like"; if(sim.aud!=="ordinary")hot="warm"; }
+      if(t.k==="gnss"){ val="locked"; sub=PLACE.lat.toFixed(3)+", "+PLACE.lon.toFixed(3); }
+    }
+    return '<div class="tile '+(dead?"dead":hot)+'"><span class="lab">'+t.lab+'</span>'+
+           '<span class="val">'+val+'</span><span class="sub">'+sub+'</span></div>';
+  }).join("");
+}
+
+function renderEvents(){
+  $("#events").innerHTML=EVENTS.map(e=>
+    '<button class="ev '+e.kind+'" type="button" data-ev="'+e.id+'"><b>'+e.lab+'</b>'+
+    '<span class="hint">'+e.hint+'</span></button>').join("");
+  $$("[data-ev]").forEach(b=>b.onclick=()=>stage(b.dataset.ev));
+}
+
+function renderVerdict(){
+  const box=$("#verdict"), v=S.verdict;
+  if(!v){
+    box.className="verdict";
+    $("#vTitle").textContent="Nothing to report";
+    $("#vSub").textContent="Ordinary driving. No event in the window.";
+    $("#vConf").textContent="";
+    $("#vChans").innerHTML="";
+    $("#vFoot").textContent="Confidence is capped at "+Math.round(cap()*100)+"% in "+modeLabel()+
+      " mode. It describes how certain the system is that a crash happened — never how badly anyone is hurt.";
+    return;
+  }
+  box.className="verdict "+(v.sev==="severe"?"crit":v.sev==="none"?"ok":"warn");
+  $("#vTitle").textContent=CLSNAME[v.cls];
+  $("#vSub").textContent = v.sev==="none"
+    ? "Not a crash. Logged in the car and nothing else."
+    : v.win===null ? "Phone-only mode will not dispatch a minor event. Logged, nothing sent."
+    : v.win===0 ? "No window — restraints fired and nobody has moved. Sent immediately."
+    : "Window of "+v.win+" s, then "+(v.sends==="contacts"?"the contacts only":"112 and the contacts")+".";
+  $("#vConf").textContent="confidence "+Math.round(v.conf*100)+"% · "+modeLabel();
+  $("#vChans").innerHTML=v.ch.map(c=>
+    '<div class="chan '+(c.side||"")+'"><span class="nm">'+c.nm+'</span>'+
+    '<span class="why">'+c.why+'</span><span class="vv">'+c.vv+'</span></div>').join("");
+  let foot="Capped at "+Math.round(cap()*100)+"% in "+modeLabel()+" mode.";
+  if(v.mode==="phone"&&v.ev.id==="drop")
+    foot+=" With the car linked, this one is thrown out in 40 ms — the car felt 0.3 g while the phone felt 7.9 g.";
+  if(v.sev==="none") foot+=" Nothing was sent, and no position left the car.";
+  $("#vFoot").textContent=foot;
+}
+
+function renderLog(){
+  $("#log").innerHTML=S.log.length
+    ? S.log.map(l=>'<li class="'+l.c+'"><span class="t">'+l.t+'</span><span class="m">'+l.m+'</span></li>').join("")
+    : '<li><span class="t">——:——</span><span class="m">Watching. Nothing has happened yet.</span></li>';
+}
+
+function renderPeople(){
+  $("#people").innerHTML=CONTACTS.map(c=>
+    '<div class="person"><span class="ord">contact '+c.n+'</span><b>'+c.name+'</b>'+
+    '<span class="rel">'+c.rel+'</span><span class="ph">'+c.phone+'</span>'+
+    '<span class="small">invented number</span></div>').join("");
+  $("#medical").innerHTML=
+    '<dt>blood</dt><dd>'+OWNER.blood+'</dd>'+
+    '<dt>allergy</dt><dd>'+OWNER.allergy+'</dd>'+
+    '<dt>medication</dt><dd>'+OWNER.meds+'</dd>'+
+    '<dt>note</dt><dd>'+OWNER.note+'</dd>';
+}
+
+function renderPacket(){
+  const d=S.dispatch;
+  if(!d){
+    $("#policePacket").innerHTML='<dt>status</dt><dd>Nothing has been dispatched. Stage a crash and the packet is built here, field by field, exactly as it would leave the car.</dd>';
+    $("#contactTo").textContent="—";
+    $("#contactMsgEn").textContent="No message has been sent.";
+    $("#contactMsgAr").textContent="لم تُرسل أي رسالة.";
+    $("#chain").innerHTML='<li><span class="st no">idle</span><span>No delivery attempted.</span></li>';
+    return;
+  }
+  const dirTxt=d.dir!==null?DIRNAME[d.dir]:"undetermined";
+  $("#policePacket").innerHTML=[
+    ["incident",d.id],
+    ["priority",d.sev==="severe"||d.cls==="rollover"?"1 — severe":d.sev==="collision"?"2 — collision":"3 — minor"],
+    ["time",d.t+" · "+new Date().toLocaleDateString("en-GB")],
+    ["position",d.lat.toFixed(4)+", "+d.lon.toFixed(4)+" (±6 m)"],
+    ["road",PLACE.road+", "+PLACE.detail],
+    ["governorate",PLACE.gov],
+    ["impact",dirTxt+" · Δv "+d.dv.toFixed(0)+" km/h · peak "+d.peak.toFixed(1)+" g"+(d.roll>=60?" · rolled "+Math.round(d.roll)+"°":"")],
+    ["restraints",d.airbag?"deployed — driver and passenger":"no deployment"],
+    ["vehicle",VEH.model+" · "+VEH.colour+" · plate "+VEH.plate],
+    ["fuel",d.airbag?"pump cut off":"pump running"],
+    ["occupants","2 belted, front row · "+(d.still?"no movement since impact":"movement detected")],
+    ["registered to",OWNER.name+" · "+OWNER.civil],
+    ["medical",OWNER.blood+" · allergy: "+OWNER.allergy+" · meds: "+OWNER.meds],
+    ["call back",OWNER.phone+" · voice channel open to the cabin"],
+    ["confidence",Math.round(d.conf*100)+"% that a crash occurred · "+modeLabel()],
+    ["not claimed","No assessment of injury. The system does not know."]
+  ].map(([k,v])=>'<dt>'+k+'</dt><dd>'+v+'</dd>').join("");
+
+  const sevEn=d.cls==="rollover"?"a rollover":d.sev==="severe"?"a severe "+dirTxt+" impact":
+              d.sev==="collision"?"a "+dirTxt+" collision":"a minor collision";
+  const toPolice=d.sends==="both";
+  $("#contactTo").textContent=CONTACTS[0].name+" · "+CONTACTS[0].phone;
+  $("#contactMsgEn").textContent=
+    OWNER.name+" has been in a car accident.\n\n"+
+    "Najda detected "+sevEn+" at "+d.t+" on "+PLACE.road+", "+PLACE.detail+".\n\n"+
+    (toPolice
+      ? "The 112 operations room already has the location and a patrol is being assigned — you do not need to call them.\n\n"
+      : "This was below the threshold for calling 112, so only you have been told.\n\n")+
+    "Position: "+d.lat.toFixed(4)+", "+d.lon.toFixed(4)+"\nTap to open in Maps · reply CALL to speak to the car";
+  $("#contactMsgAr").textContent=
+    "تعرّضت "+OWNER.ar+" لحادث مروري.\n\n"+
+    "رصد «نجدة» "+arPhrase(d)+" عند الساعة "+d.t+" على الطريق 30 — طريق الفحيحيل السريع، بالاتجاه الشمالي قرب مخرج العقيلة.\n\n"+
+    (toPolice
+      ? "تم إبلاغ غرفة عمليات 112 بالموقع ويجري إرسال دورية — لا داعي للاتصال بهم.\n\n"
+      : "لم يبلغ الحادث الحدّ الذي يستدعي إبلاغ 112، لذلك أُبلغتَ أنت فقط.\n\n")+
+    "الموقع: "+d.lat.toFixed(4)+"، "+d.lon.toFixed(4);
+  renderChain();
+}
+
+function renderChain(){
+  const d=S.dispatch; if(!d) return;
+  const rows=[];
+  if(S.car) rows.push(["ok","car modem","LTE, acknowledged in 1.2 s — the packet left on the car's own aerial."]);
+  else rows.push(["no","car modem","unavailable — no car linked."]);
+  if(S.car) rows.push(["no","phone LTE","not needed; the first attempt was acknowledged."]);
+  else rows.push(["ok","phone LTE","acknowledged in 2.4 s."]);
+  rows.push(["no","SMS gateway","not needed. Used when there is data-less coverage."]);
+  rows.push(["no","store & forward","not needed. Holds the packet with its original timestamp until any radio returns."]);
+  $("#chain").innerHTML=rows.map(([k,a,b])=>
+    '<li><span class="st '+k+'">'+(k==="ok"?"sent":"idle")+'</span><span><b>'+a+'</b> — '+b+'</span></li>').join("");
+}
+
+/* ── the police console ─────────────────────────────────────────────── */
+function incidents(){
+  const live=S.dispatch&&S.dispatch.sends==="both"?[dispatchAsIncident()]:[];
+  return live.concat(SEED);
+}
+function dispatchAsIncident(){
+  const d=S.dispatch;
+  return {id:d.id,sev:d.sev==="severe"||d.cls==="rollover"?"severe":d.sev,dir:d.dir,dv:d.dv,peak:d.peak,
+    airbag:d.airbag,roll:d.roll,road:PLACE.road,detail:PLACE.detail,lat:d.lat,lon:d.lon,
+    veh:VEH.model+", "+VEH.colour,occ:"2 belted, front"+(d.still?" · no movement since impact":""),
+    t:d.t,ts:d.ts,status:d.status,ack:d.ack,blood:OWNER.blood,allergy:OWNER.allergy,meds:OWNER.meds,live:true};
+}
+const PRI={severe:"p1",collision:"p2",minor:"p3"}, RANK={severe:0,collision:1,minor:2};
+function renderQueue(){
+  const list=incidents().sort((a,b)=>RANK[a.sev]-RANK[b.sev]||b.ts-a.ts);
+  if(!list.some(i=>i.id===S.sel)) S.sel=list[0]?list[0].id:null;
+  $("#queue").innerHTML=list.map(i=>
+    '<button class="inc '+PRI[i.sev]+'" type="button" data-inc="'+i.id+'" aria-pressed="'+(i.id===S.sel)+'">'+
+    '<span class="top"><span class="sev">'+(i.sev==="severe"?"priority 1":i.sev==="collision"?"priority 2":"priority 3")+'</span>'+
+    '<span class="t">'+i.t+'</span></span>'+
+    '<span class="wh">'+i.road+(i.live?' · <b>new</b>':"")+'</span>'+
+    '<span class="st">'+i.id+' · '+i.status+'</span></button>').join("");
+  $$("[data-inc]").forEach(b=>b.onclick=()=>{ S.sel=b.dataset.inc; renderQueue(); renderDetail(); });
+  const fresh=S.dispatch&&!S.dispatch.ack&&S.dispatch.sends==="both";
+  $("#policeBadge").hidden=!fresh;
+}
+function renderDetail(){
+  const i=incidents().find(x=>x.id===S.sel);
+  const d=$("#detail");
+  if(!i){ d.innerHTML='<p class="small">Nothing selected.</p>'; return; }
+  const dirTxt=i.dir!==null&&i.dir!==undefined?DIRNAME[i.dir]:"undetermined";
+  d.innerHTML=
+    '<div class="row"><span class="pill '+(i.sev==="severe"?"live-crit":"on")+'">'+
+      (i.sev==="severe"?"priority 1":i.sev==="collision"?"priority 2":"priority 3")+'</span>'+
+      '<b style="font-family:var(--display);font-size:var(--f2)">'+i.id+'</b>'+
+      '<span class="small" style="margin-inline-start:auto">reported '+i.t+' · automatic, Najda</span></div>'+
+    '<div class="map"><canvas id="mapC" aria-label="Schematic position of the incident"></canvas>'+
+      '<span class="pin">'+i.lat.toFixed(4)+', '+i.lon.toFixed(4)+'</span></div>'+
+    '<dl class="kv">'+[
+      ["road",i.road],["where",i.detail],
+      ["impact",dirTxt+" · Δv "+i.dv+" km/h · peak "+i.peak+" g"+(i.roll>=60?" · rolled "+i.roll+"°":"")],
+      ["restraints",i.airbag?"deployed":"no deployment"],
+      ["vehicle",i.veh],["occupants",i.occ],
+      ["medical",i.blood+" · allergy: "+i.allergy+" · meds: "+i.meds],
+      ["injuries","not assessed — the system does not know"],
+      ["status",i.status]
+    ].map(([k,v])=>'<dt>'+k+'</dt><dd>'+v+'</dd>').join("")+'</dl>'+
+    (i.live
+      ? '<div class="row"><button class="btn sm" type="button" id="ackBtn"'+(i.ack?" disabled":"")+'>'+
+        (i.ack?"Acknowledged":"Acknowledge and assign patrol")+'</button>'+
+        '<button class="btn ghost sm" type="button" id="voiceBtn">Open voice channel to the cabin</button></div>'
+      : '<p class="small">An invented incident, here so the queue is not empty.</p>');
+  drawMap(i);
+  if($("#ackBtn")) $("#ackBtn").onclick=acknowledge;
+  if($("#voiceBtn")) $("#voiceBtn").onclick=()=>{
+    logIt("112 operations room opened a voice channel to the cabin.","good");
+    $("#voiceBtn").textContent="Voice channel open"; $("#voiceBtn").disabled=true;
+  };
+}
+/* A schematic, not a map: a page that drew a real one would be making a
+   network request it has promised not to make. */
+function drawMap(i){
+  const c=$("#mapC"); if(!c) return;
+  const x=fit(c,190), w=c.clientWidth, h=190;
+  x.fillStyle=css("--surface-2"); x.fillRect(0,0,w,h);
+  x.strokeStyle=css("--line"); x.lineWidth=1;
+  for(let gx=0;gx<w;gx+=26){ x.beginPath(); x.moveTo(gx,0); x.lineTo(gx,h); x.stroke(); }
+  for(let gy=0;gy<h;gy+=26){ x.beginPath(); x.moveTo(0,gy); x.lineTo(w,gy); x.stroke(); }
+  x.strokeStyle=css("--line-strong"); x.lineWidth=9; x.lineCap="round";
+  x.beginPath(); x.moveTo(w*.12,h+10); x.bezierCurveTo(w*.3,h*.7,w*.42,h*.45,w*.78,-10); x.stroke();
+  x.lineWidth=5; x.beginPath(); x.moveTo(-10,h*.72); x.lineTo(w+10,h*.34); x.stroke();
+  x.strokeStyle=css("--surface"); x.lineWidth=1; x.setLineDash([7,9]);
+  x.beginPath(); x.moveTo(w*.12,h+10); x.bezierCurveTo(w*.3,h*.7,w*.42,h*.45,w*.78,-10); x.stroke();
+  x.setLineDash([]);
+  const px=w*.45, py=h*.44;
+  x.fillStyle=css(i.sev==="severe"?"--crit":i.sev==="collision"?"--caution":"--steady");
+  x.globalAlpha=.22; x.beginPath(); x.arc(px,py,26,0,7); x.fill();
+  x.globalAlpha=1; x.beginPath(); x.arc(px,py,6.5,0,7); x.fill();
+  x.strokeStyle=css("--surface"); x.lineWidth=2; x.stroke();
+  x.fillStyle=css("--ink-dim"); x.font='500 11px '+css("--mono").split(",")[0].replace(/"/g,"");
+  x.fillText(i.road.split("—")[0].trim(),10,18);
+}
+
+function acknowledge(){
+  if(!S.dispatch) return;
+  S.dispatch.ack=true;
+  S.dispatch.status="Acknowledged · patrol 19 assigned, ETA 7 minutes";
+  logIt("112 operations room acknowledged. Patrol 19 assigned, ETA 7 minutes.","good");
+  CONTACTS.slice(1).forEach(c=>logIt("Contact "+c.n+" ("+c.name+") told a patrol is on the way.",""));
+  renderQueue(); renderDetail(); renderPhase();
+}
+
+/* ═══ 7. the window and the dispatch ══════════════════════════════════ */
+function stage(id){
+  const e=EVENTS.find(x=>x.id===id); if(!e) return;
+  if(mode()==="none"){
+    logIt("Nothing is linked. There is no service to run.","hit");
+    return;
+  }
+  clearTimers();
+  S.dispatch=null; S.phase="idle"; $("#waitBadge").hidden=true; $("#policeBadge").hidden=true;
+  S.ev=e; inject(e);
+  logIt("Event examined: "+e.lab.toLowerCase()+".","");
+  later(()=>{
+    const v=classify(e); S.verdict=v;
+    renderVerdict(); renderTiles();
+    if(v.sev==="none"){
+      S.phase="idle";
+      logIt("Classified “"+CLSNAME[v.cls]+"”. Not a crash — nothing sent, no position left the car.","good");
+      renderPhase();
+      return;
+    }
+    logIt("Classified “"+CLSNAME[v.cls]+"” at "+Math.round(v.conf*100)+"% confidence.","hit");
+    if(v.win===null){
+      S.phase="idle";
+      logIt("Classified “"+CLSNAME[v.cls]+"”, but phone-only mode does not dispatch a minor event. Nothing sent.","good");
+      renderPhase();
+      return;
+    }
+    if(v.win===0){
+      logIt("No window: restraints fired and nobody has moved. Sending immediately.","hit");
+      openWindow(v,0);
+    } else openWindow(v,v.win);
+  },620);
+  renderPhase();
+}
+
+function openWindow(v,secs){
+  S.phase="window"; S.windowLen=secs; S.windowEnd=performance.now()+secs*1000;
+  $("#waitBadge").hidden=false;
+  $("#btnOkay").disabled=false; $("#btnNow").disabled=false;
+  if(secs>0) logIt("Window open: "+secs+" seconds to cancel.","");
+  renderPhase();
+  if(secs===0) dispatch();
+}
+
+function dispatch(){
+  if(S.phase==="dispatched") return;
+  const v=S.verdict; if(!v) return;
+  S.phase="dispatched";
+  $("#btnOkay").disabled=true; $("#btnNow").disabled=true;
+  $("#waitBadge").hidden=true;
+  S.dispatch={
+    id:"KW-"+(4474+Math.floor(Math.random()*9)),
+    sev:v.sev,cls:v.cls,dir:v.r.dir,dv:v.r.dv,peak:v.r.peak,roll:v.r.roll,
+    airbag:v.r.belt===true,still:v.r.occ==="still",conf:v.conf,sends:v.sends,
+    lat:PLACE.lat,lon:PLACE.lon,t:hhmm(),ts:Date.now(),ack:false,
+    status:"New · not yet acknowledged"
+  };
+  if(v.sends==="both"){
+    logIt("Dispatched to the 112 operations room: position, vehicle, impact and medical card.","hit");
+    logIt("Contact 1 (Sara) called and sent the message in Arabic and English.","");
+    later(()=>{ logIt("Contact 1 acknowledged. Contacts 2 and 3 told it is already answered.",""); },9000);
+  } else {
+    logIt("Below the threshold for 112. Contact 1 (Sara) told, operations room not called.","");
+  }
+  S.sel=S.dispatch.id;
+  renderPacket(); renderQueue(); renderDetail(); renderPhase();
+}
+
+function cancel(){
+  if(S.phase!=="window") return;
+  S.phase="cancelled";
+  $("#btnOkay").disabled=true; $("#btnNow").disabled=true; $("#waitBadge").hidden=true;
+  logIt("Cancelled by the driver. Nobody was told. The event stays in the car's log.","good");
+  renderPhase();
+}
+
+function reset(){
+  clearTimers();
+  S.phase="idle"; S.verdict=null; S.ev=null; S.dispatch=null; S.log=[];
+  sim.speed=96; sim.target=96; sim.belt="armed"; sim.occ="moving"; sim.aud="ordinary";
+  sim.pulse=null; sim.slowing=null; sim.dv=0; S.sel="KW-4473";
+  $("#btnOkay").disabled=true; $("#btnNow").disabled=true; $("#waitBadge").hidden=true;
+  renderVerdict(); renderTiles(); renderLog(); renderPacket(); renderQueue(); renderDetail(); renderPhase();
+  logIt("Demo reset. Driving on "+PLACE.road+".","");
+}
+
+/* ═══ 8. phase → the whole page ═══════════════════════════════════════ */
+function renderPhase(){
+  const p=S.phase, v=S.verdict;
+  const txt={idle:"watching",window:"waiting for you",dispatched:"help called",cancelled:"cancelled by you"}[p];
+  $("#stateTxt").textContent=mode()==="none"?"not linked":txt;
+  $("#statePill").className="pill "+(p==="dispatched"?"live-crit":p==="window"?"on":"");
+  $("#stateDot").className="dot "+(p==="dispatched"?"crit live":p==="window"?"warn live":mode()==="none"?"off":"live");
+  $("#heroState").textContent=mode()==="none"?"no service":txt;
+  $("#senseMode").textContent=modeLabel();
+
+  const box=$("#countBox"), ring=$("#ring");
+  if(p==="window"){
+    box.className="count "+(v.sev==="severe"?"crit":"warn");
+    ring.style.setProperty("--c",v.sev==="severe"?css("--crit"):css("--caution"));
+    $("#countWhat").textContent=CLSNAME[v.cls]+" at "+Math.round(v.conf*100)+"% confidence. "+
+      (v.sends==="contacts"?"When this reaches zero your contacts are told. 112 is not called for this one."
+                           :"When this reaches zero, 112 and your contacts are told.");
+    $("#countNote").textContent="Cancelling still writes the event to the car's own log, so a workshop can read it later.";
+  } else if(p==="dispatched"){
+    box.className="count crit"; ring.style.setProperty("--p",100); ring.style.setProperty("--c",css("--crit"));
+    $("#countNum").textContent="sent";
+    $("#countWhat").textContent=S.dispatch&&S.dispatch.sends==="both"
+      ? "Sent. The operations room has the position, the vehicle and the medical card; your contacts have a message. See “What gets sent”."
+      : "Sent to your contacts only. This was below the threshold for calling 112.";
+    $("#countNote").textContent=S.dispatch&&S.dispatch.ack
+      ? "Patrol 19 assigned, ETA 7 minutes. Position updates have stopped."
+      : "Waiting for the operations room to acknowledge.";
+  } else if(p==="cancelled"){
+    box.className="count"; ring.style.setProperty("--p",0);
+    $("#countNum").textContent="—";
+    $("#countWhat").textContent="You closed the window. Nothing was sent and nobody was told.";
+    $("#countNote").textContent="The event is still in the car's log — cancelling hides it from other people, not from the workshop.";
+  } else {
+    box.className="count"; ring.style.setProperty("--p",0);
+    $("#countNum").textContent="—";
+    $("#countWhat").textContent=mode()==="none"
+      ? "Nothing is linked, so there is nothing watching. Link a device on the “Car & phone” tab."
+      : "Nothing is waiting. Stage a crash and the window opens here.";
+  }
+  syncDevices();
+}
+
+function syncDevices(){
+  const m=mode();
+  $("#carDot").className="dot "+(S.car?"":"off");
+  $("#phoneDot").className="dot "+(S.phone?"":"off");
+  $("#carPill").className="pill "+(S.car?"on":"off");
+  $("#phonePill").className="pill "+(S.phone?"on":"off");
+  $("#carPillTxt").textContent=S.car?"car linked":"car off";
+  $("#phonePillTxt").textContent=S.phone?"phone linked":"phone off";
+  $("#devCar").className="dev"+(S.car?" on":"");
+  $("#devPhone").className="dev"+(S.phone?" on":"");
+  $("#carStatus").innerHTML='<span class="dot '+(S.car?"":"off")+'"></span> '+(S.car?"linked":"unlinked");
+  $("#phoneStatus").innerHTML='<span class="dot '+(S.phone?"":"off")+'"></span> '+(S.phone?"linked":"unlinked");
+  $("#carToggle").textContent=S.car?"Unlink the car":"Link the car";
+  $("#phoneToggle").textContent=S.phone?"Unlink the phone":"Link the phone";
+  $("#carNote").textContent=S.car?"Restraint line and wheel speed available.":"No restraints, no wheel speed, no doors.";
+  $("#phoneNote").textContent=S.phone?"Occupant movement, cabin sound and the voice channel available.":"No occupant movement, no voice channel.";
+  $("#heroVeh").textContent=m==="none"?"no device linked":"example vehicle · "+VEH.plate;
+}
+
+/* ═══ 9. views, theme, boot ═══════════════════════════════════════════ */
+function go(id){
+  $$(".view").forEach(v=>v.hidden=(v.id!=="view-"+id));
+  $$(".tab").forEach(t=>t.setAttribute("aria-current",String(t.dataset.go===id)));
+  window.scrollTo({top:0,behavior:"instant"});
+  if(id==="police"){ renderQueue(); renderDetail(); }
+  if(id==="alert") renderPacket();
+  sizeAll();
+}
+$$("[data-go]").forEach(b=>b.onclick=()=>go(b.dataset.go));
+
+$("#themeBtn").onclick=()=>{
+  const dark=matchMedia("(prefers-color-scheme: dark)").matches;
+  const cur=document.documentElement.dataset.theme||(dark?"dark":"light");
+  document.documentElement.dataset.theme=cur==="dark"?"light":"dark";
+  renderPhase(); renderDetail();
+};
+$("#carToggle").onclick=()=>{ S.car=!S.car; afterLink("Car"); };
+$("#phoneToggle").onclick=()=>{ S.phone=!S.phone; afterLink("Phone"); };
+function afterLink(what){
+  logIt(what+" "+((what==="Car"?S.car:S.phone)?"linked":"unlinked")+" — now "+modeLabel()+
+        ", confidence capped at "+Math.round(cap()*100)+"%.","");
+  if(S.verdict){ S.verdict=classify(S.ev); }
+  renderVerdict(); renderTiles(); renderPhase(); renderChain();
+}
+$("#btnOkay").onclick=cancel;
+$("#btnNow").onclick=()=>{ if(S.phase==="window"){ logIt("Driver sent it early.","hit"); dispatch(); } };
+$("#btnStage").onclick=()=>stage("frontal");
+$("#btnReset").onclick=reset;
+$("#heroCrash").onclick=()=>{ stage("frontal"); go("wait"); };
+
+function sizeAll(){
+  const h=$("#heroTrace"), s=$("#senseTrace");
+  if(h&&h.clientWidth) fit(h,150);
+  if(s&&s.clientWidth) fit(s,150);
+  if($("#mapC")) renderDetail();
+}
+addEventListener("resize",sizeAll);
+
+let last=performance.now(), tileT=0;
+function loop(now){
+  const dt=Math.min(.05,(now-last)/1000); last=now;
+  tick(dt);
+  drawTrace($("#heroTrace")); drawTrace($("#senseTrace"));
+  $("#heroSpeed").textContent=Math.round(sim.speed)+" km/h";
+  $("#heroG").textContent=sim.g.toFixed(2)+" g";
+  $("#senseSpeed").textContent=Math.round(sim.speed)+" km/h";
+  $("#senseG").textContent=sim.g.toFixed(2)+" g";
+  if(S.phase==="window"){
+    const left=Math.max(0,S.windowEnd-now);
+    $("#countNum").textContent=Math.ceil(left/1000);
+    $("#ring").style.setProperty("--p",100-(left/(S.windowLen*1000))*100);
+    if(left<=0) dispatch();
+  }
+  tileT+=dt; if(tileT>.25){ tileT=0; renderTiles(); }
+  requestAnimationFrame(loop);
+}
+
+/* The seeded queue is dated off the clock in your browser, so the live
+   incident does not land four hours after three older ones. */
+(function seedClock(){
+  const ago=m=>new Date(Date.now()-m*60000).toLocaleTimeString("en-GB",{hour12:false,hour:"2-digit",minute:"2-digit"});
+  SEED[0].t=ago(19); SEED[1].t=ago(12); SEED[2].t=ago(4);
+  [19,12,4].forEach((m,i)=>SEED[i].ts=Date.now()-m*60000);
+})();
+renderEvents(); renderPeople(); renderVerdict(); renderTiles(); renderLog();
+renderPacket(); renderQueue(); renderDetail(); renderPhase(); syncDevices();
+logIt("Watching. Driving on "+PLACE.road+", "+PLACE.detail+".","");
+go("drive"); sizeAll(); requestAnimationFrame(loop);
+</script>
+</body>
+</html>

@@ -31,6 +31,22 @@ Manchester Metropolitan University.
   keeps state for the tab only unless asked otherwise, never writes the ID number to the device,
   and is marked `noindex`. `vercel.json` adds a content-security policy for the whole site and a
   stricter one for `/rafeeq/`.
+- `najda/` — **Najda** (نجدة): an automatic crash alert service. It links the car
+  and the phone, reads eight channels between them, and decides whether what just
+  happened was a crash or a pothole — then gives the driver a window to cancel before
+  it sends the position, the vehicle and a medical card to the 112 operations room and a
+  bilingual message to one chosen person. The page stages nine events, five of them
+  harmless but violent enough to fool a naive threshold, and the readout names the
+  channels for and against each decision. Unlinking the car or the phone changes the
+  confidence cap, the window length and what a staged event is even classified as. It
+  carries the dispatcher's side too: a worst-first queue where acknowledging an incident
+  writes back into the driver's log. One self-contained page (`najda/index.html`) plus
+  `najda/PROMPT.md`, the build brief. It is a **prototype**: no car is linked, no
+  operations room is connected, every vehicle, contact, officer and coordinate is
+  invented, and the only real thing on it is 112. It carries a demonstration banner on
+  every screen, makes no network requests beyond its fonts, keeps nothing after the tab
+  closes, and is marked `noindex`.
+
 - `notes/` — the Notebook: six running logs (places in Kuwait, a car build list, a gahwa
   log, things I'm learning, read & watched, small wins). A hub page plus one page per log,
   all sharing `notes/styles.css`. Currently a **draft** — every page carries a
@@ -77,6 +93,19 @@ patient's own baseline, capped at a 97% match because body signs are not a lab t
 band pairing uses Web Bluetooth's Heart Rate service and degrades to the demo band. The
 whole design brief, including the rules about what the site must never claim a wrist band
 can do, is in `rafeeq/PROMPT.md`.
+
+`najda/index.html` is one file too. The invented world — vehicle, owner, contacts,
+location and the seeded incident queue — is the block of constants at the top of the
+script, so changing who the demo is about means editing one place. The nine staged
+events are the `EVENTS` array: each one carries what the *car* measures and what the
+*phone* measures separately, which is what lets the page show a dropped phone reading
+7.9 g on one device and 0.3 g on the other. Detection is `classify()`, running the
+rules in the same order the page prints them, and the confidence cap comes from which
+devices are linked (98 / 94 / 79 per cent). A single `requestAnimationFrame` loop drives
+the traces, the tiles and the countdown, and the countdown runs at real speed — thirty
+seconds means thirty seconds. Colours are the `:root` tokens (light-first, with both
+dark blocks and a theme button in the rail). The whole design brief, including the rules
+about what the service must never claim, is in `najda/PROMPT.md`.
 
 `dives/index.html` is one file with no build step. Colours are the `:root` tokens at the top;
 each place is one `<article class="place">`; the pearls and silt are drawn on the `#drift` canvas; the four 3D scenes are the `build*()` functions in
