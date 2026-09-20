@@ -182,7 +182,38 @@
   .chip{border:1px solid var(--line);border-radius:99px;padding:.18rem .6rem}
   .chip b{color:var(--sand);font-weight:500}
 
-  /* ---------- the cart, annotated ---------- */
+  /* ---------- the cart in 3D ---------- */
+  .stage3d{position:relative;height:clamp(340px,50vw,560px);background:
+    radial-gradient(70% 60% at 50% 40%, #1B140E, #100B08 70%)}
+  .stage3d canvas{display:block;width:100%;height:100%;touch-action:pan-y;cursor:grab}
+  .stage3d canvas:active{cursor:grabbing}
+  .hotspots{position:absolute;inset:0;pointer-events:none}
+  .spot{
+    position:absolute;top:0;left:0;pointer-events:auto;
+    width:26px;height:26px;border-radius:50%;cursor:pointer;
+    background:rgba(14,10,7,.82);border:1.6px solid var(--cool);color:var(--cool);
+    font-family:var(--mono);font-size:.74rem;line-height:1;padding:0;
+    transition:opacity .2s ease;
+  }
+  .spot.on{border-color:var(--gold);color:var(--gold);box-shadow:0 0 0 6px rgba(232,181,75,.14)}
+  .spot:hover{border-color:var(--gold);color:var(--gold)}
+  .view-tools{
+    position:absolute;left:0;right:0;bottom:0;display:flex;gap:.45rem;align-items:center;
+    padding:.7rem .9rem;flex-wrap:wrap;
+    background:linear-gradient(to top, rgba(10,7,5,.85), transparent);
+  }
+  .view-tools button{
+    background:rgba(20,15,10,.8);border:1px solid var(--line);color:#DCCDB8;
+    border-radius:8px;padding:.35rem .7rem;font-size:.82rem;cursor:pointer;
+  }
+  .view-tools button:hover{border-color:var(--cool);color:var(--cool)}
+  .view-tools button[aria-pressed=true]{border-color:var(--gold);color:var(--gold)}
+  .view-tools .zoom{width:30px;padding:.35rem 0;font-family:var(--mono)}
+  .view-tools .hint3d{margin-left:auto;font-family:var(--mono);font-size:.68rem;
+    letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  @media (max-width:560px){ .view-tools .hint3d{display:none} }
+
+  /* ---------- the cart, annotated (fallback drawing) ---------- */
   .cartboard{border:1px solid var(--line);border-radius:var(--r);background:var(--panel);overflow:hidden}
   .cartboard svg{display:block;width:100%;height:auto}
   .pin{cursor:pointer}
@@ -273,7 +304,7 @@
     </div>
   </header>
 
-  <p class="concept"><b>Concept project.</b> Nothing here is a photograph and no such service runs in Al-Mubarakiya &mdash; every scene on this page is drawn, and every figure is a design target.</p>
+  <p class="concept"><b>Concept project.</b> Nothing here is a photograph and no such service runs in Al-Mubarakiya &mdash; the lane is drawn, the cart is modelled, and every figure is a design target.</p>
 
   <section id="lane-sec" style="padding-top:var(--s3)">
     <div class="stage">
@@ -390,9 +421,20 @@
       <h2>The cart</h2>
       <span class="ara">&#1575;&#1604;&#1593;&#1585;&#1576;&#1577;</span>
     </div>
-    <p class="sec-note">Tap a number.</p>
+    <p class="sec-note">Drag it around. Tap a number and it turns to show you that part.</p>
 
     <div class="cartboard">
+      <div class="stage3d" id="cart3d" hidden>
+        <canvas id="cart-canvas"></canvas>
+        <div class="hotspots" id="hotspots"></div>
+        <div class="view-tools">
+          <button id="explode" type="button" aria-pressed="false">Take it apart</button>
+          <button id="reset-view" type="button">Reset view</button>
+          <button id="zoom-in" class="zoom" type="button" aria-label="Zoom in">+</button>
+          <button id="zoom-out" class="zoom" type="button" aria-label="Zoom out">&minus;</button>
+          <span class="hint3d">drag to turn it</span>
+        </div>
+      </div>
       <svg id="cart-art" viewBox="0 0 1060 580" role="img" aria-label="A drawn air-conditioned cart in side view with eight numbered markers: roof air-conditioner, insulated roof, tinted glass, power doors, seats for six, battery pack, motor and fold-out ramp"></svg>
       <div class="caption">
         <span class="num" id="cap-num">01</span>
@@ -463,7 +505,7 @@
     <span>Zill &middot; &#1592;&#1604;&#1617;</span>
     <span>Souq Al-Mubarakiya, Kuwait City</span>
     <span>Concept &mdash; drawn, not photographed</span>
-    <span>No network requests</span>
+    <span>Fetches nothing but its fonts</span>
   </footer>
 
 </div>
@@ -938,13 +980,19 @@
           finishRide(cc);
         });
         ride.rideUnits = c.leg ? c.leg.len : 0;
+        if(!c.leg){ ride.phase = "done"; finishRide(c); }
       }, 2200);
     }
 
     var fromNode = cart.leg ? cart.leg.endNode : cart.node;
     var leg1 = setLeg(cart, fromNode, a.node, onPickup);
     cart.queue = [];
-    if(cart.leg){ cart.queue.push(leg1); } else { cart.leg = leg1; }
+    if(leg1){
+      if(cart.leg){ cart.queue.push(leg1); } else { cart.leg = leg1; }
+    } else {
+      /* it is already standing at your stop */
+      setTimeout(function(){ onPickup(cart); }, 400);
+    }
     ride.approachUnits = leg1 ? leg1.len : 0;
     cart.phase = "collecting at " + a.en;
 
@@ -974,10 +1022,10 @@
     document.getElementById("r-cab").textContent  = cart.cabin.toFixed(1) + "°C";
     document.getElementById("r-out").textContent  = out + "°C";
     document.getElementById("r-fare").textContent = f.note;
+    var saved = Math.max(1, Math.round(walkMin - rideMin));
     document.getElementById("r-verdict").textContent =
       "You crossed " + Math.round(m) + " m of " + out + "°C souq at " + cart.cabin.toFixed(0) +
-      "°C, and saved about " + Math.max(1, Math.round(walkMin - rideMin)) +
-      " minutes of it on foot.";
+      "°C, and saved about " + saved + (saved === 1 ? " minute" : " minutes") + " of it on foot.";
     receipt.classList.add("on");
 
     say("Dropped at " + ride.to.en + ".",
@@ -1750,12 +1798,14 @@
         e.num.setAttribute("fill", j === i ? C.gold : C.cool);
       });
       btns.forEach(function(b, j){ b.setAttribute("aria-pressed", j === i ? "true" : "false"); });
+      if(window.ZillCartHook) window.ZillCartHook(i);
     }
+    window.ZillCart = {select: select, parts: PARTS};
     select(0);
   }
 
   window.ZillArt = {E:E, T:T, poly:poly, C:C, lerp:lerp, seeded:seeded, REDUCED:REDUCED,
-                    drawCartSide:drawCartSide};
+                    drawCartSide:drawCartSide, PARTS:PARTS};
   buildLane();
   buildCartArt();
 })();
@@ -2212,6 +2262,521 @@
   buildShots();
   buildFacts();
   buildMapDecor();
+})();
+</script>
+
+<!-- three.js r128, MIT, vendored so the page fetches nothing at all -->
+<script src="three.min.js"></script>
+<script>
+/* ================================================================
+   Zill — the cart in three dimensions.
+   Built from primitives at 1 unit = 1 metre, so the numbers on the
+   page and the thing you are turning around are the same object.
+   Falls back to the drawing above if WebGL or the library is missing.
+   ================================================================ */
+(function(){
+  "use strict";
+  if(!window.THREE || !window.ZillArt) return;
+
+  var host = document.getElementById("cart3d");
+  var canvas = document.getElementById("cart-canvas");
+  var svgFallback = document.getElementById("cart-art");
+  var spotHost = document.getElementById("hotspots");
+  if(!host || !canvas) return;
+
+  var REDUCED = window.ZillArt.REDUCED;
+  var renderer;
+  try{
+    renderer = new THREE.WebGLRenderer({canvas:canvas, antialias:true, alpha:true});
+  }catch(err){ return; }
+  if(!renderer) return;
+
+  host.hidden = false;
+  if(svgFallback) svgFallback.style.display = "none";
+
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75));
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  /* r128 has no colour management, so linear output keeps the authored colours */
+
+  var scene = new THREE.Scene();
+  var camera = new THREE.PerspectiveCamera(38, 16/9, 0.1, 100);
+
+  /* ---------------- materials ---------------- */
+  var M = {
+    body:   new THREE.MeshStandardMaterial({color:0x241A13, roughness:.68, metalness:.22}),
+    bodyDk: new THREE.MeshStandardMaterial({color:0x140E09, roughness:.82, metalness:.12}),
+    wood:   new THREE.MeshStandardMaterial({color:0x4A3826, roughness:.88, metalness:.05}),
+    trim:   new THREE.MeshStandardMaterial({color:0x8A6B49, roughness:.6,  metalness:.3}),
+    ac:     new THREE.MeshStandardMaterial({color:0x13242A, roughness:.45, metalness:.5,
+              emissive:0x0B3A44, emissiveIntensity:.5}),
+    cool:   new THREE.MeshStandardMaterial({color:0x6FD3E8, roughness:.3, metalness:.2,
+              emissive:0x6FD3E8, emissiveIntensity:.8}),
+    glass:  new THREE.MeshStandardMaterial({color:0xBFEFF9, roughness:.06, metalness:.15,
+              transparent:true, opacity:.17, side:THREE.DoubleSide,
+              emissive:0x1E4C58, emissiveIntensity:.14}),
+    tyre:   new THREE.MeshStandardMaterial({color:0x0E0A07, roughness:.95, metalness:.02}),
+    hub:    new THREE.MeshStandardMaterial({color:0x6A5743, roughness:.4, metalness:.65}),
+    pack:   new THREE.MeshStandardMaterial({color:0x16211A, roughness:.5, metalness:.3,
+              emissive:0x1E6B45, emissiveIntensity:.55}),
+    person: new THREE.MeshStandardMaterial({color:0x0D0907, roughness:1, metalness:0}),
+    seat:   new THREE.MeshStandardMaterial({color:0x3A2C20, roughness:.9, metalness:.03}),
+    lamp:   new THREE.MeshStandardMaterial({color:0xFFC978, emissive:0xFFC978,
+              emissiveIntensity:1.1, roughness:.4}),
+    tail:   new THREE.MeshStandardMaterial({color:0xE8624B, emissive:0xE8624B,
+              emissiveIntensity:.8, roughness:.5}),
+    ground: new THREE.MeshStandardMaterial({color:0x241A13, roughness:1, metalness:0})
+  };
+  var EDGE_MAT = new THREE.LineBasicMaterial({color:0x6A5540, transparent:true, opacity:.5});
+
+  function box(w,h,d,mat,x,y,z,parent,edges){
+    var m = new THREE.Mesh(new THREE.BoxGeometry(w,h,d), mat);
+    m.position.set(x,y,z);
+    m.castShadow = true; m.receiveShadow = true;
+    (parent || scene).add(m);
+    if(edges !== false){
+      var e = new THREE.LineSegments(new THREE.EdgesGeometry(m.geometry), EDGE_MAT);
+      m.add(e);
+    }
+    return m;
+  }
+  function cyl(rt,rb,h,seg,mat,x,y,z,parent){
+    var m = new THREE.Mesh(new THREE.CylinderGeometry(rt,rb,h,seg), mat);
+    m.position.set(x,y,z);
+    m.castShadow = true; m.receiveShadow = true;
+    (parent || scene).add(m);
+    return m;
+  }
+  function plane(w,h,mat,x,y,z,parent){
+    var m = new THREE.Mesh(new THREE.PlaneGeometry(w,h), mat);
+    m.position.set(x,y,z);
+    (parent || scene).add(m);
+    return m;
+  }
+
+  /* ---------------- the cart ---------------- */
+  var cart = new THREE.Group();
+  scene.add(cart);
+
+  /* sub-assemblies, so the thing can be taken apart */
+  var gAC     = new THREE.Group(), gRoof  = new THREE.Group(),
+      gGlass  = new THREE.Group(), gBody  = new THREE.Group(),
+      gPack   = new THREE.Group(), gWheelL= new THREE.Group(),
+      gWheelR = new THREE.Group(), gRamp  = new THREE.Group();
+  [gAC,gRoof,gGlass,gBody,gPack,gWheelL,gWheelR,gRamp].forEach(function(g){ cart.add(g); });
+
+  /* deck, skirt and side panels */
+  box(2.40, 0.10, 1.22, M.bodyDk, 0, 0.46, 0, gBody);
+  box(2.30, 0.26, 0.04, M.body, 0, 0.32, 0.60, gBody);
+  box(2.30, 0.26, 0.04, M.body, 0, 0.32, -0.60, gBody);
+  box(0.06, 0.30, 1.20, M.body, 1.18, 0.34, 0, gBody);
+  box(0.06, 0.30, 1.20, M.body, -1.18, 0.34, 0, gBody);
+  /* lower body sides, where the doors are */
+  var doorL = box(0.96, 0.46, 0.05, M.body, -0.10, 0.76, 0.61, gBody);
+  var doorR = box(0.96, 0.46, 0.05, M.body, -0.10, 0.76, -0.61, gBody);
+  box(0.96, 0.46, 0.05, M.bodyDk, 0.92, 0.76, 0.61, gBody);
+  box(0.96, 0.46, 0.05, M.bodyDk, 0.92, 0.76, -0.61, gBody);
+  /* door handles */
+  box(0.16, 0.035, 0.03, M.trim, -0.42, 0.88, 0.645, gBody);
+  box(0.16, 0.035, 0.03, M.trim, -0.42, 0.88, -0.645, gBody);
+  /* nose and tail */
+  box(0.12, 0.44, 1.18, M.body, 1.22, 0.74, 0, gBody);
+  box(0.10, 0.40, 1.18, M.body, -1.22, 0.72, 0, gBody);
+  /* lamps */
+  cyl(0.07,0.07,0.05,18, M.lamp, 1.29, 0.78, 0.40, gBody).rotation.z = Math.PI/2;
+  cyl(0.07,0.07,0.05,18, M.lamp, 1.29, 0.78, -0.40, gBody).rotation.z = Math.PI/2;
+  cyl(0.05,0.05,0.04,14, M.tail, -1.28, 0.80, 0.42, gBody).rotation.z = Math.PI/2;
+  cyl(0.05,0.05,0.04,14, M.tail, -1.28, 0.80, -0.42, gBody).rotation.z = Math.PI/2;
+
+  /* the livery, painted on a canvas and wrapped onto the side */
+  (function livery(){
+    var c = document.createElement("canvas");
+    c.width = 512; c.height = 128;
+    var x = c.getContext("2d");
+    x.clearRect(0,0,512,128);
+    x.fillStyle = "#E8B54B";
+    x.textBaseline = "middle";
+    x.textAlign = "center";
+    x.font = "800 64px 'Bricolage Grotesque', sans-serif";
+    x.fillText("ZILL", 196, 66);
+    x.font = "400 58px 'IBM Plex Sans', sans-serif";
+    x.fillText("ظلّ", 340, 62);
+    var tex = new THREE.CanvasTexture(c);
+    var mat = new THREE.MeshBasicMaterial({map:tex, transparent:true});
+    var a = plane(0.86, 0.22, mat, -0.10, 0.78, 0.639, gBody);
+    var b = plane(0.86, 0.22, mat, -0.10, 0.78, -0.639, gBody);
+    b.rotation.y = Math.PI;
+  })();
+
+  /* pillars */
+  [[1.14,0.58],[1.14,-0.58],[0.10,0.58],[0.10,-0.58],[-1.16,0.58],[-1.16,-0.58]].forEach(function(p){
+    box(0.07, 0.86, 0.07, M.wood, p[0], 1.30, p[1], gRoof);
+  });
+
+  /* roof: insulated slab plus its rafters */
+  box(2.48, 0.10, 1.34, M.body, -0.02, 1.78, 0, gRoof);
+  box(2.40, 0.04, 1.26, M.wood, -0.02, 1.71, 0, gRoof, false);
+  for(var r=-5; r<=5; r++) box(0.04, 0.03, 1.22, M.trim, r*0.21, 1.685, 0, gRoof, false);
+
+  /* the air-conditioner */
+  box(0.92, 0.24, 0.74, M.ac, 0.10, 1.95, 0, gAC);
+  for(var f=0; f<7; f++) box(0.02, 0.15, 0.70, M.cool, -0.24 + f*0.07, 1.95, 0, gAC, false);
+  var fan = cyl(0.17, 0.17, 0.03, 24, M.ac, 0.42, 2.075, 0, gAC);
+  var blades = new THREE.Group();
+  blades.position.set(0.42, 2.09, 0);
+  gAC.add(blades);
+  for(var b3=0; b3<3; b3++){
+    var bl = box(0.16, 0.012, 0.05, M.cool, 0.07, 0, 0, blades, false);
+    bl.rotation.y = b3 * Math.PI * 2 / 3;
+    bl.position.set(Math.cos(b3*2.094)*0.08, 0, Math.sin(b3*2.094)*0.08);
+  }
+  cyl(0.05,0.05,0.05,12, M.trim, 0.42, 2.10, 0, gAC);
+  /* the duct down into the cabin */
+  box(0.20, 0.16, 0.20, M.ac, 0.10, 1.70, 0, gAC, false);
+
+  /* glass */
+  (function(){
+    var ws = plane(1.12, 0.78, M.glass, 1.17, 1.32, 0, gGlass);
+    ws.rotation.y = Math.PI/2; ws.rotation.x = 0;
+    var rear = plane(1.12, 0.78, M.glass, -1.19, 1.32, 0, gGlass);
+    rear.rotation.y = Math.PI/2;
+    [[0.62, 0.615],[-0.55, 0.615]].forEach(function(p){
+      plane(0.96, 0.78, M.glass, p[0], 1.32, p[1], gGlass);
+    });
+    [[0.62, -0.615],[-0.55, -0.615]].forEach(function(p){
+      var g = plane(0.96, 0.78, M.glass, p[0], 1.32, p[1], gGlass);
+      g.rotation.y = Math.PI;
+    });
+  })();
+
+  /* ceiling vents, and the cold they drop */
+  [[0.45],[ -0.45]].forEach(function(v){
+    box(0.36, 0.05, 0.5, M.ac, v[0], 1.64, 0, gRoof, false);
+    box(0.30, 0.02, 0.44, M.cool, v[0], 1.615, 0, gRoof, false);
+  });
+
+  /* benches, facing each other */
+  function bench(x, dir){
+    box(0.46, 0.09, 1.10, M.seat, x, 0.92, 0, gBody);
+    box(0.09, 0.44, 1.10, M.seat, x - dir*0.26, 1.15, 0, gBody);
+  }
+  bench(0.58, 1); bench(-0.52, -1);
+
+  /* passengers */
+  function passenger(x, z, scarf, h, face){
+    var g = new THREE.Group();
+    g.position.set(x, 0, z);
+    g.rotation.y = face || 0;
+    gBody.add(g);
+    /* torso, shoulders, head */
+    cyl(0.155, 0.125, h, 14, M.person, 0, 1.00 + h/2, 0, g);
+    var sh = new THREE.Mesh(new THREE.SphereGeometry(0.16, 14, 10), M.person);
+    sh.scale.set(1, 0.6, 0.8);
+    sh.position.set(0, 1.00 + h, 0);
+    sh.castShadow = true; g.add(sh);
+    var head = new THREE.Mesh(new THREE.SphereGeometry(scarf ? 0.125 : 0.105, 16, 12), M.person);
+    head.position.set(0, 1.04 + h + 0.10, 0);
+    head.castShadow = true; g.add(head);
+    if(scarf){
+      var sc = new THREE.Mesh(new THREE.ConeGeometry(0.17, 0.30, 14, 1, true), M.person);
+      sc.position.set(0, 1.01 + h + 0.08, 0);
+      sc.castShadow = true; g.add(sc);
+    }
+    /* thighs out to the knee */
+    var k = cyl(0.085, 0.085, 0.36, 10, M.person, 0.16, 0.97, 0, g);
+    k.rotation.z = Math.PI/2;
+    var shin = cyl(0.075, 0.075, 0.34, 10, M.person, 0.33, 0.80, 0, g);
+    return g;
+  }
+  passenger(0.44, 0.32, true, 0.40, Math.PI);
+  passenger(0.44, -0.30, false, 0.42, Math.PI);
+  passenger(-0.38, 0.12, true, 0.38, 0);
+  passenger(-0.38, -0.34, false, 0.28, 0);
+  /* the driver, and something to steer with */
+  var driver = passenger(0.92, 0.34, false, 0.42, Math.PI);
+  var wheel = new THREE.Mesh(new THREE.TorusGeometry(0.115, 0.018, 8, 22), M.trim);
+  wheel.position.set(1.14, 1.20, 0.34);
+  wheel.rotation.y = Math.PI/2;
+  wheel.rotation.x = -0.5;
+  gBody.add(wheel);
+
+  /* shopping, in the back */
+  box(0.22, 0.24, 0.20, M.wood, -1.00, 0.63, 0.34, gBody);
+  box(0.18, 0.18, 0.18, M.seat, -1.00, 0.60, 0.02, gBody);
+
+  /* the pack, under the floor */
+  box(0.98, 0.18, 0.72, M.pack, 0, 0.32, 0, gPack);
+  for(var c2=0; c2<5; c2++) box(0.14, 0.13, 0.60, M.cool, -0.36 + c2*0.18, 0.32, 0, gPack, false);
+
+  /* wheels, and the motor on the rear axle */
+  function wheelAt(x, z, parent){
+    var w = cyl(0.25, 0.25, 0.17, 22, M.tyre, x, 0.25, z, parent);
+    w.rotation.x = Math.PI/2;
+    var h = cyl(0.12, 0.12, 0.19, 16, M.hub, x, 0.25, z, parent);
+    h.rotation.x = Math.PI/2;
+    return w;
+  }
+  var wheels = [
+    wheelAt(0.86, 0.60, gWheelL), wheelAt(-0.86, 0.60, gWheelL),
+    wheelAt(0.86, -0.60, gWheelR), wheelAt(-0.86, -0.60, gWheelR)
+  ];
+  var axle = cyl(0.05, 0.05, 1.20, 12, M.hub, -0.86, 0.25, 0, gBody);
+  axle.rotation.x = Math.PI/2;
+  var motor = cyl(0.14, 0.14, 0.30, 16, M.trim, -0.86, 0.25, 0.20, gBody);
+  motor.rotation.x = Math.PI/2;
+
+  /* the ramp, folded against the tail */
+  var ramp = box(0.90, 0.05, 0.86, M.ac, -1.32, 0.90, 0, gRamp);
+  ramp.rotation.z = Math.PI/2 - 0.06;
+  box(0.86, 0.02, 0.06, M.cool, -1.29, 0.90, 0.40, gRamp, false).rotation.z = Math.PI/2 - 0.06;
+
+  /* ---------------- the ground it stands on ---------------- */
+  var ground = new THREE.Mesh(new THREE.CircleGeometry(3.0, 64), M.ground);
+  ground.rotation.x = -Math.PI/2;
+  ground.receiveShadow = true;
+  scene.add(ground);
+  /* the pad fades out rather than ending in a hard rim */
+  (function fade(){
+    var c = document.createElement("canvas");
+    c.width = c.height = 256;
+    var x = c.getContext("2d");
+    var g = x.createRadialGradient(128,128,40,128,128,128);
+    g.addColorStop(0, "rgba(11,9,7,0)");
+    g.addColorStop(0.62, "rgba(11,9,7,.35)");
+    g.addColorStop(1, "rgba(11,9,7,1)");
+    x.fillStyle = g; x.fillRect(0,0,256,256);
+    var m = new THREE.Mesh(new THREE.CircleGeometry(3.02, 64),
+      new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(c), transparent:true}));
+    m.rotation.x = -Math.PI/2; m.position.y = 0.004;
+    scene.add(m);
+  })();
+  var ring = new THREE.Mesh(new THREE.RingGeometry(2.24, 2.27, 64),
+    new THREE.MeshBasicMaterial({color:0x6FD3E8, transparent:true, opacity:.14, side:THREE.DoubleSide}));
+  ring.rotation.x = -Math.PI/2; ring.position.y = 0.003;
+  scene.add(ring);
+
+  /* ---------------- light ---------------- */
+  scene.add(new THREE.HemisphereLight(0xFFD9A8, 0x241A12, 0.46));
+  var sun = new THREE.DirectionalLight(0xFFD79B, 1.25);
+  sun.position.set(3.4, 6.2, 2.6);
+  sun.castShadow = true;
+  sun.shadow.mapSize.set(1024, 1024);
+  sun.shadow.camera.near = 1; sun.shadow.camera.far = 16;
+  sun.shadow.camera.left = -4; sun.shadow.camera.right = 4;
+  sun.shadow.camera.top = 4; sun.shadow.camera.bottom = -4;
+  sun.shadow.bias = -0.0015;
+  scene.add(sun);
+  var rim = new THREE.DirectionalLight(0xE8B54B, 0.45);
+  rim.position.set(-4, 2.4, -3);
+  scene.add(rim);
+  var cabin = new THREE.PointLight(0x6FD3E8, 0.85, 3.4, 2);
+  cabin.position.set(0, 1.42, 0);
+  scene.add(cabin);
+
+  /* ---------------- camera orbit ---------------- */
+  var view = {theta: 0.92, phi: 1.24, r: 5.3, ty: 1.02};
+  var goal = {theta: 0.92, phi: 1.24, r: 5.3, ty: 1.02};
+  var target = new THREE.Vector3(0, 0.98, 0);
+
+  function applyCamera(){
+    target.set(0, view.ty, 0);
+    camera.position.set(
+      target.x + view.r * Math.sin(view.phi) * Math.sin(view.theta),
+      target.y + view.r * Math.cos(view.phi),
+      target.z + view.r * Math.sin(view.phi) * Math.cos(view.theta)
+    );
+    camera.lookAt(target);
+  }
+
+  var PARTVIEWS = [
+    {theta: 0.75, phi: 0.95, r: 4.7, ty: 1.66},   /* 1 roof unit   */
+    {theta: 1.25, phi: 1.02, r: 5.2, ty: 1.55},   /* 2 roof        */
+    {theta: 1.70, phi: 1.30, r: 4.7, ty: 1.30},   /* 3 glass       */
+    {theta: 2.10, phi: 1.44, r: 4.4, ty: 0.92},   /* 4 doors       */
+    {theta: 2.55, phi: 1.22, r: 4.3, ty: 1.10},   /* 5 seats       */
+    {theta: 1.15, phi: 1.70, r: 4.6, ty: 0.42},   /* 6 pack        */
+    {theta: 3.75, phi: 1.52, r: 4.2, ty: 0.42},   /* 7 motor       */
+    {theta: 4.05, phi: 1.34, r: 4.9, ty: 0.80}    /* 8 ramp        */
+  ];
+  var NORMALS = [
+    new THREE.Vector3(0, 1, 0.15),
+    new THREE.Vector3(0.1, 1, 0.2),
+    new THREE.Vector3(0.1, 0.25, 1),
+    new THREE.Vector3(0, 0.1, 1),
+    new THREE.Vector3(-0.1, 0.35, 1),
+    new THREE.Vector3(0, -0.45, 1),
+    new THREE.Vector3(-0.5, -0.1, 1),
+    new THREE.Vector3(-1, 0.15, 0)
+  ].map(function(v){ return v.normalize(); });
+  var ANCHORS = [
+    new THREE.Vector3(0.10, 2.08, 0),
+    new THREE.Vector3(-0.60, 1.83, 0.30),
+    new THREE.Vector3(0.62, 1.34, 0.62),
+    new THREE.Vector3(-0.10, 0.80, 0.64),
+    new THREE.Vector3(-0.52, 1.18, 0),
+    new THREE.Vector3(0, 0.30, 0.38),
+    new THREE.Vector3(-0.86, 0.26, 0.36),
+    new THREE.Vector3(-1.34, 1.10, 0)
+  ];
+
+  /* ---------------- hotspot markers over the canvas ---------------- */
+  var spots = ANCHORS.map(function(v, i){
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = "spot";
+    b.textContent = String(i+1);
+    b.setAttribute("aria-label", window.ZillArt.PARTS ? window.ZillArt.PARTS[i].t : ("Part " + (i+1)));
+    b.addEventListener("click", function(){ if(window.ZillCart) window.ZillCart.select(i); });
+    spotHost.appendChild(b);
+    return b;
+  });
+
+  var active = 0;
+  var pv = new THREE.Vector3(), nv = new THREE.Vector3(), toCam = new THREE.Vector3();
+  function placeSpots(){
+    var w = canvas.clientWidth, h = canvas.clientHeight;
+    for(var i=0;i<spots.length;i++){
+      pv.copy(ANCHORS[i]);
+      cart.localToWorld(pv);
+      /* a marker on the far side of the cart is behind it, so it fades out */
+      nv.copy(NORMALS[i]).applyQuaternion(cart.quaternion);
+      toCam.copy(camera.position).sub(pv).normalize();
+      var facing = nv.dot(toCam);
+      pv.project(camera);
+      var el = spots[i];
+      var vis = pv.z < 1 && facing > -0.12;
+      el.style.transform = "translate(-50%,-50%) translate(" +
+        ((pv.x * 0.5 + 0.5) * w).toFixed(1) + "px," + ((-pv.y * 0.5 + 0.5) * h).toFixed(1) + "px)";
+      el.style.opacity = vis ? (facing > 0.18 ? "1" : "0.45") : "0";
+      el.style.pointerEvents = vis ? "auto" : "none";
+      el.classList.toggle("on", i === active);
+    }
+  }
+
+  /* ---------------- taking it apart ---------------- */
+  var explode = 0, explodeGoal = 0;
+  var PIECES = [
+    {g:gAC,     to:[0, 0.85, 0]},
+    {g:gRoof,   to:[0, 0.45, 0]},
+    {g:gGlass,  to:[0, 0.22, 0]},
+    {g:gPack,   to:[0, -0.55, 0]},
+    {g:gWheelL, to:[0, 0, 0.42]},
+    {g:gWheelR, to:[0, 0, -0.42]},
+    {g:gRamp,   to:[-0.55, 0, 0]}
+  ];
+
+  /* ---------------- interaction ---------------- */
+  var dragging = false, lastX = 0, lastY = 0, idle = 0, engaged = false, axisLock = null;
+
+  function pointerDown(e){
+    dragging = true; engaged = true; idle = 0; axisLock = null;
+    lastX = (e.touches ? e.touches[0].clientX : e.clientX);
+    lastY = (e.touches ? e.touches[0].clientY : e.clientY);
+  }
+  function pointerMove(e){
+    if(!dragging) return;
+    var x = (e.touches ? e.touches[0].clientX : e.clientX);
+    var y = (e.touches ? e.touches[0].clientY : e.clientY);
+    var dx = x - lastX, dy = y - lastY;
+    if(e.touches && axisLock === null){
+      if(Math.abs(dx) + Math.abs(dy) > 6) axisLock = Math.abs(dx) > Math.abs(dy) ? "turn" : "scroll";
+      else return;
+    }
+    if(axisLock === "scroll") { dragging = false; return; }   /* let the page scroll */
+    if(e.cancelable) e.preventDefault();
+    lastX = x; lastY = y;
+    goal.theta -= dx * 0.008;
+    goal.phi = Math.min(1.72, Math.max(0.42, goal.phi - dy * 0.006));
+    idle = 0;
+  }
+  function pointerUp(){ dragging = false; }
+
+  canvas.addEventListener("mousedown", pointerDown);
+  window.addEventListener("mousemove", pointerMove);
+  window.addEventListener("mouseup", pointerUp);
+  canvas.addEventListener("touchstart", pointerDown, {passive:true});
+  canvas.addEventListener("touchmove", pointerMove, {passive:false});
+  canvas.addEventListener("touchend", pointerUp);
+  canvas.addEventListener("wheel", function(e){
+    if(!engaged) return;                    /* the page scrolls until you take hold of the cart */
+    e.preventDefault();
+    goal.r = Math.min(8.4, Math.max(3.2, goal.r + (e.deltaY > 0 ? .45 : -.45)));
+    idle = 0;
+  }, {passive:false});
+
+  function zoom(by){ goal.r = Math.min(8.4, Math.max(3.2, goal.r + by)); engaged = true; idle = 0; }
+  var zi = document.getElementById("zoom-in"), zo = document.getElementById("zoom-out"),
+      rv = document.getElementById("reset-view"), ex = document.getElementById("explode");
+  if(zi) zi.addEventListener("click", function(){ zoom(-0.9); });
+  if(zo) zo.addEventListener("click", function(){ zoom(0.9); });
+  if(rv) rv.addEventListener("click", function(){
+    goal.theta = 0.92; goal.phi = 1.24; goal.r = 5.3; goal.ty = 1.02;
+    explodeGoal = 0; if(ex) ex.setAttribute("aria-pressed","false");
+    if(ex) ex.textContent = "Take it apart";
+    engaged = true; idle = 0;
+  });
+  if(ex) ex.addEventListener("click", function(){
+    explodeGoal = explodeGoal > .5 ? 0 : 1;
+    ex.setAttribute("aria-pressed", explodeGoal > .5 ? "true" : "false");
+    ex.textContent = explodeGoal > .5 ? "Put it back" : "Take it apart";
+    if(explodeGoal > .5){ goal.phi = Math.min(goal.phi, 1.22); goal.r = Math.max(goal.r, 7.4); goal.ty = 1.42; }
+    else { goal.ty = 1.02; }
+    engaged = true; idle = 0;
+  });
+
+  /* the numbered captions drive the camera */
+  window.ZillCartHook = function(i){
+    active = i;
+    var v = PARTVIEWS[i];
+    if(!v) return;
+    goal.theta = v.theta; goal.phi = v.phi; goal.r = v.r; goal.ty = v.ty;
+    engaged = true; idle = 0;
+  };
+
+  /* ---------------- size, visibility, loop ---------------- */
+  function resize(){
+    var w = host.clientWidth, h = host.clientHeight;
+    if(!w || !h) return;
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+  }
+  window.addEventListener("resize", resize);
+  resize();
+
+  var onScreen = true;
+  if(window.IntersectionObserver){
+    new IntersectionObserver(function(es){ onScreen = es[0].isIntersecting; },
+      {rootMargin:"120px"}).observe(host);
+  }
+
+  var last = performance.now();
+  (function loop(now){
+    requestAnimationFrame(loop);
+    var dt = Math.min(0.08, (now - last)/1000); last = now;
+    if(!onScreen) return;
+
+    /* turn on its own until someone takes hold of it */
+    idle += dt;
+    if(!REDUCED && !dragging && (!engaged || idle > 5)) goal.theta += dt * 0.18;
+
+    view.theta += (goal.theta - view.theta) * Math.min(1, dt*6);
+    view.phi   += (goal.phi   - view.phi)   * Math.min(1, dt*6);
+    view.r     += (goal.r     - view.r)     * Math.min(1, dt*5);
+    view.ty    += (goal.ty    - view.ty)    * Math.min(1, dt*5);
+    applyCamera();
+
+    explode += (explodeGoal - explode) * Math.min(1, dt*4);
+    PIECES.forEach(function(p){
+      p.g.position.set(p.to[0]*explode, p.to[1]*explode, p.to[2]*explode);
+    });
+
+    if(!REDUCED) blades.rotation.y += dt * 7;
+    cabin.intensity = 0.82 + Math.sin(now/900) * 0.07;
+
+    renderer.render(scene, camera);
+    placeSpots();
+  })(last);
 })();
 </script>
 

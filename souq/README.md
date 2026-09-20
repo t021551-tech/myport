@@ -5,10 +5,11 @@ air-conditioned golf carts carrying shoppers from one souq to the next, so the f
 metres between the gold souq and the date market stop being the reason someone turns back at
 the gate in August.
 
-The page is meant to be **looked at** rather than read. Everything on it is drawn in SVG — a
-lane you watch a cart come down, a live plan of the souq with carts working it, the cart
-itself with numbered parts, and six close-ups. There are no photographs and no image files:
-nothing is fetched, ever.
+The page is meant to be **looked at** rather than read: a lane you watch a cart come down, a
+live plan of the souq with carts working it, **the cart itself as a 3D model you can turn
+around and take apart**, and six close-ups. There are no photographs and no image files —
+the scenes are SVG built in the page, the cart is geometry built in the page, and the only
+thing fetched from anywhere is the webfont.
 
 **It is a concept, not a service.** No such shuttle runs in Al-Mubarakiya. The map is a
 schematic of the souq's lanes rather than a survey, and every figure is a design target sized
@@ -20,7 +21,7 @@ from published cart, battery and air-conditioning specifications.
 |---|---|
 | **The lane** | A drawn diorama of a covered souq lane at dusk — shopfronts, striped awnings, strung lanterns, shafts of light through the roof, shoppers — with a cart driving out of the sunlit end towards you, on a loop. |
 | **The map** | The souq as a graph of 30 junctions and 48 lanes under striped awnings, with palms, a crowd that thickens after sunset, lantern glow after dark, 13 shaded stops and 12 carts driving it continuously. Pick two stops and the nearest free cart by lane distance (Dijkstra, not straight line) collects you, carries you and hands back a receipt. Tick the ramp box and only the two accessible carts are eligible. |
-| **The cart** | A side drawing with eight numbered markers — tap one and the caption underneath changes. |
+| **The cart** | A 3D model at 1 unit = 1 metre: drag to turn it, zoom in, and take it apart to see the roof unit lift off, the roof and glass rise, the pack drop out of the floor and the wheels step aside. Eight markers sit on the model itself and fade as they go round the back; tap a number and the camera turns to that part. If WebGL is unavailable the page falls back to the side drawing it replaced. |
 | **Close up** | Six drawn panels: the roof unit, the cabin, the pack under the bench, the ramp, the hub at night, the misted shelter. A line of caption each. |
 | **Cut in half** | A section through the cart, head-on: heat pressing in from both sides, cold falling from the ceiling vents, the pack under the floor. |
 | **The day** | A typical August day in Kuwait City — the outside curve, the 22 °C cabin line, and the souq's own footfall in bars. The hour slider drives the whole model: outside temperature sets the air-conditioner's draw, which sets range on one pack, which sets how many carts that hour needs. |
@@ -47,7 +48,12 @@ the bottom of `index.html`:
    depth scale `S`), `drawCartSide()` and `drawCartFront()` draw the cart once so the same
    vehicle appears in the lane, in the annotated view and at the hub, and `buildCartArt()`
    wires the numbered markers to the caption.
-3. **The rest of the pictures** — the section drawing, the six close-up panels, the fact tiles,
+3. **The model** — `three.min.js` (r128, MIT, vendored so the page fetches nothing) plus one
+   script that builds the cart from boxes and cylinders in metres, groups it into sub-assemblies
+   so it can come apart, and runs its own small orbit camera. Markers are HTML buttons projected
+   from 3D anchors each frame, hidden by a dot product against each anchor's outward normal
+   rather than a raycast.
+4. **The rest of the pictures** — the section drawing, the six close-up panels, the fact tiles,
    and the map's scenery (awnings as dashed strokes along each lane, palms, crowd dots,
    lantern glow), which listens on `window.onZillHour` so the souq fills and lights up as you
    drag through the day.
