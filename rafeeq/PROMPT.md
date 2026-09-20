@@ -355,6 +355,20 @@ frightened of being found out will not believe it otherwise.
 someone who cannot type the sentence can press it instead. The first hero button
 on the door is "Talk to someone now", because for many people this is the door.
 
+**Arabic or English, and the patient decides which.** Auto-detection is the right
+default and a bad assumption to force: people write Arabic on an English keyboard,
+transliterate, or switch mid-sentence. So a three-way control above the chat reads
+**Auto · English · عربي**, stored in `S.lang`, and picking a side forces every
+reply regardless of what was typed. Choosing عربي turns the whole view over rather
+than leaving Arabic answers in English furniture — heading, standfirst, honesty
+note, placeholder, send button and footnote all swap from `TALK_UI`, and the
+section gets `dir="rtl"`, which flips the bubbles and chips the right way round on
+its own. Every intent carries `chipsAr` as well as `chips`, and each Arabic chip
+phrase is written to match its own intent's regular expression — a test asserts
+all eleven route to the intent they name, because a chip that falls through to the
+fallback is worse than no chip. The language choice is a preference, so it is
+saved with the plan; the conversation still is not.
+
 ## Content rules
 
 - **Clinical safety comes before encouragement.** For alcohol, benzodiazepines,
