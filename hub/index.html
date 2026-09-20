@@ -1,0 +1,1515 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Student Hub — one question, the right desk</title>
+<meta name="description" content="A student help desk that reads the question, works out which university department owns it, and lets the student follow it from asked to answered.">
+<meta name="color-scheme" content="dark">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:title" content="Student Hub">
+<meta property="og:description" content="Reads the question, finds the right department, tracks it to an answer.">
+<meta property="og:type" content="website">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<style>
+  :root{
+    --ink:#07070B; --panel:#0E0E14; --panel-2:#12121A; --panel-3:#171721;
+    --line:#23232F; --line-soft:#1A1A24;
+    --white:#F6F6FA; --muted:#8B8B9C; --muted-2:#6A6A7C;
+    --yellow:#FFD84D; --pink:#FFB0C8; --blue:#9BD4F5; --green:#9BE8B4; --red:#FF8B8B;
+
+    --display:"Bricolage Grotesque","Helvetica Neue",Helvetica,Arial,sans-serif;
+    --body:"IBM Plex Sans","Segoe UI",Helvetica,Arial,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+
+    --s1:.5rem; --s2:.875rem; --s3:1.25rem; --s4:2rem; --s5:3.25rem;
+    --r:14px; --r-sm:9px;
+  }
+
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+
+  body{
+    margin:0; background:var(--ink); color:var(--white);
+    font-family:var(--body); font-size:16px; line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  html[dir="rtl"] body{font-family:var(--body)}
+
+  a{color:inherit}
+  button,input,select,textarea{font:inherit;color:inherit}
+
+  .wrap{max-width:1060px;margin:0 auto;padding:0 var(--s3)}
+
+  /* --- demonstration banner ------------------------------------------- */
+  .demo{
+    background:linear-gradient(90deg,rgba(255,216,77,.14),rgba(255,176,200,.10));
+    border-bottom:1px solid var(--line);
+    font-size:.8125rem; color:var(--yellow);
+    padding:.55rem var(--s3); text-align:center;
+  }
+  .demo b{color:var(--white);font-weight:600}
+
+  /* --- header ---------------------------------------------------------- */
+  header{border-bottom:1px solid var(--line);background:var(--panel)}
+  .head{display:flex;align-items:center;gap:var(--s2);padding:var(--s3) 0;flex-wrap:wrap}
+  .logo{display:flex;align-items:center;gap:.7rem;text-decoration:none;min-height:44px}
+  .mark{
+    width:34px;height:34px;border-radius:10px;flex:none;
+    background:linear-gradient(140deg,var(--yellow),var(--pink));
+    display:grid;place-items:center;color:#0B0B10;font-weight:800;
+    font-family:var(--display);font-size:1rem;
+  }
+  .logo-text{font-family:var(--display);font-weight:600;font-size:1.0625rem;letter-spacing:-.01em}
+  .logo-text small{display:block;font-family:var(--body);font-weight:400;font-size:.75rem;color:var(--muted)}
+  .head-actions{margin-inline-start:auto;display:flex;align-items:center;gap:.4rem}
+
+  .chip{
+    background:var(--panel-2);border:1px solid var(--line);color:var(--muted);
+    border-radius:999px;padding:.35rem .75rem;font-size:.75rem;cursor:pointer;
+    min-height:36px;display:inline-flex;align-items:center;gap:.4rem;
+  }
+  .chip:hover{border-color:var(--muted-2);color:var(--white)}
+  .chip[aria-pressed="true"]{background:var(--white);color:var(--ink);border-color:var(--white);font-weight:600}
+
+  /* --- tabs ------------------------------------------------------------ */
+  nav.tabs{border-bottom:1px solid var(--line);background:var(--panel);position:sticky;top:0;z-index:20}
+  .tabs-inner{display:flex;gap:.15rem;overflow-x:auto;scrollbar-width:none}
+  .tabs-inner::-webkit-scrollbar{display:none}
+  .tab{
+    background:none;border:0;border-bottom:2px solid transparent;
+    padding:.8rem .85rem;font-size:.875rem;color:var(--muted);cursor:pointer;
+    white-space:nowrap;min-height:46px;
+  }
+  .tab:hover{color:var(--white)}
+  .tab[aria-selected="true"]{color:var(--white);border-bottom-color:var(--yellow);font-weight:600}
+  .tab .dot{
+    display:inline-block;min-width:18px;padding:0 .3rem;margin-inline-start:.35rem;
+    background:var(--yellow);color:var(--ink);border-radius:999px;
+    font-size:.6875rem;font-weight:700;line-height:18px;text-align:center;
+  }
+
+  main{padding:var(--s4) 0 var(--s5)}
+  section[hidden]{display:none}
+
+  h1{font-family:var(--display);font-size:clamp(1.6rem,4vw,2.1rem);line-height:1.15;margin:0 0 .5rem;letter-spacing:-.02em}
+  h2{font-family:var(--display);font-size:1.1rem;margin:0 0 var(--s2);letter-spacing:-.01em}
+  h3{font-family:var(--display);font-size:.95rem;margin:0}
+  .lede{color:var(--muted);margin:0 0 var(--s4);max-width:62ch}
+
+  /* --- search ---------------------------------------------------------- */
+  .search{position:relative;margin-bottom:var(--s3)}
+  .search svg{position:absolute;inset-inline-start:1rem;top:50%;transform:translateY(-50%);color:var(--muted)}
+  .search input{
+    width:100%;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);
+    padding:1rem 1rem 1rem 3rem;font-size:1.0625rem;min-height:58px;
+  }
+  html[dir="rtl"] .search input{padding:1rem 3rem 1rem 1rem}
+  .search input:focus{outline:2px solid var(--yellow);outline-offset:2px;border-color:transparent}
+
+  /* --- cards ----------------------------------------------------------- */
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:var(--s3)}
+  .card + .card{margin-top:var(--s2)}
+  .grid{display:grid;gap:var(--s2)}
+  .cols-2{grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr))}
+  .cols-3{grid-template-columns:repeat(auto-fill,minmax(min(100%,150px),1fr))}
+  .cols-4{grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr))}
+  .side{display:grid;grid-template-columns:1fr;gap:var(--s3)}
+  @media(min-width:900px){.side{grid-template-columns:1fr 300px;align-items:start}}
+
+  /* --- category tiles --------------------------------------------------- */
+  .tile{
+    background:var(--panel);border:1px solid var(--line);border-radius:var(--r);
+    padding:var(--s2);text-align:start;cursor:pointer;min-height:92px;
+    display:flex;flex-direction:column;gap:.5rem;width:100%;
+    transition:border-color .15s,transform .15s;
+  }
+  .tile:hover{border-color:var(--muted-2);transform:translateY(-1px)}
+  .tile[aria-pressed="true"]{border-color:var(--yellow)}
+  .tile .ico{font-size:1.15rem;line-height:1}
+  .tile .nm{font-size:.8125rem;font-weight:500;line-height:1.25}
+  .tile .ct{font-size:.6875rem;color:var(--muted-2);margin-top:auto;font-family:var(--mono)}
+
+  /* --- faq ------------------------------------------------------------- */
+  .faq{border:1px solid var(--line);border-radius:var(--r);background:var(--panel);overflow:hidden}
+  .faq + .faq{margin-top:.5rem}
+  .faq button.q{
+    width:100%;background:none;border:0;text-align:start;cursor:pointer;
+    padding:var(--s2) var(--s3);display:flex;gap:.7rem;align-items:flex-start;min-height:54px;
+  }
+  .faq button.q:hover{background:var(--panel-2)}
+  .faq .caret{color:var(--muted);transition:transform .2s;flex:none;margin-top:.15rem}
+  .faq[open-state="1"] .caret{transform:rotate(90deg)}
+  html[dir="rtl"] .faq[open-state="1"] .caret{transform:rotate(-90deg)}
+  .faq .qt{font-size:.9375rem;font-weight:500}
+  .faq .meta{font-size:.75rem;color:var(--muted-2);margin-top:.25rem}
+  .faq .a{padding:0 var(--s3) var(--s3) 3.1rem;color:var(--muted);font-size:.9rem;line-height:1.65}
+  html[dir="rtl"] .faq .a{padding:0 3.1rem var(--s3) var(--s3)}
+  .faq .a .dept{margin-top:var(--s2);padding-top:.7rem;border-top:1px solid var(--line-soft);font-size:.75rem;color:var(--muted-2)}
+
+  /* --- forms ------------------------------------------------------------ */
+  label.f{display:block;margin-bottom:var(--s2)}
+  label.f > span{display:block;font-size:.8125rem;font-weight:500;margin-bottom:.35rem}
+  label.f .hint{font-weight:400;color:var(--muted-2);font-size:.75rem;margin-top:.25rem}
+  input[type=text],textarea,select,input[type=file]{
+    width:100%;background:var(--panel-2);border:1px solid var(--line);
+    border-radius:var(--r-sm);padding:.65rem .8rem;font-size:.9375rem;min-height:44px;
+  }
+  textarea{resize:vertical;line-height:1.55}
+  input:focus,textarea:focus,select:focus{outline:2px solid var(--yellow);outline-offset:1px;border-color:transparent}
+
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:.45rem;
+    background:var(--yellow);color:var(--ink);border:1px solid var(--yellow);
+    border-radius:var(--r-sm);padding:.6rem 1.1rem;font-size:.9375rem;font-weight:600;
+    cursor:pointer;min-height:46px;
+  }
+  .btn:hover{filter:brightness(1.08)}
+  .btn.ghost{background:transparent;color:var(--white);border-color:var(--line)}
+  .btn.ghost:hover{border-color:var(--muted-2);filter:none}
+  .btn:disabled{opacity:.45;cursor:not-allowed}
+  .row{display:flex;gap:.5rem;flex-wrap:wrap}
+
+  /* --- badges ----------------------------------------------------------- */
+  .badge{
+    display:inline-flex;align-items:center;gap:.35rem;border-radius:999px;
+    padding:.15rem .6rem;font-size:.7rem;font-weight:600;border:1px solid;
+    white-space:nowrap;
+  }
+  .b-grey{color:var(--muted);border-color:var(--line);background:var(--panel-2)}
+  .b-blue{color:var(--blue);border-color:rgba(155,212,245,.3);background:rgba(155,212,245,.09)}
+  .b-yellow{color:var(--yellow);border-color:rgba(255,216,77,.3);background:rgba(255,216,77,.09)}
+  .b-green{color:var(--green);border-color:rgba(155,232,180,.3);background:rgba(155,232,180,.09)}
+  .b-pink{color:var(--pink);border-color:rgba(255,176,200,.3);background:rgba(255,176,200,.09)}
+
+  /* --- assistant --------------------------------------------------------- */
+  .assist{border:1px solid var(--line);border-radius:var(--r);background:var(--panel);padding:var(--s3)}
+  .answer{background:var(--panel-2);border:1px solid var(--line);border-radius:var(--r-sm);padding:var(--s2) var(--s3)}
+  .answer .src{font-size:.6875rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted-2);margin-bottom:.5rem}
+  .refuse{background:rgba(255,216,77,.07);border:1px solid rgba(255,216,77,.28);border-radius:var(--r-sm);padding:var(--s2) var(--s3)}
+
+  /* --- threads ----------------------------------------------------------- */
+  .msg{border:1px solid var(--line);border-radius:var(--r-sm);padding:var(--s2);background:var(--panel-2)}
+  .msg + .msg{margin-top:.5rem}
+  .msg.staff{background:rgba(155,212,245,.06);border-color:rgba(155,212,245,.22)}
+  .msg.note{border-style:dashed;background:rgba(255,216,77,.05);border-color:rgba(255,216,77,.28)}
+  .msg .who{font-size:.75rem;font-weight:600;margin-bottom:.35rem;display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
+  .msg .when{color:var(--muted-2);font-weight:400;margin-inline-start:auto;font-family:var(--mono);font-size:.7rem}
+  .msg p{margin:0;font-size:.9rem;color:var(--muted);white-space:pre-line;line-height:1.6}
+
+  .qrow{
+    width:100%;text-align:start;background:var(--panel);border:1px solid var(--line);
+    border-radius:var(--r);padding:var(--s2) var(--s3);cursor:pointer;
+  }
+  .qrow:hover{border-color:var(--muted-2)}
+  .qrow + .qrow{margin-top:.5rem}
+  .qrow .t{font-size:.9375rem;font-weight:500}
+  .qrow .b{font-size:.8125rem;color:var(--muted);margin:.25rem 0 0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .qrow .f{display:flex;gap:.7rem;align-items:center;flex-wrap:wrap;margin-top:.6rem;padding-top:.6rem;border-top:1px solid var(--line-soft);font-size:.7rem;color:var(--muted-2)}
+  .ref{font-family:var(--mono)}
+
+  /* --- timeline ---------------------------------------------------------- */
+  .tl{list-style:none;margin:0;padding:0}
+  .tl li{display:flex;gap:.6rem;font-size:.75rem;color:var(--muted);padding:.3rem 0}
+  .tl .pip{width:6px;height:6px;border-radius:50%;background:var(--yellow);margin-top:.45rem;flex:none}
+  .tl time{display:block;color:var(--muted-2);font-family:var(--mono);font-size:.6875rem}
+
+  /* --- stats -------------------------------------------------------------- */
+  .stat{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:var(--s2) var(--s3)}
+  .stat .k{font-size:.6875rem;text-transform:uppercase;letter-spacing:.07em;color:var(--muted-2)}
+  .stat .v{font-family:var(--display);font-size:1.6rem;font-weight:600;margin-top:.15rem;font-variant-numeric:tabular-nums}
+  .bar{display:flex;align-items:center;gap:.6rem;font-size:.8125rem;padding:.3rem 0}
+  .bar .nm{width:38%;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .bar .tr{flex:1;height:8px;background:var(--panel-3);border-radius:999px;overflow:hidden}
+  .bar .fl{height:100%;background:var(--yellow);border-radius:999px}
+  .bar .vl{font-family:var(--mono);font-size:.75rem;color:var(--muted);min-width:2ch;text-align:end}
+
+  .empty{text-align:center;padding:var(--s4) var(--s3);color:var(--muted)}
+  .empty .big{font-size:1.6rem;margin-bottom:.5rem}
+  .muted{color:var(--muted)}
+  .small{font-size:.8125rem}
+  .tiny{font-size:.75rem}
+  .mt2{margin-top:var(--s2)} .mt3{margin-top:var(--s3)} .mt4{margin-top:var(--s4)}
+  .sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+  footer{border-top:1px solid var(--line);padding:var(--s4) 0;color:var(--muted-2);font-size:.8125rem}
+  footer a{color:var(--muted)}
+
+  .toast{
+    position:fixed;inset-inline:0;bottom:1.2rem;display:flex;justify-content:center;
+    pointer-events:none;z-index:60;padding:0 var(--s3);
+  }
+  .toast div{
+    background:var(--panel-3);border:1px solid var(--line);border-radius:var(--r-sm);
+    padding:.7rem 1.1rem;font-size:.875rem;box-shadow:0 12px 32px rgba(0,0,0,.5);
+  }
+
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<p class="demo">
+  <b>Demonstration.</b>
+  <span data-t="demoNote">Not a real university system. Nothing is sent anywhere — everything you do here stays in this browser tab.</span>
+</p>
+
+<header>
+  <div class="wrap head">
+    <a class="logo" href="../index.html">
+      <span class="mark" aria-hidden="true">SH</span>
+      <span class="logo-text">
+        <span data-t="brand">Student Hub</span>
+        <small data-t="brandSub">One question, the right desk</small>
+      </span>
+    </a>
+    <div class="head-actions">
+      <button class="chip" id="roleBtn" type="button"></button>
+      <button class="chip" id="langBtn" type="button">العربية</button>
+    </div>
+  </div>
+</header>
+
+<nav class="tabs" aria-label="Student Hub sections">
+  <div class="wrap">
+    <div class="tabs-inner" role="tablist" id="tablist"></div>
+  </div>
+</nav>
+
+<main class="wrap">
+  <!-- ===== HOME ===== -->
+  <section id="v-home" role="tabpanel">
+    <h1 data-t="homeTitle"></h1>
+    <p class="lede" data-t="homeLede"></p>
+
+    <div class="search">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg>
+      <input type="text" id="q" autocomplete="off">
+    </div>
+
+    <div id="searchResults"></div>
+
+    <div class="side mt4">
+      <div>
+        <h2 data-t="browse"></h2>
+        <div class="grid cols-3" id="tiles"></div>
+
+        <h2 class="mt4" data-t="assistantTitle"></h2>
+        <div class="assist">
+          <p class="small muted" style="margin-top:0" data-t="assistantIntro"></p>
+          <form id="assistForm" class="row" style="align-items:flex-end">
+            <label class="f" style="flex:1;min-width:200px;margin-bottom:0">
+              <span class="sr" data-t="assistantLabel"></span>
+              <input type="text" id="assistInput" autocomplete="off">
+            </label>
+            <button class="btn" type="submit" data-t="ask"></button>
+          </form>
+          <div id="assistOut" class="mt3"></div>
+        </div>
+      </div>
+
+      <aside>
+        <div class="card">
+          <h3 data-t="notifications"></h3>
+          <div id="notifs" class="mt2"></div>
+        </div>
+        <div class="card mt2">
+          <h3 data-t="myQuestions"></h3>
+          <div id="homeQuestions" class="mt2"></div>
+        </div>
+        <div class="card mt2" style="border-color:rgba(255,216,77,.28);background:rgba(255,216,77,.05)">
+          <h3 data-t="askTitle"></h3>
+          <p class="small muted" data-t="askSub" style="margin:.4rem 0 0"></p>
+          <button class="btn mt2" style="width:100%" data-go="ask" data-t="askTitle"></button>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ===== ASK ===== -->
+  <section id="v-ask" role="tabpanel" hidden>
+    <h1 data-t="askTitle"></h1>
+    <p class="lede" data-t="askLede"></p>
+    <div class="side">
+      <form id="askForm" class="card">
+        <label class="f">
+          <span data-t="fSubject"></span>
+          <input type="text" id="aSubject" maxlength="200" required>
+          <span class="hint" data-t="fSubjectHint"></span>
+        </label>
+        <label class="f">
+          <span data-t="fCategory"></span>
+          <select id="aCategory"></select>
+          <span class="hint" data-t="fCategoryHint"></span>
+        </label>
+        <label class="f">
+          <span data-t="fBody"></span>
+          <textarea id="aBody" rows="6" maxlength="4000" required></textarea>
+          <span class="hint" data-t="fBodyHint"></span>
+        </label>
+        <label class="f">
+          <span data-t="fFiles"></span>
+          <input type="file" id="aFiles" multiple accept="image/*,application/pdf">
+          <span class="hint" data-t="fFilesHint"></span>
+        </label>
+        <div class="row mt2">
+          <button class="btn" type="submit" data-t="send"></button>
+        </div>
+        <p class="tiny muted mt3" style="border-top:1px solid var(--line-soft);padding-top:.8rem" data-t="privacy"></p>
+      </form>
+
+      <aside class="card" style="background:var(--panel-2)">
+        <h3 class="tiny" style="text-transform:uppercase;letter-spacing:.07em;color:var(--muted-2)" data-t="routeTo"></h3>
+        <div id="routePreview" class="mt2"></div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ===== MY QUESTIONS ===== -->
+  <section id="v-mine" role="tabpanel" hidden>
+    <h1 data-t="myQuestions"></h1>
+    <p class="lede" data-t="mineLede"></p>
+    <div class="row" id="mineFilters" style="margin-bottom:var(--s3)"></div>
+    <div id="mineList"></div>
+  </section>
+
+  <!-- ===== THREAD ===== -->
+  <section id="v-thread" role="tabpanel" hidden>
+    <button class="chip" data-go="mine" style="margin-bottom:var(--s3)">&larr; <span data-t="back"></span></button>
+    <div id="threadBody"></div>
+  </section>
+
+  <!-- ===== STAFF INBOX ===== -->
+  <section id="v-inbox" role="tabpanel" hidden>
+    <h1 data-t="inboxTitle"></h1>
+    <p class="lede" id="inboxLede"></p>
+    <div class="row" id="inboxFilters" style="margin-bottom:var(--s3)"></div>
+    <div id="inboxList"></div>
+  </section>
+
+  <!-- ===== DASHBOARD ===== -->
+  <section id="v-dash" role="tabpanel" hidden>
+    <h1 data-t="dashTitle"></h1>
+    <p class="lede" data-t="dashLede"></p>
+    <div id="dashBody"></div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p style="margin:0 0 .4rem" data-t="footNote"></p>
+    <p style="margin:0"><a href="../index.html" data-t="backToPort"></a></p>
+  </div>
+</footer>
+
+<div class="toast" id="toast" aria-live="polite"></div>
+
+<script>
+/* ============================================================================
+   Student Hub — a self-contained prototype.
+
+   No network requests, no build step, no analytics. Everything below runs in
+   the tab: the routing engine, the FAQ retrieval, the department queues and
+   the dashboard. State lives in sessionStorage, so a refresh keeps your
+   place and closing the tab forgets you entirely.
+
+   The two engines here — routeQuestion() and assistantAnswer() — are ports of
+   the ones written and unit-tested for the UniMate codebase. Their behaviour
+   is the point of the whole thing, so they are kept honest rather than
+   simplified for a demo.
+   ========================================================================== */
+
+/* --- text handling -------------------------------------------------------
+   A student types two languages, usually without diacritics, often
+   misspelled. Everything is folded to one comparable shape first.          */
+
+const ARABIC_MARKS = /[ً-ٰٟـۖ-ۭ]/g;
+
+function foldArabic(s){
+  return s.replace(ARABIC_MARKS,'')
+    .replace(/[آأإٱ]/g,'ا')  // آ أ إ ٱ → ا
+    .replace(/ى/g,'ي')                       // ى → ي
+    .replace(/ة/g,'ه')                       // ة → ه
+    .replace(/[ؤئ]/g,'ء');              // ؤ ئ → ء
+}
+function foldDigits(s){
+  return s.replace(/[٠-٩۰-۹]/g,d=>String(d.charCodeAt(0)&0x0f));
+}
+function normalise(s){
+  return foldArabic(foldDigits(String(s||'').toLowerCase().normalize('NFKD')
+    .replace(/[̀-ͯ]/g,'')))
+    .replace(/[^\p{L}\p{N}\s]/gu,' ').replace(/\s+/g,' ').trim();
+}
+
+/* Short on purpose: an aggressive stop list throws away the difference
+   between "can I add a course" and "can I drop a course".                  */
+const STOP = new Set(('a an the is are was were be been am i me my we our you your it its they '
+ +'to of in on at for from by with about and or but if so as that this there do does did can '
+ +'could will would should have has had get got please hello hi thanks how what when where why '
+ +'who whom whose which need want know tell kindly regards').split(' ')
+ .concat('في من على الى عن مع هل ما ماذا انا هو هي او و ان التي الذي لو كان يوجد ممكن شكرا كيف متى اين لماذا وش شنو ليش وين ابغى اريد'.split(' ')));
+
+function stem(w){
+  if(w.length<=3) return w;
+  for(const suf of ['ations','ation','ing','ies','ed','es','s']){
+    if(w.endsWith(suf) && w.length-suf.length>=3){
+      const base=w.slice(0,-suf.length);
+      return suf==='ies' ? base+'y' : base;
+    }
+  }
+  return w;
+}
+function terms(s){
+  return [...new Set(normalise(s).split(' ')
+    .filter(w=>w.length>1 && !STOP.has(w)).map(stem))];
+}
+
+/* --- departments ---------------------------------------------------------
+   Each owns a set of categories. Moving a topic between offices is a data
+   change here, not a change to the router.                                 */
+const DEPTS = [
+  {slug:'registry',   en:'Student Services & Registry', ar:'خدمات الطلبة والتسجيل', email:'registry@demo.hub',   cats:['registration','timetables']},
+  {slug:'admissions', en:'Admissions Office',           ar:'مكتب القبول',            email:'admissions@demo.hub', cats:['admissions']},
+  {slug:'academic',   en:'Academic & Assessment',       ar:'الشؤون الأكاديمية والتقييم', email:'assessment@demo.hub', cats:['exams','grades','courses','attendance']},
+  {slug:'finance',    en:'Finance Department',          ar:'الإدارة المالية',        email:'finance@demo.hub',    cats:['fees']},
+  {slug:'it',         en:'IT Support',                  ar:'الدعم الفني',            email:'ithelp@demo.hub',     cats:['it_support']},
+  {slug:'housing',    en:'Accommodation Office',        ar:'مكتب السكن',             email:'housing@demo.hub',    cats:['accommodation']},
+  {slug:'wellbeing',  en:'Student Support & Wellbeing', ar:'دعم ورعاية الطلبة',      email:'wellbeing@demo.hub',  cats:['student_support']},
+  {slug:'graduation', en:'Graduation & Alumni',         ar:'مكتب التخرج والخريجين',  email:'graduation@demo.hub', cats:['graduation']},
+  {slug:'services',   en:'Campus Services',             ar:'الخدمات الجامعية',       email:'campus@demo.hub',     cats:['other']},
+];
+const deptBySlug = Object.fromEntries(DEPTS.map(d=>[d.slug,d]));
+
+const CATS = ['registration','courses','exams','grades','timetables','attendance','fees',
+  'admissions','it_support','accommodation','student_support','graduation','other'];
+
+const CAT_ICON = {registration:'📝',courses:'📚',exams:'🖊',grades:'📊',timetables:'🗓',
+  attendance:'✔',fees:'💳',admissions:'🎓',it_support:'🔧',accommodation:'🏠',
+  student_support:'💬',graduation:'🏅',other:'🧭'};
+
+/* --- the routing engine ---------------------------------------------------
+   A weighted keyword engine, not a classifier: same answer every time, and
+   when it is wrong you can see the word that misled it. Both languages are
+   matched in one pass.                                                      */
+const SIGNALS = {
+  registration:{s:['add drop','late registration','registration','register','enrol','enroll','enrolment','enrollment','withdraw','withdrawal','prerequisite','override','تسجيل','الحذف والاضافه','انسحاب','متطلب سابق','شعبه'],
+                w:['add','drop','section','swap','seat','capacity','closed','load','اضافه','حذف','عبء']},
+  courses:{s:['syllabus','curriculum','plan of study','elective','credit hour','course description','module','خطه دراسيه','مقرر','المنهج','اختياري','ساعات معتمده'],
+           w:['course','subject','instructor','lecture','material','ماده','محاضره','دكتور']},
+  exams:{s:['midterm','final exam','resit','retake','exam hall','exam schedule','deferred exam','invigilator','seating number','امتحان','اختبار','نصفي','نهائي','اعاده اختبار'],
+         w:['exam','quiz','test','paper','sit','قاعه','ورقه']},
+  grades:{s:['gpa','transcript','grade appeal','recheck','remark','incomplete grade','result','معدل','كشف درجات','تظلم','مراجعه درجه','نتيجه','درجه'],
+          w:['grade','mark','score','average','fail','pass','علامه','رسوب','نجاح']},
+  attendance:{s:['attendance','absence','absent','medical certificate','excuse','deprived','attendance warning','حضور','غياب','عذر','انذار','حرمان'],
+              w:['miss','late','sick','مريض','تاخير']},
+  timetables:{s:['timetable','clash','class schedule','lecture time','room change','جدول','تعارض','موعد المحاضره','قاعه دراسيه'],
+              w:['schedule','time','room','slot','وقت','موعد']},
+  fees:{s:['tuition','fee','invoice','instalment','installment','refund','scholarship','payment','financial aid','رسوم','قسط','فاتوره','استرداد','منحه','دفع'],
+        w:['pay','money','bank','cost','charge','ماليه','مبلغ']},
+  admissions:{s:['admission','entry requirement','application form','offer letter','transfer student','equivalency','high school certificate','قبول','شروط القبول','معادله','الثانويه العامه','تقديم'],
+              w:['apply','applicant','accept','seat','التحاق']},
+  it_support:{s:['password','reset my password','login','log in','portal','wifi','vpn','blackboard','moodle','account locked','two factor','system error','كلمه المرور','البوابه','الشبكه','الدخول','النظام','البريد الجامعي'],
+              w:['email','account','website','app','error','crash','bug','تطبيق','موقع','خطا']},
+  accommodation:{s:['accommodation','housing','dormitory','dorm','hostel','roommate','room allocation','سكن','المدينه الجامعيه','سكن الطلاب'],
+                 w:['room','stay','live','غرفه']},
+  student_support:{s:['counselling','counseling','mental health','wellbeing','disability','academic advisor','harassment','complaint','ارشاد','الدعم النفسي','صحه نفسيه','اعاقه','شكوى','المرشد الاكاديمي'],
+                   w:['stress','anxious','help','support','advice','قلق','ضغط','مساعده']},
+  graduation:{s:['graduation','graduate','ceremony','clearance','degree certificate','convocation','alumni','تخرج','حفل التخرج','اخلاء طرف','شهاده التخرج'],
+              w:['finish','last semester','certificate','شهاده']},
+  other:{s:['library','parking permit','student card','id card','enrolment letter','to whom it may concern','bus','shuttle','مكتبه','بطاقه الطالب','موقف السيارات','افاده','الباص'],
+         w:['letter','card','lost','book','كتاب','ضائع']},
+};
+
+const STRONG=3, WEAK=1, SUBJ_MULT=1.5, SATURATION=6;
+const CONFIDENT = 0.55;
+
+function scoreList(list, weight, hay, toks, mult, hits){
+  let total=0;
+  for(const sig of list){
+    const hit = sig.includes(' ') ? hay.includes(normalise(sig)) : toks.has(stem(normalise(sig)));
+    if(hit){ total += weight*mult; hits.add(sig); }
+  }
+  return total;
+}
+
+/* Confidence blends two worries: whether there was enough evidence at all,
+   and whether the winner actually beat the runner-up. Weighted towards the
+   margin, because the usual failure is two departments both plausibly owning
+   the same sentence.                                                        */
+function confidenceOf(top, second){
+  if(top<=0) return 0;
+  const strength = Math.min(1, top/SATURATION);
+  const margin = (top-second)/top;
+  return Math.round((0.4*strength + 0.6*margin)*1000)/1000;
+}
+
+function routeQuestion(subject, body, chosen){
+  const sHay=normalise(subject), bHay=normalise(body);
+  const sTok=new Set(terms(subject)), bTok=new Set(terms(body));
+
+  const scores = CATS.map(cat=>{
+    const sig=SIGNALS[cat], hits=new Set();
+    const score =
+      scoreList(sig.s,STRONG,sHay,sTok,SUBJ_MULT,hits) +
+      scoreList(sig.w,WEAK,  sHay,sTok,SUBJ_MULT,hits) +
+      scoreList(sig.s,STRONG,bHay,bTok,1,hits) +
+      scoreList(sig.w,WEAK,  bHay,bTok,1,hits);
+    return {cat, score:Math.round(score*100)/100, hits:[...hits]};
+  }).sort((a,b)=>b.score-a.score);
+
+  const best=scores[0], next=scores[1];
+  const conf = confidenceOf(best.score, next?next.score:0);
+
+  if(best.score===0){
+    return {cat: chosen||'other', conf: chosen?0.3:0, method: chosen?'student':'rules', hits:[], scores};
+  }
+  // Unsure, and the student told us what they think. Their answer beats a
+  // coin flip between two weak keyword scores.
+  if(conf<CONFIDENT && chosen && chosen!==best.cat){
+    return {cat:chosen, conf:Math.max(conf,0.35), method:'student', hits:best.hits, scores, runnerUp:best.cat};
+  }
+  return {cat:best.cat, conf, method:'rules', hits:best.hits, scores};
+}
+
+function departmentFor(cat){
+  return DEPTS.find(d=>d.cats.includes(cat)) || DEPTS.find(d=>d.cats.includes('other')) || DEPTS[0];
+}
+
+/* --- the FAQ ------------------------------------------------------------- */
+/* q/a are [english, arabic]. `k` holds the WRONG words — what a student types
+   when they do not know the official term.                                  */
+const FAQ = [
+  {c:'admissions',d:'admissions',q:['What are the entry requirements for an undergraduate programme?','ما هي شروط القبول في مرحلة البكالوريوس؟'],a:['Each programme publishes its own minimum high-school average and subject requirements on the programme page. Engineering and science programmes also require mathematics and physics at the level stated there.','يعلن كل برنامج الحد الأدنى لمعدل الثانوية العامة والمواد المطلوبة في صفحة البرنامج. وتشترط برامج الهندسة والعلوم مواد الرياضيات والفيزياء بالمستوى الموضّح هناك.'],k:['entry requirement','admission','apply','شروط القبول','تقديم']},
+  {c:'admissions',d:'admissions',q:['How do I get my qualification from another country recognised?','كيف أعادل شهادتي الصادرة من خارج البلاد؟'],a:['Equivalency is assessed by the Admissions Office. Bring the original certificate, an official transcript and a certified translation if the documents are not in English or Arabic.','يتولى مكتب القبول دراسة المعادلة. أحضر الشهادة الأصلية وكشف الدرجات الرسمي وترجمة معتمدة إذا لم تكن المستندات بالعربية أو الإنجليزية.'],k:['equivalency','transfer student','معادله','شهاده خارجيه']},
+
+  {c:'registration',d:'registry',q:['Can I add or drop a course after the deadline?','هل يمكنني الحذف أو الإضافة بعد انتهاء الموعد؟'],a:['Late add and drop needs the approval of your academic advisor and the Registry. Submit the signed form at the Registry desk; after the second week a drop is recorded as a withdrawal on your transcript.','يتطلب الحذف أو الإضافة المتأخر موافقة المرشد الأكاديمي والتسجيل. سلّم النموذج الموقّع في مكتب التسجيل، وبعد الأسبوع الثاني يُسجَّل الحذف كانسحاب في كشف الدرجات.'],k:['add drop','late registration','withdraw','الحذف والاضافه','انسحاب']},
+  {c:'registration',d:'registry',q:['The system says a course is full. What can I do?','النظام يقول إن الشعبة ممتلئة، ماذا أفعل؟'],a:['Capacity is set by the teaching department, not the Registry. Ask the department that owns the course whether it will issue an override; the Registry can only add you once that override exists.','تحدد الأقسام الأكاديمية سعة الشعب وليس التسجيل. اسأل القسم صاحب المقرر إن كان سيمنحك استثناءً، فلا يستطيع التسجيل إضافتك إلا بعد صدوره.'],k:['full','closed section','override','capacity','شعبه ممتلئه','استثناء']},
+  {c:'registration',d:'registry',q:['How do I know whether I have met a prerequisite?','كيف أعرف أنني استوفيت المتطلب السابق؟'],a:['The course page lists its prerequisites, and the registration system blocks a course whose prerequisite is unmet or still in progress. If you believe the block is wrong, bring your transcript to the Registry.','تعرض صفحة المقرر متطلباته السابقة، ويمنع نظام التسجيل المقرر الذي لم يُستوفَ متطلبه أو ما زال قيد الدراسة. وإذا اعتقدت أن المنع غير صحيح فأحضر كشف درجاتك إلى التسجيل.'],k:['prerequisite','blocked','متطلب سابق']},
+
+  {c:'courses',d:'academic',q:['Where do I find the syllabus for a course?','أين أجد خطة المقرر الدراسية؟'],a:['The instructor publishes the syllabus in the first week, and it is also attached to the course page.','ينشر أستاذ المقرر الخطة الدراسية في الأسبوع الأول، وهي مرفقة كذلك في صفحة المقرر.'],k:['syllabus','course outline','خطه المقرر','المنهج']},
+  {c:'courses',d:'academic',q:['How many credit hours am I allowed to take in one semester?','كم عدد الساعات المعتمدة المسموح بها في الفصل؟'],a:['The standard load is 12 to 18 credit hours. Above 18 requires the approval of your academic advisor, and students on academic probation are capped at 12.','العبء الدراسي المعتاد من ١٢ إلى ١٨ ساعة معتمدة. ويتطلب تجاوز ١٨ ساعة موافقة المرشد الأكاديمي، ويقتصر الطلبة تحت الإنذار الأكاديمي على ١٢ ساعة.'],k:['credit hour','course load','overload','ساعات معتمده','عبء دراسي']},
+
+  {c:'exams',d:'academic',q:['When is the final exam timetable published?','متى يُنشر جدول الاختبارات النهائية؟'],a:['The final exam timetable is published in week ten and sent to your university email. Check it as soon as it arrives: a clash has to be reported within five working days.','يُنشر جدول الاختبارات النهائية في الأسبوع العاشر ويُرسل إلى بريدك الجامعي. راجعه فور وصوله، إذ يجب الإبلاغ عن أي تعارض خلال خمسة أيام عمل.'],k:['exam schedule','final','timetable','جدول الاختبارات','نهائي']},
+  {c:'exams',d:'academic',q:['I missed an exam because I was ill. What happens now?','تغيّبت عن اختبار بسبب المرض، ماذا أفعل؟'],a:['Submit a medical certificate to the Academic & Assessment Office within three working days of the exam. If it is accepted you sit a deferred exam; if it is late, the mark stands at zero.','قدّم تقريراً طبياً إلى الشؤون الأكاديمية والتقييم خلال ثلاثة أيام عمل من موعد الاختبار. فإذا قُبل أدّيت اختباراً بديلاً، وإذا تأخر احتُسبت الدرجة صفراً.'],k:['missed exam','sick','medical certificate','deferred','اختبار بديل','تقرير طبي']},
+  {c:'exams',d:'academic',q:['What am I allowed to bring into the exam hall?','ما المسموح بإدخاله إلى قاعة الاختبار؟'],a:['Your student card, pens and any material the instructor has listed as permitted. Phones and smart watches must be switched off and left at the front of the hall.','بطاقة الطالب وأقلامك وأي مواد أذن بها أستاذ المقرر. ويجب إطفاء الهواتف والساعات الذكية وتركها في مقدمة القاعة.'],k:['exam hall','allowed','calculator','phone','قاعه الاختبار','مسموح']},
+
+  {c:'grades',d:'academic',q:['How do I appeal a grade I believe is wrong?','كيف أتظلّم من درجة أعتقد أنها خاطئة؟'],a:['Speak to the instructor first — most disputes are an addition error and are fixed the same day. If it is not resolved, submit a formal appeal to the Academic & Assessment Office within fifteen days of publication.','تحدث مع أستاذ المقرر أولاً، فمعظم الاعتراضات خطأ في الجمع ويُصحَّح في اليوم نفسه. وإذا لم يُحل الأمر فقدّم تظلماً رسمياً إلى الشؤون الأكاديمية والتقييم خلال خمسة عشر يوماً من إعلان النتيجة.'],k:['grade appeal','recheck','remark','wrong mark','تظلم','مراجعه درجه']},
+  {c:'grades',d:'academic',q:['When do results appear, and how is my GPA calculated?','متى تظهر النتائج وكيف يُحتسب المعدل؟'],a:['Results are released two weeks after the last final exam. The GPA is the credit-weighted average of your grade points; a withdrawn course carries no points and does not affect it.','تُعلن النتائج بعد أسبوعين من آخر اختبار نهائي. والمعدل هو متوسط نقاط الدرجات مرجّحاً بالساعات المعتمدة، ولا يحمل المقرر المنسحب منه نقاطاً ولا يؤثر فيه.'],k:['results','gpa','transcript','نتيجه','معدل','كشف درجات']},
+  {c:'grades',d:'academic',q:['What does an incomplete grade mean?','ماذا تعني درجة «غير مكتمل»؟'],a:['An incomplete is given when illness or an emergency stopped you finishing assessed work. You have until the end of the following semester to complete it, after which it converts to the grade earned so far.','تُمنح درجة «غير مكتمل» عندما يمنعك مرض أو ظرف طارئ من إنهاء أعمال التقييم. ولديك حتى نهاية الفصل التالي لإكمالها، وبعدها تتحول إلى الدرجة المحققة فعلياً.'],k:['incomplete','غير مكتمل']},
+
+  {c:'attendance',d:'academic',q:['How many absences am I allowed before it affects me?','كم عدد الغيابات المسموح بها قبل أن تؤثر عليّ؟'],a:['Absence above 25 per cent of a course’s sessions without an accepted excuse leads to deprivation from its final exam. A written warning is sent at 15 per cent.','يؤدي الغياب بما يزيد على ٢٥٪ من محاضرات المقرر دون عذر مقبول إلى الحرمان من اختباره النهائي. ويُرسل إنذار خطي عند بلوغ ١٥٪.'],k:['absence','deprived','kicked out of the exam','warning','غياب','حرمان','انذار']},
+  {c:'attendance',d:'academic',q:['How do I submit an excuse for missing classes?','كيف أقدّم عذراً عن الغياب؟'],a:['Upload the supporting document to the Academic & Assessment Office within one week of returning. A medical certificate must name the dates it covers, or it cannot be accepted.','ارفع المستند المؤيد إلى الشؤون الأكاديمية والتقييم خلال أسبوع من عودتك. ويجب أن يذكر التقرير الطبي التواريخ التي يغطيها وإلا تعذّر قبوله.'],k:['excuse','medical','عذر','تقرير طبي']},
+
+  {c:'timetables',d:'registry',q:['Two of my courses clash. How do I fix it?','لدي تعارض بين مقررين، كيف أحله؟'],a:['Report the clash to the Registry in the first week. They will move you to another section where one exists; where none does, one of the two courses has to be dropped without penalty.','أبلغ التسجيل بالتعارض في الأسبوع الأول. وسينقلونك إلى شعبة أخرى إن وُجدت، وإن لم توجد فيجب حذف أحد المقررين دون عقوبة.'],k:['clash','conflict','same time','تعارض','جدول']},
+  {c:'timetables',d:'registry',q:['My lecture has moved to a different room. Where do I check?','تغيّرت قاعة المحاضرة، أين أتحقق؟'],a:['Room changes are published on the course page and on the screen outside the original room. Permanent changes are also emailed to everyone registered on the course.','تُنشر تغييرات القاعات في صفحة المقرر وعلى الشاشة خارج القاعة الأصلية. كما تُرسل التغييرات الدائمة بالبريد إلى جميع المسجلين في المقرر.'],k:['room change','where is my class','قاعه','تغيير قاعه']},
+
+  {c:'fees',d:'finance',q:['When are tuition instalments due?','متى تستحق أقساط الرسوم الدراسية؟'],a:['There are two instalments each semester, due in the second and the eighth week. Registration for the following semester is blocked while an instalment is outstanding.','هناك قسطان في كل فصل يستحقان في الأسبوع الثاني والأسبوع الثامن. ويُمنع التسجيل للفصل التالي ما دام هناك قسط غير مسدد.'],k:['instalment','tuition','due','payment','قسط','رسوم','دفع']},
+  {c:'fees',d:'finance',q:['Can I get a refund if I withdraw from a course?','هل أسترد الرسوم إذا انسحبت من مقرر؟'],a:['A withdrawal in the first two weeks is refunded in full. After that the refund drops to half until the end of week four, and to nothing after it.','يُسترد كامل المبلغ عند الانسحاب خلال الأسبوعين الأولين. ثم ينخفض الاسترداد إلى النصف حتى نهاية الأسبوع الرابع، ولا يُسترد شيء بعده.'],k:['refund','withdraw','money back','استرداد','انسحاب']},
+  {c:'fees',d:'finance',q:['How do I apply for a scholarship or financial support?','كيف أتقدم لمنحة أو دعم مالي؟'],a:['Applications open in the first two weeks of each semester through the Finance Department. Academic scholarships are assessed on your GPA; hardship support is assessed separately and confidentially.','يفتح التقديم في الأسبوعين الأولين من كل فصل عبر الإدارة المالية. وتُقيَّم المنح الأكاديمية بناءً على المعدل، بينما يُقيَّم دعم الحالات الصعبة بشكل منفصل وسري.'],k:['scholarship','financial aid','hardship','منحه','دعم مالي']},
+
+  {c:'it_support',d:'it',q:['How do I reset my university portal password?','كيف أعيد تعيين كلمة مرور البوابة الجامعية؟'],a:['Use the Forgot Password link on the portal sign-in page. The reset email reaches your registered address within ten minutes — check the junk folder before reporting it as missing.','استخدم رابط «نسيت كلمة المرور» في صفحة الدخول إلى البوابة. وتصل رسالة إعادة التعيين إلى عنوانك المسجل خلال عشر دقائق، فتحقق من مجلد الرسائل غير المرغوب فيها قبل الإبلاغ عن عدم وصولها.'],k:['password','reset','login','locked out','كلمه المرور','الدخول','البوابه']},
+  {c:'it_support',d:'it',q:['I cannot connect to the campus wifi.','لا أستطيع الاتصال بشبكة الجامعة اللاسلكية.'],a:['Connect to the network named for the university and sign in with your portal username and password — not your email address. If it still refuses, forget the network on your device and reconnect.','اتصل بالشبكة التي تحمل اسم الجامعة وسجّل الدخول باسم المستخدم وكلمة المرور الخاصين بالبوابة، لا ببريدك الإلكتروني. وإن استمر الرفض فاحذف الشبكة من جهازك ثم أعد الاتصال.'],k:['wifi','internet','network','الشبكه','واي فاي']},
+  {c:'it_support',d:'it',q:['My account is locked after too many attempts.','حُظر حسابي بعد محاولات دخول كثيرة.'],a:['The account unlocks itself after thirty minutes. If you need it sooner, bring your student card to IT Support in the library — a lock cannot be lifted over the phone.','يُفتح الحساب تلقائياً بعد ثلاثين دقيقة. وإذا احتجته قبل ذلك فأحضر بطاقة الطالب إلى الدعم الفني في المكتبة، إذ لا يمكن رفع الحظر عبر الهاتف.'],k:['locked','too many attempts','محظور','حساب مقفل']},
+
+  {c:'accommodation',d:'housing',q:['How do I apply for university accommodation?','كيف أتقدم بطلب السكن الجامعي؟'],a:['Applications open in June for the following year through the Accommodation Office. Places are allocated by distance from home first, then by year of study.','يفتح التقديم في يونيو للعام التالي عبر مكتب السكن. وتُوزَّع الأماكن حسب بُعد مكان السكن أولاً ثم حسب السنة الدراسية.'],k:['housing','dormitory','apply','سكن','المدينه الجامعيه']},
+  {c:'accommodation',d:'housing',q:['Something in my room is broken. Who fixes it?','هناك عطل في غرفتي، من يصلحه؟'],a:['Report it to the residence reception, in person or by email. Anything affecting water, power or the door lock is treated as urgent and attended to the same day.','أبلغ استقبال السكن شخصياً أو بالبريد الإلكتروني. ويُعد كل ما يتعلق بالماء أو الكهرباء أو قفل الباب أمراً عاجلاً يُعالج في اليوم نفسه.'],k:['broken','maintenance','repair','صيانه','عطل']},
+
+  {c:'student_support',d:'wellbeing',q:['Can I speak to someone confidentially about stress or my mental health?','هل يمكنني التحدث بسرية عن الضغط النفسي أو صحتي النفسية؟'],a:['Yes. Student Support & Wellbeing offers free confidential counselling, and nothing you say is recorded on your academic file. Appointments are usually available within three working days.','نعم. يقدم قسم دعم ورعاية الطلبة استشارات نفسية مجانية وسرية، ولا يُسجَّل شيء مما تقوله في ملفك الأكاديمي. وتتاح المواعيد عادةً خلال ثلاثة أيام عمل.'],k:['counselling','mental health','stress','ارشاد','صحه نفسيه','قلق']},
+  {c:'student_support',d:'wellbeing',q:['I have a disability or a learning difference. What adjustments can I get?','لديّ إعاقة أو صعوبة تعلّم، ما الترتيبات المتاحة لي؟'],a:['Adjustments include extra time in exams, a separate room, note-taking support and accessible materials. Register with Student Support & Wellbeing, ideally before the semester starts.','تشمل الترتيبات وقتاً إضافياً في الاختبارات وقاعة منفصلة ودعماً في تدوين الملاحظات ومواد ميسّرة. سجّل لدى دعم ورعاية الطلبة، ويُفضَّل قبل بداية الفصل.'],k:['disability','extra time','adjustment','اعاقه','وقت اضافي']},
+
+  {c:'graduation',d:'graduation',q:['How do I apply to graduate?','كيف أتقدم بطلب التخرج؟'],a:['Apply through the Graduation Office in your final semester, before the end of week four. The office checks your remaining requirements and tells you in writing whether you are clear to graduate.','قدّم الطلب عبر مكتب التخرج في فصلك الأخير قبل نهاية الأسبوع الرابع. ويتحقق المكتب من متطلباتك المتبقية ويبلغك خطياً إن كنت مستوفياً لشروط التخرج.'],k:['graduate','apply','final semester','تخرج','طلب تخرج']},
+  {c:'graduation',d:'graduation',q:['When do I get my certificate, and what is clearance?','متى أستلم شهادتي وما هو إخلاء الطرف؟'],a:['Clearance confirms you owe nothing to the library, the residence or Finance. The certificate is issued four to six weeks after results, and only once clearance is complete.','يؤكد إخلاء الطرف أنه لا توجد عليك مستحقات للمكتبة أو السكن أو الإدارة المالية. وتُصدر الشهادة خلال أربعة إلى ستة أسابيع من إعلان النتائج، وبعد اكتمال إخلاء الطرف فقط.'],k:['certificate','clearance','ceremony','شهاده','اخلاء طرف','حفل']},
+
+  {c:'other',d:'services',q:['How do I get a letter confirming I am a student?','كيف أحصل على إفادة بأنني طالب؟'],a:['Request an enrolment letter from Campus Services in the student centre. It is ready within two working days and can be addressed to a bank, an embassy or an employer.','اطلب إفادة قيد من الخدمات الجامعية في مركز الطلبة. وتكون جاهزة خلال يومي عمل ويمكن توجيهها إلى بنك أو سفارة أو جهة عمل.'],k:['enrolment letter','to whom it may concern','proof','افاده','شهاده قيد']},
+  {c:'other',d:'services',q:['I lost my student card. How do I replace it?','فقدت بطاقة الطالب، كيف أستبدلها؟'],a:['Report it at the student centre so the old card is deactivated, then apply for a replacement. The first replacement is free; each one after that carries a small fee.','أبلغ مركز الطلبة لإلغاء تفعيل البطاقة القديمة ثم تقدّم بطلب بديلة. والبديلة الأولى مجانية، وتُفرض رسوم رمزية على ما بعدها.'],k:['student card','lost','id card','بطاقه الطالب','ضائع']},
+  {c:'other',d:'services',q:['What are the library opening hours during exams?','ما ساعات عمل المكتبة خلال فترة الاختبارات؟'],a:['The library extends to 2am from the start of the final exam period until the last exam. Group study rooms must be booked in advance during those weeks.','تمدد المكتبة ساعات العمل حتى الثانية صباحاً من بداية فترة الاختبارات النهائية حتى آخر اختبار. ويجب حجز قاعات الدراسة الجماعية مسبقاً خلال تلك الأسابيع.'],k:['library','opening hours','study room','مكتبه','ساعات العمل']},
+];
+FAQ.forEach((f,i)=>{ f.id='f'+i; f.order=i; });
+
+/* --- retrieval -----------------------------------------------------------
+   The assistant is built on this and nothing else. There is no generative
+   step, so it cannot state a policy nobody published: every sentence it
+   shows is the `a` field of an entry above.                                */
+const Q_W=3, K_W=2.5, A_W=1;
+const ANSWER_FLOOR=0.5, LIST_FLOOR=0.12, DECISIVE=0.15;
+
+const INDEX = FAQ.map(f=>({
+  f,
+  q:new Set([...terms(f.q[0]),...terms(f.q[1])]),
+  k:new Set(f.k.flatMap(x=>terms(x))),
+  a:new Set([...terms(f.a[0]),...terms(f.a[1])]),
+}));
+
+function scoreEntry(qt, ix){
+  let weighted=0, strong=0; const matched=[];
+  for(const t of qt){
+    let w=0;
+    if(ix.q.has(t)) w=Q_W; else if(ix.k.has(t)) w=K_W; else if(ix.a.has(t)) w=A_W;
+    if(w>0){ weighted+=w; matched.push(t); if(w>A_W) strong++; }
+  }
+  const coverage = qt.length ? matched.length/qt.length : 0;
+  const density  = qt.length ? weighted/(Q_W*qt.length) : 0;
+  let score = 0.6*coverage + 0.4*density;
+  // Matching only words that happen to appear in an answer body is how you
+  // get confidently wrong.
+  const weak = strong===0;
+  if(weak) score *= 0.5;
+  return {f:ix.f, score:Math.round(score*1000)/1000, matched, weak};
+}
+
+function searchFaq(query, cat, limit){
+  limit = limit || 8;
+  const pool = INDEX.filter(ix=>!cat || ix.f.c===cat);
+  const qt = terms(query);
+  if(!qt.length){
+    return pool.slice(0,limit).map(ix=>({f:ix.f,score:0,matched:[],weak:false}));
+  }
+  return pool.map(ix=>scoreEntry(qt,ix))
+    .filter(m=>m.score>=LIST_FLOOR)
+    .sort((a,b)=>b.score-a.score || a.f.order-b.f.order)
+    .slice(0,limit);
+}
+
+/* Answers only above the floor AND clear of the runner-up. Without the
+   margin, one word like "deadline" scores perfectly against every answer
+   containing it, and picking one is exactly the confident guess this
+   assistant must not make.                                                 */
+function assistantAnswer(query){
+  const m = searchFaq(query, null, 4);
+  const best = m[0];
+  const second = m[1] ? m[1].score : 0;
+  const margin = best && best.score>0 ? (best.score-second)/best.score : 0;
+  const ok = best && best.score>=ANSWER_FLOOR && !best.weak && margin>=DECISIVE;
+  if(!ok) return {answered:false, near:m.slice(0,3), suggest:best?best.f.c:null};
+  return {answered:true, entry:best.f, conf:best.score, near:m.slice(1,3)};
+}
+
+/* --- copy ----------------------------------------------------------------- */
+const T = {
+ en:{
+  demoNote:'Not a real university system. Nothing is sent anywhere — everything you do here stays in this browser tab.',
+  brand:'Student Hub', brandSub:'One question, the right desk',
+  tabHome:'Hub', tabAsk:'Ask', tabMine:'My questions', tabInbox:'Department inbox', tabDash:'Dashboard',
+  homeTitle:'What do you need help with?',
+  homeLede:'Search the published answers first. If the answer is not there, the Hub reads your question, works out which department owns it, and you can follow it from asked to answered.',
+  searchPlaceholder:'Try “reset my password”, “قسط الرسوم”, “grade appeal”…',
+  browse:'Browse by topic', assistantTitle:'Hub assistant',
+  assistantIntro:'Ask anything about university admin. This answers only from the published answers above — if it is not in them, it says so and offers to send your question to the right department instead of guessing.',
+  assistantLabel:'Your question', ask:'Ask',
+  answerFrom:'From the published FAQ', confidence:'Confidence',
+  unsure:'I do not have a published answer for that.',
+  unsureBody:'I am not going to guess at university policy. Send it to the department and someone there will answer it.',
+  near:'These came close — one of them may be what you meant:',
+  sendToDept:'Send to department',
+  notifications:'Notifications', noNotifs:'Nothing new. Updates on your questions appear here.',
+  markRead:'Mark all as read',
+  myQuestions:'My questions', noQuestions:'You have not asked anything yet.',
+  askTitle:'Ask a question', askSub:'Send it to the right desk in under a minute.',
+  askLede:'Describe it in your own words. The Hub works out which department should answer.',
+  fSubject:'What is it about?', fSubjectHint:'A short title, for example “Cannot add CE315”.',
+  fCategory:'Topic', fCategoryHint:'Pick the closest. If your question says otherwise, it will be re-routed.',
+  fBody:'Your question', fBodyHint:'A sentence or two. The more specific, the faster the answer.',
+  fFiles:'Attach a screenshot', fFilesHint:'Optional. Nothing is uploaded — filenames are recorded so you can see how it would work.',
+  send:'Send question', sent:'Question sent',
+  privacy:'The department sees your question and your email address. It cannot see your grades, courses or any other part of your record.',
+  routeTo:'This will go to', routeWhy:'Because your question mentions {terms}.',
+  routeChoice:'Based on the topic you picked.',
+  routeUnsure:'Not certain yet — it will go to the department for your chosen topic.',
+  routeWaiting:'Start typing and the routing shows here.',
+  mineLede:'Everything you have asked, the department handling it, and where it got to.',
+  fAll:'All', fOpen:'Open', fResolved:'Resolved', fNew:'New', fUnanswered:'Unanswered', fWaiting:'Waiting on student',
+  back:'Back', reference:'Reference', department:'Department', routedBy:'Routed by',
+  byRules:'keyword match', byStudent:'your chosen topic', byManual:'a staff transfer',
+  history:'History', attachments:'Attachments', you:'You', internal:'Internal note',
+  reply:'Add to your question…', sendReply:'Send reply', markResolved:'Mark as resolved', reopen:'Reopen',
+  resolvedNote:'You marked this resolved.', noReplies:'No replies yet. The department has your question.',
+  inboxTitle:'Department inbox', inboxLede:'Questions routed to {d}. You are signed in as a member of staff.',
+  inboxEmpty:'Nothing in the queue.',
+  student:'Student', studentEmail:'Email',
+  staffPrivacy:'The Hub shows you the question and the address to reply to. It does not give you access to the student’s academic record.',
+  staffReply:'Reply to the student', staffNote:'Internal note (the student never sees this)',
+  staffSend:'Send', staffWaiting:'Waiting on student', staffResolve:'Mark resolved',
+  transfer:'Forward to another department', transferNote:'Why (internal)', forward:'Forward',
+  transferred:'Forwarded. It has left your queue.',
+  dashTitle:'Hub dashboard', dashLede:'Across every department. Counts only — opening this gives nobody access to a question.',
+  dNew:'New today', dOpen:'Open', dUnanswered:'Unanswered', dResolved:'Resolved',
+  dFirst:'Average first reply', dTotal:'Total asked', dByDept:'By department',
+  dByCat:'What students are stuck on', dTopFaq:'Most-opened answers', dNone:'No questions yet.',
+  noAvg:'No replies yet', minutes:'{n} min', hours:'{n} h', days:'{n} d',
+  roleStudent:'Viewing as student', roleStaff:'Viewing as staff',
+  ev_submitted:'You sent this question.', ev_routed:'It was routed to a department.',
+  ev_staff_replied:'The department replied.', ev_student_replied:'You added to the thread.',
+  ev_transferred:'It was forwarded to another department.', ev_status:'The status changed.',
+  ev_resolved:'It was marked resolved.', ev_reopened:'It was reopened.',
+  n_received:'We received your question and sent it to the department.',
+  n_replied:'A department has replied to your question.',
+  n_transferred:'Your question was forwarded to another department.',
+  n_resolved:'Your question has been marked resolved.',
+  n_waiting:'A department is waiting for something from you.',
+  st_submitted:'Submitted', st_under_review:'Under review', st_waiting_student:'Waiting for you',
+  st_answered:'Answered', st_resolved:'Resolved',
+  footNote:'A prototype. The routing engine and the assistant are ports of code written and unit-tested for a full Next.js and Supabase build; here they run in the page so the whole thing works with no server.',
+  backToPort:'← Back to the portfolio',
+  toastSent:'Sent. The department has it.', toastReply:'Reply sent.', toastResolved:'Marked resolved.',
+  toastReopened:'Reopened.', toastRead:'All caught up.',
+ },
+ ar:{
+  demoNote:'ليس نظاماً جامعياً حقيقياً. لا يُرسل شيء إلى أي جهة — كل ما تفعله هنا يبقى في هذه النافذة.',
+  brand:'مركز الطالب', brandSub:'سؤال واحد، والجهة الصحيحة',
+  tabHome:'المركز', tabAsk:'اسأل', tabMine:'أسئلتي', tabInbox:'بريد القسم', tabDash:'اللوحة',
+  homeTitle:'بماذا يمكننا مساعدتك؟',
+  homeLede:'ابحث في الإجابات المنشورة أولاً. وإن لم تجد الإجابة، يقرأ المركز سؤالك ويحدد القسم المسؤول، ويمكنك متابعته من الإرسال حتى الرد.',
+  searchPlaceholder:'جرّب «كلمة المرور» أو «قسط الرسوم» أو «تظلم درجة»…',
+  browse:'تصفّح حسب الموضوع', assistantTitle:'مساعد المركز',
+  assistantIntro:'اسأل عن أي إجراء جامعي. يجيب من الإجابات المنشورة أعلاه فقط — وإن لم تكن موجودة فسيقول ذلك ويعرض إرسال سؤالك إلى القسم المختص بدل التخمين.',
+  assistantLabel:'سؤالك', ask:'اسأل',
+  answerFrom:'من الأسئلة الشائعة المنشورة', confidence:'درجة الثقة',
+  unsure:'ليست لديّ إجابة منشورة عن ذلك.',
+  unsureBody:'لن أخمّن في أنظمة الجامعة. أرسله إلى القسم وسيجيبك أحد موظفيه.',
+  near:'هذه كانت قريبة — قد يكون أحدها ما تقصده:',
+  sendToDept:'إرسال إلى القسم',
+  notifications:'الإشعارات', noNotifs:'لا جديد. ستظهر هنا تحديثات أسئلتك.',
+  markRead:'تعليم الكل كمقروء',
+  myQuestions:'أسئلتي', noQuestions:'لم تسأل شيئاً بعد.',
+  askTitle:'اطرح سؤالاً', askSub:'أرسله إلى الجهة الصحيحة في أقل من دقيقة.',
+  askLede:'اكتبه بكلماتك، والمركز يحدد القسم الذي ينبغي أن يجيب.',
+  fSubject:'ما موضوع السؤال؟', fSubjectHint:'عنوان قصير، مثل «لا أستطيع إضافة CE315».',
+  fCategory:'الموضوع', fCategoryHint:'اختر الأقرب. وإذا دلّ نص سؤالك على غير ذلك، سيُعاد توجيهه.',
+  fBody:'سؤالك', fBodyHint:'جملة أو جملتان. كلما كان أوضح كانت الإجابة أسرع.',
+  fFiles:'أرفق صورة للشاشة', fFilesHint:'اختياري. لا يُرفع شيء — تُسجَّل الأسماء فقط لتوضيح الفكرة.',
+  send:'إرسال السؤال', sent:'أُرسل السؤال',
+  privacy:'يرى القسم سؤالك وبريدك الإلكتروني. ولا يمكنه الاطلاع على درجاتك أو مقرراتك أو أي جزء آخر من سجلك.',
+  routeTo:'سيذهب إلى', routeWhy:'لأن سؤالك يذكر {terms}.',
+  routeChoice:'بناءً على الموضوع الذي اخترته.',
+  routeUnsure:'لسنا متأكدين بعد — سيذهب إلى قسم الموضوع الذي اخترته.',
+  routeWaiting:'ابدأ الكتابة وسيظهر التوجيه هنا.',
+  mineLede:'كل ما سألت عنه، والقسم الذي يتولاه، وإلى أين وصل.',
+  fAll:'الكل', fOpen:'مفتوحة', fResolved:'منتهية', fNew:'جديدة', fUnanswered:'بلا رد', fWaiting:'بانتظار الطالب',
+  back:'رجوع', reference:'الرقم المرجعي', department:'القسم', routedBy:'وُجّه بواسطة',
+  byRules:'مطابقة الكلمات المفتاحية', byStudent:'الموضوع الذي اخترته', byManual:'تحويل من موظف',
+  history:'السجل', attachments:'المرفقات', you:'أنت', internal:'ملاحظة داخلية',
+  reply:'أضف إلى سؤالك…', sendReply:'إرسال الرد', markResolved:'تعليمه كمنتهٍ', reopen:'إعادة فتحه',
+  resolvedNote:'أنهيت هذا السؤال.', noReplies:'لا ردود بعد. سؤالك لدى القسم.',
+  inboxTitle:'بريد القسم', inboxLede:'الأسئلة الموجّهة إلى {d}. أنت الآن بصفة موظف.',
+  inboxEmpty:'لا شيء في قائمة الانتظار.',
+  student:'الطالب', studentEmail:'البريد الإلكتروني',
+  staffPrivacy:'يعرض المركز السؤال وعنوان الرد فقط، ولا يمنحك الاطلاع على السجل الأكاديمي للطالب.',
+  staffReply:'الرد على الطالب', staffNote:'ملاحظة داخلية (لا يراها الطالب)',
+  staffSend:'إرسال', staffWaiting:'بانتظار الطالب', staffResolve:'تعليمه كمنتهٍ',
+  transfer:'تحويل إلى قسم آخر', transferNote:'السبب (داخلي)', forward:'تحويل',
+  transferred:'حُوِّل السؤال وخرج من قائمتك.',
+  dashTitle:'لوحة المركز', dashLede:'عبر جميع الأقسام. أعداد فقط — فتح اللوحة لا يمنح أحداً الاطلاع على أي سؤال.',
+  dNew:'جديدة اليوم', dOpen:'مفتوحة', dUnanswered:'بلا رد', dResolved:'منتهية',
+  dFirst:'متوسط أول رد', dTotal:'إجمالي الأسئلة', dByDept:'حسب القسم',
+  dByCat:'أكثر ما يواجه الطلبة', dTopFaq:'أكثر الإجابات فتحاً', dNone:'لا أسئلة بعد.',
+  noAvg:'لا ردود بعد', minutes:'{n} دقيقة', hours:'{n} ساعة', days:'{n} يوم',
+  roleStudent:'العرض كطالب', roleStaff:'العرض كموظف',
+  ev_submitted:'أرسلت هذا السؤال.', ev_routed:'وُجّه إلى قسم مختص.',
+  ev_staff_replied:'ردّ القسم.', ev_student_replied:'أضفت إلى المحادثة.',
+  ev_transferred:'حُوّل إلى قسم آخر.', ev_status:'تغيّرت الحالة.',
+  ev_resolved:'عُلّم كمنتهٍ.', ev_reopened:'أُعيد فتحه.',
+  n_received:'استلمنا سؤالك وأرسلناه إلى القسم المختص.',
+  n_replied:'ردّ أحد الأقسام على سؤالك.',
+  n_transferred:'حُوّل سؤالك إلى قسم آخر.',
+  n_resolved:'تم تعليم سؤالك كمنتهٍ.',
+  n_waiting:'أحد الأقسام بانتظار ردّك.',
+  st_submitted:'أُرسل', st_under_review:'قيد المراجعة', st_waiting_student:'بانتظارك',
+  st_answered:'تمت الإجابة', st_resolved:'منتهٍ',
+  footNote:'نموذج أولي. محرك التوجيه والمساعد منقولان من شيفرة كُتبت واختُبرت لمشروع Next.js و Supabase كامل، وهنا يعملان داخل الصفحة نفسها دون أي خادم.',
+  backToPort:'← العودة إلى الموقع',
+  toastSent:'أُرسل. وصل إلى القسم.', toastReply:'أُرسل الرد.', toastResolved:'عُلّم كمنتهٍ.',
+  toastReopened:'أُعيد فتحه.', toastRead:'لا جديد.',
+ }
+};
+
+const CATNAME = {
+ en:{admissions:'Admissions',registration:'Registration',courses:'Courses & modules',exams:'Exams & assessments',
+     grades:'Grades & results',attendance:'Attendance',timetables:'Timetables',fees:'Fees & payments',
+     student_support:'Student support',it_support:'IT & technical support',accommodation:'Accommodation',
+     graduation:'Graduation',other:'Other services'},
+ ar:{admissions:'القبول',registration:'التسجيل',courses:'المقررات',exams:'الاختبارات',
+     grades:'الدرجات والنتائج',attendance:'الحضور والغياب',timetables:'الجداول',fees:'الرسوم',
+     student_support:'دعم الطلبة',it_support:'الدعم الفني',accommodation:'السكن',
+     graduation:'التخرج',other:'خدمات أخرى'}
+};
+
+/* --- state ---------------------------------------------------------------- */
+let LANG = 'en';
+let ROLE = 'student';               // or 'staff'
+let STAFF_DEPT = 'registry';
+let VIEW = 'home';
+let OPEN_ID = null;
+let CAT_FILTER = null;
+let MINE_FILTER = 'open';
+let INBOX_FILTER = 'all';
+const ME = 'sara.alajmi@demo.hub';
+
+const KEY='studenthub.v1';
+let refCounter = 1001;
+
+// Assigned at the bottom of the file, not here: seed() reaches for helpers
+// declared further down, and a `const` read before its declaration is a
+// dead-zone error rather than an undefined.
+let DB;
+
+function load(){
+  try{
+    const raw = sessionStorage.getItem(KEY);
+    if(raw) return JSON.parse(raw);
+  }catch(e){/* private mode, or storage blocked — carry on with a fresh set */}
+  return seed();
+}
+function save(){
+  try{ sessionStorage.setItem(KEY, JSON.stringify(DB)); }catch(e){/* nothing to do */}
+}
+function t(k){ return (T[LANG] && T[LANG][k]) || T.en[k] || k; }
+function catName(c){ return CATNAME[LANG][c] || c; }
+function deptName(slug){ const d=deptBySlug[slug]; return d ? d[LANG] : '—'; }
+
+function nextRef(){ return 'HUB-' + String(refCounter++).padStart(6,'0'); }
+
+const hoursAgo = h => new Date(Date.now()-h*3600e3).toISOString();
+
+/* Three worked questions, one in each interesting state — including one the
+   student filed under the wrong topic, which the router corrected.          */
+function seed(){
+  refCounter = 1001;
+  const q1 = {
+    id:'q1', ref:nextRef(), subject:'Portal password reset email never arrives',
+    body:'I have asked for a password reset four times today and nothing has arrived. I checked my junk folder. I need to get into the portal before registration closes.',
+    cat:'it_support', dept:'it', method:'rules', conf:0.84, hits:['password','reset','portal'],
+    status:'answered', created:hoursAgo(22), firstReply:hoursAgo(19), files:[],
+    msgs:[{who:'staff',dept:'it',body:'Your account was set to an old personal address, which is where the resets were going. I have pointed it at your university email — try the Forgot Password link again and it should arrive within a few minutes.',at:hoursAgo(19)}],
+    events:[{k:'submitted',at:hoursAgo(22)},{k:'routed',at:hoursAgo(22)},{k:'staff_replied',at:hoursAgo(19)}],
+  };
+  const q2 = {
+    id:'q2', ref:nextRef(), subject:'Second instalment shows as unpaid after I paid it',
+    body:'I paid the second instalment by bank transfer on Sunday and have the receipt, but the portal still shows it as outstanding and it is blocking my registration.',
+    cat:'fees', dept:'finance', method:'rules', conf:0.79, hits:['instalment','payment'],
+    status:'under_review', created:hoursAgo(5), firstReply:null, files:['receipt.pdf'],
+    msgs:[], events:[{k:'submitted',at:hoursAgo(5)},{k:'routed',at:hoursAgo(5)}],
+  };
+  const q3 = {
+    id:'q3', ref:nextRef(), subject:'CE301 midterm grade looks wrong on my transcript',
+    body:'My CE301 midterm was returned as 41 out of 50 but the transcript shows 31. I still have the marked paper. Who can recheck this?',
+    cat:'grades', dept:'academic', method:'rules', conf:0.71, hits:['grade appeal','recheck','transcript'],
+    status:'submitted', created:hoursAgo(2), firstReply:null, files:[],
+    msgs:[], events:[{k:'submitted',at:hoursAgo(2)},{k:'routed',at:hoursAgo(2)}],
+  };
+  return {
+    questions:[q3,q2,q1],
+    notifs:[
+      {id:'n1',kind:'replied',ref:q1.ref,qid:'q1',at:hoursAgo(19),read:false},
+      {id:'n2',kind:'received',ref:q2.ref,qid:'q2',at:hoursAgo(5),read:false},
+      {id:'n3',kind:'received',ref:q3.ref,qid:'q3',at:hoursAgo(2),read:true},
+    ],
+    hits:{f20:3,f18:2,f2:2,f10:1,f13:1},   // opened-answer counts for the dashboard
+    ref:refCounter,
+  };
+}
+
+/* --- tiny helpers ---------------------------------------------------------- */
+const $  = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+function esc(s){ return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function el(html){ const d=document.createElement('div'); d.innerHTML=html.trim(); return d.firstElementChild; }
+
+function fmtWhen(iso){
+  const d=new Date(iso), now=new Date();
+  const mins=Math.round((now-d)/60000);
+  if(mins<60) return t('minutes').replace('{n}',mins);
+  if(mins<60*36) return t('hours').replace('{n}',Math.round(mins/60));
+  return d.toLocaleDateString(LANG==='ar'?'ar':'en-GB',{day:'numeric',month:'short'});
+}
+function fmtDur(mins){
+  if(mins==null) return t('noAvg');
+  if(mins<90) return t('minutes').replace('{n}',Math.round(mins));
+  if(mins<60*48) return t('hours').replace('{n}',Math.round(mins/60));
+  return t('days').replace('{n}',Math.round(mins/1440));
+}
+const STATUS_CLASS = {submitted:'b-grey',under_review:'b-blue',waiting_student:'b-yellow',answered:'b-pink',resolved:'b-green'};
+function statusBadge(s){ return '<span class="badge '+STATUS_CLASS[s]+'">'+esc(t('st_'+s))+'</span>'; }
+
+function toast(msg){
+  const box=$('#toast');
+  box.innerHTML='<div>'+esc(msg)+'</div>';
+  clearTimeout(toast._x);
+  toast._x=setTimeout(()=>{box.innerHTML='';},2600);
+}
+
+function notify(kind, q){
+  DB.notifs.unshift({id:'n'+Date.now()+Math.random(),kind,ref:q.ref,qid:q.id,at:new Date().toISOString(),read:false});
+}
+
+/* --- rendering -------------------------------------------------------------- */
+function applyStaticCopy(){
+  document.documentElement.lang = LANG;
+  document.documentElement.dir  = LANG==='ar' ? 'rtl' : 'ltr';
+  $$('[data-t]').forEach(n=>{ n.textContent = t(n.dataset.t); });
+  $('#q').placeholder = t('searchPlaceholder');
+  $('#assistInput').placeholder = t('assistantLabel');
+  $('#langBtn').textContent = LANG==='en' ? 'العربية' : 'English';
+  $('#roleBtn').textContent = ROLE==='student' ? t('roleStudent') : t('roleStaff');
+  document.title = t('brand') + ' — ' + t('brandSub');
+}
+
+const TABS = [
+  {id:'home', k:'tabHome'}, {id:'ask', k:'tabAsk'}, {id:'mine', k:'tabMine'},
+  {id:'inbox', k:'tabInbox', staff:true}, {id:'dash', k:'tabDash', staff:true},
+];
+
+function renderTabs(){
+  const unread = DB.notifs.filter(n=>!n.read).length;
+  $('#tablist').innerHTML = TABS.filter(tb=>!tb.staff || ROLE==='staff').map(tb=>{
+    const badge = tb.id==='mine' && unread ? '<span class="dot">'+unread+'</span>' : '';
+    const inboxCount = tb.id==='inbox' ? queueFor(STAFF_DEPT).filter(q=>q.status!=='resolved').length : 0;
+    const ib = inboxCount ? '<span class="dot">'+inboxCount+'</span>' : '';
+    return '<button class="tab" role="tab" data-tab="'+tb.id+'" aria-selected="'+(VIEW===tb.id||(VIEW==='thread'&&tb.id==='mine'))+'">'
+      + esc(t(tb.k)) + badge + ib + '</button>';
+  }).join('');
+}
+
+function show(view){
+  VIEW = view;
+  ['home','ask','mine','thread','inbox','dash'].forEach(v=>{
+    const n=$('#v-'+v); if(n) n.hidden = (v!==view);
+  });
+  renderTabs();
+  window.scrollTo({top:0,behavior:'instant'});
+}
+
+/* --- FAQ list --------------------------------------------------------------- */
+function faqHtml(matches, query){
+  if(!matches.length){
+    return '<div class="empty"><div class="big">🔍</div><p>'+esc(t('unsure'))+'</p>'
+      + '<button class="btn mt2" data-go="ask">'+esc(t('sendToDept'))+'</button></div>';
+  }
+  return matches.map((m,i)=>{
+    const f=m.f, open = i===0 && query && m.score>0;
+    return '<div class="faq" open-state="'+(open?1:0)+'" data-faq="'+f.id+'">'
+      + '<button class="q" type="button" aria-expanded="'+(open?'true':'false')+'">'
+      +   '<span class="caret" aria-hidden="true">›</span>'
+      +   '<span><span class="qt">'+esc(f.q[LANG==='ar'?1:0])+'</span>'
+      +   '<span class="meta">'+esc(CAT_ICON[f.c]+' '+catName(f.c))+'</span></span>'
+      + '</button>'
+      + '<div class="a"'+(open?'':' hidden')+'>'
+      +   '<p style="margin:0">'+esc(f.a[LANG==='ar'?1:0])+'</p>'
+      +   '<div class="dept">'+esc(t('department'))+': '+esc(deptName(f.d))
+      +     ' · <a href="mailto:'+esc(deptBySlug[f.d].email)+'">'+esc(deptBySlug[f.d].email)+'</a></div>'
+      + '</div></div>';
+  }).join('');
+}
+
+function renderSearch(){
+  const query = $('#q').value.trim();
+  const box = $('#searchResults');
+  if(!query && !CAT_FILTER){ box.innerHTML=''; return; }
+  const matches = searchFaq(query, CAT_FILTER, 8);
+  box.innerHTML = '<p class="small muted" style="margin:.2rem 0 .7rem">'
+    + (CAT_FILTER ? esc(catName(CAT_FILTER)) : '')
+    + (CAT_FILTER && query ? ' · ' : '')
+    + (query ? '“'+esc(query)+'”' : '') + '</p>'
+    + faqHtml(matches, query);
+}
+
+function renderTiles(){
+  const counts={};
+  FAQ.forEach(f=>counts[f.c]=(counts[f.c]||0)+1);
+  $('#tiles').innerHTML = CATS.map(c=>
+    '<button class="tile" type="button" data-cat="'+c+'" aria-pressed="'+(CAT_FILTER===c)+'">'
+    + '<span class="ico" aria-hidden="true">'+CAT_ICON[c]+'</span>'
+    + '<span class="nm">'+esc(catName(c))+'</span>'
+    + '<span class="ct">'+(counts[c]||0)+'</span></button>'
+  ).join('');
+}
+
+/* --- assistant -------------------------------------------------------------- */
+function renderAssistant(query){
+  const out=$('#assistOut');
+  if(!query){ out.innerHTML=''; return; }
+  const r = assistantAnswer(query);
+
+  if(r.answered){
+    DB.hits[r.entry.id]=(DB.hits[r.entry.id]||0)+1; save();
+    out.innerHTML = '<div class="answer">'
+      + '<p class="src">'+esc(t('answerFrom'))+'</p>'
+      + '<p style="margin:0">'+esc(r.entry.a[LANG==='ar'?1:0])+'</p>'
+      + '<p class="tiny muted" style="margin:.8rem 0 0">'+esc(r.entry.q[LANG==='ar'?1:0])+' · '+esc(catName(r.entry.c))+'</p>'
+      + '</div>'
+      + '<p class="tiny muted mt2">'+esc(t('confidence'))+': '+Math.round(r.conf*100)+'%</p>';
+    return;
+  }
+
+  out.innerHTML = '<div class="refuse">'
+    + '<p style="margin:0;font-weight:600">ⓘ '+esc(t('unsure'))+'</p>'
+    + '<p class="small muted" style="margin:.4rem 0 0">'+esc(t('unsureBody'))+'</p>'
+    + (r.near.length ? '<p class="tiny muted" style="margin:.9rem 0 .3rem">'+esc(t('near'))+'</p><ul class="small muted" style="margin:0;padding-inline-start:1.1rem">'
+        + r.near.map(m=>'<li>'+esc(m.f.q[LANG==='ar'?1:0])+'</li>').join('') + '</ul>' : '')
+    + '<div class="row mt3"><button class="btn" data-go="ask" data-prefill="'+esc(query)
+    + '" data-cat-prefill="'+esc(r.suggest||'')+'">'+esc(t('sendToDept'))+'</button></div>'
+    + '</div>';
+}
+
+/* --- notifications ----------------------------------------------------------- */
+function renderNotifs(){
+  const box=$('#notifs');
+  if(!DB.notifs.length){ box.innerHTML='<p class="small muted" style="margin:0">'+esc(t('noNotifs'))+'</p>'; return; }
+  box.innerHTML = DB.notifs.slice(0,6).map(n=>
+    '<button class="qrow" style="padding:.5rem .6rem;border:0;background:none;display:block" data-open="'+n.qid+'">'
+    + '<span style="display:flex;gap:.5rem;align-items:flex-start">'
+    +   '<span style="width:6px;height:6px;border-radius:50%;margin-top:.45rem;flex:none;background:'+(n.read?'transparent':'var(--yellow)')+'"></span>'
+    +   '<span><span class="small" style="display:block">'+esc(t('n_'+n.kind))+'</span>'
+    +   '<span class="tiny muted ref">'+esc(n.ref)+' · '+esc(fmtWhen(n.at))+'</span></span>'
+    + '</span></button>'
+  ).join('')
+  + (DB.notifs.some(n=>!n.read) ? '<button class="chip mt2" id="readAll">'+esc(t('markRead'))+'</button>' : '');
+}
+
+function renderHomeQuestions(){
+  const box=$('#homeQuestions');
+  const open = DB.questions.filter(q=>q.status!=='resolved').slice(0,3);
+  if(!open.length){ box.innerHTML='<p class="small muted" style="margin:0">'+esc(t('noQuestions'))+'</p>'; return; }
+  box.innerHTML = open.map(q=>
+    '<button class="qrow" style="padding:.55rem .6rem;border:0;background:none;display:block;text-align:start" data-open="'+q.id+'">'
+    + '<span class="small" style="display:block;font-weight:500">'+esc(q.subject)+'</span>'
+    + '<span style="display:flex;gap:.45rem;align-items:center;margin-top:.3rem">'+statusBadge(q.status)
+    + '<span class="tiny muted">'+esc(fmtWhen(q.created))+'</span></span></button>'
+  ).join('');
+}
+
+/* --- ask -------------------------------------------------------------------- */
+function renderCategorySelect(){
+  $('#aCategory').innerHTML = CATS.map(c=>'<option value="'+c+'">'+esc(catName(c))+'</option>').join('');
+}
+
+function renderRoutePreview(){
+  const s=$('#aSubject').value, b=$('#aBody').value, c=$('#aCategory').value;
+  const box=$('#routePreview');
+  if(s.trim().length<3 && b.trim().length<15){
+    box.innerHTML='<p class="small muted" style="margin:0">'+esc(t('routeWaiting'))+'</p>'; return;
+  }
+  const r = routeQuestion(s,b,c);
+  const d = departmentFor(r.cat);
+  let why;
+  if(r.conf>=CONFIDENT && r.hits.length){
+    why = t('routeWhy').replace('{terms}', r.hits.slice(0,3).map(h=>'“'+h+'”').join(', '));
+  } else if(r.method==='student'){ why = t('routeChoice'); }
+  else { why = t('routeUnsure'); }
+
+  box.innerHTML = '<p style="margin:0;font-family:var(--display);font-weight:600">'+esc(d[LANG])+'</p>'
+    + '<p style="margin:.5rem 0 0"><span class="badge b-yellow">'+esc(catName(r.cat))+'</span></p>'
+    + '<p class="tiny muted" style="margin:.7rem 0 0">'+esc(why)+'</p>'
+    + '<p class="tiny muted" style="margin:.5rem 0 0">'+esc(t('confidence'))+': '+Math.round(r.conf*100)+'%</p>'
+    + '<p class="tiny muted" style="margin:.7rem 0 0;padding-top:.6rem;border-top:1px solid var(--line-soft)">'
+    +   '<a href="mailto:'+esc(d.email)+'">'+esc(d.email)+'</a></p>';
+}
+
+function submitQuestion(e){
+  e.preventDefault();
+  const subject=$('#aSubject').value.trim(), body=$('#aBody').value.trim(), chosen=$('#aCategory').value;
+  if(subject.length<3 || body.length<15) return;
+
+  // Routing is recomputed here rather than read off the preview, so what is
+  // recorded is always what the engine actually decided.
+  const r = routeQuestion(subject, body, chosen);
+  const d = departmentFor(r.cat);
+  const files = [...($('#aFiles').files||[])].slice(0,3).map(f=>f.name);
+  const now = new Date().toISOString();
+
+  const q = {
+    id:'q'+Date.now(), ref:nextRef(), subject, body,
+    cat:r.cat, dept:d.slug, method:r.method, conf:r.conf, hits:r.hits,
+    status:'submitted', created:now, firstReply:null, files,
+    msgs:[], events:[{k:'submitted',at:now},{k:'routed',at:now}],
+  };
+  DB.questions.unshift(q);
+  DB.ref = refCounter;
+  notify('received', q);
+  save();
+
+  e.target.reset();
+  renderRoutePreview();
+  toast(t('toastSent'));
+  OPEN_ID=q.id; renderThread(); show('thread');
+  renderAll();
+}
+
+/* --- my questions ------------------------------------------------------------ */
+function renderMine(){
+  $('#mineFilters').innerHTML = [['open','fOpen'],['resolved','fResolved'],['all','fAll']]
+    .map(([v,k])=>'<button class="chip" data-mine="'+v+'" aria-pressed="'+(MINE_FILTER===v)+'">'+esc(t(k))+'</button>').join('');
+
+  const list = DB.questions.filter(q=>
+    MINE_FILTER==='all' ? true : MINE_FILTER==='resolved' ? q.status==='resolved' : q.status!=='resolved');
+
+  $('#mineList').innerHTML = list.length ? list.map(qrow).join('')
+    : '<div class="empty"><div class="big">📭</div><p>'+esc(t('noQuestions'))+'</p>'
+      + '<button class="btn mt2" data-go="ask">'+esc(t('askTitle'))+'</button></div>';
+}
+
+function qrow(q){
+  return '<button class="qrow" data-open="'+q.id+'">'
+    + '<span style="display:flex;gap:.7rem;align-items:flex-start;justify-content:space-between">'
+    +   '<span style="min-width:0"><span class="t" style="display:block">'+esc(q.subject)+'</span>'
+    +   '<span class="b">'+esc(q.body)+'</span></span>'
+    +   statusBadge(q.status) + '</span>'
+    + '<span class="f"><span class="ref">'+esc(q.ref)+'</span>'
+    +   '<span>'+CAT_ICON[q.cat]+' '+esc(catName(q.cat))+'</span>'
+    +   '<span>'+esc(deptName(q.dept))+'</span>'
+    +   '<span style="margin-inline-start:auto">'+esc(fmtWhen(q.created))+'</span></span>'
+    + '</button>';
+}
+
+/* --- thread (student view) ----------------------------------------------------- */
+function renderThread(){
+  const q = DB.questions.find(x=>x.id===OPEN_ID);
+  if(!q){ show('mine'); return; }
+  const d = deptBySlug[q.dept];
+  const methodLabel = q.method==='student' ? t('byStudent') : q.method==='manual' ? t('byManual') : t('byRules');
+
+  $('#threadBody').innerHTML =
+    '<h1 style="font-size:1.4rem">'+esc(q.subject)+'</h1>'
+  + '<p class="lede small"><span class="ref">'+esc(q.ref)+'</span></p>'
+  + '<div class="side"><div>'
+  +   '<div class="card">'
+  +     '<div class="row" style="align-items:center;margin-bottom:.7rem">'+statusBadge(q.status)
+  +       '<span class="tiny muted">'+CAT_ICON[q.cat]+' '+esc(catName(q.cat))+'</span>'
+  +       '<span class="tiny muted ref" style="margin-inline-start:auto">'+esc(fmtWhen(q.created))+'</span></div>'
+  +     '<p style="margin:0;white-space:pre-line;font-size:.9375rem;color:var(--muted)">'+esc(q.body)+'</p>'
+  +     (q.files.length ? '<p class="tiny muted" style="margin:.9rem 0 0;padding-top:.7rem;border-top:1px solid var(--line-soft)">'
+        + esc(t('attachments'))+': '+q.files.map(esc).join(', ')+'</p>' : '')
+  +   '</div>'
+  +   '<div class="mt2">'+ (q.msgs.filter(m=>!m.internal).length
+        ? q.msgs.filter(m=>!m.internal).map(msgHtml).join('')
+        : '<div class="card"><p class="small muted" style="margin:0">'+esc(t('noReplies'))+'</p></div>') +'</div>'
+  +   (q.status==='resolved'
+        ? '<div class="card mt2" style="border-color:rgba(155,232,180,.3);background:rgba(155,232,180,.06)">'
+          + '<div class="row" style="align-items:center"><span class="small">✓ '+esc(t('resolvedNote'))+'</span>'
+          + '<button class="btn ghost" style="margin-inline-start:auto" data-act="reopen">'+esc(t('reopen'))+'</button></div></div>'
+        : '<form class="card mt2" id="replyForm">'
+          + '<label class="f"><span class="sr">'+esc(t('reply'))+'</span>'
+          + '<textarea id="replyBody" rows="3" placeholder="'+esc(t('reply'))+'" required></textarea></label>'
+          + '<div class="row"><button class="btn" type="submit">'+esc(t('sendReply'))+'</button>'
+          + '<button class="btn ghost" type="button" data-act="resolve">'+esc(t('markResolved'))+'</button></div></form>')
+  + '</div><aside>'
+  +   '<div class="card"><h3 class="tiny" style="text-transform:uppercase;letter-spacing:.07em;color:var(--muted-2)">'+esc(t('department'))+'</h3>'
+  +     '<p style="margin:.5rem 0 0;font-weight:500">'+esc(d[LANG])+'</p>'
+  +     '<p class="tiny muted" style="margin:.3rem 0 0"><a href="mailto:'+esc(d.email)+'">'+esc(d.email)+'</a></p>'
+  +     '<dl class="tiny" style="margin:.9rem 0 0;padding-top:.7rem;border-top:1px solid var(--line-soft)">'
+  +       '<div style="display:flex;justify-content:space-between;gap:.5rem"><dt class="muted">'+esc(t('reference'))+'</dt><dd class="ref" style="margin:0">'+esc(q.ref)+'</dd></div>'
+  +       '<div style="display:flex;justify-content:space-between;gap:.5rem;margin-top:.3rem"><dt class="muted">'+esc(t('routedBy'))+'</dt><dd style="margin:0">'+esc(methodLabel)+'</dd></div>'
+  +     '</dl></div>'
+  +   '<div class="card mt2"><h3 class="tiny" style="text-transform:uppercase;letter-spacing:.07em;color:var(--muted-2)">'+esc(t('history'))+'</h3>'
+  +     '<ul class="tl mt2">'+q.events.map(e=>
+          '<li><span class="pip"></span><span>'+esc(t('ev_'+(e.k==='status_changed'?'status':e.k)))
+          + '<time>'+esc(fmtWhen(e.at))+'</time></span></li>').join('')+'</ul></div>'
+  + '</aside></div>';
+}
+
+function msgHtml(m){
+  return '<div class="msg '+(m.who==='staff'?'staff':'')+(m.internal?' note':'')+'">'
+    + '<p class="who">'+(m.who==='staff'?esc(deptName(m.dept)):esc(t('you')))
+    + (m.internal?' <span class="badge b-yellow">'+esc(t('internal'))+'</span>':'')
+    + '<span class="when">'+esc(fmtWhen(m.at))+'</span></p>'
+    + '<p>'+esc(m.body)+'</p></div>';
+}
+
+/* --- staff ------------------------------------------------------------------- */
+function queueFor(slug){ return DB.questions.filter(q=>q.dept===slug); }
+
+function renderInbox(){
+  $('#inboxLede').textContent = t('inboxLede').replace('{d}', deptName(STAFF_DEPT));
+
+  $('#inboxFilters').innerHTML =
+    DEPTS.map(d=>'<button class="chip" data-dept="'+d.slug+'" aria-pressed="'+(STAFF_DEPT===d.slug)+'">'+esc(d[LANG])+'</button>').join('')
+    + '<span style="flex-basis:100%;height:0"></span>'
+    + [['all','fAll'],['new','fNew'],['unanswered','fUnanswered'],['waiting','fWaiting']]
+      .map(([v,k])=>'<button class="chip" data-inbox="'+v+'" aria-pressed="'+(INBOX_FILTER===v)+'">'+esc(t(k))+'</button>').join('');
+
+  let list = queueFor(STAFF_DEPT);
+  if(INBOX_FILTER==='new') list=list.filter(q=>q.status==='submitted');
+  if(INBOX_FILTER==='unanswered') list=list.filter(q=>!q.firstReply && q.status!=='resolved');
+  if(INBOX_FILTER==='waiting') list=list.filter(q=>q.status==='waiting_student');
+
+  $('#inboxList').innerHTML = list.length
+    ? list.map(q=>'<button class="qrow" data-staff="'+q.id+'">'
+        + '<span style="display:flex;gap:.7rem;align-items:flex-start;justify-content:space-between">'
+        +   '<span style="min-width:0"><span class="t" style="display:block">'+esc(q.subject)+'</span>'
+        +   '<span class="b">'+esc(q.body)+'</span></span>'
+        +   '<span style="display:flex;flex-direction:column;gap:.3rem;align-items:flex-end">'+statusBadge(q.status)
+        +   (!q.firstReply && q.status!=='resolved' ? '<span class="badge b-yellow">'+esc(t('fUnanswered'))+'</span>':'')
+        +   '</span></span>'
+        + '<span class="f"><span class="ref">'+esc(q.ref)+'</span><span>'+esc(ME)+'</span>'
+        +   '<span style="margin-inline-start:auto">'+esc(fmtWhen(q.created))+'</span></span></button>').join('')
+    : '<div class="empty"><div class="big">✅</div><p>'+esc(t('inboxEmpty'))+'</p></div>';
+}
+
+function renderStaffThread(){
+  const q = DB.questions.find(x=>x.id===OPEN_ID);
+  if(!q){ show('inbox'); return; }
+  $('#threadBody').innerHTML =
+    '<h1 style="font-size:1.4rem">'+esc(q.subject)+'</h1>'
+  + '<p class="lede small"><span class="ref">'+esc(q.ref)+'</span></p>'
+  + '<div class="side"><div>'
+  +   '<div class="card"><div class="row" style="align-items:center;margin-bottom:.7rem">'+statusBadge(q.status)
+  +     '<span class="tiny muted">'+CAT_ICON[q.cat]+' '+esc(catName(q.cat))+'</span></div>'
+  +     '<p style="margin:0;white-space:pre-line;font-size:.9375rem;color:var(--muted)">'+esc(q.body)+'</p>'
+  +     (q.files.length?'<p class="tiny muted" style="margin:.9rem 0 0">'+esc(t('attachments'))+': '+q.files.map(esc).join(', ')+'</p>':'')
+  +   '</div>'
+  +   '<div class="mt2">'+ q.msgs.map(msgHtml).join('') +'</div>'
+  +   '<form class="card mt2" id="staffForm">'
+  +     '<label class="f"><span>'+esc(t('staffReply'))+'</span><textarea id="staffBody" rows="4" required></textarea></label>'
+  +     '<label class="small muted" style="display:flex;gap:.5rem;align-items:flex-start;margin-bottom:.8rem">'
+  +       '<input type="checkbox" id="staffInternal" style="width:auto;min-height:0;margin-top:.25rem"> <span>'+esc(t('staffNote'))+'</span></label>'
+  +     '<div class="row"><button class="btn" type="submit">'+esc(t('staffSend'))+'</button>'
+  +       '<button class="btn ghost" type="button" data-sact="waiting">'+esc(t('staffWaiting'))+'</button>'
+  +       '<button class="btn ghost" type="button" data-sact="resolve">'+esc(t('staffResolve'))+'</button></div>'
+  +   '</form>'
+  +   '<form class="card mt2" id="transferForm"><h3 style="margin-bottom:.7rem">'+esc(t('transfer'))+'</h3>'
+  +     '<label class="f"><span class="sr">'+esc(t('department'))+'</span><select id="tDept">'
+  +       DEPTS.filter(d=>d.slug!==q.dept).map(d=>'<option value="'+d.slug+'">'+esc(d[LANG])+'</option>').join('')
+  +     '</select></label>'
+  +     '<label class="f"><span>'+esc(t('transferNote'))+'</span><textarea id="tNote" rows="2"></textarea></label>'
+  +     '<button class="btn ghost" type="submit">'+esc(t('forward'))+'</button></form>'
+  + '</div><aside>'
+  +   '<div class="card"><h3 class="tiny" style="text-transform:uppercase;letter-spacing:.07em;color:var(--muted-2)">'+esc(t('student'))+'</h3>'
+  +     '<p class="tiny muted" style="margin:.6rem 0 .15rem">'+esc(t('studentEmail'))+'</p>'
+  +     '<p style="margin:0"><a href="mailto:'+esc(ME)+'">'+esc(ME)+'</a></p>'
+  +     '<p class="tiny muted" style="margin:.9rem 0 0;padding-top:.7rem;border-top:1px solid var(--line-soft)">'+esc(t('staffPrivacy'))+'</p></div>'
+  +   '<div class="card mt2"><h3 class="tiny" style="text-transform:uppercase;letter-spacing:.07em;color:var(--muted-2)">'+esc(t('routedBy'))+'</h3>'
+  +     '<p style="margin:.5rem 0 0" class="small">'+esc(q.method==='student'?t('byStudent'):q.method==='manual'?t('byManual'):t('byRules'))+'</p>'
+  +     '<p class="tiny muted" style="margin:.3rem 0 0">'+esc(t('confidence'))+': '+Math.round(q.conf*100)+'%</p>'
+  +     (q.hits&&q.hits.length?'<p class="tiny muted" style="margin:.5rem 0 0">'+esc(q.hits.join(', '))+'</p>':'')+'</div>'
+  +   '<div class="card mt2"><h3 class="tiny" style="text-transform:uppercase;letter-spacing:.07em;color:var(--muted-2)">'+esc(t('history'))+'</h3>'
+  +     '<ul class="tl mt2">'+q.events.map(e=>'<li><span class="pip"></span><span>'
+          + esc(t('ev_'+(e.k==='status_changed'?'status':e.k)))+'<time>'+esc(fmtWhen(e.at))+'</time></span></li>').join('')+'</ul></div>'
+  + '</aside></div>';
+}
+
+/* --- dashboard ----------------------------------------------------------------- */
+function renderDash(){
+  const qs=DB.questions;
+  if(!qs.length){ $('#dashBody').innerHTML='<div class="empty"><p>'+esc(t('dNone'))+'</p></div>'; return; }
+
+  const today=new Date().toDateString();
+  const totals={
+    total:qs.length,
+    newToday:qs.filter(q=>new Date(q.created).toDateString()===today).length,
+    open:qs.filter(q=>q.status!=='resolved').length,
+    unanswered:qs.filter(q=>!q.firstReply && q.status!=='resolved').length,
+    resolved:qs.filter(q=>q.status==='resolved').length,
+  };
+  // Averaged over the questions that actually got a reply — an unanswered
+  // one would otherwise quietly improve the average.
+  const replied=qs.filter(q=>q.firstReply);
+  const avgFirst = replied.length
+    ? replied.reduce((s,q)=>s+(new Date(q.firstReply)-new Date(q.created))/60000,0)/replied.length : null;
+
+  const byDept={}; DEPTS.forEach(d=>byDept[d.slug]=0);
+  qs.forEach(q=>byDept[q.dept]=(byDept[q.dept]||0)+1);
+  const deptRows=Object.entries(byDept).filter(([,n])=>n>0).sort((a,b)=>b[1]-a[1]);
+
+  const byCat={}; qs.forEach(q=>byCat[q.cat]=(byCat[q.cat]||0)+1);
+  const catRows=Object.entries(byCat).sort((a,b)=>b[1]-a[1]);
+
+  const faqRows=Object.entries(DB.hits||{}).sort((a,b)=>b[1]-a[1]).slice(0,6);
+  const maxD=Math.max(...deptRows.map(r=>r[1]),1), maxC=Math.max(...catRows.map(r=>r[1]),1);
+
+  const bars=(rows,max,label)=>rows.map(([k,n])=>
+    '<div class="bar"><span class="nm">'+esc(label(k))+'</span>'
+    + '<span class="tr"><span class="fl" style="width:'+Math.round(n/max*100)+'%"></span></span>'
+    + '<span class="vl">'+n+'</span></div>').join('');
+
+  $('#dashBody').innerHTML =
+    '<div class="grid cols-4">'
+  +   '<div class="stat"><div class="k">'+esc(t('dNew'))+'</div><div class="v">'+totals.newToday+'</div></div>'
+  +   '<div class="stat"><div class="k">'+esc(t('dUnanswered'))+'</div><div class="v" style="color:'+(totals.unanswered?'var(--yellow)':'var(--green)')+'">'+totals.unanswered+'</div></div>'
+  +   '<div class="stat"><div class="k">'+esc(t('dOpen'))+'</div><div class="v">'+totals.open+'</div></div>'
+  +   '<div class="stat"><div class="k">'+esc(t('dResolved'))+'</div><div class="v" style="color:var(--green)">'+totals.resolved+'</div></div>'
+  + '</div>'
+  + '<div class="grid cols-2 mt2">'
+  +   '<div class="stat"><div class="k">'+esc(t('dFirst'))+'</div><div class="v" style="font-size:1.25rem">'+esc(fmtDur(avgFirst))+'</div></div>'
+  +   '<div class="stat"><div class="k">'+esc(t('dTotal'))+'</div><div class="v" style="font-size:1.25rem">'+totals.total+'</div></div>'
+  + '</div>'
+  + '<div class="grid cols-2 mt3">'
+  +   '<div class="card"><h2>'+esc(t('dByDept'))+'</h2>'+bars(deptRows,maxD,deptName)+'</div>'
+  +   '<div class="card"><h2>'+esc(t('dByCat'))+'</h2>'+bars(catRows,maxC,catName)+'</div>'
+  + '</div>'
+  + '<div class="card mt3"><h2>'+esc(t('dTopFaq'))+'</h2>'
+  +   (faqRows.length ? '<ol style="margin:0;padding-inline-start:1.2rem" class="small">'
+      + faqRows.map(([id,n])=>{
+          const f=FAQ.find(x=>x.id===id); if(!f) return '';
+          return '<li style="margin:.35rem 0"><span>'+esc(f.q[LANG==='ar'?1:0])+'</span> '
+            + '<span class="tiny muted ref">· '+n+'</span></li>';
+        }).join('') + '</ol>'
+      : '<p class="small muted" style="margin:0">'+esc(t('dNone'))+'</p>')
+  + '</div>';
+}
+
+/* --- render everything --------------------------------------------------------- */
+function renderAll(){
+  applyStaticCopy();
+  renderTabs();
+  renderTiles();
+  renderSearch();
+  renderNotifs();
+  renderHomeQuestions();
+  renderCategorySelect();
+  renderRoutePreview();
+  renderMine();
+  if(ROLE==='staff'){ renderInbox(); renderDash(); }
+  if(VIEW==='thread'){ ROLE==='staff' && OPEN_STAFF ? renderStaffThread() : renderThread(); }
+  save();
+}
+
+let OPEN_STAFF = false;
+
+/* --- events --------------------------------------------------------------------- */
+document.addEventListener('click', e=>{
+  const tab = e.target.closest('[data-tab]');
+  if(tab){ OPEN_STAFF=false; show(tab.dataset.tab); if(tab.dataset.tab==='inbox') renderInbox(); if(tab.dataset.tab==='dash') renderDash(); return; }
+
+  const go = e.target.closest('[data-go]');
+  if(go){
+    if(go.dataset.prefill){ $('#aSubject').value = go.dataset.prefill; }
+    if(go.dataset.catPrefill){ $('#aCategory').value = go.dataset.catPrefill; }
+    show(go.dataset.go);
+    if(go.dataset.go==='ask') renderRoutePreview();
+    if(go.dataset.go==='mine') renderMine();
+    return;
+  }
+
+  const tile = e.target.closest('[data-cat]');
+  if(tile){ CAT_FILTER = CAT_FILTER===tile.dataset.cat ? null : tile.dataset.cat; renderTiles(); renderSearch(); return; }
+
+  const faqBtn = e.target.closest('.faq .q');
+  if(faqBtn){
+    const card=faqBtn.closest('.faq'), body=card.querySelector('.a');
+    const open = card.getAttribute('open-state')==='1';
+    card.setAttribute('open-state', open?'0':'1');
+    faqBtn.setAttribute('aria-expanded', String(!open));
+    body.hidden = open;
+    if(!open){ const id=card.dataset.faq; DB.hits[id]=(DB.hits[id]||0)+1; save(); }
+    return;
+  }
+
+  const open = e.target.closest('[data-open]');
+  if(open){
+    OPEN_ID=open.dataset.open; OPEN_STAFF=false;
+    DB.notifs.forEach(n=>{ if(n.qid===OPEN_ID) n.read=true; });
+    renderThread(); show('thread'); renderNotifs(); renderTabs(); save(); return;
+  }
+
+  const staffOpen = e.target.closest('[data-staff]');
+  if(staffOpen){ OPEN_ID=staffOpen.dataset.staff; OPEN_STAFF=true; renderStaffThread(); show('thread'); return; }
+
+  if(e.target.id==='readAll'){
+    DB.notifs.forEach(n=>n.read=true); save(); renderNotifs(); renderTabs(); toast(t('toastRead')); return;
+  }
+
+  const mine = e.target.closest('[data-mine]');
+  if(mine){ MINE_FILTER=mine.dataset.mine; renderMine(); return; }
+
+  const inbox = e.target.closest('[data-inbox]');
+  if(inbox){ INBOX_FILTER=inbox.dataset.inbox; renderInbox(); return; }
+
+  const dept = e.target.closest('[data-dept]');
+  if(dept){ STAFF_DEPT=dept.dataset.dept; renderInbox(); renderTabs(); return; }
+
+  const act = e.target.closest('[data-act]');
+  if(act){
+    const q=DB.questions.find(x=>x.id===OPEN_ID); if(!q) return;
+    const now=new Date().toISOString();
+    if(act.dataset.act==='resolve'){ q.status='resolved'; q.events.push({k:'resolved',at:now}); toast(t('toastResolved')); }
+    if(act.dataset.act==='reopen'){ q.status='submitted'; q.events.push({k:'reopened',at:now}); toast(t('toastReopened')); }
+    save(); renderThread(); renderAll(); return;
+  }
+
+  const sact = e.target.closest('[data-sact]');
+  if(sact){
+    const q=DB.questions.find(x=>x.id===OPEN_ID); if(!q) return;
+    const now=new Date().toISOString();
+    if(sact.dataset.sact==='waiting'){ q.status='waiting_student'; q.events.push({k:'status_changed',at:now}); notify('waiting',q); }
+    if(sact.dataset.sact==='resolve'){ q.status='resolved'; q.events.push({k:'resolved',at:now}); notify('resolved',q); }
+    save(); renderStaffThread(); renderAll(); return;
+  }
+});
+
+document.addEventListener('submit', e=>{
+  if(e.target.id==='askForm'){ submitQuestion(e); return; }
+
+  if(e.target.id==='assistForm'){
+    e.preventDefault(); renderAssistant($('#assistInput').value.trim()); return;
+  }
+
+  if(e.target.id==='replyForm'){
+    e.preventDefault();
+    const q=DB.questions.find(x=>x.id===OPEN_ID); if(!q) return;
+    const body=$('#replyBody').value.trim(); if(!body) return;
+    const now=new Date().toISOString();
+    q.msgs.push({who:'student',body,at:now});
+    q.events.push({k:'student_replied',at:now});
+    // The department was waiting on them; now it is not.
+    if(q.status==='waiting_student') q.status='under_review';
+    save(); renderThread(); renderAll(); toast(t('toastReply')); return;
+  }
+
+  if(e.target.id==='staffForm'){
+    e.preventDefault();
+    const q=DB.questions.find(x=>x.id===OPEN_ID); if(!q) return;
+    const body=$('#staffBody').value.trim(); if(!body) return;
+    const internal=$('#staffInternal').checked;
+    const now=new Date().toISOString();
+    q.msgs.push({who:'staff',dept:q.dept,body,internal,at:now});
+    q.events.push({k:'staff_replied',at:now});
+    // An internal note is not an answer, so it does not stop the clock and
+    // the student is not told about it.
+    if(!internal){
+      if(!q.firstReply) q.firstReply=now;
+      if(q.status!=='resolved') q.status='answered';
+      notify('replied', q);
+    }
+    save(); renderStaffThread(); renderAll(); toast(t('toastReply')); return;
+  }
+
+  if(e.target.id==='transferForm'){
+    e.preventDefault();
+    const q=DB.questions.find(x=>x.id===OPEN_ID); if(!q) return;
+    const to=$('#tDept').value, note=$('#tNote').value.trim();
+    const now=new Date().toISOString();
+    if(note) q.msgs.push({who:'staff',dept:q.dept,body:note,internal:true,at:now});
+    q.dept=to; q.method='manual';
+    if(q.status==='answered'||q.status==='resolved') q.status='under_review';
+    q.events.push({k:'transferred',at:now});
+    notify('transferred', q);
+    save(); toast(t('transferred'));
+    OPEN_STAFF=false; show('inbox'); renderAll(); return;
+  }
+});
+
+$('#q').addEventListener('input', renderSearch);
+['#aSubject','#aBody','#aCategory'].forEach(s=>{
+  document.addEventListener('input', e=>{ if(e.target.matches(s)) renderRoutePreview(); });
+  document.addEventListener('change', e=>{ if(e.target.matches(s)) renderRoutePreview(); });
+});
+
+$('#langBtn').addEventListener('click', ()=>{ LANG = LANG==='en' ? 'ar' : 'en'; renderAll(); if(VIEW==='thread'){ OPEN_STAFF?renderStaffThread():renderThread(); } });
+$('#roleBtn').addEventListener('click', ()=>{
+  ROLE = ROLE==='student' ? 'staff' : 'student';
+  if(ROLE==='student' && (VIEW==='inbox'||VIEW==='dash')) show('home');
+  OPEN_STAFF=false;
+  renderAll();
+});
+
+DB = load();
+if(DB.ref) refCounter = DB.ref;
+
+renderAll();
+show('home');
+</script>
+</body>
+</html>

@@ -31,6 +31,22 @@ Manchester Metropolitan University.
   keeps state for the tab only unless asked otherwise, never writes the ID number to the device,
   and is marked `noindex`. `vercel.json` adds a content-security policy for the whole site and a
   stricter one for `/rafeeq/`.
+- `hub/` — **Student Hub**: a university help desk that reads a student's question and
+  works out which of nine departments should answer it. A weighted keyword engine over
+  English and Arabic in one pass scores the question against thirteen topics, blends how
+  much evidence it found with how clearly the winner beat the runner-up, and overrides the
+  topic the student picked when the words plainly say otherwise — a question filed under
+  Fees that is entirely about a password goes to IT. The assistant has no generative step
+  at all: it answers from the 32 published answers or it declines and offers to send the
+  question to a department, and it declines unless the best match clears both a confidence
+  floor and a margin over the runner-up, because one word like "deadline" matches every
+  answer containing it. Students track a question from submitted through to resolved with
+  the audit trail visible; a staff view has a per-department inbox, internal notes the
+  student never sees, forwarding, and a counts-only dashboard. Bilingual with full RTL.
+  One self-contained page (`hub/index.html`): no build step, no network requests, state
+  kept for the tab only. It is a **prototype** — a demonstration banner on every screen,
+  invented departments and no real university behind it.
+
 - `notes/` — the Notebook: six running logs (places in Kuwait, a car build list, a gahwa
   log, things I'm learning, read & watched, small wins). A hub page plus one page per log,
   all sharing `notes/styles.css`. Currently a **draft** — every page carries a
