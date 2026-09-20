@@ -21,7 +21,7 @@ from published cart, battery and air-conditioning specifications.
 |---|---|
 | **The lane** | A drawn diorama of a covered souq lane at dusk — shopfronts, striped awnings, strung lanterns, shafts of light through the roof, shoppers — with a cart driving out of the sunlit end towards you, on a loop. |
 | **The map** | The souq as a graph of 30 junctions and 48 lanes under striped awnings, with palms, a crowd that thickens after sunset, lantern glow after dark, 13 shaded stops and 12 carts driving it continuously. Pick two stops and the nearest free cart by lane distance (Dijkstra, not straight line) collects you, carries you and hands back a receipt. Tick the ramp box and only the two accessible carts are eligible. |
-| **The cart** | A 3D model at 1 unit = 1 metre — 3.6 m long, 1.3 m wide: **six seats, three facing three, and the driver's own seat up front** with its wheel and dash, the whole thing **woven in sadu (السدو)** — a band down both flanks, across the nose and tail, along the roof fascia, on all seven seats and down the cabin floor. Drag to turn it, zoom in, and take it apart to see the roof unit lift off, the roof and glass rise, the pack drop out of the floor and the wheels step aside. Tapping 5 lifts the roof away entirely and looks straight down on the seating. Eight markers sit on the model itself and fade as they go round the back. If WebGL is unavailable the page falls back to the side drawing it replaced. |
+| **The cart** | A 3D model at 1 unit = 1 metre — 3.6 m long, 1.3 m wide: **six seats, three facing three, and the driver's own seat up front** with its wheel and dash, and **a sadu band (السدو)** down both flanks, across the nose and tail and along the roof fascia — the cabin itself is left plain. Drag to turn it, zoom in, and take it apart to see the roof unit lift off, the roof and glass rise, the pack drop out of the floor and the wheels step aside. Tapping 5 lifts the roof away entirely and looks straight down on the seating. Eight markers sit on the model itself and fade as they go round the back. If WebGL is unavailable the page falls back to the side drawing it replaced. |
 | **Close up** | Six drawn panels: the roof unit, the cabin, the pack under the bench, the ramp, the hub at night, the misted shelter. A line of caption each. |
 | **Cut in half** | A section through the cart, head-on: heat pressing in from both sides, cold falling from the ceiling vents, the pack under the floor. |
 | **The day** | A typical August day in Kuwait City — the outside curve, the 22 °C cabin line, and the souq's own footfall in bars. The hour slider drives the whole model: outside temperature sets the air-conditioner's draw, which sets range on one pack, which sets how many carts that hour needs. |
@@ -54,7 +54,7 @@ the bottom of `index.html`:
    photographed: `saduCanvas()` draws a band row by row — solid stripes, rows of triangles,
    a row of hooked diamonds, zigzags — over a black ground in madder red, undyed white, camel
    and brown, then lays warp and weft shadows over the top, and `saduTexture()` tiles it along
-   whichever panel it is wrapped around. Markers are HTML buttons projected
+   whichever panel it is wrapped around. Exterior panels only. Markers are HTML buttons projected
    from 3D anchors each frame, hidden by a dot product against each anchor's outward normal
    rather than a raycast.
 4. **The rest of the pictures** — the section drawing, the six close-up panels, the fact tiles,
