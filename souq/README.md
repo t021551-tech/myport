@@ -1,36 +1,29 @@
 # Zill (ظلّ) — air-conditioned carts for Souq Al-Mubarakiya
 
-A concept for a small shuttle service inside **Souq Al-Mubarakiya**, Kuwait City: twelve
-enclosed, air-conditioned golf carts that carry shoppers from one souq to the next, so the
-four hundred metres between the gold souq and the date market stop being the reason an older
-shopper, a pregnant woman or a family with a pram turns back at the gate in August.
+A concept for a small shuttle inside **Souq Al-Mubarakiya**, Kuwait City: twelve enclosed,
+air-conditioned golf carts carrying shoppers from one souq to the next, so the four hundred
+metres between the gold souq and the date market stop being the reason someone turns back at
+the gate in August.
 
-**This is a design concept, not an operating service.** No such shuttle runs in Al-Mubarakiya.
-The map is a schematic of the souq's lanes rather than a survey, and every figure on the page
-is a design target sized from published cart, battery and air-conditioning specifications.
+The page is meant to be **looked at** rather than read. Everything on it is drawn in SVG — a
+lane you watch a cart come down, a live plan of the souq with carts working it, the cart
+itself with numbered parts, and six close-ups. There are no photographs and no image files:
+nothing is fetched, ever.
 
-## What's in it
+**It is a concept, not a service.** No such shuttle runs in Al-Mubarakiya. The map is a
+schematic of the souq's lanes rather than a survey, and every figure is a design target sized
+from published cart, battery and air-conditioning specifications.
 
-One self-contained page, `index.html` — no build step, no dependencies beyond Google Fonts,
-and no network requests of its own.
+## What you see
 
-- **A live map.** The souq is modelled as a graph: 30 lane junctions, 48 edges (covered lanes
-  and the perimeter streets), 13 shaded stops and a charging hub. Twelve carts drive the
-  network continuously, routed by Dijkstra over real lane distances — one map unit is treated
-  as 0.42 m, which puts the souq core at about 420 m across.
-- **Working dispatch.** Pick a pickup and a destination (from the selects, or by tapping stops
-  on the map) and the nearest *free* cart by lane distance — not straight-line distance — is
-  sent to collect you. It finishes whatever move it was making, drives to your stop, boards,
-  carries you, and hands back a receipt: distance, time in the cabin, cabin temperature against
-  the street, fare, and the minutes you did not spend walking it. Tick the ramp box and only the
-  two accessible carts are eligible.
-- **An hour slider.** A typical August day in Kuwait City drives the whole model: outside
-  temperature sets the air-conditioner's electrical draw, which sets the range on one pack,
-  and the souq's own footfall curve sets how many of the twelve carts that hour actually needs.
-- **The cart.** A cutaway of the vehicle — roof-mounted 12,000 BTU DC unit, insulated roof,
-  sealed cabin, 10 kWh LFP pack under the bench, fold-out ramp — beside its specification.
-- **A live fleet table.** The same twelve carts: status, nearest stop, cabin temperature,
-  state of charge, seats free.
+| | |
+|---|---|
+| **The lane** | A drawn diorama of a covered souq lane at dusk — shopfronts, striped awnings, strung lanterns, shafts of light through the roof, shoppers — with a cart driving out of the sunlit end towards you, on a loop. |
+| **The map** | The souq as a graph of 30 junctions and 48 lanes under striped awnings, with palms, a crowd that thickens after sunset, lantern glow after dark, 13 shaded stops and 12 carts driving it continuously. Pick two stops and the nearest free cart by lane distance (Dijkstra, not straight line) collects you, carries you and hands back a receipt. Tick the ramp box and only the two accessible carts are eligible. |
+| **The cart** | A side drawing with eight numbered markers — tap one and the caption underneath changes. |
+| **Close up** | Six drawn panels: the roof unit, the cabin, the pack under the bench, the ramp, the hub at night, the misted shelter. A line of caption each. |
+| **Cut in half** | A section through the cart, head-on: heat pressing in from both sides, cold falling from the ceiling vents, the pack under the floor. |
+| **The day** | A typical August day in Kuwait City — the outside curve, the 22 °C cabin line, and the souq's own footfall in bars. The hour slider drives the whole model: outside temperature sets the air-conditioner's draw, which sets range on one pack, which sets how many carts that hour needs. |
 
 ## Running it
 
@@ -39,30 +32,34 @@ python3 -m http.server 8000
 # then visit http://localhost:8000/souq/
 ```
 
-Or just open `index.html` in a browser.
+Or open `index.html` in a browser.
 
-## Editing
+## How it is built
 
-Everything lives in `index.html`:
+One self-contained file, no build step, no dependencies beyond Google Fonts. Three scripts at
+the bottom of `index.html`:
 
-- **Colours, fonts, spacing** are the CSS custom properties in the `:root` block.
-- **The souq itself** is four data structures at the top of the script: `NODE` (junction
-  coordinates in the 1000×660 viewBox), `EDGE` (`[from, to, "street" | "lane"]`), `STOPS`
-  (each with its node, English and Arabic names, and which side its label sits on) and
-  `BLOCKS` (the market blocks drawn between the lanes). Adding a stop is one line in `STOPS`,
-  as long as its node exists.
-- **The day model** is `TEMP` (24 hourly temperatures) and `FOOT` (24 relative footfall
-  values), with `acKw()`, `rangeHours()` and `cartsNeeded()` reading off them.
-- **Cart behaviour** is `advance()` (walks a cart along its current leg), `wander()` (what an
-  idle cart does), `nearestCart()` (dispatch) and the single `requestAnimationFrame` loop at
-  the bottom, which also runs the cabin-temperature and battery models. The demo clock runs
-  3× real time, and the battery drains on a compressed scale so a shift is visible in a minute.
+1. **The engine** — the souq graph (`NODE`, `EDGE`, `STOPS`, `BLOCKS`), Dijkstra routing,
+   dispatch, the cabin-temperature and battery models, the chart and the fleet table, all
+   driven by one `requestAnimationFrame` loop. The demo clock runs 3× real time and the pack
+   drains on a compressed scale so a shift is visible in a minute.
+2. **The artwork** — `buildLane()` draws the diorama (a four-layer perspective built from one
+   depth scale `S`), `drawCartSide()` and `drawCartFront()` draw the cart once so the same
+   vehicle appears in the lane, in the annotated view and at the hub, and `buildCartArt()`
+   wires the numbered markers to the caption.
+3. **The rest of the pictures** — the section drawing, the six close-up panels, the fact tiles,
+   and the map's scenery (awnings as dashed strokes along each lane, palms, crowd dots,
+   lantern glow), which listens on `window.onZillHour` so the souq fills and lights up as you
+   drag through the day.
+
+Colours, type and spacing are the CSS custom properties in `:root`. Adding a stop is one line
+in `STOPS`; adding a close-up is one object in `SHOTS`.
 
 ## Honesty notes
 
-- The Kuwait heat figures are ordinary summer values; the 53.9 °C at Mitribah in July 2016 is
-  a real recorded reading, and it is quoted as a record, not as a normal day.
-- 22 °C is a setpoint the fleet is *sized* to hold, not a measurement. The simulated cabins sit
-  a degree or so above it while a cart is moving with its doors cycling, which is the point.
-- Stop names are the souq's well-known sections. Their positions on the map are arranged for
-  legibility, not surveyed from the ground.
+- The heat figures are ordinary Kuwaiti summer values. The 53.9 °C at Mitribah in July 2016 is
+  a real recorded reading, quoted as a record rather than as a normal day.
+- 22 °C is the setpoint the fleet is *sized* to hold, not a measurement — the simulated cabins
+  sit a degree above it while a cart is moving with its doors cycling, which is the point.
+- Stop names are the souq's well-known sections; their positions are arranged for legibility,
+  not surveyed from the ground.

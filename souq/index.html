@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Zill &mdash; air-conditioned carts for Souq Al-Mubarakiya</title>
-<meta name="description" content="Zill (&#1592;&#1604;&#1617;) &mdash; a concept for a small fleet of air-conditioned golf carts that carry shoppers between the souqs of Al-Mubarakiya, Kuwait City. Live map, dispatch, cart spec and heat model.">
+<meta name="description" content="Zill (&#1592;&#1604;&#1617;) &mdash; a concept for air-conditioned golf carts carrying shoppers around Souq Al-Mubarakiya, Kuwait City. Drawn, animated and live: a lane you watch a cart drive down, a working map, and the cart explained in pictures.">
 <meta name="color-scheme" content="dark">
 <meta property="og:title" content="Zill &mdash; air-conditioned carts for Souq Al-Mubarakiya">
-<meta property="og:description" content="A 12-cart air-conditioned shuttle for Kuwait's oldest market. Concept project.">
+<meta property="og:description" content="Kuwait's oldest market, and twelve cooled carts working its lanes. Concept project.">
 <meta property="og:type" content="website">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -38,7 +38,6 @@
   }
 
   *{box-sizing:border-box}
-
   html{scroll-behavior:smooth}
 
   body{
@@ -47,26 +46,17 @@
     color:var(--sand);
     font-family:var(--body);
     font-size:16px;
-    line-height:1.65;
+    line-height:1.6;
     -webkit-font-smoothing:antialiased;
   }
 
-  /* ---------- backdrop: heat haze over a lantern-lit lane ---------- */
   .bg{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
   .bg-bloom{
     position:absolute;inset:0;
     background:
-      radial-gradient(48rem 30rem at 8% -10%, rgba(232,181,75,.13), transparent 68%),
-      radial-gradient(42rem 28rem at 94% 4%, rgba(111,211,232,.10), transparent 70%),
-      radial-gradient(46rem 32rem at 60% 102%, rgba(208,122,78,.10), transparent 72%);
-  }
-  .bg-weave{
-    position:absolute;inset:0;
-    background-image:
-      repeating-linear-gradient(115deg, rgba(244,233,218,.035) 0 1px, transparent 1px 13px),
-      repeating-linear-gradient(65deg, rgba(244,233,218,.025) 0 1px, transparent 1px 19px);
-    mask-image:linear-gradient(to bottom, #000, rgba(0,0,0,.35) 60%, transparent);
-    -webkit-mask-image:linear-gradient(to bottom, #000, rgba(0,0,0,.35) 60%, transparent);
+      radial-gradient(48rem 30rem at 8% -10%, rgba(232,181,75,.12), transparent 68%),
+      radial-gradient(42rem 28rem at 94% 4%, rgba(111,211,232,.09), transparent 70%),
+      radial-gradient(46rem 32rem at 60% 102%, rgba(208,122,78,.09), transparent 72%);
   }
   .bg-edge{
     position:absolute;top:0;left:0;right:0;height:2px;
@@ -74,195 +64,183 @@
     opacity:.9;
   }
 
-  .shell{position:relative;z-index:1;max-width:1220px;margin:0 auto;padding:clamp(1rem,3vw,2rem) clamp(1rem,4vw,2.5rem) var(--s6)}
+  .shell{position:relative;z-index:1;max-width:1240px;margin:0 auto;padding:clamp(1rem,3vw,1.75rem) clamp(1rem,4vw,2.5rem) var(--s6)}
 
   a{color:var(--gold)}
   a:hover{color:var(--sand)}
 
-  /* ---------- top bar ---------- */
-  .top{
-    display:flex;align-items:center;gap:var(--s3);flex-wrap:wrap;
-    padding:var(--s2) 0 var(--s3);
-    border-bottom:1px solid var(--line-soft);
-  }
-  .back{
-    font-family:var(--mono);font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;
-    text-decoration:none;color:var(--muted);
-  }
-  .back:hover{color:var(--gold)}
-  .top-live{
-    margin-left:auto;display:flex;gap:var(--s3);align-items:center;
-    font-family:var(--mono);font-size:.76rem;color:var(--muted);
-  }
+  .top{display:flex;align-items:center;gap:var(--s3);flex-wrap:wrap;padding:var(--s2) 0 var(--s3);border-bottom:1px solid var(--line-soft)}
+  .brand{font-family:var(--display);font-size:1.05rem;letter-spacing:-.01em}
+  .brand span{color:var(--gold)}
+  .top nav{display:flex;gap:1rem;font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;flex-wrap:wrap}
+  .top nav a{color:var(--muted);text-decoration:none}
+  .top nav a:hover{color:var(--cool)}
+  .top-live{margin-left:auto;display:flex;gap:var(--s3);align-items:center;font-family:var(--mono);font-size:.76rem;color:var(--muted);flex-wrap:wrap}
   .top-live b{color:var(--sand);font-weight:500}
   .dot{width:7px;height:7px;border-radius:50%;background:var(--mint);display:inline-block;margin-right:.4em;animation:pulse 2.4s ease-in-out infinite}
   @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 
-  /* ---------- concept banner ---------- */
   .concept{
-    margin:var(--s3) 0 0;padding:.7rem 1rem;
-    border:1px dashed rgba(232,181,75,.45);border-radius:10px;
-    background:rgba(232,181,75,.06);
-    font-size:.86rem;color:#EBD9B8;
+    margin:var(--s3) 0 0;padding:.6rem .9rem;
+    border:1px dashed rgba(232,181,75,.45);border-radius:10px;background:rgba(232,181,75,.06);
+    font-size:.84rem;color:#EBD9B8;
   }
   .concept b{font-weight:600;color:var(--gold)}
 
-  /* ---------- hero ---------- */
-  .hero{padding:var(--s5) 0 var(--s4)}
-  .kicker{
-    font-family:var(--mono);font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;
-    color:var(--cool);margin:0 0 var(--s2);
+  /* ---------- hero: the lane you watch ---------- */
+  .stage{
+    position:relative;margin-top:var(--s3);
+    border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:#0D0906;
   }
-  .hero h1{
+  .stage svg{display:block;width:100%;height:auto}
+  .stage-copy{
+    position:absolute;left:0;right:0;bottom:0;
+    padding:clamp(1rem,4vw,2.2rem);
+    background:linear-gradient(to top, rgba(8,6,4,.92) 30%, rgba(8,6,4,.55) 70%, transparent);
+  }
+  .kicker{font-family:var(--mono);font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;color:var(--cool);margin:0 0 .5rem}
+  .stage-copy h1{
     font-family:var(--display);font-weight:800;
-    font-size:clamp(2.6rem,8vw,5.4rem);line-height:.95;letter-spacing:-.035em;
-    margin:0 0 var(--s2);
+    font-size:clamp(2rem,6.4vw,4.4rem);line-height:.94;letter-spacing:-.035em;margin:0;
+    text-wrap:balance;
   }
-  .hero h1 em{font-style:normal;color:var(--cool)}
-  .ar{font-family:var(--display);font-size:clamp(1.4rem,4vw,2.2rem);color:var(--gold);margin:0 0 var(--s3);direction:rtl}
-  .lede{font-size:clamp(1.02rem,2.2vw,1.22rem);max-width:60ch;color:#E2D3BF;margin:0 0 var(--s4)}
+  .stage-copy h1 em{font-style:normal;color:var(--cool)}
+  .ar{font-family:var(--display);font-size:clamp(1.05rem,3vw,1.6rem);color:var(--gold);margin:.5rem 0 0;direction:rtl}
 
-  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--line-soft);border:1px solid var(--line-soft);border-radius:var(--r);overflow:hidden}
+  /* on a phone the lane is cropped to its middle rather than squeezed flat */
+  @media (max-width:700px){
+    .stage svg{height:min(58vh,360px)}
+    .stage-copy{padding-bottom:1.1rem}
+  }
+
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1px;background:var(--line-soft);border:1px solid var(--line-soft);border-radius:var(--r);overflow:hidden;margin-top:var(--s3)}
   .stat{background:var(--panel);padding:var(--s3)}
-  .stat .n{font-family:var(--display);font-weight:700;font-size:1.9rem;line-height:1;letter-spacing:-.02em}
-  .stat .n small{font-size:.9rem;color:var(--muted);font-weight:400;letter-spacing:0}
-  .stat .l{font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:.5rem}
+  .stat .n{font-family:var(--display);font-weight:700;font-size:1.8rem;line-height:1;letter-spacing:-.02em}
+  .stat .n small{font-size:.85rem;color:var(--muted);font-weight:400}
+  .stat .l{font-family:var(--mono);font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:.45rem}
   .stat.cool .n{color:var(--cool)}
   .stat.hot .n{color:var(--clay)}
 
   /* ---------- sections ---------- */
   section{padding:var(--s5) 0 0;scroll-margin-top:1rem}
-  .sec-head{display:flex;align-items:baseline;gap:var(--s3);flex-wrap:wrap;margin-bottom:var(--s3)}
-  .sec-head h2{font-family:var(--display);font-weight:700;font-size:clamp(1.6rem,4vw,2.4rem);letter-spacing:-.025em;margin:0}
-  .sec-head .num{font-family:var(--mono);font-size:.72rem;color:var(--cool);letter-spacing:.2em}
-  .sec-head .ara{margin-left:auto;font-size:1.05rem;color:var(--muted);direction:rtl}
-  .sec-note{color:var(--muted);max-width:64ch;margin:0 0 var(--s3)}
+  .sec-head{display:flex;align-items:baseline;gap:var(--s3);flex-wrap:wrap;margin-bottom:var(--s2)}
+  .sec-head h2{font-family:var(--display);font-weight:700;font-size:clamp(1.5rem,4vw,2.2rem);letter-spacing:-.025em;margin:0}
+  .sec-head .ara{margin-left:auto;font-size:1.02rem;color:var(--muted);direction:rtl}
+  .sec-note{color:var(--muted);max-width:56ch;margin:0 0 var(--s3);font-size:.95rem}
 
   /* ---------- map + dispatch ---------- */
-  .board{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,22rem);gap:var(--s3);align-items:start}
+  .board{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,21rem);gap:var(--s3);align-items:start}
   @media (max-width:980px){.board{grid-template-columns:minmax(0,1fr)}}
 
-  .map-wrap{
-    position:relative;border:1px solid var(--line);border-radius:var(--r);
-    background:#120E0A;overflow:hidden;
-  }
+  .map-wrap{position:relative;border:1px solid var(--line);border-radius:var(--r);background:#120E0A;overflow:hidden}
   #map{display:block;width:100%;height:auto;touch-action:manipulation}
   .map-legend{
     display:flex;gap:var(--s3);flex-wrap:wrap;align-items:center;
-    padding:.6rem .9rem;border-top:1px solid var(--line-soft);
-    font-family:var(--mono);font-size:.68rem;letter-spacing:.08em;color:var(--muted);text-transform:uppercase;
+    padding:.55rem .85rem;border-top:1px solid var(--line-soft);
+    font-family:var(--mono);font-size:.66rem;letter-spacing:.08em;color:var(--muted);text-transform:uppercase;
   }
   .swatch{width:9px;height:9px;border-radius:2px;display:inline-block;margin-right:.45em;vertical-align:middle}
 
   .panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:var(--s3)}
-  .panel h3{font-family:var(--display);font-size:1.12rem;margin:0 0 var(--s1);letter-spacing:-.01em}
-  .panel .hint{font-size:.82rem;color:var(--muted);margin:0 0 var(--s3)}
+  .panel h3{font-family:var(--display);font-size:1.1rem;margin:0 0 .3rem;letter-spacing:-.01em}
+  .panel .hint{font-size:.8rem;color:var(--muted);margin:0 0 var(--s3)}
 
-  label.fld{display:block;margin-bottom:.7rem}
-  label.fld span{display:block;font-family:var(--mono);font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:.35rem}
+  label.fld{display:block;margin-bottom:.65rem}
+  label.fld span{display:block;font-family:var(--mono);font-size:.64rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:.3rem}
   select,button,input{font-family:inherit;font-size:.92rem;color:inherit}
-  select{
-    width:100%;padding:.6rem .7rem;border-radius:9px;
-    background:var(--panel-2);border:1px solid var(--line);color:var(--sand);
-  }
-  select:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--cool);outline-offset:2px}
+  select{width:100%;padding:.55rem .65rem;border-radius:9px;background:var(--panel-2);border:1px solid var(--line);color:var(--sand)}
+  select:focus-visible,button:focus-visible,input:focus-visible,.pin:focus-visible{outline:2px solid var(--cool);outline-offset:2px}
 
-  .swap{display:flex;justify-content:center;margin:-.2rem 0 .45rem}
-  .swap button{
-    background:none;border:1px solid var(--line);color:var(--muted);
-    border-radius:99px;padding:.15rem .7rem;font-size:.76rem;cursor:pointer;
-  }
+  .swap{display:flex;justify-content:center;margin:-.15rem 0 .4rem}
+  .swap button{background:none;border:1px solid var(--line);color:var(--muted);border-radius:99px;padding:.12rem .7rem;font-size:.75rem;cursor:pointer}
   .swap button:hover{color:var(--cool);border-color:var(--cool)}
 
-  .ramp{display:flex;align-items:center;gap:.55rem;font-size:.85rem;color:#DCCDB8;margin:.2rem 0 var(--s3)}
+  .ramp{display:flex;align-items:center;gap:.5rem;font-size:.84rem;color:#DCCDB8;margin:.15rem 0 var(--s3)}
   .ramp input{accent-color:var(--cool);width:16px;height:16px}
 
-  .go{
-    width:100%;padding:.8rem 1rem;border-radius:10px;cursor:pointer;
-    background:var(--cool);color:#062229;border:none;
-    font-family:var(--display);font-weight:700;font-size:1rem;letter-spacing:-.01em;
-  }
+  .go{width:100%;padding:.75rem 1rem;border-radius:10px;cursor:pointer;background:var(--cool);color:#062229;border:none;font-family:var(--display);font-weight:700;font-size:1rem}
   .go:hover{background:#8FE0F2}
   .go:disabled{background:var(--line);color:var(--muted);cursor:not-allowed}
 
-  .status{
-    margin-top:var(--s3);padding-top:var(--s3);border-top:1px solid var(--line-soft);
-    font-family:var(--mono);font-size:.8rem;line-height:1.7;color:#DCCDB8;min-height:3.2rem;
-  }
-  .status .big{display:block;font-family:var(--display);font-size:1.05rem;color:var(--sand);letter-spacing:-.01em;margin-bottom:.2rem}
-  .bar{height:5px;border-radius:99px;background:var(--line);overflow:hidden;margin:.6rem 0}
+  .status{margin-top:var(--s3);padding-top:var(--s3);border-top:1px solid var(--line-soft);font-family:var(--mono);font-size:.78rem;line-height:1.65;color:#DCCDB8;min-height:3rem}
+  .status .big{display:block;font-family:var(--display);font-size:1.02rem;color:var(--sand);margin-bottom:.15rem}
+  .bar{height:5px;border-radius:99px;background:var(--line);overflow:hidden;margin:.55rem 0}
   .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--cool),var(--mint));transition:width .25s linear}
 
   .receipt{margin-top:var(--s3);border-top:1px solid var(--line-soft);padding-top:var(--s3);display:none}
   .receipt.on{display:block}
-  .receipt dl{display:grid;grid-template-columns:1fr auto;gap:.3rem var(--s2);margin:0;font-size:.86rem}
+  .receipt dl{display:grid;grid-template-columns:1fr auto;gap:.25rem var(--s2);margin:0;font-size:.85rem}
   .receipt dt{color:var(--muted)}
   .receipt dd{margin:0;font-family:var(--mono);text-align:right}
-  .receipt .verdict{margin-top:var(--s2);font-size:.85rem;color:var(--cool);line-height:1.5}
+  .receipt .verdict{margin-top:var(--s2);font-size:.83rem;color:var(--cool);line-height:1.45}
 
-  /* ---------- hour slider ---------- */
-  .clockbar{
-    margin-top:var(--s3);border:1px solid var(--line);border-radius:var(--r);
-    background:var(--panel);padding:var(--s3);
-  }
+  .clockbar{margin-top:var(--s3);border:1px solid var(--line);border-radius:var(--r);background:var(--panel);padding:var(--s3)}
   .clockbar .row{display:flex;align-items:center;gap:var(--s3);flex-wrap:wrap}
-  .clockbar .row .t{font-family:var(--display);font-size:1.5rem;letter-spacing:-.02em;min-width:5.2rem}
-  input[type=range]{flex:1;min-width:200px;accent-color:var(--clay);height:22px}
-  .clockbar .chips{display:flex;gap:var(--s2);flex-wrap:wrap;margin-top:var(--s2);font-family:var(--mono);font-size:.72rem;color:var(--muted)}
-  .chip{border:1px solid var(--line);border-radius:99px;padding:.2rem .65rem}
+  .clockbar .row .t{font-family:var(--display);font-size:1.45rem;min-width:5rem}
+  input[type=range]{flex:1;min-width:190px;accent-color:var(--clay);height:22px}
+  .clockbar .chips{display:flex;gap:var(--s2);flex-wrap:wrap;margin-top:var(--s2);font-family:var(--mono);font-size:.71rem;color:var(--muted)}
+  .chip{border:1px solid var(--line);border-radius:99px;padding:.18rem .6rem}
   .chip b{color:var(--sand);font-weight:500}
 
-  /* ---------- generic cards ---------- */
-  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:var(--s3)}
-  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:var(--s3)}
-  .card h3{font-family:var(--display);font-size:1.08rem;margin:0 0 .4rem;letter-spacing:-.01em}
-  .card h3 .tick{color:var(--cool);margin-right:.4em}
-  .card p{margin:0;color:#D9CAB5;font-size:.92rem}
-  .card p + p{margin-top:.6rem}
-  .card .ar-s{display:block;color:var(--muted);font-size:.85rem;direction:rtl;margin-top:.45rem}
+  /* ---------- the cart, annotated ---------- */
+  .cartboard{border:1px solid var(--line);border-radius:var(--r);background:var(--panel);overflow:hidden}
+  .cartboard svg{display:block;width:100%;height:auto}
+  .pin{cursor:pointer}
+  .pin circle.hit{fill:transparent}
+  .caption{
+    display:flex;gap:var(--s3);align-items:baseline;flex-wrap:wrap;
+    padding:var(--s3);border-top:1px solid var(--line-soft);background:var(--panel-2);
+  }
+  .caption .num{font-family:var(--mono);font-size:.72rem;color:var(--cool);letter-spacing:.2em}
+  .caption .txt{font-family:var(--display);font-size:clamp(1.05rem,2.4vw,1.45rem);letter-spacing:-.02em}
+  .caption .sub{font-size:.88rem;color:var(--muted);flex-basis:100%}
+  .pinbar{display:flex;gap:.4rem;flex-wrap:wrap;padding:0 var(--s3) var(--s3);background:var(--panel-2)}
+  .pinbar button{
+    background:var(--panel);border:1px solid var(--line);color:var(--muted);
+    width:30px;height:30px;border-radius:50%;cursor:pointer;font-family:var(--mono);font-size:.78rem;
+  }
+  .pinbar button[aria-pressed=true]{border-color:var(--cool);color:var(--cool);background:rgba(111,211,232,.1)}
 
-  /* ---------- tables ---------- */
+  /* ---------- picture panels ---------- */
+  .shots{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:var(--s3)}
+  figure.shot{margin:0;border:1px solid var(--line);border-radius:var(--r);background:var(--panel);overflow:hidden}
+  figure.shot svg{display:block;width:100%;height:auto}
+  figure.shot figcaption{padding:.8rem var(--s3) var(--s3)}
+  figure.shot .t{font-family:var(--display);font-size:1.02rem;letter-spacing:-.01em}
+  figure.shot .d{font-size:.85rem;color:var(--muted);margin-top:.2rem}
+  figure.shot .d span{direction:rtl;display:block;margin-top:.2rem;color:#7B6B59}
+
+  /* ---------- heat ---------- */
+  .heat{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:var(--s3)}
+  .heatcard{border:1px solid var(--line);border-radius:var(--r);background:var(--panel);padding:var(--s3)}
+  .heatcard .big{font-family:var(--display);font-weight:800;font-size:2.4rem;line-height:1;letter-spacing:-.03em}
+  .heatcard p{margin:.35rem 0 0;font-size:.88rem;color:var(--muted)}
+  .hot{color:var(--clay)} .cold{color:var(--cool)}
+  .chart{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:var(--s3);margin-top:var(--s3)}
+  .chart svg{width:100%;height:auto;display:block}
+  .chart p{margin:.7rem 0 0;font-size:.8rem;color:var(--muted)}
+
+  /* ---------- facts strip ---------- */
+  .facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1px;background:var(--line-soft);border:1px solid var(--line-soft);border-radius:var(--r);overflow:hidden}
+  .fact{background:var(--panel);padding:var(--s3);display:flex;gap:.7rem;align-items:flex-start}
+  .fact svg{flex:none;width:30px;height:30px}
+  .fact b{display:block;font-family:var(--display);font-size:.98rem;font-weight:600;letter-spacing:-.01em}
+  .fact span{font-size:.8rem;color:var(--muted)}
+
+  /* ---------- fleet ---------- */
   .tbl-wrap{border:1px solid var(--line);border-radius:var(--r);overflow:auto;background:var(--panel)}
-  table{width:100%;border-collapse:collapse;font-size:.88rem;min-width:620px}
-  th,td{text-align:left;padding:.62rem .9rem;border-bottom:1px solid var(--line-soft)}
-  th{font-family:var(--mono);font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:500}
+  table{width:100%;border-collapse:collapse;font-size:.87rem;min-width:620px}
+  th,td{text-align:left;padding:.58rem .85rem;border-bottom:1px solid var(--line-soft)}
+  th{font-family:var(--mono);font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:500}
   tbody tr:last-child td{border-bottom:none}
-  td.num{font-family:var(--mono)}
-  .pill{font-family:var(--mono);font-size:.7rem;padding:.12rem .55rem;border-radius:99px;border:1px solid currentColor;white-space:nowrap}
-  .st-idle{color:var(--mint)}
-  .st-trip{color:var(--cool)}
-  .st-charge{color:var(--gold)}
-  .st-cool{color:var(--rose)}
-
-  .meter{display:inline-block;width:52px;height:6px;border-radius:99px;background:var(--line);overflow:hidden;vertical-align:middle;margin-right:.5em}
+  td.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+  .pill{font-family:var(--mono);font-size:.69rem;padding:.1rem .5rem;border-radius:99px;border:1px solid currentColor;white-space:nowrap}
+  .st-idle{color:var(--mint)} .st-trip{color:var(--cool)} .st-charge{color:var(--gold)} .st-cool{color:var(--rose)}
+  .meter{display:inline-block;width:50px;height:6px;border-radius:99px;background:var(--line);overflow:hidden;vertical-align:middle;margin-right:.5em}
   .meter i{display:block;height:100%;background:var(--mint)}
   .meter i.low{background:var(--clay)}
 
-  /* ---------- cart cutaway ---------- */
-  .cart-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:var(--s3);align-items:start}
-  @media (max-width:880px){.cart-grid{grid-template-columns:minmax(0,1fr)}}
-  .cutaway{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:var(--s3)}
-  .cutaway svg{width:100%;height:auto;display:block}
-  .spec{list-style:none;margin:0;padding:0}
-  .spec li{display:flex;gap:var(--s2);justify-content:space-between;padding:.55rem 0;border-bottom:1px solid var(--line-soft);font-size:.9rem}
-  .spec li:last-child{border-bottom:none}
-  .spec b{font-weight:500;color:#E2D3BF}
-  .spec span{font-family:var(--mono);color:var(--muted);text-align:right}
-
-  /* ---------- heat strip ---------- */
-  .heat{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:var(--s3)}
-  .heat .big{font-family:var(--display);font-weight:800;font-size:2.6rem;line-height:1;letter-spacing:-.03em}
-  .heat .hot{color:var(--clay)}
-  .heat .cold{color:var(--cool)}
-
-  .chart{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:var(--s3);margin-top:var(--s3)}
-  .chart svg{width:100%;height:auto;display:block}
-
-  .foot{
-    margin-top:var(--s6);padding-top:var(--s3);border-top:1px solid var(--line-soft);
-    display:flex;gap:var(--s3);flex-wrap:wrap;
-    font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);
-  }
+  .foot{margin-top:var(--s6);padding-top:var(--s3);border-top:1px solid var(--line-soft);display:flex;gap:var(--s3);flex-wrap:wrap;font-family:var(--mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
 
   .sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
@@ -274,71 +252,66 @@
 </head>
 <body>
 
-<div class="bg" aria-hidden="true">
-  <div class="bg-bloom"></div>
-  <div class="bg-weave"></div>
-  <div class="bg-edge"></div>
-</div>
+<div class="bg" aria-hidden="true"><div class="bg-bloom"></div><div class="bg-edge"></div></div>
 
 <div class="shell">
 
   <header class="top">
-    <strong style="font-family:var(--display);font-size:1.05rem;letter-spacing:-.01em">Zill <span style="color:var(--gold)">&#1592;&#1604;&#1617;</span></strong>
-    <nav style="display:flex;gap:1rem;font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase">
-      <a href="#map-sec" style="color:var(--muted);text-decoration:none">Map</a>
-      <a href="#cart-sec" style="color:var(--muted);text-decoration:none">The cart</a>
-      <a href="#heat-sec" style="color:var(--muted);text-decoration:none">Heat</a>
-      <a href="#ops-sec" style="color:var(--muted);text-decoration:none">Operations</a>
-      <a href="#fleet-sec" style="color:var(--muted);text-decoration:none">Fleet</a>
+    <strong class="brand">Zill <span>&#1592;&#1604;&#1617;</span></strong>
+    <nav>
+      <a href="#lane-sec">The lane</a>
+      <a href="#map-sec">The map</a>
+      <a href="#cart-sec">The cart</a>
+      <a href="#shots-sec">Close up</a>
+      <a href="#heat-sec">The day</a>
+      <a href="#fleet-sec">Fleet</a>
     </nav>
     <div class="top-live">
-      <span><span class="dot"></span><b id="live-free">0</b> carts free</span>
-      <span>outside <b id="live-out">45&deg;C</b></span>
+      <span><span class="dot"></span><b id="live-free">0</b> free</span>
+      <span>outside <b id="live-out">48&deg;C</b></span>
       <span>cabin <b id="live-cab" style="color:var(--cool)">22&deg;C</b></span>
     </div>
   </header>
 
-  <p class="concept"><b>Concept project.</b> No such shuttle operates in Al-Mubarakiya today. The map is a schematic of the souq's lanes, not a survey, and every number on this page is a design target &mdash; sized from published cart, battery and air-conditioning specifications, not measured from a running service.</p>
+  <p class="concept"><b>Concept project.</b> Nothing here is a photograph and no such service runs in Al-Mubarakiya &mdash; every scene on this page is drawn, and every figure is a design target.</p>
 
-  <section class="hero" style="padding-top:var(--s4)">
-    <p class="kicker">Souq Al-Mubarakiya &middot; Kuwait City</p>
-    <h1>Carry the <em>shade</em> with you.</h1>
-    <p class="ar">&#1592;&#1604;&#1617; &mdash; &#1593;&#1585;&#1576;&#1575;&#1578; &#1605;&#1603;&#1610;&#1601;&#1577; &#1578;&#1606;&#1602;&#1604; &#1586;&#1608;&#1575;&#1585; &#1575;&#1604;&#1605;&#1576;&#1575;&#1585;&#1603;&#1610;&#1577;</p>
-    <p class="lede">Al-Mubarakiya is a walking market &mdash; narrow lanes, a gold souq at one end, the date sellers at the other, and about four hundred metres of hot ground in between. <b>Zill</b> is a fleet of twelve enclosed, air-conditioned golf carts that shuttle shoppers from one souq to the next: you wait in a misted shelter, a cart pulls up at 22&nbsp;&deg;C, and you step out three minutes later at the spice lane instead of arriving at it soaked.</p>
+  <section id="lane-sec" style="padding-top:var(--s3)">
+    <div class="stage">
+      <svg id="scene" viewBox="0 0 1400 620" preserveAspectRatio="xMidYMid slice" role="img" aria-label="A drawn view down a covered lane of Souq Al-Mubarakiya at dusk: shuttered shopfronts, striped awnings and hanging lanterns on both sides, shafts of light through the roof slats, shoppers in the lane, and an air-conditioned cart driving towards the viewer with its cabin glowing cool blue."></svg>
+      <div class="stage-copy">
+        <p class="kicker">Souq Al-Mubarakiya &middot; Kuwait City</p>
+        <h1>Carry the <em>shade</em> with you.</h1>
+        <p class="ar">&#1592;&#1604;&#1617; &mdash; &#1593;&#1585;&#1576;&#1575;&#1578; &#1605;&#1603;&#1610;&#1601;&#1577; &#1578;&#1606;&#1602;&#1604; &#1586;&#1608;&#1575;&#1585; &#1575;&#1604;&#1605;&#1576;&#1575;&#1585;&#1603;&#1610;&#1577;</p>
+      </div>
+    </div>
 
     <div class="stats">
-      <div class="stat"><div class="n">12</div><div class="l">carts in the fleet</div></div>
+      <div class="stat"><div class="n">12</div><div class="l">carts</div></div>
       <div class="stat"><div class="n">13</div><div class="l">shaded stops</div></div>
-      <div class="stat cool"><div class="n">22<small>&deg;C</small></div><div class="l">cabin setpoint</div></div>
-      <div class="stat hot"><div class="n" id="stat-out">46<small>&deg;C</small></div><div class="l">outside, right now</div></div>
-      <div class="stat"><div class="n">2<small>&ndash;5 min</small></div><div class="l">typical ride</div></div>
-      <div class="stat"><div class="n">250<small> fils</small></div><div class="l">flat fare, free for some</div></div>
+      <div class="stat cool"><div class="n">22<small>&deg;C</small></div><div class="l">in the cabin</div></div>
+      <div class="stat hot"><div class="n" id="stat-out">48<small>&deg;C</small></div><div class="l">on the street</div></div>
+      <div class="stat"><div class="n">3<small> min</small></div><div class="l">end to end</div></div>
+      <div class="stat"><div class="n">250<small> fils</small></div><div class="l">flat fare</div></div>
     </div>
   </section>
 
   <section id="map-sec">
     <div class="sec-head">
-      <span class="num">01</span>
-      <h2>The souq, and the carts on it</h2>
-      <span class="ara">&#1575;&#1604;&#1582;&#1585;&#1610;&#1591;&#1577; &#1608;&#1575;&#1604;&#1593;&#1585;&#1576;&#1575;&#1578;</span>
+      <h2>Watch them work the lanes</h2>
+      <span class="ara">&#1575;&#1604;&#1582;&#1585;&#1610;&#1591;&#1577; &#1575;&#1604;&#1581;&#1610;&#1617;&#1577;</span>
     </div>
-    <p class="sec-note">Twelve carts run a loop of the lanes all day. Pick where you are and where you're going &mdash; the nearest free cart is dispatched, drives to you, then takes you there. Tap a stop on the map to set it as your pickup; tap a second one to set your destination.</p>
+    <p class="sec-note">Tap two stops &mdash; the nearest free cart comes and gets you.</p>
 
     <div class="board">
       <div>
         <div class="map-wrap">
-          <svg id="map" viewBox="0 0 1000 660" role="img" aria-label="Schematic map of Souq Al-Mubarakiya showing lanes, thirteen shaded stops and twelve air-conditioned carts moving between them">
+          <svg id="map" viewBox="0 0 1000 660" role="img" aria-label="Live plan of Souq Al-Mubarakiya: market blocks under striped awnings, palms, crowds, thirteen shaded stops and twelve air-conditioned carts driving the lanes between them">
             <defs>
               <linearGradient id="gr-ground" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#1B140E"/>
-                <stop offset="100%" stop-color="#120D09"/>
+                <stop offset="0%" stop-color="#1B140E"/><stop offset="100%" stop-color="#110C08"/>
               </linearGradient>
-              <pattern id="pat-block" width="8" height="8" patternTransform="rotate(35)" patternUnits="userSpaceOnUse">
-                <rect width="8" height="8" fill="none"/>
-                <line x1="0" y1="0" x2="0" y2="8" stroke="rgba(244,233,218,.05)" stroke-width="2"/>
-              </pattern>
-              <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
-                <feGaussianBlur stdDeviation="6" result="b"/>
+              <filter id="glow" x="-70%" y="-70%" width="240%" height="240%">
+                <feGaussianBlur stdDeviation="7" result="b"/>
                 <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
               </filter>
               <filter id="soft" x="-40%" y="-40%" width="180%" height="180%">
@@ -346,15 +319,17 @@
                 <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
               </filter>
             </defs>
-
             <rect width="1000" height="660" fill="url(#gr-ground)"/>
             <g id="blocks"></g>
             <g id="lanes"></g>
+            <g id="canopy"></g>
+            <g id="crowd"></g>
             <g id="route-layer"></g>
             <g id="stops"></g>
             <g id="carts"></g>
             <g id="labels"></g>
             <rect id="daylight" width="1000" height="660" pointer-events="none" fill="#FFD27A" opacity="0"/>
+            <g id="nightglow" pointer-events="none"></g>
             <g id="compass" pointer-events="none" opacity=".5">
               <path d="M946 596 L951 616 L946 612 L941 616 Z" fill="#E8B54B"/>
               <text x="946" y="640" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="11" fill="#A4907A">N</text>
@@ -373,36 +348,28 @@
           <div class="row">
             <span class="t" id="hour-label">15:00</span>
             <input id="hour" type="range" min="0" max="23" step="1" value="15" aria-label="Hour of the day">
-            <span style="font-family:var(--mono);font-size:.74rem;color:var(--muted)">a day in August</span>
+            <span style="font-family:var(--mono);font-size:.72rem;color:var(--muted)">drag through a day in August</span>
           </div>
           <div class="chips">
-            <span class="chip">outside <b id="c-out">46&deg;C</b></span>
-            <span class="chip">AC draw <b id="c-ac">1.2 kW</b></span>
-            <span class="chip">range on a full pack <b id="c-range">4.6 h</b></span>
-            <span class="chip">demand <b id="c-dem">moderate</b></span>
-            <span class="chip">carts needed <b id="c-need">7</b></span>
+            <span class="chip">outside <b id="c-out">48&deg;C</b></span>
+            <span class="chip">AC draw <b id="c-ac">1.19 kW</b></span>
+            <span class="chip">range <b id="c-range">4.4 h</b></span>
+            <span class="chip">crowd <b id="c-dem">light</b></span>
+            <span class="chip">carts needed <b id="c-need">2</b></span>
           </div>
         </div>
       </div>
 
       <aside class="panel">
         <h3>Call a cart</h3>
-        <p class="hint">Dispatch is nearest-first along the lanes, not as the crow flies.</p>
-
+        <p class="hint">Nearest free cart, by lane distance.</p>
         <label class="fld"><span>From</span><select id="from"></select></label>
         <div class="swap"><button id="swap" type="button">&#8645; swap</button></div>
         <label class="fld"><span>To</span><select id="to"></select></label>
-
-        <label class="ramp"><input id="ramp" type="checkbox"> I need the ramp (wheelchair or pram)</label>
-
+        <label class="ramp"><input id="ramp" type="checkbox"> I need the ramp</label>
         <button class="go" id="go" type="button">Request a cart</button>
-
-        <div class="status" id="status" aria-live="polite">
-          <span class="big">Ready when you are.</span>
-          Pick two stops and the map will show the route.
-        </div>
+        <div class="status" id="status" aria-live="polite"><span class="big">Ready when you are.</span>Pick two stops.</div>
         <div class="bar" id="bar-wrap" hidden><i id="bar"></i></div>
-
         <div class="receipt" id="receipt">
           <dl>
             <dt>Cart</dt><dd id="r-cart">&mdash;</dd>
@@ -420,219 +387,73 @@
 
   <section id="cart-sec">
     <div class="sec-head">
-      <span class="num">02</span>
       <h2>The cart</h2>
       <span class="ara">&#1575;&#1604;&#1593;&#1585;&#1576;&#1577;</span>
     </div>
-    <p class="sec-note">A stock six-seat electric golf cart cannot hold 22&nbsp;&deg;C in a Kuwaiti August &mdash; an open canopy has nothing to cool. Zill's cart is the closed version of the same vehicle: hard doors, laminated glass, an insulated roof, and a roof-mounted 12,000&nbsp;BTU DC air-conditioner sitting over its own inverter.</p>
+    <p class="sec-note">Tap a number.</p>
 
-    <div class="cart-grid">
-      <div class="cutaway">
-        <svg viewBox="0 0 640 340" role="img" aria-label="Cutaway drawing of the air-conditioned cart showing the roof air-conditioner, insulated roof, sealed cabin, lithium pack under the bench and the motor at the rear axle">
-          <rect width="640" height="340" fill="#120D09"/>
-          <line x1="40" y1="286" x2="600" y2="286" stroke="#2E251C" stroke-width="2"/>
-
-          <!-- roof AC unit -->
-          <rect x="212" y="54" width="170" height="34" rx="8" fill="#15242A" stroke="#6FD3E8" stroke-width="1.6"/>
-          <g stroke="#6FD3E8" stroke-width="1.2" opacity=".75">
-            <line x1="230" y1="62" x2="230" y2="80"/><line x1="244" y1="62" x2="244" y2="80"/>
-            <line x1="258" y1="62" x2="258" y2="80"/><line x1="272" y1="62" x2="272" y2="80"/>
-          </g>
-          <circle cx="340" cy="71" r="11" fill="none" stroke="#6FD3E8" stroke-width="1.4"/>
-          <path d="M340 62 L340 80 M331 71 L349 71" stroke="#6FD3E8" stroke-width="1.2"/>
-
-          <!-- insulated roof -->
-          <rect x="150" y="88" width="300" height="14" rx="5" fill="#241C15" stroke="#4A3B2C" stroke-width="1.4"/>
-          <g stroke="#E8B54B" stroke-width="1" opacity=".5">
-            <line x1="164" y1="91" x2="164" y2="99"/><line x1="180" y1="91" x2="180" y2="99"/>
-            <line x1="196" y1="91" x2="196" y2="99"/><line x1="212" y1="91" x2="212" y2="99"/>
-            <line x1="228" y1="91" x2="228" y2="99"/><line x1="244" y1="91" x2="244" y2="99"/>
-            <line x1="260" y1="91" x2="260" y2="99"/><line x1="276" y1="91" x2="276" y2="99"/>
-            <line x1="292" y1="91" x2="292" y2="99"/><line x1="308" y1="91" x2="308" y2="99"/>
-            <line x1="324" y1="91" x2="324" y2="99"/><line x1="340" y1="91" x2="340" y2="99"/>
-            <line x1="356" y1="91" x2="356" y2="99"/><line x1="372" y1="91" x2="372" y2="99"/>
-            <line x1="388" y1="91" x2="388" y2="99"/><line x1="404" y1="91" x2="404" y2="99"/>
-            <line x1="420" y1="91" x2="420" y2="99"/><line x1="436" y1="91" x2="436" y2="99"/>
-          </g>
-
-          <!-- pillars + glass -->
-          <rect x="152" y="102" width="9" height="96" fill="#3A2E23"/>
-          <rect x="296" y="102" width="9" height="96" fill="#3A2E23"/>
-          <rect x="441" y="102" width="9" height="96" fill="#3A2E23"/>
-          <rect x="163" y="108" width="131" height="76" rx="5" fill="rgba(111,211,232,.10)" stroke="#6FD3E8" stroke-width="1" opacity=".8"/>
-          <rect x="307" y="108" width="132" height="76" rx="5" fill="rgba(111,211,232,.10)" stroke="#6FD3E8" stroke-width="1" opacity=".8"/>
-
-          <!-- cold air arrows -->
-          <g stroke="#6FD3E8" stroke-width="1.6" fill="none" opacity=".9">
-            <path d="M226 106 L226 140 M220 132 L226 142 L232 132"/>
-            <path d="M372 106 L372 140 M366 132 L372 142 L378 132"/>
-          </g>
-
-          <!-- body / bench -->
-          <path d="M150 198 L450 198 L466 236 L134 236 Z" fill="#1C1711" stroke="#4A3B2C" stroke-width="1.4"/>
-          <rect x="176" y="150" width="62" height="48" rx="6" fill="#2A211B" stroke="#4A3B2C" stroke-width="1"/>
-          <rect x="330" y="150" width="62" height="48" rx="6" fill="#2A211B" stroke="#4A3B2C" stroke-width="1"/>
-
-          <!-- battery pack -->
-          <rect x="214" y="204" width="150" height="26" rx="5" fill="#1A2418" stroke="#7FD8A0" stroke-width="1.4"/>
-          <g fill="#7FD8A0" opacity=".65">
-            <rect x="224" y="210" width="16" height="14" rx="2"/><rect x="246" y="210" width="16" height="14" rx="2"/>
-            <rect x="268" y="210" width="16" height="14" rx="2"/><rect x="290" y="210" width="16" height="14" rx="2"/>
-            <rect x="312" y="210" width="16" height="14" rx="2"/><rect x="334" y="210" width="16" height="14" rx="2"/>
-          </g>
-
-          <!-- motor -->
-          <circle cx="418" cy="218" r="17" fill="#2A211B" stroke="#E8B54B" stroke-width="1.4"/>
-          <path d="M410 218 h16 M418 210 v16" stroke="#E8B54B" stroke-width="1.2"/>
-
-          <!-- ramp -->
-          <path d="M466 236 L520 268 L466 268 Z" fill="#1C1711" stroke="#6FD3E8" stroke-width="1.2" opacity=".85"/>
-
-          <!-- wheels -->
-          <circle cx="196" cy="264" r="26" fill="#15110D" stroke="#5A4A39" stroke-width="3"/>
-          <circle cx="196" cy="264" r="9" fill="#2E251C"/>
-          <circle cx="418" cy="264" r="26" fill="#15110D" stroke="#5A4A39" stroke-width="3"/>
-          <circle cx="418" cy="264" r="9" fill="#2E251C"/>
-
-          <!-- callouts -->
-          <g font-family="IBM Plex Mono, monospace" font-size="11" fill="#A4907A">
-            <line x1="382" y1="66" x2="470" y2="46" stroke="#6FD3E8" stroke-width=".8"/>
-            <text x="476" y="44" fill="#6FD3E8">12,000 BTU roof unit</text>
-            <line x1="450" y1="95" x2="516" y2="112" stroke="#4A3B2C" stroke-width=".8"/>
-            <text x="520" y="115">insulated roof</text>
-            <line x1="163" y1="146" x2="86" y2="126" stroke="#4A3B2C" stroke-width=".8"/>
-            <text x="22" y="122">sealed cabin</text>
-            <line x1="214" y1="217" x2="96" y2="196" stroke="#7FD8A0" stroke-width=".8"/>
-            <text x="22" y="192" fill="#7FD8A0">10 kWh lithium</text>
-            <line x1="435" y1="218" x2="522" y2="200" stroke="#E8B54B" stroke-width=".8"/>
-            <text x="526" y="197" fill="#E8B54B">5 kW motor</text>
-            <line x1="512" y1="264" x2="560" y2="292" stroke="#6FD3E8" stroke-width=".8"/>
-            <text x="470" y="312" fill="#6FD3E8">fold-out ramp (2 carts)</text>
-          </g>
-        </svg>
+    <div class="cartboard">
+      <svg id="cart-art" viewBox="0 0 1060 580" role="img" aria-label="A drawn air-conditioned cart in side view with eight numbered markers: roof air-conditioner, insulated roof, tinted glass, power doors, seats for six, battery pack, motor and fold-out ramp"></svg>
+      <div class="caption">
+        <span class="num" id="cap-num">01</span>
+        <span class="txt" id="cap-txt">Roof unit</span>
+        <span class="sub" id="cap-sub">12,000 BTU, its own inverter.</span>
       </div>
-
-      <div class="panel">
-        <h3>Specification</h3>
-        <p class="hint">Design targets for the August case &mdash; the hardest day of the year.</p>
-        <ul class="spec">
-          <li><b>Seats</b><span>6 passengers + driver</span></li>
-          <li><b>Cabin</b><span>enclosed, 22&nbsp;&deg;C setpoint</span></li>
-          <li><b>Air-conditioner</b><span>12,000 BTU / 3.5 kW cooling</span></li>
-          <li><b>AC electrical draw</b><span>0.5&ndash;1.4 kW with heat</span></li>
-          <li><b>Battery</b><span>48 V &middot; 210 Ah &middot; 10 kWh LFP</span></li>
-          <li><b>Shift on one pack</b><span>4.5 h in August, 8 h in January</span></li>
-          <li><b>Charge</b><span>2.5 h at 4 kW, at the hub</span></li>
-          <li><b>Speed in the lanes</b><span>capped at 12 km/h</span></li>
-          <li><b>Doors</b><span>hard, with laminated glass</span></li>
-          <li><b>Accessible carts</b><span>2 of 12, ramp + securement</span></li>
-          <li><b>Footprint</b><span>2.4 m &times; 1.2 m</span></li>
-        </ul>
-      </div>
+      <div class="pinbar" id="pinbar" role="group" aria-label="Parts of the cart"></div>
     </div>
+  </section>
 
-    <div class="cards" style="margin-top:var(--s3)">
-      <div class="card">
-        <h3><span class="tick">&#10038;</span>Pre-cool on the charger</h3>
-        <p>The pack that cools an empty cabin from 48&nbsp;&deg;C is a pack that isn't moving anyone. Carts pull the cabin down to 22&nbsp;&deg;C while still plugged in at the hub, so the first ride of a shift starts cold on mains power, not on the battery.</p>
-        <span class="ar-s">&#1575;&#1604;&#1578;&#1576;&#1585;&#1610;&#1583; &#1575;&#1604;&#1605;&#1587;&#1576;&#1602; &#1571;&#1579;&#1606;&#1575;&#1569; &#1575;&#1604;&#1588;&#1581;&#1606;</span>
-      </div>
-      <div class="card">
-        <h3><span class="tick">&#10038;</span>Doors closed, always</h3>
-        <p>Half the cooling load in a shuttle is the door standing open at a stop. Doors are power-operated, open for the boarding count and shut on their own &mdash; and the roof unit steps to high for ninety seconds after each stop to recover the loss.</p>
-        <span class="ar-s">&#1571;&#1576;&#1608;&#1575;&#1576; &#1578;&#1594;&#1604;&#1602; &#1578;&#1604;&#1602;&#1575;&#1574;&#1610;&#1611;&#1575;</span>
-      </div>
-      <div class="card">
-        <h3><span class="tick">&#10038;</span>Shelters do the first ten degrees</h3>
-        <p>Stepping from 48&nbsp;&deg;C into 22&nbsp;&deg;C is a hard jolt. Each stop is a shaded, misted shelter sitting around 10&nbsp;&deg;C below the street, so the step into the cabin is the second half of the drop, not all of it.</p>
-        <span class="ar-s">&#1605;&#1592;&#1604;&#1575;&#1578; &#1605;&#1585;&#1584;&#1608;&#1584;&#1577; &#1601;&#1610; &#1603;&#1604; &#1605;&#1581;&#1591;&#1577;</span>
-      </div>
-      <div class="card">
-        <h3><span class="tick">&#10038;</span>Narrow enough for the lanes</h3>
-        <p>At 1.2 m wide the cart clears the covered lanes with room for people to pass, and it is speed-capped to 12 km/h with a walking-pace limiter in the crowded stretches. The perimeter streets are the only place it runs at 20 km/h.</p>
-        <span class="ar-s">&#1593;&#1585;&#1590; &#1610;&#1606;&#1575;&#1587;&#1576; &#1571;&#1586;&#1602;&#1577; &#1575;&#1604;&#1587;&#1608;&#1602;</span>
-      </div>
+  <section id="shots-sec">
+    <div class="sec-head">
+      <h2>Close up</h2>
+      <span class="ara">&#1593;&#1606; &#1602;&#1585;&#1610;&#1576;</span>
+    </div>
+    <div class="shots" id="shots"></div>
+  </section>
+
+  <section id="cut-sec">
+    <div class="sec-head">
+      <h2>Cut in half</h2>
+      <span class="ara">&#1605;&#1602;&#1591;&#1593; &#1593;&#1585;&#1590;&#1610;</span>
+    </div>
+    <div class="cartboard">
+      <svg id="cutaway" viewBox="0 0 1060 470" role="img" aria-label="Section drawing through the cart showing the roof air-conditioner over an insulated roof, the sealed cabin with cold air falling from ceiling vents, the lithium pack under the bench, the rear motor and the fold-out ramp"></svg>
     </div>
   </section>
 
   <section id="heat-sec">
     <div class="sec-head">
-      <span class="num">03</span>
-      <h2>Why any of this</h2>
-      <span class="ara">&#1604;&#1605;&#1575;&#1584;&#1575; &#1575;&#1604;&#1578;&#1576;&#1585;&#1610;&#1583;&#1567;</span>
+      <h2>The day it has to survive</h2>
+      <span class="ara">&#1610;&#1608;&#1605; &#1601;&#1610; &#1571;&#1594;&#1587;&#1591;&#1587;</span>
     </div>
-    <p class="sec-note">Kuwait has some of the hottest summer afternoons on Earth &mdash; July and August routinely run past 45&nbsp;&deg;C, and the country holds one of the highest temperatures ever reliably recorded (53.9&nbsp;&deg;C at Mitribah, July 2016). Al-Mubarakiya keeps trading through it, which is why it empties out between noon and late afternoon and refills after sunset.</p>
-
     <div class="heat">
-      <div class="card">
-        <div class="big hot" id="h-walk">7 min</div>
-        <p>walking the route you picked, in the sun</p>
-      </div>
-      <div class="card">
-        <div class="big cold" id="h-ride">3 min</div>
-        <p>the same route in a cart, at 22&nbsp;&deg;C</p>
-      </div>
-      <div class="card">
-        <div class="big" id="h-delta" style="color:var(--gold)">24&deg;C</div>
-        <p>the difference the cabin holds against the street</p>
-      </div>
+      <div class="heatcard"><div class="big hot" id="h-walk">5 min</div><p>on foot, in the sun</p></div>
+      <div class="heatcard"><div class="big cold" id="h-ride">2 min</div><p>the same route, cooled</p></div>
+      <div class="heatcard"><div class="big" id="h-delta" style="color:var(--gold)">26&deg;C</div><p>held against the street</p></div>
     </div>
-
     <div class="chart">
-      <svg viewBox="0 0 900 300" role="img" aria-label="Chart of a typical August day in Kuwait City: outside temperature rising to about 48 degrees at 15:00 while the cart cabin holds 22 degrees, with souq footfall peaking in the evening">
-        <g id="chart-body"></g>
-      </svg>
-      <p style="margin:.8rem 0 0;font-size:.82rem;color:var(--muted)">A typical August day, not a forecast: the outside curve is a normal Kuwait City summer profile, the cabin line is the setpoint the fleet is sized to hold, and the bars are where the souq's own footfall actually sits &mdash; thin at noon, heavy after Maghrib.</p>
+      <svg viewBox="0 0 900 300" role="img" aria-label="A typical August day in Kuwait City: the outside temperature climbing to about 48 degrees mid-afternoon while the cart cabin holds 22, with souq footfall in bars peaking after sunset"><g id="chart-body"></g></svg>
+      <p>A typical August day &mdash; not a forecast. Bars are the souq's own footfall: thin at noon, heavy after Maghrib.</p>
     </div>
   </section>
 
-  <section id="ops-sec">
+  <section id="facts-sec">
     <div class="sec-head">
-      <span class="num">04</span>
-      <h2>How it would run</h2>
+      <h2>How it runs</h2>
       <span class="ara">&#1575;&#1604;&#1578;&#1588;&#1594;&#1610;&#1604;</span>
     </div>
-    <div class="cards">
-      <div class="card">
-        <h3>Hours</h3>
-        <p>08:00&ndash;13:00, then 16:00&ndash;23:00 &mdash; the souq's own rhythm. Thursday and Friday evenings run the full twelve carts; a quiet Tuesday noon runs four. In Ramadan the fleet moves to a single night shift, roughly 19:00 to 02:00.</p>
-      </div>
-      <div class="card">
-        <h3>Fare</h3>
-        <p>250 fils flat anywhere inside the loop, 500 fils to the outer car parks, paid by KNET or contactless at the door. Free for passengers over 65, children under 6, and anyone using a ramp cart &mdash; the fare is there to keep carts moving, not to price out the people who need them most.</p>
-      </div>
-      <div class="card">
-        <h3>Dispatch</h3>
-        <p>Nearest free cart by lane distance, not straight line. If no cart is within four minutes the shelter screen says so honestly instead of counting down a number it can't keep. Carts with under 15% pack return to the hub and are replaced from the two spares.</p>
-      </div>
-      <div class="card">
-        <h3>Drivers</h3>
-        <p>Twelve carts, sixteen drivers across two shifts, trained on the lane speed limiter and on heat-illness signs &mdash; the driver is the person most likely to notice a passenger in trouble before the passenger does. Every cart carries chilled water and a first-aid kit.</p>
-      </div>
-      <div class="card">
-        <h3>Where the carts sleep</h3>
-        <p>One hub on the Mubarak Al-Kabeer edge: twelve 4 kW chargers, a shaded canopy, and a wash bay. Charging is deliberately slow and overnight on the cheap side of the load curve, with opportunity top-ups between rounds during the afternoon lull.</p>
-      </div>
-      <div class="card">
-        <h3>What it is not</h3>
-        <p>Not a tour, not a taxi out of the souq, and not a replacement for walking Al-Mubarakiya &mdash; the walking <em>is</em> the souq. It exists for the 400 m in the middle of a 48&nbsp;&deg;C afternoon that stops an older shopper, a pregnant woman or a family with a pram from making the trip at all.</p>
-      </div>
-    </div>
+    <div class="facts" id="facts"></div>
   </section>
 
   <section id="fleet-sec">
     <div class="sec-head">
-      <span class="num">05</span>
       <h2>Fleet, live</h2>
       <span class="ara">&#1575;&#1604;&#1571;&#1587;&#1591;&#1608;&#1604;</span>
     </div>
-    <p class="sec-note">The same twelve carts that are moving on the map above. Battery and cabin temperature run off the simulated model on this page &mdash; the demo clock moves three times faster than real time.</p>
     <div class="tbl-wrap">
       <table>
         <caption class="sr">Live status of the twelve carts</caption>
-        <thead>
-          <tr><th>Cart</th><th>Status</th><th>Where</th><th>Cabin</th><th>Pack</th><th>Seats free</th><th>Ramp</th></tr>
-        </thead>
+        <thead><tr><th>Cart</th><th>Status</th><th>Where</th><th>Cabin</th><th>Pack</th><th>Seats free</th><th>Ramp</th></tr></thead>
         <tbody id="fleet"></tbody>
       </table>
     </div>
@@ -641,8 +462,8 @@
   <footer class="foot">
     <span>Zill &middot; &#1592;&#1604;&#1617;</span>
     <span>Souq Al-Mubarakiya, Kuwait City</span>
-    <span>Concept &mdash; not an operating service</span>
-    <span>No network requests &middot; no tracking</span>
+    <span>Concept &mdash; drawn, not photographed</span>
+    <span>No network requests</span>
   </footer>
 
 </div>
@@ -728,6 +549,9 @@
   var PACK_USABLE = 9.0;   /* kWh actually used from a 10 kWh pack  */
   var DRIVE_KW = 0.85;     /* average traction draw at souq speed   */
 
+  window.ZillMap = {NODE:NODE, EDGE:EDGE, STOPS:STOPS, BLOCKS:BLOCKS,
+                    currentHour:15, currentFootfall:0.2};
+
   /* ============================================================
      2. Graph helpers
      ============================================================ */
@@ -791,7 +615,6 @@
   BLOCKS.forEach(function(b){
     gBlocks.appendChild(el("rect",{x:b[0],y:b[1],width:b[2],height:b[3],rx:9,
       fill:"#1A140E",stroke:"#2E251C","stroke-width":1}));
-    gBlocks.appendChild(el("rect",{x:b[0],y:b[1],width:b[2],height:b[3],rx:9,fill:"url(#pat-block)"}));
   });
 
   EDGE.forEach(function(e){
@@ -891,12 +714,14 @@
   carts.forEach(function(c){
     var g = el("g",{class:"cart"});
     var body = el("g",{});
-    body.appendChild(el("rect",{x:-13,y:-7,width:26,height:14,rx:4,fill:"#15110D",
+    body.appendChild(el("rect",{x:-14,y:-8,width:28,height:16,rx:5,fill:"#15110D",
       stroke:"#7FD8A0","stroke-width":2}));
-    body.appendChild(el("rect",{x:-6,y:-4.5,width:12,height:9,rx:2,fill:"#6FD3E8",opacity:.55}));
-    body.appendChild(el("circle",{cx:10,cy:0,r:2,fill:"#E8B54B"}));
+    body.appendChild(el("rect",{x:-7,y:-5,width:14,height:10,rx:2.5,fill:"#6FD3E8",opacity:.5}));
+    body.appendChild(el("rect",{x:-4,y:-9.5,width:9,height:4,rx:1.5,fill:"#13242A",
+      stroke:"#6FD3E8","stroke-width":1}));
+    body.appendChild(el("circle",{cx:11,cy:0,r:2,fill:"#E8B54B"}));
     var txt = el("text",{x:0,y:20,"text-anchor":"middle","font-family":"IBM Plex Mono, monospace",
-      "font-size":9.5,fill:"#8A7965"});
+      "font-size":8.5,fill:"#8A7965",opacity:.72});
     txt.textContent = c.id;
     g.appendChild(body); g.appendChild(txt);
     gCarts.appendChild(g);
@@ -1189,6 +1014,9 @@
     document.getElementById("h-delta").textContent = (out - CABIN_SET) + "°C";
     document.getElementById("daylight").setAttribute("opacity",
       Math.max(0, Math.min(.075, (out - 33) / 15 * .075)).toFixed(3));
+    window.ZillMap.currentHour = hour;
+    window.ZillMap.currentFootfall = demandAt(hour);
+    if(window.onZillHour) window.onZillHour(hour, demandAt(hour));
     drawChart();
   }
   hourInput.addEventListener("input", applyHour);
@@ -1394,6 +1222,996 @@
   onRouteChange();
   paintFleet();
   requestAnimationFrame(frame);
+})();
+</script>
+
+<script>
+/* ================================================================
+   Zill — the drawn parts of the page.
+   Everything on this page is built here in SVG: the lane, the cart,
+   the close-ups. No photographs, no image files, no network.
+   ================================================================ */
+(function(){
+  "use strict";
+
+  var NS = "http://www.w3.org/2000/svg";
+  var REDUCED = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  var C = {
+    night:"#0B0907", wood:"#3A2C20", woodDark:"#241A12", woodLight:"#5A4634",
+    sand:"#F4E9DA", muted:"#A4907A", gold:"#E8B54B", clay:"#D07A4E",
+    cool:"#6FD3E8", mint:"#7FD8A0", lamp:"#FFC978", cloth:"#8A5A45"
+  };
+
+  function E(name, attrs, parent){
+    var n = document.createElementNS(NS, name);
+    if(attrs) for(var k in attrs) n.setAttribute(k, attrs[k]);
+    if(parent) parent.appendChild(n);
+    return n;
+  }
+  function T(text, attrs, parent){
+    var n = E("text", attrs, parent);
+    n.textContent = text;
+    return n;
+  }
+  function poly(pts, attrs, parent){
+    var a = attrs || {};
+    a.points = pts.map(function(p){ return p[0].toFixed(1)+","+p[1].toFixed(1); }).join(" ");
+    return E("polygon", a, parent);
+  }
+  function lerp(a,b,t){ return a + (b-a)*t; }
+  function seeded(seed){
+    return function(){
+      seed |= 0; seed = seed + 0x6D2B79F5 | 0;
+      var t = Math.imul(seed ^ seed >>> 15, 1 | seed);
+      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+  }
+
+  /* ================================================================
+     THE CART, drawn once and reused at any size.
+     side = elevation for the annotated drawing; front = the lane view.
+     ================================================================ */
+
+  function pg_parent(g){ return g; }
+
+  function drawCartSide(g, o){
+    o = o || {};
+    var glass = o.glass || "rgba(111,211,232,.13)";
+
+    /* shadow on the ground */
+    E("ellipse",{cx:250,cy:296,rx:236,ry:15,fill:"#000",opacity:.34}, g);
+
+    /* rear ramp, folded flat against the tail */
+    E("rect",{x:452,y:196,width:22,height:74,rx:5,fill:"#241A12",stroke:C.cool,"stroke-width":2,opacity:.9}, g);
+
+    /* chassis + sill */
+    poly([[42,232],[458,232],[470,262],[30,262]],{fill:"#1A130D",stroke:C.woodLight,"stroke-width":2}, g);
+
+    /* battery pack, seen through the sill cut */
+    E("rect",{x:150,y:236,width:190,height:22,rx:4,fill:"#16211A",stroke:C.mint,"stroke-width":1.6}, g);
+    for(var b=0;b<6;b++) E("rect",{x:158+b*30,y:240,width:22,height:14,rx:2,fill:C.mint,opacity:.55}, g);
+
+    /* wheels */
+    [118, 392].forEach(function(cx){
+      E("circle",{cx:cx,cy:272,r:38,fill:"#0E0A07",stroke:"#4A3B2C","stroke-width":5}, g);
+      E("circle",{cx:cx,cy:272,r:15,fill:"#2A211B",stroke:"#6A5743","stroke-width":2}, g);
+      for(var s=0;s<4;s++){
+        var a = s/4*Math.PI*2 + .4;
+        E("line",{x1:cx,y1:272,x2:cx+Math.cos(a)*13,y2:272+Math.sin(a)*13,stroke:"#6A5743","stroke-width":2}, g);
+      }
+    });
+
+    /* the lit inside of the cabin, so what is in there can be seen */
+    E("rect",{x:54,y:84,width:398,height:148,rx:6,fill:"#2A1E14"}, g);
+    E("rect",{x:54,y:84,width:398,height:148,rx:6,fill:"#6FD3E8",opacity:.06}, g);
+    poly([[54,232],[452,232],[452,190],[54,190]],{fill:"#1F1810"}, g);
+
+    [[126,150],[170,150],[280,150],[324,150]].forEach(function(p,i){
+      var pg = E("g",{fill:"#0C0806"}, pg_parent(g));
+      var x = p[0], y = p[1];
+      /* knees to the floor */
+      E("path",{d:"M"+(x-11)+" "+y+" h22 v14 h-9 l-4 22 h-9 z",fill:"#0C0806"}, pg);
+      /* torso and shoulders */
+      E("path",{d:"M"+(x-13)+" "+y+" L"+(x-12)+" "+(y-30)+" Q"+x+" "+(y-44)+" "+(x+12)+" "+(y-30)+
+        " L"+(x+13)+" "+y+" z",fill:"#0C0806"}, pg);
+      E("circle",{cx:x,cy:y-50,r:11,fill:"#0C0806"}, pg);
+      if(i%2) E("path",{d:"M"+(x-14)+" "+(y-48)+" q14 -18 28 0 l2 12 h-32 z",fill:"#0C0806"}, pg);
+    });
+
+    /* the bench, in front of them */
+    [[96,"#2A211B"],[250,"#2A211B"]].forEach(function(s){
+      E("rect",{x:s[0],y:150,width:104,height:46,rx:7,fill:s[1],stroke:"#46372A","stroke-width":1.5}, g);
+    });
+
+    /* pillars */
+    [56, 214, 344, 448].forEach(function(x){
+      E("rect",{x:x,y:78,width:10,height:114,rx:3,fill:"#3A2C20"}, g);
+    });
+
+    /* glass */
+    E("rect",{x:68,y:88,width:142,height:92,rx:6,fill:glass,stroke:C.cool,"stroke-width":1.4,opacity:.95}, g);
+    E("rect",{x:226,y:88,width:114,height:92,rx:6,fill:glass,stroke:C.cool,"stroke-width":1.4,opacity:.95}, g);
+    E("rect",{x:356,y:88,width:88,height:92,rx:6,fill:glass,stroke:C.cool,"stroke-width":1.4,opacity:.95}, g);
+    /* windscreen rake at the front */
+    poly([[36,182],[62,86],[68,86],[52,182]],{fill:glass,stroke:C.cool,"stroke-width":1.4}, g);
+
+    /* what people are carrying home, in the back */
+    E("rect",{x:368,y:150,width:30,height:30,rx:4,fill:"#6B4A2E"}, g);
+    E("path",{d:"M374 150 q9 -12 18 0",fill:"none",stroke:"#6B4A2E","stroke-width":3}, g);
+    E("rect",{x:404,y:158,width:26,height:22,rx:4,fill:"#9E4B39"}, g);
+
+    /* door line + handle */
+    E("line",{x1:214,y1:92,x2:214,y2:228,stroke:"#46372A","stroke-width":2}, g);
+    E("rect",{x:196,y:150,width:16,height:5,rx:2.5,fill:C.gold}, g);
+
+    /* cold air falling inside */
+    [110, 180, 270, 330].forEach(function(x){
+      var a = E("g",{stroke:C.cool,"stroke-width":2,fill:"none",opacity:.75}, g);
+      E("path",{d:"M"+x+" 96 v34"}, a);
+      E("path",{d:"M"+(x-5)+" 124 l5 9 l5 -9"}, a);
+    });
+
+    /* insulated roof */
+    E("rect",{x:44,y:62,width:416,height:16,rx:6,fill:"#2A211B",stroke:"#5A4634","stroke-width":1.6}, g);
+    for(var r=0;r<26;r++) E("line",{x1:54+r*15,y1:65,x2:54+r*15,y2:75,stroke:C.gold,"stroke-width":1,opacity:.45}, g);
+
+    /* the air-conditioner */
+    E("rect",{x:168,y:20,width:196,height:42,rx:9,fill:"#13242A",stroke:C.cool,"stroke-width":2.2}, g);
+    for(var f=0;f<7;f++) E("line",{x1:186+f*13,y1:30,x2:186+f*13,y2:52,stroke:C.cool,"stroke-width":1.4,opacity:.75}, g);
+    var fan = E("g",{}, g);
+    E("circle",{cx:322,cy:41,r:14,fill:"none",stroke:C.cool,"stroke-width":1.8}, fan);
+    var blades = E("g",{}, fan);
+    for(var bl=0;bl<3;bl++){
+      E("path",{d:"M322 41 q10 -6 13 -9 q-6 12 -13 9 z",fill:C.cool,opacity:.8,
+        transform:"rotate("+(bl*120)+" 322 41)"}, blades);
+    }
+    if(!REDUCED) E("animateTransform",{attributeName:"transform",type:"rotate",
+      from:"0 322 41",to:"360 322 41",dur:"2.4s",repeatCount:"indefinite"}, blades);
+
+    /* headlamp + mirror + livery */
+    poly([[36,196],[58,196],[58,232],[30,232]],{fill:"#1A130D",stroke:"#5A4634","stroke-width":1.6}, g);
+    E("circle",{cx:46,cy:210,r:6.5,fill:C.lamp,opacity:.95}, g);
+    E("circle",{cx:46,cy:210,r:13,fill:C.lamp,opacity:.14}, g);
+    E("path",{d:"M64 96 l-18 -10",stroke:"#5A4634","stroke-width":3,"stroke-linecap":"round"}, g);
+    T("ZILL", {x:292,y:222,"font-family":"Bricolage Grotesque, sans-serif","font-size":19,
+      "font-weight":800,fill:C.gold,opacity:.9,"letter-spacing":"3"}, g);
+    T("ظلّ", {x:354,y:222,"font-family":"IBM Plex Sans, sans-serif","font-size":17,fill:C.gold,opacity:.7}, g);
+
+    return g;
+  }
+
+  /* the cart coming down the lane, seen from the front-quarter */
+  function drawCartFront(g){
+    E("ellipse",{cx:0,cy:8,rx:120,ry:16,fill:"#000",opacity:.45}, g);
+    /* cold pool of light it drags with it */
+    E("ellipse",{cx:0,cy:4,rx:150,ry:34,fill:C.cool,opacity:.12,filter:"url(#sceneGlow)"}, g);
+
+    /* wheels */
+    E("ellipse",{cx:-74,cy:-14,rx:20,ry:24,fill:"#0C0806",stroke:"#463728","stroke-width":4}, g);
+    E("ellipse",{cx:74,cy:-14,rx:20,ry:24,fill:"#0C0806",stroke:"#463728","stroke-width":4}, g);
+
+    /* body */
+    poly([[-92,-34],[92,-34],[84,-104],[-84,-104]],{fill:"#1C150E",stroke:"#5A4634","stroke-width":3}, g);
+    /* windscreen */
+    poly([[-76,-108],[76,-108],[70,-168],[-70,-168]],{fill:"rgba(111,211,232,.22)",stroke:C.cool,"stroke-width":2.4}, g);
+    /* passengers behind the glass */
+    [[-40,-126],[0,-122],[40,-126]].forEach(function(p){
+      E("circle",{cx:p[0],cy:p[1],r:12,fill:"#0B0806",opacity:.8}, g);
+      E("path",{d:"M"+(p[0]-16)+" "+(p[1]+26)+" q16 -30 32 0 z",fill:"#0B0806",opacity:.8}, g);
+    });
+    /* pillars + roof */
+    E("rect",{x:-80,y:-172,width:10,height:66,rx:3,fill:"#3A2C20"}, g);
+    E("rect",{x:70,y:-172,width:10,height:66,rx:3,fill:"#3A2C20"}, g);
+    E("rect",{x:-96,y:-188,width:192,height:18,rx:7,fill:"#2A211B",stroke:"#5A4634","stroke-width":2}, g);
+    /* the AC box on the roof */
+    E("rect",{x:-54,y:-216,width:108,height:30,rx:8,fill:"#13242A",stroke:C.cool,"stroke-width":2.2}, g);
+    for(var f=0;f<5;f++) E("line",{x1:-40+f*14,y1:-209,x2:-40+f*14,y2:-193,stroke:C.cool,"stroke-width":1.4,opacity:.8}, g);
+    /* headlamps */
+    [[-58,-52],[58,-52]].forEach(function(p){
+      E("circle",{cx:p[0],cy:p[1],r:9,fill:C.lamp}, g);
+      E("circle",{cx:p[0],cy:p[1],r:22,fill:C.lamp,opacity:.22,filter:"url(#sceneGlow)"}, g);
+    });
+    T("ZILL",{x:0,y:-58,"text-anchor":"middle","font-family":"Bricolage Grotesque, sans-serif",
+      "font-size":20,"font-weight":800,fill:C.gold,"letter-spacing":"4",opacity:.9}, g);
+    return g;
+  }
+
+  /* ================================================================
+     1. THE LANE — a diorama you watch a cart come down
+     ================================================================ */
+
+  function buildLane(){
+    var svg = document.getElementById("scene");
+    if(!svg) return;
+    var defs = E("defs",{},svg);
+
+    var sky = E("linearGradient",{id:"gr-sky",x1:"0",y1:"0",x2:"0",y2:"1"},defs);
+    E("stop",{offset:"0%","stop-color":"#170F08"},sky);
+    E("stop",{offset:"52%","stop-color":"#2A1A0C"},sky);
+    E("stop",{offset:"100%","stop-color":"#140D08"},sky);
+
+    var end = E("linearGradient",{id:"gr-end",x1:"0",y1:"0",x2:"0",y2:"1"},defs);
+    E("stop",{offset:"0%","stop-color":"#FFE7BC"},end);
+    E("stop",{offset:"70%","stop-color":"#F6B972"},end);
+    E("stop",{offset:"100%","stop-color":"#E08C4A"},end);
+
+    var shopGlow = E("linearGradient",{id:"gr-shop",x1:"0",y1:"0",x2:"0",y2:"1"},defs);
+    E("stop",{offset:"0%","stop-color":"#FFCB80","stop-opacity":".62"},shopGlow);
+    E("stop",{offset:"100%","stop-color":"#7A3618","stop-opacity":".30"},shopGlow);
+
+    var shaft = E("linearGradient",{id:"gr-shaft",x1:"0",y1:"0",x2:"0",y2:"1"},defs);
+    E("stop",{offset:"0%","stop-color":"#FFD79B","stop-opacity":".20"},shaft);
+    E("stop",{offset:"70%","stop-color":"#FFD79B","stop-opacity":".05"},shaft);
+    E("stop",{offset:"100%","stop-color":"#FFD79B","stop-opacity":"0"},shaft);
+
+    var fl = E("filter",{id:"sceneGlow",x:"-80%",y:"-80%",width:"260%",height:"260%"},defs);
+    E("feGaussianBlur",{stdDeviation:"9",result:"b"},fl);
+    var mg = E("feMerge",{},fl);
+    E("feMergeNode",{in:"b"},mg); E("feMergeNode",{in:"SourceGraphic"},mg);
+
+    E("rect",{width:1400,height:620,fill:"url(#gr-sky)"},svg);
+
+    var VPX = 700, VPY = 386;
+    var S = [1, 0.70, 0.48, 0.32, 0.22];
+    var edgeX = S.map(function(s){ return VPX - VPX*s; });
+    var topY  = S.map(function(s){ return VPY - 368*s; });
+    var botY  = S.map(function(s){ return VPY + 240*s; });
+
+    /* ---- the far end: the lane opens onto a street in full sun ---- */
+    E("ellipse",{cx:VPX,cy:VPY-10,rx:104,ry:86,fill:"#F6B972",opacity:.22,filter:"url(#sceneGlow)"},svg);
+    E("path",{d:"M"+(VPX-62)+" "+(VPY+44)+" V"+(VPY-44)+" a62 62 0 0 1 124 0 V"+(VPY+44)+" z",
+      fill:"url(#gr-end)"},svg);
+    /* someone standing in the light at the end of the lane */
+    E("path",{d:"M"+(VPX+16)+" "+(VPY+44)+" q9 -46 18 0 z",fill:"#7A4526",opacity:.55},svg);
+    E("circle",{cx:VPX+25,cy:VPY-4,r:5,fill:"#7A4526",opacity:.55},svg);
+
+    /* ---- floor ---- */
+    var floor = E("g",{},svg);
+    poly([[0,620],[1400,620],[1400-edgeX[4],botY[4]],[edgeX[4],botY[4]]],{fill:"#2C1E15"}, floor);
+    for(var i=1;i<5;i++){
+      poly([[edgeX[i-1],botY[i-1]],[1400-edgeX[i-1],botY[i-1]],[1400-edgeX[i],botY[i]],[edgeX[i],botY[i]]],
+        {fill: i%2 ? "#33231800" : "#241811", opacity: i%2 ? 0 : .55}, floor);
+      E("line",{x1:edgeX[i],y1:botY[i],x2:1400-edgeX[i],y2:botY[i],
+        stroke:"#4A3424","stroke-width":1.4,opacity:.5}, floor);
+    }
+    for(var p=-6;p<=6;p++){
+      E("line",{x1:VPX+p*132,y1:620,x2:VPX+p*7,y2:botY[4],stroke:"#46311F","stroke-width":1.3,opacity:.45},floor);
+    }
+    E("ellipse",{cx:VPX-150,cy:600,rx:260,ry:70,fill:"#FFC978",opacity:.05,filter:"url(#sceneGlow)"}, floor);
+    E("ellipse",{cx:VPX+230,cy:560,rx:210,ry:56,fill:"#FFC978",opacity:.045,filter:"url(#sceneGlow)"}, floor);
+
+    /* the sun that gets in at the open end, spilling up the lane */
+    poly([[VPX-70,botY[4]],[VPX+70,botY[4]],[VPX+300,620],[VPX-300,620]],
+      {fill:"#FFD79B",opacity:.07}, floor);
+
+    /* ---- ceiling: beams, and light through the slats ---- */
+    var roof = E("g",{},svg);
+    poly([[0,0],[1400,0],[1400-edgeX[4],topY[4]],[edgeX[4],topY[4]]],{fill:"#160E09"}, roof);
+    for(var k=0;k<4;k++){
+      poly([[edgeX[k],topY[k]],[1400-edgeX[k],topY[k]],[1400-edgeX[k],topY[k]+16*S[k]],[edgeX[k],topY[k]+16*S[k]]],
+        {fill:"#241810"}, roof);
+      poly([[edgeX[k],topY[k]+16*S[k]],[1400-edgeX[k],topY[k]+16*S[k]],[1400-edgeX[k+1],topY[k+1]],[edgeX[k+1],topY[k+1]]],
+        {fill:"#FFD79B",opacity:.022}, roof);
+      /* the rafters themselves */
+      for(var rr=-5; rr<=5; rr++){
+        E("line",{x1:VPX+rr*118*S[k],y1:topY[k]+16*S[k],x2:VPX+rr*118*S[k+1],y2:topY[k+1],
+          stroke:"#0F0A06","stroke-width":2*S[k],opacity:.5}, roof);
+      }
+    }
+
+    /* ---- narrow shafts of light coming through the roof ---- */
+    var shafts = E("g",{},svg);
+    [-2.1,-1.1,0.2,1.2,2.2].forEach(function(o){
+      poly([[VPX+o*96, topY[1]],[VPX+o*96+26, topY[1]],
+            [VPX+o*300+96, 620],[VPX+o*300, 620]],
+        {fill:"url(#gr-shaft)"}, shafts);
+    });
+
+    /* ---- the two walls of shopfronts ---- */
+    var SHOPHUE = ["#FFC069","#FFD79B","#F3A15B","#FFC069"];
+    var SACK = ["#C98A2E","#A83E2A","#6E8A3C","#D8A54B"];
+
+    function wall(side){
+      var g = E("g",{},svg);
+      function X(v){ return side < 0 ? v : 1400 - v; }
+      for(var k=0;k<4;k++){
+        var x0 = edgeX[k], x1 = edgeX[k+1];
+        var t0 = topY[k], t1 = topY[k+1], b0 = botY[k], b1 = botY[k+1];
+        var seed = seeded(k*13 + (side<0?3:91));
+
+        poly([[X(x0),t0],[X(x1),t1],[X(x1),b1],[X(x0),b0]],
+          {fill: k===0 ? "#2A1E15" : k===1 ? "#231911" : "#1B130D"}, g);
+        /* the top of the facade, above the awning */
+        poly([[X(x0),t0],[X(x1),t1],[X(x1),lerp(t1,b1,.16)],[X(x0),lerp(t0,b0,.16)]],
+          {fill:"#120C08",opacity:.55}, g);
+
+        var ox0 = lerp(x0,x1,.08), ox1 = lerp(x0,x1,.94);
+        var oy0 = lerp(t0,b0,.32), oy1 = lerp(t0,b0,.99);
+        var oy2 = lerp(t1,b1,.32), oy3 = lerp(t1,b1,.99);
+
+        /* the lit inside of the shop */
+        poly([[X(ox0),oy0],[X(ox1),oy2],[X(ox1),oy3],[X(ox0),oy1]],{fill:"url(#gr-shop)"}, g);
+        E("ellipse",{cx:X(lerp(ox0,ox1,.5)),cy:lerp(oy0,oy2,.5)+18*S[k],
+          rx:(ox1-ox0)*.36, ry:(oy1-oy0)*.3, fill:SHOPHUE[k], opacity:.22, filter:"url(#sceneGlow)"}, g);
+
+        /* shelves and stock at the back */
+        for(var sh=1; sh<=3; sh++){
+          var sy0 = lerp(oy0,oy1,sh*.22), sy1 = lerp(oy2,oy3,sh*.22);
+          E("line",{x1:X(ox0),y1:sy0,x2:X(ox1),y2:sy1,stroke:"#4A2C16","stroke-width":2*S[k],opacity:.6}, g);
+        }
+        /* the shopkeeper */
+        var kx = lerp(ox0,ox1,.66), ky = lerp(oy1,oy3,.66), kh = 132*S[k];
+        E("path",{d:"M"+(X(kx)-kh*0.16)+" "+ky+" q"+(kh*0.16)+" "+(-kh*0.80)+" "+(kh*0.32)+" 0 z",
+          fill:"#2A1409",opacity:.85}, g);
+        E("circle",{cx:X(kx),cy:ky-kh*0.78,r:kh*0.09,fill:"#2A1409",opacity:.85}, g);
+
+        /* goods hanging in the opening */
+        for(var h=0; h<4; h++){
+          var u = .12 + h*.19;
+          var hx = lerp(ox0, ox1, u), hy = lerp(oy0, oy2, u);
+          var hh = (lerp(oy1,oy3,u) - hy) * (0.28 + seed()*0.26);
+          var hw = 20*S[k] + 5;
+          E("rect",{x:X(hx)-(side<0?0:hw), y:hy+5*S[k], width:hw, height:hh, rx:3,
+            fill: h%2 ? C.cloth : "#7C4A22", opacity:.9}, g);
+          if(h%2) E("rect",{x:X(hx)-(side<0?0:hw), y:hy+5*S[k], width:hw, height:hh*.26, rx:2,
+            fill:"#C6B49A", opacity:.5}, g);
+        }
+
+        /* the lamp over the counter */
+        var lx = lerp(ox0, ox1, .34), ly = lerp(oy0, oy2, .34);
+        E("line",{x1:X(lx),y1:ly-6*S[k],x2:X(lx),y2:ly+14*S[k],stroke:"#5A4634","stroke-width":1.4*S[k]}, g);
+        E("circle",{cx:X(lx), cy:ly + 18*S[k], r:5*S[k]+2.5, fill:C.lamp}, g);
+        E("circle",{cx:X(lx), cy:ly + 18*S[k], r:18*S[k]+7, fill:C.lamp, opacity:.22, filter:"url(#sceneGlow)"}, g);
+        /* the pool of light it throws on the floor */
+        E("ellipse",{cx:X(lerp(ox0,ox1,.4)), cy:lerp(oy1,oy3,.4)+10*S[k],
+          rx:90*S[k], ry:22*S[k], fill:C.lamp, opacity:.09, filter:"url(#sceneGlow)"}, g);
+
+        /* striped awning */
+        var aw = E("g",{}, g);
+        var ay0 = lerp(t0,b0,.28), ay1 = lerp(t1,b1,.28);
+        var drop = 30*S[k];
+        for(var st=0; st<8; st++){
+          var u0 = st/8, u1 = (st+1)/8;
+          poly([[X(lerp(ox0,ox1,u0)), lerp(ay0,ay1,u0)],
+                [X(lerp(ox0,ox1,u1)), lerp(ay0,ay1,u1)],
+                [X(lerp(ox0,ox1,u1) - side*20*S[k]), lerp(ay0,ay1,u1)+drop],
+                [X(lerp(ox0,ox1,u0) - side*20*S[k]), lerp(ay0,ay1,u0)+drop]],
+            {fill: st%2 ? "#C6B49A" : "#9E4B39", opacity:.93}, aw);
+        }
+
+        /* sacks of spice and crates spilling into the lane */
+        var cg = E("g",{}, g);
+        for(var c=0;c<4;c++){
+          var cu = .12 + c*.22;
+          var cx = lerp(ox0,ox1,cu), cy = lerp(oy1,oy3,cu);
+          var cs = 30*S[k]*(0.7+seed()*0.5);
+          var px = X(cx) - side*cs*.75;
+          if(c%2){
+            E("path",{d:"M"+(px-cs*.5)+" "+cy+" q"+(cs*.5)+" "+(-cs*1.25)+" "+cs+" 0 z",
+              fill:"#6B4A2E"}, cg);
+            E("ellipse",{cx:px, cy:cy-cs*.62, rx:cs*.34, ry:cs*.16, fill:SACK[(c+k)%4], opacity:.95}, cg);
+          } else {
+            E("rect",{x:px-cs*.5, y:cy-cs*.8, width:cs, height:cs*.8, rx:3,
+              fill:"#4A3524", stroke:"#63492F","stroke-width":1}, cg);
+            E("line",{x1:px-cs*.5,y1:cy-cs*.5,x2:px+cs*.5,y2:cy-cs*.5,stroke:"#63492F","stroke-width":1}, cg);
+          }
+        }
+      }
+      return g;
+    }
+    wall(-1); wall(1);
+
+    /* ---- a string of lamps hung across the lane ---- */
+    var strings = E("g",{},svg);
+    [1,2].forEach(function(k){
+      var y = topY[k] + 40*S[k];
+      var d = "M"+edgeX[k]+" "+y+" Q"+VPX+" "+(y+46*S[k])+" "+(1400-edgeX[k])+" "+y;
+      E("path",{d:d,stroke:"#4A3B2C","stroke-width":1.4,fill:"none",opacity:.7}, strings);
+      for(var i=1;i<8;i++){
+        var t = i/8;
+        var lx = lerp(edgeX[k], 1400-edgeX[k], t);
+        var ly = y + 46*S[k]*(2*t*(1-t))*1.15;
+        E("circle",{cx:lx,cy:ly+7*S[k],r:3.4*S[k]+1.6,fill:C.lamp,opacity:.95}, strings);
+        E("circle",{cx:lx,cy:ly+7*S[k],r:12*S[k]+5,fill:C.lamp,opacity:.16,filter:"url(#sceneGlow)"}, strings);
+      }
+    });
+
+    /* ---- shoppers, rim-lit by the shop windows ---- */
+    var people = E("g",{},svg);
+    var pr = seeded(23);
+    [[0.30,0.30],[0.68,0.26],[0.42,0.46],[0.78,0.52],[0.18,0.70],[0.86,0.78],[0.34,0.92],[0.62,0.64]]
+      .forEach(function(q){
+        var s = 0.20 + q[1]*0.88;
+        var x = lerp(VPX - 600*s, VPX + 600*s, q[0]);
+        var y = VPY + 240*s;
+        var h = 158*s;
+        var pg = E("g",{}, people);
+        E("ellipse",{cx:x,cy:y+2,rx:h*.24,ry:h*.06,fill:"#000",opacity:.45}, pg);
+        /* the rim of light along one side */
+        E("path",{d:"M"+(x-h*0.20)+" "+y+" q"+(h*0.20)+" "+(-h*0.94)+" "+(h*0.40)+" 0 z",
+          fill:"#6B4526",opacity:.55,transform:"translate("+(pr()>.5?3:-3)+",0)"}, pg);
+        E("path",{d:"M"+(x-h*0.19)+" "+y+" q"+(h*0.19)+" "+(-h*0.92)+" "+(h*0.38)+" 0 z",
+          fill:"#0E0A07"}, pg);
+        E("circle",{cx:x,cy:y-h*0.86,r:h*0.10,fill:"#0E0A07"}, pg);
+      });
+
+    /* ---- the cart ---- */
+    var cartG = E("g",{},svg);
+    var cart = E("g",{},cartG);
+    drawCartFront(cart);
+
+    function place(t){
+      t = Math.min(1, Math.max(0, t));
+      var e = Math.pow(t, 1.45);
+      var s = lerp(0.20, 0.95, e);
+      var x = lerp(VPX + 8, VPX + 320, e);   /* carts keep right, clear of the headline */
+      var y = VPY + 240*s;
+      var fade = t < .06 ? t/.06 : t > .94 ? (1-t)/.06 : 1;
+      cart.setAttribute("transform","translate("+x.toFixed(1)+","+y.toFixed(1)+") scale("+s.toFixed(3)+")");
+      cart.setAttribute("opacity", fade.toFixed(2));
+    }
+
+    if(REDUCED){ place(0.68); }
+    else {
+      var T0 = performance.now() - 0.60 * 14000;   /* open with a cart already close */
+      place(0.60);
+      (function step(now){
+        var t = (((now - T0) / 14000) % 1 + 1) % 1;   /* rAF can hand back a stamp before T0 */
+        place(t);
+        requestAnimationFrame(step);
+      })(T0);
+    }
+
+    /* a soft vignette so the copy at the bottom stays readable */
+    var vig = E("radialGradient",{id:"gr-vig",cx:"50%",cy:"44%",r:"74%"},defs);
+    E("stop",{offset:"52%","stop-color":"#000","stop-opacity":"0"},vig);
+    E("stop",{offset:"100%","stop-color":"#000","stop-opacity":".58"},vig);
+    E("rect",{width:1400,height:620,fill:"url(#gr-vig)","pointer-events":"none"},svg);
+  }
+
+  /* ================================================================
+     2. THE CART, with numbers you can tap
+     ================================================================ */
+
+  var PARTS = [
+    {n:"01", x:322, y:26,  t:"Roof unit",        s:"12,000 BTU, sitting on its own inverter."},
+    {n:"02", x:120, y:70,  t:"Insulated roof",   s:"The sun lands here, not on your head."},
+    {n:"03", x:270, y:104, t:"Laminated glass",  s:"Tinted, sealed, and it stays shut."},
+    {n:"04", x:206, y:196, t:"Power doors",      s:"Open for boarding, close on their own."},
+    {n:"05", x:148, y:158, t:"Six seats",        s:"Plus the driver."},
+    {n:"06", x:246, y:247, t:"10 kWh pack",      s:"A four-and-a-half hour shift in August."},
+    {n:"07", x:392, y:272, t:"5 kW motor",       s:"Capped to 12 km/h in the lanes."},
+    {n:"08", x:464, y:232, t:"Fold-out ramp",    s:"On two carts of the twelve."}
+  ];
+
+  function buildCartArt(){
+    var svg = document.getElementById("cart-art");
+    if(!svg) return;
+    var defs = E("defs",{},svg);
+    var fl = E("filter",{id:"cartGlow",x:"-60%",y:"-60%",width:"220%",height:"220%"},defs);
+    E("feGaussianBlur",{stdDeviation:"5",result:"b"},fl);
+    var mg = E("feMerge",{},fl);
+    E("feMergeNode",{in:"b"},mg); E("feMergeNode",{in:"SourceGraphic"},mg);
+
+    E("rect",{width:1060,height:580,fill:"#130E0A"},svg);
+    /* floor line */
+    E("line",{x1:40,y1:520,x2:1020,y2:520,stroke:"#2E251C","stroke-width":2},svg);
+    E("ellipse",{cx:530,cy:520,rx:420,ry:24,fill:C.cool,opacity:.05,filter:"url(#cartGlow)"},svg);
+
+    var cart = E("g",{transform:"translate(166,38) scale(1.55)"},svg);
+    drawCartSide(cart, {});
+
+    /* pins sit in the cart's own coordinates, so they follow the drawing */
+    var pins = E("g",{transform:"translate(166,38) scale(1.55)"},svg);
+    var pinEls = [];
+    PARTS.forEach(function(p, i){
+      var g = E("g",{class:"pin", tabindex:"0", role:"button"}, pins);
+      g.setAttribute("aria-label", p.t + ". " + p.s);
+      E("circle",{cx:p.x,cy:p.y,r:11,fill:"rgba(111,211,232,.12)"}, g);
+      var ring = E("circle",{cx:p.x,cy:p.y,r:8.6,fill:"#0E0A07",stroke:C.cool,"stroke-width":1.5}, g);
+      var num = T(p.n.replace(/^0/,""), {x:p.x,y:p.y+3,"text-anchor":"middle",
+        "font-family":"IBM Plex Mono, monospace","font-size":8,fill:C.cool}, g);
+      E("circle",{cx:p.x,cy:p.y,r:16,class:"hit"}, g);
+      pinEls.push({g:g, ring:ring, num:num});
+      function pick(){ select(i); }
+      g.addEventListener("click", pick);
+      g.addEventListener("mouseenter", pick);
+      g.addEventListener("focus", pick);
+      g.addEventListener("keydown", function(ev){
+        if(ev.key === "Enter" || ev.key === " "){ ev.preventDefault(); pick(); }
+      });
+    });
+
+    var bar = document.getElementById("pinbar");
+    var btns = PARTS.map(function(p, i){
+      var b = document.createElement("button");
+      b.type = "button";
+      b.textContent = String(i+1);
+      b.setAttribute("aria-pressed", i === 0 ? "true" : "false");
+      b.setAttribute("aria-label", p.t);
+      b.addEventListener("click", function(){ select(i); });
+      bar.appendChild(b);
+      return b;
+    });
+
+    var capN = document.getElementById("cap-num"),
+        capT = document.getElementById("cap-txt"),
+        capS = document.getElementById("cap-sub");
+
+    function select(i){
+      var p = PARTS[i];
+      capN.textContent = p.n; capT.textContent = p.t; capS.textContent = p.s;
+      pinEls.forEach(function(e, j){
+        e.ring.setAttribute("stroke", j === i ? C.gold : C.cool);
+        e.ring.setAttribute("r", j === i ? 10 : 8.6);
+        e.ring.setAttribute("filter", j === i ? "url(#cartGlow)" : "");
+        e.num.setAttribute("fill", j === i ? C.gold : C.cool);
+      });
+      btns.forEach(function(b, j){ b.setAttribute("aria-pressed", j === i ? "true" : "false"); });
+    }
+    select(0);
+  }
+
+  window.ZillArt = {E:E, T:T, poly:poly, C:C, lerp:lerp, seeded:seeded, REDUCED:REDUCED,
+                    drawCartSide:drawCartSide};
+  buildLane();
+  buildCartArt();
+})();
+</script>
+
+<script>
+/* ================================================================
+   Zill — the section drawing, the close-ups, the map's scenery.
+   ================================================================ */
+(function(){
+  "use strict";
+  var A = window.ZillArt, E = A.E, T = A.T, poly = A.poly, C = A.C, seeded = A.seeded;
+  var NS = "http://www.w3.org/2000/svg";
+
+  function svgIn(parent, vb, label){
+    var s = document.createElementNS(NS, "svg");
+    s.setAttribute("viewBox", vb);
+    s.setAttribute("role", "img");
+    s.setAttribute("aria-label", label);
+    parent.appendChild(s);
+    return s;
+  }
+  function label(txt, x, y, fill, anchor, parent, size){
+    return T(txt, {x:x, y:y, "text-anchor":anchor||"start", "font-family":"IBM Plex Mono, monospace",
+      "font-size":size||12, fill:fill||C.muted}, parent);
+  }
+  function person(g, x, y, h, fill){
+    E("path",{d:"M"+(x-h*0.28)+" "+y+" q"+(h*0.28)+" "+(-h*0.84)+" "+(h*0.56)+" 0 z",fill:fill}, g);
+    E("circle",{cx:x,cy:y-h*0.74,r:h*0.17,fill:fill}, g);
+  }
+  function coldArrow(g, x, y, len){
+    E("path",{d:"M"+x+" "+y+" v"+len, stroke:C.cool,"stroke-width":2.2,fill:"none","stroke-linecap":"round"}, g);
+    E("path",{d:"M"+(x-5)+" "+(y+len-7)+" l5 7 l5 -7", stroke:C.cool,"stroke-width":2.2,fill:"none",
+      "stroke-linecap":"round","stroke-linejoin":"round"}, g);
+  }
+  function heatArrow(g, x, y, dx){
+    E("path",{d:"M"+x+" "+y+" h"+dx, stroke:C.clay,"stroke-width":2.2,fill:"none","stroke-linecap":"round"}, g);
+    E("path",{d:"M"+(x+dx-(dx>0?7:-7))+" "+(y-5)+" l"+(dx>0?7:-7)+" 5 l"+(dx>0?-7:7)+" 5",
+      stroke:C.clay,"stroke-width":2.2,fill:"none","stroke-linecap":"round","stroke-linejoin":"round"}, g);
+  }
+
+  /* ================================================================
+     CUT IN HALF — a section through the cart, seen head-on
+     ================================================================ */
+  function buildCutaway(){
+    var svg = document.getElementById("cutaway");
+    if(!svg) return;
+    E("rect",{width:1060,height:470,fill:"#130E0A"},svg);
+
+    /* the sun, and the street pressing in */
+    var sun = E("g",{},svg);
+    E("circle",{cx:118,cy:74,r:26,fill:C.clay,opacity:.85}, sun);
+    for(var r=0;r<10;r++){
+      var a = r/10*Math.PI*2;
+      E("line",{x1:118+Math.cos(a)*34,y1:74+Math.sin(a)*34,x2:118+Math.cos(a)*46,y2:74+Math.sin(a)*46,
+        stroke:C.clay,"stroke-width":2.4,opacity:.65,"stroke-linecap":"round"}, sun);
+    }
+    label("48°C on the street", 118, 142, C.clay, "middle", svg, 14);
+    heatArrow(svg, 196, 210, 90);
+    heatArrow(svg, 864, 210, -90);
+    heatArrow(svg, 196, 268, 90);
+    heatArrow(svg, 864, 268, -90);
+
+    var cx = 530;
+
+    /* the air-conditioner */
+    E("rect",{x:cx-118,y:44,width:236,height:46,rx:10,fill:"#13242A",stroke:C.cool,"stroke-width":2.4},svg);
+    for(var f=0;f<9;f++) E("line",{x1:cx-96+f*15,y1:56,x2:cx-96+f*15,y2:78,stroke:C.cool,"stroke-width":1.5,opacity:.75},svg);
+    var fan = E("g",{},svg);
+    E("circle",{cx:cx+78,cy:67,r:16,fill:"none",stroke:C.cool,"stroke-width":2}, fan);
+    var blades = E("g",{}, fan);
+    for(var b=0;b<3;b++) E("path",{d:"M"+(cx+78)+" 67 q11 -7 15 -10 q-7 14 -15 10 z",fill:C.cool,opacity:.8,
+      transform:"rotate("+(b*120)+" "+(cx+78)+" 67)"}, blades);
+    if(!A.REDUCED) E("animateTransform",{attributeName:"transform",type:"rotate",
+      from:"0 "+(cx+78)+" 67",to:"360 "+(cx+78)+" 67",dur:"2.2s",repeatCount:"indefinite"}, blades);
+
+    /* insulated roof, drawn as the sandwich it is */
+    E("rect",{x:cx-206,y:92,width:412,height:22,rx:7,fill:"#2A211B",stroke:"#5A4634","stroke-width":2},svg);
+    for(var h=0;h<26;h++) E("line",{x1:cx-196+h*15,y1:96,x2:cx-196+h*15,y2:110,stroke:C.gold,"stroke-width":1,opacity:.45},svg);
+
+    /* the cabin, cut open */
+    E("rect",{x:cx-196,y:114,width:392,height:214,rx:10,fill:"#1A130D",stroke:"#5A4634","stroke-width":2.4},svg);
+    /* glass on both sides */
+    E("rect",{x:cx-186,y:126,width:46,height:120,rx:6,fill:"rgba(111,211,232,.18)",stroke:C.cool,"stroke-width":1.6},svg);
+    E("rect",{x:cx+140,y:126,width:46,height:120,rx:6,fill:"rgba(111,211,232,.18)",stroke:C.cool,"stroke-width":1.6},svg);
+
+    /* ceiling vents and the cold falling out of them */
+    [[cx-92],[cx+92]].forEach(function(v){
+      E("rect",{x:v[0]-30,y:118,width:60,height:12,rx:4,fill:"#13242A",stroke:C.cool,"stroke-width":1.6},svg);
+      coldArrow(svg, v[0]-12, 136, 54);
+      coldArrow(svg, v[0]+12, 136, 68);
+    });
+
+    /* benches facing each other, with people on them */
+    /* the cabin is lit, so what is inside reads */
+    E("rect",{x:cx-186,y:126,width:372,height:172,rx:8,fill:"#2A1E14"},svg);
+    E("rect",{x:cx-186,y:126,width:372,height:172,rx:8,fill:"#6FD3E8",opacity:.05},svg);
+    [[cx-172, 1],[cx+92, -1]].forEach(function(s){
+      E("rect",{x:s[0],y:246,width:80,height:14,rx:5,fill:"#3A2C20",stroke:"#5A4634","stroke-width":1.6},svg);
+      E("rect",{x:s[1]>0?s[0]:s[0]+70,y:196,width:10,height:52,rx:4,fill:"#3A2C20"},svg);
+    });
+    person(svg, cx-128, 298, 104, "#120C08");
+    person(svg, cx+136, 298, 104, "#120C08");
+    person(svg, cx+96, 298, 74, "#120C08");
+
+    /* floor, and the pack inside it */
+    E("rect",{x:cx-196,y:300,width:392,height:34,rx:8,fill:"#1F1810",stroke:"#5A4634","stroke-width":2},svg);
+    E("rect",{x:cx-140,y:306,width:280,height:22,rx:5,fill:"#16211A",stroke:C.mint,"stroke-width":1.8},svg);
+    for(var p=0;p<8;p++) E("rect",{x:cx-130+p*34,y:310,width:26,height:14,rx:2,fill:C.mint,opacity:.55},svg);
+
+    /* axle and wheels */
+    E("rect",{x:cx-210,y:344,width:420,height:10,rx:5,fill:"#3A2C20"},svg);
+    [cx-230, cx+230].forEach(function(wx){
+      E("ellipse",{cx:wx,cy:372,rx:30,ry:44,fill:"#0E0A07",stroke:"#4A3B2C","stroke-width":5},svg);
+      E("ellipse",{cx:wx,cy:372,rx:11,ry:17,fill:"#2A211B",stroke:"#6A5743","stroke-width":2},svg);
+    });
+    E("line",{x1:60,y1:418,x2:1000,y2:418,stroke:"#2E251C","stroke-width":2},svg);
+
+    /* the one number that matters, in the middle of the cabin */
+    var badge = E("g",{},svg);
+    E("rect",{x:cx-44,y:158,width:88,height:34,rx:17,fill:"rgba(111,211,232,.12)",stroke:C.cool,"stroke-width":1.6}, badge);
+    T("22°C",{x:cx,y:181,"text-anchor":"middle","font-family":"Bricolage Grotesque, sans-serif",
+      "font-size":20,"font-weight":700,fill:C.cool}, badge);
+
+    /* labels */
+    var L = [
+      ["12,000 BTU roof unit", cx+124, 52,  cx+228, 42,  C.cool, "start"],
+      ["insulated roof",       cx+208, 104, cx+250, 114, C.muted,"start"],
+      ["hard doors",           cx-190, 210, cx-278, 224, C.muted,"end"],
+      ["10 kWh pack",          cx+144, 318, cx+236, 330, C.mint, "start"],
+      ["sealed cabin, 22°C",   cx-186, 150, cx-278, 166, C.cool, "end"]
+    ];
+    L.forEach(function(l){
+      E("line",{x1:l[1],y1:l[2],x2:l[3],y2:l[4],stroke:l[5],"stroke-width":.9,opacity:.7},svg);
+      label(l[0], l[3] + (l[6]==="start" ? 8 : -8), l[4]+4, l[5], l[6], svg, 12.5);
+    });
+  }
+
+  /* ================================================================
+     CLOSE UP — six drawn panels
+     ================================================================ */
+
+  var SHOTS = [
+    {
+      t:"On the roof", d:"12,000 BTU, over its own inverter.", ar:"وحدة التكييف على السطح",
+      alt:"Close view of the roof-mounted air-conditioner under the sun, its fan turning and cold air falling into the cabin below",
+      draw:function(s){
+        E("rect",{width:400,height:260,fill:"#150F0A"},s);
+        var sun = E("g",{},s);
+        E("circle",{cx:58,cy:46,r:20,fill:C.clay,opacity:.9}, sun);
+        for(var r=0;r<9;r++){ var a=r/9*Math.PI*2;
+          E("line",{x1:58+Math.cos(a)*26,y1:46+Math.sin(a)*26,x2:58+Math.cos(a)*36,y2:46+Math.sin(a)*36,
+            stroke:C.clay,"stroke-width":2,opacity:.6,"stroke-linecap":"round"}, sun); }
+        E("rect",{x:96,y:78,width:250,height:74,rx:14,fill:"#13242A",stroke:C.cool,"stroke-width":2.6},s);
+        for(var f=0;f<10;f++) E("line",{x1:116+f*14,y1:96,x2:116+f*14,y2:134,stroke:C.cool,"stroke-width":1.6,opacity:.7},s);
+        var fan = E("g",{},s);
+        E("circle",{cx:300,cy:115,r:22,fill:"none",stroke:C.cool,"stroke-width":2.2}, fan);
+        var bl = E("g",{},fan);
+        for(var b=0;b<3;b++) E("path",{d:"M300 115 q15 -9 20 -13 q-9 19 -20 13 z",fill:C.cool,opacity:.85,
+          transform:"rotate("+(b*120)+" 300 115)"}, bl);
+        if(!A.REDUCED) E("animateTransform",{attributeName:"transform",type:"rotate",from:"0 300 115",
+          to:"360 300 115",dur:"2s",repeatCount:"indefinite"}, bl);
+        E("rect",{x:60,y:152,width:300,height:18,rx:7,fill:"#2A211B",stroke:"#5A4634","stroke-width":2},s);
+        for(var h=0;h<19;h++) E("line",{x1:70+h*16,y1:155,x2:70+h*16,y2:167,stroke:C.gold,"stroke-width":1,opacity:.4},s);
+        E("rect",{x:60,y:170,width:300,height:70,rx:6,fill:"#1A130D",stroke:"#46372A","stroke-width":1.6},s);
+        [130,200,270].forEach(function(x){ coldArrow(s, x, 178, 46); });
+        label("48°", 58, 92, C.clay, "middle", s, 13);
+        label("22°", 348, 214, C.cool, "middle", s, 13);
+      }
+    },
+    {
+      t:"Inside", d:"Six seats, doors shut, 22 °C.", ar:"من الداخل",
+      alt:"The cabin interior: a family on the bench, ceiling vents blowing cold air, the lit souq passing outside the tinted window",
+      draw:function(s){
+        E("rect",{width:400,height:260,fill:"#150F0A"},s);
+        E("rect",{x:20,y:18,width:360,height:224,rx:12,fill:"#2A1E14",stroke:"#5A4634","stroke-width":2},s);
+        E("rect",{x:20,y:18,width:360,height:224,rx:12,fill:"#6FD3E8",opacity:.05},s);
+        /* window onto the souq */
+        E("rect",{x:38,y:40,width:150,height:96,rx:8,fill:"#241810",stroke:C.cool,"stroke-width":1.8},s);
+        var sr = seeded(5);
+        for(var i=0;i<16;i++){
+          E("circle",{cx:46+sr()*134, cy:52+sr()*74, r:1.6+sr()*2.6, fill:C.lamp, opacity:.25+sr()*.5},s);
+        }
+        E("rect",{x:38,y:40,width:150,height:96,rx:8,fill:"rgba(111,211,232,.14)"},s);
+        /* vents + cold */
+        E("rect",{x:214,y:34,width:140,height:14,rx:5,fill:"#13242A",stroke:C.cool,"stroke-width":1.6},s);
+        [244,284,324].forEach(function(x){ coldArrow(s, x, 54, 40); });
+        /* bench + family */
+        E("rect",{x:206,y:182,width:158,height:18,rx:6,fill:"#2A211B",stroke:"#46372A","stroke-width":1.6},s);
+        E("rect",{x:206,y:128,width:12,height:56,rx:4,fill:"#2A211B"},s);
+        person(s, 250, 190, 96, "#120C08");
+        person(s, 306, 190, 96, "#120C08");
+        person(s, 344, 190, 66, "#120C08");
+        /* the badge */
+        E("rect",{x:44,y:168,width:96,height:40,rx:20,fill:"rgba(111,211,232,.12)",stroke:C.cool,"stroke-width":1.6},s);
+        T("22°C",{x:92,y:195,"text-anchor":"middle","font-family":"Bricolage Grotesque, sans-serif",
+          "font-size":22,"font-weight":700,fill:C.cool},s);
+      }
+    },
+    {
+      t:"Under the bench", d:"10 kWh. A shift and a half.", ar:"البطارية تحت المقعد",
+      alt:"The lithium pack under the bench seat, drawn as eight cells with a state-of-charge bar beside it",
+      draw:function(s){
+        E("rect",{width:400,height:260,fill:"#150F0A"},s);
+        E("rect",{x:30,y:40,width:340,height:46,rx:8,fill:"#2A211B",stroke:"#46372A","stroke-width":1.8},s);
+        label("bench", 200, 68, C.muted, "middle", s, 12);
+        E("rect",{x:44,y:104,width:312,height:74,rx:10,fill:"#16211A",stroke:C.mint,"stroke-width":2.4},s);
+        for(var p=0;p<8;p++){
+          E("rect",{x:56+p*38,y:116,width:28,height:50,rx:4,fill:C.mint,opacity: p<6 ? .62 : .18},s);
+        }
+        E("rect",{x:44,y:196,width:312,height:12,rx:6,fill:"#2E251C"},s);
+        E("rect",{x:44,y:196,width:230,height:12,rx:6,fill:C.mint},s);
+        label("74%", 44, 228, C.mint, "start", s, 13);
+        label("4.5 h in August", 356, 228, C.muted, "end", s, 13);
+        label("48 V · 210 Ah · LFP", 356, 96, C.muted, "end", s, 12);
+      }
+    },
+    {
+      t:"The ramp", d:"Two carts carry one.", ar:"منحدر لكرسي متحرك",
+      alt:"The rear of a cart with its ramp folded down to the ground and a wheelchair user about to board",
+      draw:function(s){
+        E("rect",{width:400,height:260,fill:"#150F0A"},s);
+        E("line",{x1:20,y1:214,x2:380,y2:214,stroke:"#2E251C","stroke-width":2},s);
+        /* tail of the cart */
+        E("rect",{x:40,y:56,width:150,height:130,rx:10,fill:"#1A130D",stroke:"#5A4634","stroke-width":2},s);
+        E("rect",{x:56,y:72,width:118,height:62,rx:6,fill:"rgba(111,211,232,.18)",stroke:C.cool,"stroke-width":1.6},s);
+        E("rect",{x:28,y:40,width:174,height:16,rx:6,fill:"#2A211B",stroke:"#5A4634","stroke-width":1.8},s);
+        E("rect",{x:76,y:14,width:80,height:26,rx:8,fill:"#13242A",stroke:C.cool,"stroke-width":2},s);
+        E("ellipse",{cx:70,cy:196,rx:18,ry:20,fill:"#0E0A07",stroke:"#4A3B2C","stroke-width":4},s);
+        /* the ramp */
+        poly([[190,186],[300,214],[300,224],[190,196]],{fill:"#241A12",stroke:C.cool,"stroke-width":2},s);
+        /* wheelchair */
+        var w = E("g",{},s);
+        E("circle",{cx:300,cy:190,r:22,fill:"none",stroke:"#0F0B08","stroke-width":5}, w);
+        E("circle",{cx:328,cy:202,r:9,fill:"none",stroke:"#0F0B08","stroke-width":4}, w);
+        E("path",{d:"M296 168 l6 -20 l22 0",stroke:"#0F0B08","stroke-width":6,fill:"none","stroke-linecap":"round"}, w);
+        E("circle",{cx:292,cy:138,r:11,fill:"#0F0B08"}, w);
+        label("free fare", 300, 246, C.cool, "middle", s, 12);
+      }
+    },
+    {
+      t:"At the hub", d:"Cools on the plug, not on the pack.", ar:"مركز الشحن",
+      alt:"The charging hub at night: three carts under a canopy plugged into chargers, their cabins already cold",
+      draw:function(s){
+        E("rect",{width:400,height:260,fill:"#0F0B08"},s);
+        E("rect",{width:400,height:120,fill:"#160F0A"},s);
+        /* canopy */
+        poly([[16,86],[384,86],[368,104],[32,104]],{fill:"#2A211B",stroke:"#5A4634","stroke-width":1.6},s);
+        [40,200,360].forEach(function(x){ E("rect",{x:x-4,y:104,width:8,height:96,rx:3,fill:"#3A2C20"},s); });
+        [[92,C.cool],[200,C.rose||"#E88AA0"],[308,C.cool]].forEach(function(c,i){
+          var g = E("g",{transform:"translate("+c[0]+",188) scale(.42)"},s);
+          E("ellipse",{cx:0,cy:18,rx:120,ry:14,fill:"#000",opacity:.4},g);
+          E("rect",{x:-92,y:-70,width:184,height:78,rx:10,fill:"#1C150E",stroke:"#5A4634","stroke-width":3},g);
+          E("rect",{x:-76,y:-56,width:152,height:50,rx:6,fill:"rgba(111,211,232,.20)",stroke:C.cool,"stroke-width":2},g);
+          E("rect",{x:-100,y:-90,width:200,height:20,rx:8,fill:"#2A211B",stroke:"#5A4634","stroke-width":2},g);
+          E("rect",{x:-50,y:-118,width:100,height:28,rx:9,fill:"#13242A",stroke:C.cool,"stroke-width":2.2},g);
+          E("ellipse",{cx:-58,cy:12,rx:20,ry:22,fill:"#0C0806",stroke:"#463728","stroke-width":4},g);
+          E("ellipse",{cx:58,cy:12,rx:20,ry:22,fill:"#0C0806",stroke:"#463728","stroke-width":4},g);
+          /* the cable */
+          E("path",{d:"M"+(c[0]+18)+" 196 q26 22 42 2", stroke:C.gold,"stroke-width":3,fill:"none",
+            "stroke-linecap":"round"},s);
+          E("circle",{cx:c[0],cy:150,r:34,fill:C.cool,opacity:.08},s);
+        });
+        E("line",{x1:0,y1:214,x2:400,y2:214,stroke:"#241C15","stroke-width":2},s);
+        label("pre-cooling · 2.5 h at 4 kW", 200, 240, C.gold, "middle", s, 12.5);
+      }
+    },
+    {
+      t:"The shelter", d:"Shade and mist take the first ten degrees.", ar:"مظلة مرذاذة",
+      alt:"A shaded, misted waiting shelter at a stop, about ten degrees below the street, with two people waiting",
+      draw:function(s){
+        E("rect",{width:400,height:260,fill:"#150F0A"},s);
+        /* sun and heat outside the shade */
+        E("circle",{cx:344,cy:44,r:18,fill:C.clay,opacity:.85},s);
+        heatArrow(s, 300, 76, -34);
+        /* the shelter */
+        poly([[40,78],[300,78],[286,96],[54,96]],{fill:"#9E4B39"},s);
+        poly([[40,78],[300,78],[286,96],[54,96]],{fill:"none",stroke:"#C6B49A","stroke-width":1.4},s);
+        E("rect",{x:52,y:96,width:8,height:110,rx:3,fill:"#3A2C20"},s);
+        E("rect",{x:280,y:96,width:8,height:110,rx:3,fill:"#3A2C20"},s);
+        E("rect",{x:62,y:96,width:226,height:110,rx:4,fill:"#241A12"},s);
+        E("rect",{x:80,y:172,width:170,height:12,rx:5,fill:"#3A2C20",stroke:"#5A4634","stroke-width":1.4},s);
+        person(s, 118, 200, 92, "#120C08");
+        person(s, 186, 200, 84, "#120C08");
+        /* mist */
+        var mr = seeded(11);
+        for(var i=0;i<46;i++){
+          E("circle",{cx:60+mr()*220, cy:100+mr()*92, r:.8+mr()*1.8, fill:C.cool, opacity:.10+mr()*.28},s);
+        }
+        E("line",{x1:20,y1:206,x2:380,y2:206,stroke:"#241C15","stroke-width":2},s);
+        label("38° in the shade", 166, 232, C.cool, "middle", s, 13);
+        label("48° out there", 390, 92, C.clay, "end", s, 12.5);
+      }
+    }
+  ];
+
+  function buildShots(){
+    var host = document.getElementById("shots");
+    if(!host) return;
+    SHOTS.forEach(function(sh){
+      var fig = document.createElement("figure");
+      fig.className = "shot";
+      var s = svgIn(fig, "0 0 400 260", sh.alt);
+      sh.draw(s);
+      var cap = document.createElement("figcaption");
+      cap.innerHTML = '<div class="t"></div><div class="d"></div>';
+      cap.querySelector(".t").textContent = sh.t;
+      var d = cap.querySelector(".d");
+      d.textContent = sh.d;
+      var ar = document.createElement("span");
+      ar.textContent = sh.ar;
+      d.appendChild(ar);
+      fig.appendChild(cap);
+      host.appendChild(fig);
+    });
+  }
+
+  /* ================================================================
+     HOW IT RUNS — six tiles, a picture and a handful of words each
+     ================================================================ */
+
+  var FACTS = [
+    {b:"08:00 – 13:00, 16:00 – 23:00", s:"the souq's own hours", icon:function(g){
+      E("circle",{cx:15,cy:15,r:11,fill:"none",stroke:C.gold,"stroke-width":2},g);
+      E("path",{d:"M15 8 v8 l6 4",stroke:C.gold,"stroke-width":2,fill:"none","stroke-linecap":"round"},g);
+    }},
+    {b:"250 fils", s:"free over 65, under 6, or with the ramp", icon:function(g){
+      E("circle",{cx:15,cy:15,r:11,fill:"none",stroke:C.gold,"stroke-width":2},g);
+      E("path",{d:"M11 12 h8 M11 18 h8 M15 8 v14",stroke:C.gold,"stroke-width":2,"stroke-linecap":"round"},g);
+    }},
+    {b:"12 km/h", s:"walking pace where it is crowded", icon:function(g){
+      E("path",{d:"M4 20 a11 11 0 0 1 22 0",fill:"none",stroke:C.cool,"stroke-width":2},g);
+      E("path",{d:"M15 20 l7 -7",stroke:C.cool,"stroke-width":2,"stroke-linecap":"round"},g);
+    }},
+    {b:"One hub, 12 chargers", s:"overnight, plus top-ups in the lull", icon:function(g){
+      E("path",{d:"M11 6 v7 M19 6 v7",stroke:C.mint,"stroke-width":2,"stroke-linecap":"round"},g);
+      E("path",{d:"M8 13 h14 v4 a7 7 0 0 1 -14 0 z",fill:"none",stroke:C.mint,"stroke-width":2},g);
+      E("path",{d:"M15 24 v3",stroke:C.mint,"stroke-width":2,"stroke-linecap":"round"},g);
+    }},
+    {b:"2 ramp carts", s:"ramp and securement point", icon:function(g){
+      E("circle",{cx:13,cy:7,r:3,fill:C.cool},g);
+      E("path",{d:"M13 11 v7 h7",stroke:C.cool,"stroke-width":2,fill:"none","stroke-linecap":"round"},g);
+      E("circle",{cx:14,cy:21,r:7,fill:"none",stroke:C.cool,"stroke-width":2},g);
+    }},
+    {b:"Water and a first-aid kit", s:"in every cart, every shift", icon:function(g){
+      E("path",{d:"M15 4 c6 8 9 11 9 15 a9 9 0 0 1 -18 0 c0 -4 3 -7 9 -15 z",fill:"none",stroke:C.rose||"#E88AA0","stroke-width":2},g);
+    }}
+  ];
+
+  function buildFacts(){
+    var host = document.getElementById("facts");
+    if(!host) return;
+    FACTS.forEach(function(f){
+      var d = document.createElement("div");
+      d.className = "fact";
+      var s = svgIn(d, "0 0 30 30", "");
+      s.setAttribute("aria-hidden","true");
+      s.removeAttribute("role");
+      f.icon(s);
+      var t = document.createElement("div");
+      t.innerHTML = "<b></b><span></span>";
+      t.querySelector("b").textContent = f.b;
+      t.querySelector("span").textContent = f.s;
+      d.appendChild(t);
+      host.appendChild(d);
+    });
+  }
+
+  /* ================================================================
+     THE MAP'S SCENERY — awnings, palms, crowds, lanterns
+     ================================================================ */
+
+  function buildMapDecor(){
+    var canopy = document.getElementById("canopy"),
+        crowdG = document.getElementById("crowd"),
+        blocks = document.getElementById("blocks"),
+        night  = document.getElementById("nightglow");
+    if(!canopy || !window.ZillMap) return;
+    var M = window.ZillMap;   /* NODE, EDGE, STOPS, footfall */
+
+    /* striped awnings down both sides of every covered lane */
+    M.EDGE.forEach(function(e){
+      if(e[2] !== "lane") return;
+      var a = M.NODE[e[0]], b = M.NODE[e[1]];
+      var dx = b[0]-a[0], dy = b[1]-a[1], len = Math.hypot(dx,dy) || 1;
+      var nx = -dy/len, ny = dx/len;
+      [-9, 9].forEach(function(off){
+        var x1 = a[0]+nx*off, y1 = a[1]+ny*off, x2 = b[0]+nx*off, y2 = b[1]+ny*off;
+        E("line",{x1:x1,y1:y1,x2:x2,y2:y2,stroke:"#3E2E22","stroke-width":7,"stroke-linecap":"butt"}, canopy);
+        E("line",{x1:x1,y1:y1,x2:x2,y2:y2,stroke:"#9E4B39","stroke-width":7,
+          "stroke-dasharray":"7 7","stroke-linecap":"butt",opacity:.85}, canopy);
+        E("line",{x1:x1,y1:y1,x2:x2,y2:y2,stroke:"#C6B49A","stroke-width":7,
+          "stroke-dasharray":"7 7","stroke-dashoffset":"7","stroke-linecap":"butt",opacity:.5}, canopy);
+      });
+    });
+
+    /* palms and rooftop clutter on the market blocks */
+    var pr = seeded(31);
+    M.BLOCKS.forEach(function(b, i){
+      for(var k=0;k<2;k++){
+        E("rect",{x:b[0]+10+pr()*(b[2]-30), y:b[1]+8+pr()*(b[3]-22), width:10+pr()*12, height:7,
+          rx:2, fill:"#33291F"}, blocks);
+      }
+      if(i % 3 === 0){
+        var px = b[0] + b[2]*(0.2+pr()*0.6), py = b[1] + b[3]*(0.25+pr()*0.5);
+        var g = E("g",{}, blocks);
+        E("path",{d:"M"+px+" "+py+" q2 -12 0 -20",stroke:"#4A3B2C","stroke-width":3,fill:"none"}, g);
+        for(var fr=0; fr<6; fr++){
+          var a = -Math.PI/2 + (fr-2.5)*0.42;
+          E("path",{d:"M"+px+" "+(py-20)+" q"+(Math.cos(a)*13)+" "+(Math.sin(a)*13)+" "+
+            (Math.cos(a)*22)+" "+(Math.sin(a)*20), stroke:"#4F7A4A","stroke-width":2.6,fill:"none",
+            "stroke-linecap":"round",opacity:.85}, g);
+        }
+      }
+    });
+
+    /* the crowd: dots along the lanes that thicken as the evening comes */
+    var crowd = [];
+    var cr = seeded(77);
+    M.EDGE.forEach(function(e){
+      var a = M.NODE[e[0]], b = M.NODE[e[1]];
+      var n = e[2] === "lane" ? 5 : 2;
+      for(var i=0;i<n;i++){
+        var t = (i + .5 + (cr()-.5)*.6) / n;
+        var dx = b[0]-a[0], dy = b[1]-a[1], len = Math.hypot(dx,dy) || 1;
+        var off = (cr()-.5) * 12;
+        var c = E("circle",{cx:a[0]+dx*t + (-dy/len)*off, cy:a[1]+dy*t + (dx/len)*off,
+          r:1.6 + cr()*1.6, fill:"#E7C79A"}, crowdG);
+        crowd.push(c);
+      }
+    });
+
+    /* lantern glow over the stops, for after dark */
+    var glows = M.STOPS.map(function(s){
+      var p = M.NODE[s.node];
+      return E("circle",{cx:p[0],cy:p[1],r:26,fill:"#FFC978",opacity:0,filter:"url(#glow)"}, night);
+    });
+
+    window.onZillHour = function(h, footfall){
+      var dark = (h >= 18 || h <= 5) ? 1 : (h >= 16 || h <= 7) ? .5 : 0;
+      glows.forEach(function(g){ g.setAttribute("opacity", (dark * .16).toFixed(3)); });
+      var dens = 0.12 + footfall * 0.78;
+      crowd.forEach(function(c, i){
+        c.setAttribute("opacity", (i / crowd.length < footfall ? dens : 0.04).toFixed(3));
+      });
+      canopy.setAttribute("opacity", (0.55 + (1-dark) * 0.45).toFixed(2));
+    };
+    if(window.ZillMap.currentHour !== undefined){
+      window.onZillHour(window.ZillMap.currentHour, window.ZillMap.currentFootfall);
+    }
+  }
+
+  buildCutaway();
+  buildShots();
+  buildFacts();
+  buildMapDecor();
 })();
 </script>
 
