@@ -124,12 +124,6 @@ button{font:inherit;color:inherit}
 .dot.warn{background:var(--ochre)}.dot.crit{background:var(--brick)}
 .dot.live{animation:beat 1.9s ease-in-out infinite}
 @keyframes beat{0%,100%{opacity:1}50%{opacity:.35}}
-.exit{
-  background:none;border:1px solid var(--line-strong);border-radius:999px;
-  padding:.28rem .7rem;font-size:var(--f-2);font-weight:600;letter-spacing:.06em;
-  text-transform:uppercase;cursor:pointer;color:var(--brick);
-}
-.exit:hover{background:var(--brick-soft)}
 
 /* ── tabs ─────────────────────────────────────────────── */
 .tabs{
@@ -508,8 +502,6 @@ footer{border-top:1px solid var(--line);padding-block:1.5rem;color:var(--ink-dim
     <button class="pill" id="oncallPill" type="button" data-go="clinicians"
       style="cursor:pointer;background:none" title="Two doctors cover every day, twelve hours each">
       <span class="dot live"></span> <span id="oncallWho">on call</span></button>
-      <button class="exit" id="panicExit" type="button"
-      title="Leaves this site immediately for an ordinary page and erases what is stored. No confirmation. Pressing Escape three times does the same.">Leave now</button>
   </div>
 </header>
 
@@ -584,9 +576,9 @@ footer{border-top:1px solid var(--line);padding-block:1.5rem;color:var(--ink-dim
         <span class="small">This page makes no network requests at all &mdash; no fonts, no analytics,
         nothing. Your plan is held for this tab only and your ID number is never written to the device.
         <b>Two things it cannot clear for you: the address in your browser history, and anything a
-        shared device has synced.</b> On a shared device, use a private window. <b>Leave now</b>, top
-        right, erases what is stored and sends the browser to an ordinary page immediately &mdash; so
-        does pressing Escape three times.</span>
+        shared device has synced.</b> On a shared device, use a private window. <b>Press Escape three
+        times</b> and this page erases what is stored and sends the browser to an ordinary page
+        immediately, with no confirmation and nothing left on screen to explain.</span>
       </div>
       <div>
         <b>Telling us you used is not punished.</b>
@@ -3071,12 +3063,13 @@ const TALK=[
     to an employer. Only you can add a person, and only you can remove them.<br><br>
     If you are deciding whether to tell someone: one person who knows makes this measurably easier,
     and it does not have to be the person you are most afraid of. It can be a cousin, a friend, or
-    the doctor and nobody else. <b>Leave now</b>, at the top right, erases what is stored and sends
-    the browser to an ordinary page &mdash; so does pressing Escape three times.`,
+    the doctor and nobody else. And if someone walks in: <b>press Escape three times</b> and this
+    page erases what is stored and becomes an ordinary one.`,
   ar:()=>`لا أحد يُخبَر من خلال هذه الخدمة. لا خانة لأقرب الأقارب، ولا رسالة إلى البيت أو العمل.
     أنت وحدك من يضيف شخصًا، وأنت وحدك من يزيله.<br><br>وإن كنت تفكر في إخبار أحد: وجود شخص واحد
     يعرف يجعل هذا أسهل فعليًا، وليس بالضرورة الشخص الذي تخشاه أكثر. قد يكون ابن عم أو صديقًا، أو
-    الطبيب فقط. زر <b>غادر الآن</b> في الأعلى يمحو ما هو محفوظ وينقلك إلى صفحة عادية فورًا.`,
+    الطبيب فقط. وإن دخل عليك أحد: <b>اضغط Escape ثلاث مرات</b> فتمحو الصفحة ما هو محفوظ وتتحول إلى
+    صفحة عادية فورًا.`,
   chips:["Will I be arrested?","How do I tell my doctor?","I want to use"],
   chipsAr:["هل أدخل السجن؟","ماذا أقول للطبيب؟","عندي رغبة شديدة"]},
 
@@ -3336,8 +3329,8 @@ function leaveNow(){
   setTimeout(()=>{ document.documentElement.innerHTML=
     '<head><title>New tab</title></head><body style="background:#fff"></body>'; }, 200);
 }
-$("#panicExit").onclick=leaveNow;
-/* Escape three times does the same, for when the mouse is too slow */
+/* No visible button: three presses of Escape is the whole exit, and a keystroke
+   is the one version of it that nobody standing behind you can read off the screen. */
 let escN=0, escT=0;
 addEventListener("keydown",e=>{
   if(e.key!=="Escape") return;

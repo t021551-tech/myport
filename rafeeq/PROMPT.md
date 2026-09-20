@@ -477,11 +477,14 @@ them re-opens a finding.
 - **The ID number is never written to storage, in either mode.** `save()` strips
   it. The field also tells the reader not to type a real one, because there is no
   prescriber to need it.
-- **The exit button leaves.** No confirmation dialog, no farewell screen: it
-  erases storage, sets a neutral title and replaces the history entry with an
-  ordinary website, so Back does not return and whoever walked into the room sees
-  nothing. Escape three times does the same. If navigation is blocked, it goes
-  blank rather than explaining itself.
+- **The exit is a keystroke, not a button.** Three presses of Escape erase
+  storage, set a neutral title and replace the history entry with an ordinary
+  website, so Back does not return and whoever walked into the room sees nothing.
+  No confirmation dialog, no farewell screen; if navigation is blocked it goes
+  blank rather than explaining itself. There is deliberately no visible control:
+  a keystroke is the one version of this that nobody standing behind the patient
+  can read off the screen, and a red button labelled "Leave now" tells a room
+  what kind of site this is.
 - **Notifications carry no words** — title "Reminder", empty body — so a lock
   screen preview gives nothing away.
 - **Everything from a person is escaped**, including digits-only fields, so the
