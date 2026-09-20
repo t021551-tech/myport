@@ -108,6 +108,10 @@ not an illustration: it is the most characteristic object in this subject's worl
 7. **Doctors** — who is awake right now, the seven-day on-call rota, then the
    directory filtered by the chosen substances.
 8. **Doctor's view** — panel table, summary tiles, alert queue with acknowledge.
+9. **Ministry link** — the supply-side design concept, and the wall that keeps
+   the patient out of it (see below).
+10. **Talk** — the companion: a text box the patient can say anything into, at
+    any hour, before they are ready to say it to a person (see below).
 
 ## Messages
 
@@ -307,6 +311,49 @@ names.
 
 The Drug Control reporting line is deliberately not printed, with a `.tbd`
 marker, rather than shipping a number that might be wrong.
+
+## The companion (Talk)
+
+Most people rehearse this conversation for months before they have it with a
+human being. The Talk view lets them have it here first — badly, in the wrong
+words, at 4am — and it is built to be the least impressive chatbot possible,
+because every claim it could make is a claim that would be false.
+
+**What it is.** A rule-based matcher. Twelve intents, each a regular expression
+over what the patient typed and a pair of answers written in advance, English
+and Arabic; `TALK.find` returns the first match and `FALLBACK` covers the rest.
+The language is chosen by testing the input for Arabic script. Where the answer
+depends on the plan — withdrawal danger, which medication, which clinic — it
+reads `S.subs[0]`, so someone on alcohol is told about seizures and someone on
+prescription opioids is told the opposite, in the same words the plan uses.
+
+**What it says it is.** The view opens with the honest version, unprompted: an
+automated companion, not a person and not your doctor; it does not learn and it
+does not remember you between visits; it runs entirely inside this page. The
+`who` intent repeats it if asked: "A program, and a simple one… every answer
+here was written in advance by a human being and I pick between them by matching
+what you typed." The fallback says "I did not follow that, and I would rather
+say so than guess — I match words rather than understand them," rather than
+inventing an answer. Nothing here is generated, so nothing here can hallucinate
+a dose, a law, or a phone number.
+
+**The crisis path comes first.** `CRISIS_RE` is tested before any intent match,
+in both languages, and covers suicidal statements and overdose descriptions
+("not breathing", "blue lips", "can't wake"). It short-circuits into a red card
+with 2462 1770, 112, the Kuwait Center's street address, and the naloxone line —
+no chips, no conversation, no attempt to talk anyone down. A program should hand
+those words to a human being immediately, and say that it is doing so.
+
+**The conversation is not saved.** Not to a server — there is no network call in
+this view, which the test asserts — and not to this device either: it is never
+written to `save()`, so it is absent from both storages, and `leaveNow()` clears
+the transcript from the DOM before it replaces the page. Close the tab and the
+conversation is gone. That is stated in the view, because a patient who is
+frightened of being found out will not believe it otherwise.
+
+**Chips, not a menu.** Each answer offers two or three follow-ups as buttons, so
+someone who cannot type the sentence can press it instead. The first hero button
+on the door is "Talk to someone now", because for many people this is the door.
 
 ## Content rules
 

@@ -428,6 +428,37 @@ td .num{font-size:var(--f-1)}
 .bar-row{display:grid;grid-template-columns:9rem 1fr auto;gap:.5rem;align-items:center;font-size:var(--f-1)}
 .bar-row i{display:block;height:.6rem;border-radius:99px;background:var(--pine);min-width:2px}
 .bar-row .n{font-family:var(--mono);font-size:var(--f-2);color:var(--ink-dim)}
+/* the conversation: kept deliberately plain, because a chat window that
+   looks like a person is a chat window that gets mistaken for one */
+.chat{
+  display:flex;flex-direction:column;gap:.6rem;background:var(--surface);
+  border:1px solid var(--line);border-radius:var(--r);padding:1rem;
+  min-height:22rem;max-height:32rem;overflow-y:auto;
+}
+.bub{max-width:min(46ch,88%);padding:.6rem .85rem;border-radius:12px;font-size:var(--f-1);line-height:1.55}
+.bub.them{background:var(--surface-2);border:1px solid var(--line);align-self:flex-start;border-bottom-left-radius:4px}
+.bub.me{background:var(--pine-soft);color:var(--pine-ink);align-self:flex-end;border-bottom-right-radius:4px}
+.bub.crisis{background:var(--brick-soft);border:1px solid var(--brick);align-self:stretch;max-width:100%}
+.bub.crisis b{color:var(--brick)}
+.bub .ar{display:block;font-size:var(--f-1);line-height:1.9}
+.bub a{font-weight:600}
+.who-said{display:block;font-size:var(--f-2);letter-spacing:.07em;text-transform:uppercase;color:var(--ink-dim);font-weight:600;margin-bottom:.3rem}
+.chips{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.2rem}
+.chips button{
+  background:var(--surface);border:1px solid var(--line-strong);border-radius:999px;
+  padding:.3rem .7rem;font-size:var(--f-2);cursor:pointer;color:var(--ink-2);
+}
+.chips button:hover{border-color:var(--pine);color:var(--pine-ink)}
+.ask{display:flex;gap:.5rem;align-items:flex-end}
+.ask textarea{
+  flex:1;font:inherit;font-size:var(--f-1);padding:.6rem .75rem;border:1px solid var(--line-strong);
+  border-radius:10px;background:var(--surface);color:var(--ink);resize:none;min-height:2.8rem;max-height:8rem;
+}
+.ask textarea:focus-visible{border-color:var(--pine)}
+.typing{display:inline-flex;gap:.2rem;align-items:center}
+.typing i{width:.35rem;height:.35rem;border-radius:50%;background:var(--ink-dim);animation:blip 1.1s infinite}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes blip{0%,60%,100%{opacity:.25}30%{opacity:1}}
 .where{
   display:grid;gap:.35rem;justify-items:start;
   background:var(--surface);border:1px solid var(--line-strong);
@@ -483,6 +514,7 @@ footer{border-top:1px solid var(--line);padding-block:1.5rem;color:var(--ink-dim
     <button class="tab" type="button" data-go="clinicians">Doctors</button>
     <button class="tab" type="button" data-go="console">Doctor&rsquo;s view</button>
     <button class="tab" type="button" data-go="moi">MOI link</button>
+    <button class="tab" type="button" data-go="talk">Talk</button>
   </div>
 </nav>
 
@@ -505,6 +537,7 @@ footer{border-top:1px solid var(--line);padding-block:1.5rem;color:var(--ink-dim
       <div class="row">
         <button class="btn" type="button" data-go="choose">Choose the substance</button>
         <button class="btn ghost" type="button" data-go="band">See what the band watches</button>
+        <button class="btn ghost" type="button" data-go="talk">Talk to someone now</button>
         <button class="btn quiet" type="button" data-go="console">See what the doctor sees</button>
       </div>
     </div>
@@ -1193,6 +1226,33 @@ footer{border-top:1px solid var(--line);padding-block:1.5rem;color:var(--ink-dim
   </div>
 </section>
 
+<!-- ══ TALK ════════════════════════════════════════════ -->
+<section class="view" id="view-talk" hidden>
+  <div class="band" style="border-top:0">
+    <div class="stack stack-16">
+      <span class="eyebrow">Any hour</span>
+      <h2 style="font-size:var(--f3)">Say it to something that cannot be shocked.</h2>
+      <p class="lede">Most people rehearse this conversation for months before they have it with a
+        human being. You can have it here first, badly, in the wrong words, at 4am.</p>
+      <div class="note">
+        <b>What this is, exactly.</b> An automated companion, not a person and not your doctor. It
+        does not learn, it does not remember you between visits, and <b>it runs entirely inside this
+        page</b> &mdash; what you type is not sent anywhere, not to a server, not to your clinician,
+        not to us. The conversation is not even saved on this device: close the tab and it is gone.
+        It will tell you when something needs a human, and it will not pretend to be one.
+      </div>
+      <div class="chat" id="chat" aria-live="polite" aria-label="Conversation"></div>
+      <form class="ask" id="askForm">
+        <textarea id="ask" rows="1" placeholder="Type anything. Arabic or English."
+          aria-label="Write a message"></textarea>
+        <button class="btn" type="submit">Send</button>
+      </form>
+      <p class="small">If you would rather not type: the crisis numbers on the front page are real
+        and answer to a human being.</p>
+    </div>
+  </div>
+</section>
+
 <!-- ══ MOI LINK ══════════════════════════════════════════ -->
 <section class="view" id="view-moi" hidden>
   <div class="band" style="border-top:0">
@@ -1796,7 +1856,7 @@ function toggleRemember(){
 }
 
 /* ═══ 4. routing ══════════════════════════════════════════════════════ */
-const VIEWS=["door","choose","plan","band","after","abroad","clinicians","console","moi"];
+const VIEWS=["door","choose","plan","band","after","abroad","clinicians","console","moi","talk"];
 function go(v){
   VIEWS.forEach(n=>{ $("#view-"+n).hidden = n!==v; });
   $$(".tab").forEach(t=>t.setAttribute("aria-current", String(t.dataset.go===v)));
@@ -1805,6 +1865,7 @@ function go(v){
   if(v==="clinicians"){ renderDocs(); renderOncall(); }
   if(v==="console") renderConsole();
   if(v==="moi"){ renderTips(); renderMoi(); }
+  if(v==="talk") openTalk();
   window.scrollTo({top:0,behavior:"instant"});
 }
 document.addEventListener("click",e=>{
@@ -2889,12 +2950,277 @@ function renderMoi(){
   });
 }
 
+/* ═══ 10e. the companion ══════════════════════════════════════════════
+   Rule-based on purpose. An answer here is written in advance by a person
+   and can be read before it ships, which is the opposite of a generative
+   model improvising to somebody in withdrawal at 4am. It also runs with
+   no network at all, so a patient can type the worst sentence of their
+   life and have it genuinely go nowhere.
+   Order matters: the crisis test runs on every message before anything
+   else gets a chance to be clever. */
+const AR_RE=/[\u0600-\u06FF]/;
+const CRISIS_RE=/\b(kill(ing)? myself|end (my life|it all)|suicid|better off dead|want to die|hurt myself|self harm|overdos|not breathing|blue lips|can'?t wake|unconscious)\b|أقتل نفسي|أنهي حياتي|أموت|الانتحار|أؤذي نفسي|جرعة زائدة|لا يتنفس/i;
+
+const TALK=[
+ {id:"used", re:/\b(i used|used again|used last|relapse\w*|i slipped|i failed|i drank|took (some|it) again|smoked again|broke my)|تعاطيت|انتكست|فشلت|شربت/i,
+  en:()=>`That took something to type, and it changes nothing about your plan. A single use is
+    information, not a verdict, and nobody here resets you to day one for it.<br><br>
+    Two things worth doing now: tell your doctor yourself rather than letting the band tell them,
+    and &mdash; if what you use is an opioid &mdash; remember your tolerance has dropped, so the
+    dose that felt normal before can stop your breathing. Do not use alone tonight.`,
+  ar:()=>`كتابة هذا وحدها تتطلب شجاعة، وهي لا تغيّر شيئًا في خطتك. المرة الواحدة معلومة لا حكم،
+    ولا أحد هنا يعيدك إلى اليوم الأول بسببها.<br><br>أمران الآن: أخبر طبيبك بنفسك بدل أن يخبره
+    السوار، وإن كان ما تتعاطاه أفيونيًا فتذكّر أن تحمّلك انخفض، والجرعة التي كانت عادية قد توقف
+    تنفسك. لا تتعاطَ وحدك الليلة.`,
+  chips:["How do I tell my doctor?","I want to use again","What happens now?"]},
+
+ {id:"craving", re:/\b(crav\w*|urge\w*|tempt\w*|want to use|need to use|going to use|about to use|thinking about (us|it)\w*|might use|close to using|i want it|dying for|can'?t stop|cannot stop|keep using|keep drinking|keep taking)|أشتهي|رغبة|أريد أن أتعاطى|نفسي أتعاطى|ما أقدر أوقف|لا أستطيع التوقف/i,
+  en:c=>`A craving peaks for about twenty minutes and then drops, whether or not you do anything.
+    You do not have to defeat it. You have to outlast twenty minutes.<br><br>
+    Things that actually shorten it: leave the room you are in, eat something and drink water, put
+    cold water on your wrists, and message one person about anything at all. If you can, put
+    distance between yourself and money${c.sub?` &mdash; that is the usual route back to ${c.sub.name.toLowerCase()}`:""}.`,
+  ar:c=>`ذروة الرغبة تستمر نحو عشرين دقيقة ثم تهبط، فعلت شيئًا أو لم تفعل. ليس عليك أن تهزمها،
+    عليك أن تصبر عشرين دقيقة.<br><br>ما يقصّرها فعلًا: غادر الغرفة التي أنت فيها، كُل واشرب ماءً،
+    ضع ماءً باردًا على معصميك، وراسل شخصًا واحدًا في أي موضوع. وإن استطعت، ابتعد عن المال${c.sub?` فهو الطريق المعتاد للعودة`:""}.`,
+  chips:["I can't sleep","I used","What does the band see?"]},
+
+ {id:"sleep", re:/\b(can'?t sleep|cannot sleep|insomni\w*|awake all night|no sleep|not sleep\w*|haven'?t slept|sleep\w* badly)|لا أنام|أرق|لم أنم/i,
+  en:c=>`Sleep is usually the last thing to come back, and it is the most common reason people walk
+    away from a plan that was working. It is not a sign of failure&nbsp;&mdash; it is the withdrawal
+    doing its work.<br><br>
+    ${c.sub && /cannabis|nicotine/.test(c.sub.id)
+      ? "For what you are stopping, nights three to six are the worst of it and then it turns."
+      : "Ask your doctor to treat the sleep directly rather than waiting it out; short-term help exists and does not have to be another dependence."}
+    Tonight: no screens in the dark, no caffeine after midday, and get up rather than lie there
+    after twenty minutes awake. Whatever you are thinking at 4am, decide it at 10am.`,
+  ar:c=>`النوم عادةً آخر ما يعود، وهو أكثر سبب يدفع الناس لترك خطة كانت تنجح. ليس علامة فشل، بل
+    الانسحاب يأخذ مجراه.<br><br>اطلب من طبيبك علاج النوم مباشرة بدل انتظاره؛ هناك مساعدة قصيرة
+    الأمد لا تتحول إلى إدمان جديد. الليلة: لا شاشات في العتمة، لا كافيين بعد الظهر، وإن مرّت عشرون
+    دقيقة دون نوم فانهض بدل البقاء مستلقيًا. أيًّا كان ما تفكر فيه الآن، أجّل قراره إلى الصباح.`,
+  chips:["Is withdrawal dangerous?","I have a craving","How do I tell my doctor?"]},
+
+ {id:"withdrawal", re:/\b(withdraw\w*|detox\w*|shak\w*|sweat\w*|symptom\w*|cold turkey|quit\w* (cold|suddenly)|stop taking|dangerous to stop|safe to stop)|انسحاب|أعراض|ارتجاف|أرتجف|توقف فجأة/i,
+  en:c=>{
+    const s=c.sub;
+    if(s && s.risk==="stop") return `<b>Stop and read this first.</b> For ${s.name.toLowerCase()},
+      stopping suddenly is the dangerous part, not continuing. ${s.danger||""}<br><br>
+      Do not dry out alone and do not let anyone cut your dose quickly. This needs a doctor before
+      you reduce anything &mdash; the Kuwait Center for Mental Health answers on
+      <a href="tel:+96524621770">2462 1770</a>, and it is free.`;
+    return `Withdrawal from ${s?s.name.toLowerCase():"most of what people take"} is unpleasant and
+      not dangerous, which is a real distinction even though it does not feel like one at 3am.
+      ${s&&s.timeline?("Roughly: "+s.timeline.slice(0,3).join("; ")+"."):""}<br><br>
+      The parts that can be treated &mdash; sleep, nausea, pain, agitation &mdash; are worth asking
+      for rather than enduring. Enduring is not the treatment.`;
+  },
+  ar:c=>{
+    const s=c.sub;
+    if(s && s.risk==="stop") return `<b>توقف واقرأ هذا أولًا.</b> بالنسبة لما تتعاطاه، التوقف
+      المفاجئ هو الخطر وليس الاستمرار. لا تتوقف وحدك ولا تدع أحدًا يخفّض جرعتك بسرعة. هذا يحتاج
+      طبيبًا قبل أي تخفيض &mdash; مركز الكويت للصحة النفسية يجيب على
+      <a href="tel:+96524621770">2462 1770</a>، والعلاج مجاني.`;
+    return `الانسحاب مزعج وليس خطِرًا في معظم الحالات، وهذا فرق حقيقي وإن لم يبدُ كذلك الآن.
+      الأجزاء القابلة للعلاج &mdash; النوم والغثيان والألم والتوتر &mdash; اطلب علاجها بدل تحمّلها.
+      التحمّل ليس علاجًا.`;
+  },
+  chips:["Is it dangerous to stop?","I can't sleep","How do I tell my doctor?"]},
+
+ {id:"legal", re:/\b(arrest\w*|police|jail\w*|prison|the law|legal|illegal|charge[sd]?\b|criminal|deport\w*|caught)|الشرطة|السجن|القانون|أُعتقل|ترحيل|سجل جنائي/i,
+  en:()=>`This is the fear that keeps most people away, so here is the part that is rarely said out
+    loud: Kuwait's 2025 drug law is built the other way round. A person who presents themselves for
+    treatment <b>before</b> any case is opened has no case filed against them.<br><br>
+    The catch is timing. Having traces of a drug in your body is itself an offence under the same
+    law, so that protection exists while nothing has started against you and is gone once you are
+    stopped and tested. Going first is the difference between a patient and a defendant.<br><br>
+    <span class="small">That is a plain-language summary, not legal advice &mdash; confirm it with a
+    Kuwaiti lawyer or with the centre itself.</span>`,
+  ar:()=>`هذا هو الخوف الذي يُبعد معظم الناس، وإليك ما لا يُقال كثيرًا: قانون المخدرات الكويتي
+    لعام ٢٠٢٥ مبني على العكس. من يتقدّم للعلاج طوعًا <b>قبل</b> أن تُرفع عليه دعوى، لا تُرفع عليه
+    دعوى.<br><br>لكن العبرة بالتوقيت: وجود أثر المخدر في الجسم جريمة بحد ذاته في القانون نفسه، فالحماية
+    قائمة ما لم يبدأ شيء ضدك، وتزول لحظة إيقافك وفحصك. التقدّم أولًا هو الفرق بين مريض ومتهم.
+    <br><br><span class="small">هذا تبسيط لا استشارة قانونية &mdash; تأكد من محامٍ كويتي أو من المركز.</span>`,
+  chips:["Will my family find out?","How do I tell my doctor?","What does it cost?"]},
+
+ {id:"family", re:/\b(my (family|wife|husband|mother|father|mum|mom|dad|brother|sister|parents)|find out|tell them|they'?ll know|shame\w*|disgrace)|أهلي|عائلتي|زوجتي|زوجي|أمي|أبي|يعرفون|الفضيحة|العار/i,
+  en:()=>`Nobody is told by this service. There is no next-of-kin field, no letter home, no message
+    to an employer. Only you can add a person, and only you can remove them.<br><br>
+    If you are deciding whether to tell someone: one person who knows makes this measurably easier,
+    and it does not have to be the person you are most afraid of. It can be a cousin, a friend, or
+    the doctor and nobody else. <b>Leave now</b>, at the top right, erases what is stored and sends
+    the browser to an ordinary page &mdash; so does pressing Escape three times.`,
+  ar:()=>`لا أحد يُخبَر من خلال هذه الخدمة. لا خانة لأقرب الأقارب، ولا رسالة إلى البيت أو العمل.
+    أنت وحدك من يضيف شخصًا، وأنت وحدك من يزيله.<br><br>وإن كنت تفكر في إخبار أحد: وجود شخص واحد
+    يعرف يجعل هذا أسهل فعليًا، وليس بالضرورة الشخص الذي تخشاه أكثر. قد يكون ابن عم أو صديقًا، أو
+    الطبيب فقط. زر <b>غادر الآن</b> في الأعلى يمحو ما هو محفوظ وينقلك إلى صفحة عادية فورًا.`,
+  chips:["Will I be arrested?","How do I tell my doctor?","I want to use"]},
+
+ {id:"doctor", re:/\b(tell (my|the|a) doctor|say to (my|the) doctor|appointment\w*|see a doctor|(talk|speak|speaking) to (a |an |my |the )?(real |actual )?(doctor|psychiatrist|specialist|person|human|someone|somebody)|first visit|what do i say|how do i start)|أقول للطبيب|موعد|أزور الطبيب|أول زيارة/i,
+  en:c=>`You do not need the right words, and you do not need to know the correct name for what you
+    take. A sentence that works: <i>&ldquo;I am using ${c.sub?c.sub.name.toLowerCase():"something"}
+    and I want to stop. I do not know where to start.&rdquo;</i> That is enough. They have heard it
+    before, today.<br><br>
+    Bring, if you can: roughly how much and how often, how long it has been going on, anything else
+    you take including prescriptions, and whether you have ever had a fit or hallucinations on
+    stopping &mdash; that last one changes the plan more than anything else you will say.`,
+  ar:c=>`لا تحتاج إلى الكلمات الصحيحة ولا إلى معرفة الاسم الدقيق لما تتعاطاه. جملة تكفي:
+    <i>«أنا أتعاطى، وأريد أن أتوقف، ولا أعرف من أين أبدأ.»</i> هذا كافٍ، وقد سمعوها اليوم من غيرك.
+    <br><br>أحضِر إن استطعت: الكمية التقريبية وعدد المرات، منذ متى، وما تتناوله غير ذلك بما فيه
+    الوصفات، وهل حدث لك تشنّج أو هلوسة عند التوقف سابقًا &mdash; هذا الأخير يغيّر الخطة أكثر من أي
+    شيء آخر تقوله.`,
+  chips:["What does it cost?","Will I be arrested?","Is withdrawal dangerous?"]},
+
+ {id:"band", re:/\b(band|watch|wrist|how does it know|detect\w*|track\w*|spy\w*|monitor\w*)|السوار|الساعة|كيف يعرف|يراقب|يتجسس/i,
+  en:()=>`It reads seven body signals &mdash; pulse, heart-rate variability, blood oxygen, breathing
+    rate, skin temperature, sweat and movement &mdash; and compares them against your own baseline,
+    not anyone else's. Each drug class moves that set in its own direction, so what it identifies is
+    a <i>class</i>, and how strongly the pattern matches.<br><br>
+    It is not a blood test and it never prints certainty: the match caps at 97%, because a fever
+    and a stimulant look more alike than anyone would like. It also notices when it comes off your
+    wrist, which is not an accusation &mdash; most people take it off in the shower.`,
+  ar:()=>`يقرأ سبع إشارات من جسمك &mdash; النبض وتغيّره، والأكسجين، ومعدل التنفس، وحرارة الجلد،
+    والتعرّق، والحركة &mdash; ويقارنها بخطك القاعدي أنت لا بغيرك. كل فئة من المواد تحرّك هذه
+    المجموعة باتجاه خاص، فما يحدده هو <i>الفئة</i> وقوة تطابق النمط.<br><br>ليس تحليل دم ولا يطبع
+    يقينًا أبدًا: التطابق لا يتجاوز ٩٧٪، لأن الحمّى والمنبّه يتشابهان أكثر مما نود. ويلاحظ أيضًا
+    نزعه عن معصمك، وهذا ليس اتهامًا &mdash; أكثر الناس ينزعونه في الحمّام.`,
+  chips:["Who sees my data?","Will I be arrested?","I want to use"]},
+
+ {id:"privacy", re:/\b(who sees|who can see|privat\w*|privacy|my data|records?\b|confidential\w*|anonym\w*|is it safe)|خصوصي|سري|بياناتي|من يرى/i,
+  en:()=>`Your plan lives in this tab only and disappears when you close it, unless you press the
+    pill at the top to keep it on this device. Your ID number is never written to the device at all.
+    This page makes no network requests &mdash; no fonts, no analytics, nothing &mdash; so what you
+    type here, including this conversation, is not transmitted anywhere and is not saved.<br><br>
+    Two things it cannot clear for you: your browser history, and anything a shared device has
+    already synced. On a device other people use, open this in a private window.`,
+  ar:()=>`خطتك محفوظة في هذا التبويب فقط وتختفي عند إغلاقه، إلا إن ضغطت الزر في الأعلى لإبقائها على
+    الجهاز. ورقمك المدني لا يُكتب على الجهاز إطلاقًا. هذه الصفحة لا ترسل أي طلب إلى الشبكة &mdash;
+    لا خطوط ولا تحليلات &mdash; فما تكتبه هنا، وهذه المحادثة نفسها، لا يُرسل ولا يُحفظ.<br><br>
+    أمران لا تستطيع محوهما لك: سجل المتصفح، وما زامنه جهاز مشترك من قبل. على جهاز يستخدمه غيرك،
+    افتح هذا في نافذة خاصة.`,
+  chips:["Will my family find out?","What does the band see?","What does it cost?"]},
+
+ {id:"cost", re:/\b(cost\w*|how much|money|pay\w*|price|afford\w*|expensive|free\b|insurance|charge\w*|fee\b|fees\b)|تكلفة|كم يكلف|مجاني|فلوس|أدفع/i,
+  en:()=>`Treatment at the Kuwait Center for Mental Health is free, for citizens and expatriates
+    alike. That is the government service, and addiction treatment sits on that campus.<br><br>
+    Private clinics here and abroad charge, sometimes a great deal. Nothing about paying more buys a
+    better outcome in the first weeks &mdash; what matters early is whether a doctor is supervising
+    the part that can hurt you.`,
+  ar:()=>`العلاج في مركز الكويت للصحة النفسية مجاني، للمواطنين والمقيمين على حد سواء. هذه هي الخدمة
+    الحكومية، وعلاج الإدمان في المجمّع نفسه.<br><br>العيادات الخاصة هنا وفي الخارج تتقاضى مبالغ قد
+    تكون كبيرة، ودفع المزيد لا يشتري نتيجة أفضل في الأسابيع الأولى. المهم مبكرًا أن يشرف طبيب على
+    الجزء الذي قد يؤذيك.`,
+  chips:["How do I tell my doctor?","Will I be arrested?","Is withdrawal dangerous?"]},
+
+ {id:"who", re:/\b(who are you|what are you|are you (a |an )?(real|really|human|person|people|robot|bot|doctor|nurse|ai|machine|computer)\w*|is this a (bot|robot|person|human|machine|program))\b|من أنت|ما أنت|هل أنت (إنسان|بشر|شخص|حقيقي|روبوت|طبيب|آلة)/i,
+  en:()=>`A program, and a simple one. Not a person, not a doctor, and not an artificial
+    intelligence that is working you out &mdash; every answer here was written in advance by a human
+    being and I pick between them by matching what you typed.<br><br>
+    That means I will miss things. When something matters, I will say so and point you at a person
+    who answers: <a href="tel:+96524621770">2462 1770</a> during the day, <a href="tel:112">112</a>
+    at any hour.`,
+  ar:()=>`برنامج، وبسيط. لست إنسانًا ولا طبيبًا ولا ذكاءً اصطناعيًا يحلّلك &mdash; كل إجابة هنا
+    كتبها إنسان مسبقًا، وأنا أختار بينها بمطابقة ما كتبته.<br><br>هذا يعني أنني سأفوّت أشياء. وحين
+    يكون الأمر مهمًا سأقولها وأدلّك على إنسان يجيب: <a href="tel:+96524621770">2462 1770</a> نهارًا،
+    و<a href="tel:112">112</a> في أي ساعة.`,
+  chips:["Who sees my data?","I have a craving","Will I be arrested?"]},
+
+ {id:"greet", re:/^\s*(hi|hey|hello|salam|as-?salam|good (morning|evening)|مرحبا|السلام|هلا|أهلا)\b/i,
+  en:()=>`Hello. You can say anything here &mdash; it goes nowhere and nobody reads it.<br><br>
+    If you are not sure where to start, pick one of these, or just describe the last bad night.`,
+  ar:()=>`أهلًا. تستطيع قول أي شيء هنا &mdash; لا يذهب إلى أحد ولا يقرأه أحد.<br><br>وإن لم تعرف من
+    أين تبدأ، اختر واحدة من هذه، أو صِف آخر ليلة صعبة.`,
+  chips:["I have a craving","Is withdrawal dangerous?","Will I be arrested?","Who sees my data?"]}
+];
+
+const FALLBACK={
+ en:()=>`I did not follow that, and I would rather say so than guess &mdash; I match words rather
+   than understand them.<br><br>Try one of these, or say it differently. If it is urgent, the people
+   on <a href="tel:+96524621770">2462 1770</a> are real and answer during the day;
+   <a href="tel:112">112</a> answers at any hour.`,
+ ar:()=>`لم أفهم ذلك، وأفضّل أن أقولها على أن أخمّن &mdash; فأنا أطابق الكلمات ولا أفهمها.<br><br>
+   جرّب واحدة من هذه أو قلها بصيغة أخرى. وإن كان الأمر عاجلًا، من يجيب على
+   <a href="tel:+96524621770">2462 1770</a> بشر حقيقيون نهارًا، و<a href="tel:112">112</a> في أي ساعة.`,
+ chips:["I have a craving","I can't sleep","Will I be arrested?","Who are you?"]};
+
+function crisisCard(ar){
+  return ar
+   ? `<b>قبل أي شيء آخر.</b> ما كتبته للتو يحتاج إنسانًا الآن، لا برنامجًا.<br><br>
+      اتصل بـ <a href="tel:+96524621770">2462 1770</a> &mdash; مركز الكويت للصحة النفسية، مجاني،
+      بالعربية أو الإنجليزية. وخارج ساعات النهار، أو إن توقف أحد عن التنفس أو لم يستيقظ، اتصل بـ
+      <a href="tel:112">112</a> فورًا.<br><br>
+      أو اذهب مباشرة: مركز الكويت للصحة النفسية، منطقة الصباح الصحية، شارع جمال عبد الناصر، الشويخ.
+      لا تحتاج موعدًا ولا أن تشرح نفسك أولًا.<br><br>
+      إن كان هذا تسممًا أو جرعة زائدة: أعطِ النالوكسون إن توفر، واتصل بـ 112، وابقَ معه حتى وصول
+      المساعدة. لا أحد يحتاج اسمك لينقذ حياتك.`
+   : `<b>Before anything else.</b> What you just typed needs a person, not a program.<br><br>
+      Call <a href="tel:+96524621770">2462 1770</a> &mdash; the Kuwait Center for Mental Health,
+      free, Arabic or English. Outside daytime hours, or if someone has stopped breathing or cannot
+      be woken, call <a href="tel:112">112</a> now.<br><br>
+      Or go straight there: Kuwait Center for Mental Health, Sabah Health Region, Jamal Abdul Nasser
+      Street, Shuwaikh. You do not need an appointment and you do not need to explain yourself
+      first.<br><br>
+      If this is an overdose: give naloxone if you have it, call 112, and stay until help arrives.
+      Nobody needs your name to keep you alive.`;
+}
+
+const chat=()=>$("#chat");
+function bubble(cls, who, html, chips){
+  const b=el("div","bub "+cls);
+  b.innerHTML=(who?`<span class="who-said">${who}</span>`:"")+html;
+  if(chips && chips.length){
+    const row=el("div","chips");
+    chips.forEach(t=>{ const c=el("button"); c.type="button"; c.textContent=t;
+      c.onclick=()=>handleSay(t); row.appendChild(c); });
+    b.appendChild(row);
+  }
+  chat().appendChild(b);
+  chat().scrollTop=chat().scrollHeight;
+  return b;
+}
+function handleSay(text){
+  text=String(text||"").trim();
+  if(!text) return;
+  bubble("me","", esc(text));
+  const ar=AR_RE.test(text);
+  const ctx={sub: S.subs.length? sub(S.subs[0]) : null};
+  const think=bubble("them","Rafeeq",'<span class="typing"><i></i><i></i><i></i></span>');
+  setTimeout(()=>{
+    think.remove();
+    if(CRISIS_RE.test(text)){ bubble("crisis","Rafeeq", crisisCard(ar)); return; }
+    const hit=TALK.find(t=>t.re.test(text)) || FALLBACK;
+    const body=(ar ? hit.ar : hit.en)(ctx);
+    bubble("them","Rafeeq", ar?`<span class="ar" dir="rtl" lang="ar">${body}</span>`:body,
+           hit.chips||FALLBACK.chips);
+  }, 420);
+}
+function openTalk(){
+  if(chat().childNodes.length) return;
+  bubble("them","Rafeeq",
+    `Nothing you type here is sent anywhere, saved, or shown to your doctor. Say it however it
+     comes out.<br><br>Where do you want to start?`,
+    ["I have a craving","I can't sleep","Is withdrawal dangerous?","Will I be arrested?","Who are you?"]);
+}
+$("#askForm").addEventListener("submit", e=>{
+  e.preventDefault();
+  const box=$("#ask");
+  handleSay(box.value);
+  box.value=""; box.style.height="auto"; box.focus();
+});
+$("#ask").addEventListener("keydown", e=>{
+  if(e.key==="Enter" && !e.shiftKey){ e.preventDefault(); $("#askForm").requestSubmit(); }
+});
+$("#ask").addEventListener("input", e=>{
+  e.target.style.height="auto";
+  e.target.style.height=Math.min(128, e.target.scrollHeight)+"px";
+});
+
 /* ═══ 11. wipe & leave ════════════════════════════════════════════════ */
 /* No confirmation dialog, no farewell screen, no trace on screen. A panic button
    that announces the panic is worse than none: whoever just walked into the room
    must see an ordinary page, so this leaves for one and replaces the history entry
    so Back does not come back here. */
 function leaveNow(){
+  try{ chat().textContent=""; }catch(e){}
   try{ localStorage.removeItem(KEY); localStorage.removeItem(REMEMBER); }catch(e){}
   try{ sessionStorage.removeItem(KEY); }catch(e){}
   document.title="New tab";
