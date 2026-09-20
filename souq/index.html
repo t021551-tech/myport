@@ -322,7 +322,7 @@
       <div class="stat cool"><div class="n">22<small>&deg;C</small></div><div class="l">in the cabin</div></div>
       <div class="stat hot"><div class="n" id="stat-out">48<small>&deg;C</small></div><div class="l">on the street</div></div>
       <div class="stat"><div class="n">3<small> min</small></div><div class="l">end to end</div></div>
-      <div class="stat"><div class="n">250<small> fils</small></div><div class="l">flat fare</div></div>
+      <div class="stat"><div class="n">500<small> fils</small></div><div class="l">flat fare</div></div>
     </div>
   </section>
 
@@ -1008,8 +1008,7 @@
 
   function fareFor(a, b, needRamp){
     if(needRamp) return {fils:0, note:"free — ramp cart"};
-    var outer = (a.id === "park" || b.id === "park");
-    return outer ? {fils:500, note:"KD 0.500 · outer car park"} : {fils:250, note:"KD 0.250 flat"};
+    return {fils:500, note:"KD 0.500 flat"};
   }
 
   function finishRide(cart){
@@ -2224,7 +2223,7 @@
       E("circle",{cx:15,cy:15,r:11,fill:"none",stroke:C.gold,"stroke-width":2},g);
       E("path",{d:"M15 8 v8 l6 4",stroke:C.gold,"stroke-width":2,fill:"none","stroke-linecap":"round"},g);
     }},
-    {b:"250 fils", s:"free over 65, under 6, or with the ramp", icon:function(g){
+    {b:"500 fils", s:"anywhere on the loop \u2014 free over 65, under 6, or with the ramp", icon:function(g){
       E("circle",{cx:15,cy:15,r:11,fill:"none",stroke:C.gold,"stroke-width":2},g);
       E("path",{d:"M11 12 h8 M11 18 h8 M15 8 v14",stroke:C.gold,"stroke-width":2,"stroke-linecap":"round"},g);
     }},
