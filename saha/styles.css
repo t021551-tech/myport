@@ -253,7 +253,9 @@ h2{
 }
 h2 + .ar{
   font-size:1.3rem; color:var(--brass); margin:0 0 var(--s3);
+  text-align:left;          /* an RTL phrase inside an LTR page still starts at the left margin */
 }
+body.lang-ar h2 + .ar{text-align:right}
 .band-head p{color:var(--ink-2); margin:0 0 var(--s2)}
 
 .cols{columns:2 22rem; column-gap:var(--s4)}
