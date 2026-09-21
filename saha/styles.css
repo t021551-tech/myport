@@ -1,0 +1,345 @@
+
+/* ================================================================
+   Saha — الساحة
+   The ground around the Grand Mosque of Kuwait, given over to
+   people: a souq of booths, arcaded shops, food terraces, lawns,
+   shade and a walk to the water.
+
+   Daylight world. Warm limestone page, deep stage. Every colour is
+   painted here; nothing borrows the host ground.
+   ================================================================ */
+
+:root{
+  /* ground */
+  --sand:#F6F0E4;
+  --sand-2:#EFE6D4;
+  --stone:#E4D8C0;
+  --line:#DCCEB2;
+  --line-soft:#E9DFC9;
+
+  /* ink */
+  --ink:#241F17;
+  --ink-2:#4B4232;
+  --ink-3:#7A6E58;
+
+  /* the mosque and the sea */
+  --dome:#C8AE7C;
+  --brass:#B0862F;
+  --brass-soft:#D8B463;
+  --sea:#1B6B7C;
+  --sea-deep:#0E4757;
+  --palm:#436E38;
+  --terra:#BB6239;
+  --shade:#2E4A52;
+
+  --display:"Fraunces",Georgia,"Times New Roman",serif;
+  --body:"IBM Plex Sans Arabic","Segoe UI",Helvetica,Arial,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+
+  --s1:.5rem; --s2:.875rem; --s3:1.25rem; --s4:2rem; --s5:3.5rem; --s6:5.5rem;
+}
+
+*{box-sizing:border-box}
+
+html{scroll-behavior:smooth}
+
+body{
+  margin:0;
+  background:var(--sand);
+  color:var(--ink);
+  font-family:var(--body);
+  font-size:16px;
+  line-height:1.72;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+
+/* the warm ground wash behind everything */
+.sky-bg{
+  position:fixed; inset:0; z-index:-1; pointer-events:none;
+  background:
+    radial-gradient(120% 70% at 50% -10%, #FFF9EC 0%, rgba(255,249,236,0) 62%),
+    radial-gradient(90% 55% at 88% 8%, rgba(216,180,99,.20) 0%, rgba(216,180,99,0) 60%),
+    radial-gradient(80% 60% at 6% 96%, rgba(27,107,124,.13) 0%, rgba(27,107,124,0) 62%),
+    var(--sand);
+}
+
+.page{max-width:1120px; margin:0 auto; padding:0 var(--s3)}
+
+/* ---------------------------------------------------------------- bilingual */
+/* Both languages sit in the markup. One of them shows. */
+body.lang-en .ar-only{display:none}
+body.lang-ar .en-only{display:none}
+body.lang-ar{direction:rtl}
+body.lang-ar .stage,
+body.lang-ar .hud,
+body.lang-ar .pad{direction:ltr}
+
+.ar,[lang="ar"]{font-family:var(--body); font-weight:500; letter-spacing:0}
+
+/* ---------------------------------------------------------------- hero */
+.hero{padding:var(--s6) 0 var(--s4)}
+
+.eyebrow{
+  font-family:var(--mono); font-size:.72rem; letter-spacing:.24em;
+  text-transform:uppercase; color:var(--ink-3); margin:0 0 var(--s3);
+}
+
+h1{
+  font-family:var(--display);
+  font-size:clamp(3.2rem,11vw,7rem);
+  font-weight:800; line-height:.92; letter-spacing:-.03em;
+  margin:0 0 var(--s2);
+}
+h1 em{
+  display:block; font-style:normal; font-family:var(--body); font-weight:500;
+  font-size:clamp(1.6rem,5vw,3rem); color:var(--brass); letter-spacing:0;
+  margin-top:.12em;
+}
+
+.lede{
+  font-size:clamp(1.12rem,2.3vw,1.42rem);
+  line-height:1.62; max-width:60ch; margin:0 0 var(--s3);
+  color:var(--ink-2);
+}
+.sub{max-width:62ch; color:var(--ink-3); margin:0 0 var(--s4)}
+
+.legend{
+  display:flex; flex-wrap:wrap; gap:var(--s1) var(--s3);
+  font-family:var(--mono); font-size:.76rem; letter-spacing:.06em;
+  color:var(--ink-3); border-top:1px solid var(--line);
+  padding-top:var(--s3); margin-bottom:var(--s3);
+}
+.legend b{color:var(--ink); font-weight:600}
+
+.langbar{display:flex; gap:var(--s1); align-items:center; margin-bottom:var(--s2)}
+.langbar span{
+  font-family:var(--mono); font-size:.7rem; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--ink-3); margin-inline-end:var(--s1);
+}
+.langbar button{
+  font:inherit; font-size:.86rem; padding:.34rem .9rem; cursor:pointer;
+  background:transparent; color:var(--ink-2);
+  border:1px solid var(--line); border-radius:999px;
+  transition:background .15s, color .15s, border-color .15s;
+}
+.langbar button:hover{border-color:var(--brass)}
+.langbar button[aria-pressed="true"]{
+  background:var(--ink); color:var(--sand); border-color:var(--ink);
+}
+
+/* ---------------------------------------------------------------- the walk */
+.walk{margin:var(--s4) 0 var(--s6)}
+
+.stage{
+  position:relative;
+  width:100%;
+  aspect-ratio:16/10;
+  min-height:380px;
+  border-radius:14px;
+  overflow:hidden;
+  background:linear-gradient(#BFD8E4,#E8DFCB);
+  border:1px solid var(--line);
+  box-shadow:0 30px 60px -32px rgba(36,31,23,.5);
+  cursor:grab;
+  touch-action:none;
+  user-select:none;
+}
+.stage.grabbing{cursor:grabbing}
+.stage canvas{display:block; width:100%; height:100%}
+
+@media (max-width:640px){ .stage{aspect-ratio:3/4; min-height:440px} }
+
+/* --- head-up display ------------------------------------------- */
+.hud{position:absolute; inset:0; pointer-events:none; color:#fff}
+
+.hud-top{
+  position:absolute; top:0; left:0; right:0;
+  display:flex; justify-content:space-between; align-items:flex-start;
+  gap:var(--s2); padding:var(--s2) var(--s3);
+  background:linear-gradient(rgba(12,26,32,.55), rgba(12,26,32,0));
+}
+
+.where{max-width:30ch}
+.where .num{
+  font-family:var(--mono); font-size:.66rem; letter-spacing:.22em;
+  text-transform:uppercase; opacity:.78; display:block;
+}
+.where .nm{
+  font-family:var(--display); font-weight:600;
+  font-size:clamp(1.05rem,2.6vw,1.5rem); line-height:1.16; display:block;
+}
+.where .nm .ar{font-family:var(--body); font-weight:500; opacity:.9;
+  display:inline-block; unicode-bidi:isolate}
+.where .txt{
+  font-size:.82rem; line-height:1.5; margin:.3rem 0 0;
+  opacity:.9; text-shadow:0 1px 3px rgba(0,0,0,.5);
+}
+
+.compass{
+  font-family:var(--mono); font-size:.68rem; letter-spacing:.14em;
+  text-align:end; opacity:.85; white-space:nowrap;
+}
+.compass b{display:block; font-size:.95rem; letter-spacing:.2em}
+
+.hud-hint{
+  position:absolute; left:50%; bottom:var(--s3); transform:translateX(-50%);
+  font-family:var(--mono); font-size:.68rem; letter-spacing:.12em;
+  background:rgba(12,26,32,.6); padding:.4rem .8rem; border-radius:999px;
+  white-space:nowrap; transition:opacity .5s;
+}
+.hud-hint.gone{opacity:0}
+
+.hud kbd{
+  font-family:var(--mono); font-size:.9em; background:rgba(255,255,255,.18);
+  border-radius:4px; padding:.05em .34em; margin:0 .1em;
+}
+
+/* --- touch controls -------------------------------------------- */
+.pad{
+  position:absolute; inset-inline-start:var(--s3); bottom:var(--s3);
+  width:116px; height:116px; border-radius:50%;
+  background:rgba(12,26,32,.28); border:1px solid rgba(255,255,255,.28);
+  display:none; touch-action:none;
+}
+.pad i{
+  position:absolute; left:50%; top:50%; width:46px; height:46px;
+  margin:-23px 0 0 -23px; border-radius:50%;
+  background:rgba(255,255,255,.72); box-shadow:0 2px 10px rgba(0,0,0,.3);
+}
+body.touch .pad{display:block}
+
+/* --- no-webgl fallback ------------------------------------------ */
+.fallback{
+  position:absolute; inset:0; display:none;
+  align-items:center; justify-content:center; text-align:center;
+  padding:var(--s4); background:var(--stone); color:var(--ink-2);
+}
+.fallback p{max-width:44ch; margin:0}
+.stage.dead .fallback{display:flex}
+.stage.dead{cursor:default}
+
+/* --- the bar of places ------------------------------------------ */
+.stage-bar{
+  display:flex; flex-wrap:wrap; gap:var(--s1);
+  margin-top:var(--s2); align-items:center;
+}
+.stage-bar .lbl{
+  font-family:var(--mono); font-size:.68rem; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--ink-3); margin-inline-end:var(--s1);
+}
+.chip{
+  font:inherit; font-size:.84rem; cursor:pointer;
+  padding:.32rem .82rem; border-radius:999px;
+  background:#fff; color:var(--ink-2);
+  border:1px solid var(--line);
+  transition:border-color .15s, color .15s, background .15s;
+}
+.chip:hover{border-color:var(--brass); color:var(--ink)}
+.chip[aria-pressed="true"]{background:var(--ink); color:var(--sand); border-color:var(--ink)}
+.chip .ar{font-size:.95em; opacity:.78; unicode-bidi:isolate}
+
+/* ---------------------------------------------------------------- sections */
+.band{padding:var(--s5) 0; border-top:1px solid var(--line)}
+
+.band-head{max-width:66ch; margin-bottom:var(--s4)}
+.mark{
+  font-family:var(--mono); font-size:.7rem; letter-spacing:.22em;
+  text-transform:uppercase; color:var(--ink-3); display:block; margin-bottom:var(--s2);
+}
+h2{
+  font-family:var(--display); font-weight:600; letter-spacing:-.02em;
+  font-size:clamp(1.9rem,5vw,3rem); line-height:1.08; margin:0 0 .3rem;
+}
+h2 + .ar{
+  font-size:1.3rem; color:var(--brass); margin:0 0 var(--s3);
+}
+.band-head p{color:var(--ink-2); margin:0 0 var(--s2)}
+
+.cols{columns:2 22rem; column-gap:var(--s4)}
+.cols p{margin:0 0 var(--s3); break-inside:avoid; color:var(--ink-2)}
+
+/* --- the programme ---------------------------------------------- */
+.prog{list-style:none; margin:0; padding:0; display:grid; gap:var(--s2)}
+@media (min-width:780px){ .prog{grid-template-columns:1fr 1fr} }
+
+.zone{
+  position:relative; background:#fff; border:1px solid var(--line);
+  border-radius:12px; padding:var(--s3) var(--s3) var(--s3) calc(var(--s3) + 2.2rem);
+  transition:border-color .15s, transform .15s;
+}
+body.lang-ar .zone{padding:var(--s3) calc(var(--s3) + 2.2rem) var(--s3) var(--s3)}
+.zone:hover{border-color:var(--brass-soft)}
+.zone .n{
+  position:absolute; inset-inline-start:var(--s3); top:calc(var(--s3) + .15rem);
+  font-family:var(--mono); font-size:.8rem; color:var(--brass); font-weight:500;
+}
+.zone h3{
+  font-family:var(--display); font-weight:600; font-size:1.18rem;
+  margin:0; line-height:1.25;
+}
+.zone h3 .ar{
+  font-family:var(--body); font-weight:500; font-size:.95rem;
+  color:var(--ink-3); unicode-bidi:isolate;
+}
+.zone p{margin:.4rem 0 var(--s2); color:var(--ink-2); font-size:.94rem}
+.zone dl{
+  display:flex; flex-wrap:wrap; gap:.2rem var(--s3); margin:0;
+  font-family:var(--mono); font-size:.72rem; letter-spacing:.04em;
+  color:var(--ink-3); border-top:1px solid var(--line-soft); padding-top:var(--s1);
+}
+.zone dl div{display:flex; gap:.4rem}
+.zone dt::after{content:""}
+.zone dd{margin:0; color:var(--ink); font-weight:500}
+.zone .go{
+  font:inherit; font-size:.78rem; font-family:var(--mono); letter-spacing:.06em;
+  background:none; border:0; padding:0; margin-top:var(--s1);
+  color:var(--brass); cursor:pointer; text-decoration:underline;
+  text-underline-offset:3px;
+}
+.zone .go:hover{color:var(--terra)}
+
+/* --- plain facts ------------------------------------------------ */
+.facts{
+  display:grid; gap:var(--s2) var(--s4); margin:var(--s3) 0 0;
+  grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  border-top:1px solid var(--line); padding-top:var(--s3);
+}
+.facts div{display:flex; flex-direction:column; gap:.1rem}
+.facts dt{
+  font-family:var(--mono); font-size:.66rem; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--ink-3);
+}
+.facts dd{margin:0; font-family:var(--display); font-size:1.3rem; font-weight:600}
+
+/* --- the honest note -------------------------------------------- */
+.note{
+  background:var(--sand-2); border:1px solid var(--line);
+  border-inline-start:3px solid var(--terra);
+  border-radius:0 10px 10px 0; padding:var(--s3);
+  font-size:.94rem; color:var(--ink-2);
+}
+body.lang-ar .note{border-radius:10px 0 0 10px}
+.note b{color:var(--ink)}
+.note p{margin:0 0 var(--s2)}
+.note p:last-child{margin:0}
+
+/* ---------------------------------------------------------------- footer */
+footer{
+  border-top:1px solid var(--line); margin-top:var(--s5);
+  padding:var(--s4) 0 var(--s6); color:var(--ink-3); font-size:.88rem;
+}
+footer a{color:var(--ink-2)}
+footer p{margin:0 0 var(--s2); max-width:64ch}
+
+a{color:var(--ink); text-decoration-color:var(--brass-soft); text-underline-offset:3px}
+a:hover{color:var(--terra)}
+
+::selection{background:var(--brass-soft); color:var(--ink)}
+
+:focus-visible{outline:2px solid var(--brass); outline-offset:3px; border-radius:4px}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *{transition:none !important}
+}

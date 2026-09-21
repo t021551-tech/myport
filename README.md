@@ -31,6 +31,18 @@ Manchester Metropolitan University.
   keeps state for the tab only unless asked otherwise, never writes the ID number to the device,
   and is marked `noindex`. `vercel.json` adds a content-security policy for the whole site and a
   stricter one for `/rafeeq/`.
+- `saha/` — **Saha** (الساحة): a design concept for the open ground around the Grand Mosque of
+  Kuwait, walked at eye level in 3D. The proposal keeps the Eid prayer court empty and puts
+  everything new on the edges: a souq of sixty-four booths under striped canvas, an arcade of
+  twenty-eight shop units behind pointed arches, nine food terraces under pergolas, a lawn, a
+  palm grove, six sunken majlis rooms under fabric sails, and a ramped promenade that finally
+  crosses Gulf Street on foot to a waterfront deck. Nine zones, each one a place you can stand
+  in: walk with `WASD` and drag to look, or press a zone and be taken there. Bilingual
+  throughout (English / العربية). One page (`saha/index.html`) plus `saha/styles.css` and
+  `saha/scene.js`. It is a **student design concept** — not affiliated with, endorsed by or
+  submitted to the Ministry of Awqaf and Islamic Affairs, Kuwait Municipality or anyone else.
+  The mosque is modelled from photographs rather than drawings, and the site dimensions are
+  paced off aerial imagery rather than a survey.
 - `notes/` — the Notebook: six running logs (places in Kuwait, a car build list, a gahwa
   log, things I'm learning, read & watched, small wins). A hub page plus one page per log,
   all sharing `notes/styles.css`. Currently a **draft** — every page carries a
@@ -77,6 +89,16 @@ patient's own baseline, capped at a 97% match because body signs are not a lab t
 band pairing uses Web Bluetooth's Heart Rate service and degrades to the demo band. The
 whole design brief, including the rules about what the site must never claim a wrist band
 can do, is in `rafeeq/PROMPT.md`.
+
+`saha/` is three files. `scene.js` holds the whole world: the nine zones are one data array at
+the top — bounds, viewpoint and both languages — and the same array drives the head-up display,
+the chips under the stage and the written programme on the page, so the walkthrough and the text
+can never drift apart. Everything is drawn from painted canvas textures and hand-placed geometry;
+nothing is fetched but the fonts and three.js. Repeated things (palms, merlons, chairs, people,
+booth frames) go through the `Inst` instancer so a site this size stays walkable on a phone, and
+the arcades are single meshes built by `archPanel()`, which cuts the pointed arches out of one
+extruded shape. Shade is painted in as ground decals rather than shadow-mapped. Collision is a
+list of rectangles in `BLOCK`, and `groundY()` is what makes the promenade ramp walkable.
 
 `dives/index.html` is one file with no build step. Colours are the `:root` tokens at the top;
 each place is one `<article class="place">`; the pearls and silt are drawn on the `#drift` canvas; the four 3D scenes are the `build*()` functions in
