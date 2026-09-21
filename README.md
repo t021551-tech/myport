@@ -31,18 +31,15 @@ Manchester Metropolitan University.
   keeps state for the tab only unless asked otherwise, never writes the ID number to the device,
   and is marked `noindex`. `vercel.json` adds a content-security policy for the whole site and a
   stricter one for `/rafeeq/`.
-- `saha/` — **Saha** (الساحة): a design concept for the open ground around the Grand Mosque of
-  Kuwait, walked at eye level in 3D. The proposal keeps the Eid prayer court empty and puts
-  everything new on the edges: a souq of sixty-four booths under striped canvas, an arcade of
-  twenty-eight shop units behind pointed arches, nine food terraces under pergolas, a lawn, a
-  palm grove, six sunken majlis rooms under fabric sails, and a ramped promenade that finally
-  crosses Gulf Street on foot to a waterfront deck. Nine zones, each one a place you can stand
-  in: walk with `WASD` and drag to look, or press a zone and be taken there. Bilingual
-  throughout (English / العربية). One page (`saha/index.html`) plus `saha/styles.css` and
-  `saha/scene.js`. It is a **student design concept** — not affiliated with, endorsed by or
-  submitted to the Ministry of Awqaf and Islamic Affairs, Kuwait Municipality or anyone else.
-  The mosque is modelled from photographs rather than drawings, and the site dimensions are
-  paced off aerial imagery rather than a survey.
+- `saha/` — **Saha** (الساحة): the open ground around the Grand Mosque of Kuwait, given over to
+  people, walked at eye level in 3D. The Eid prayer court stays empty and everything new sits on
+  the edges: a souq of sixty-four booths under striped canvas, an arcade of twenty-eight shop
+  units, nine food terraces, a lawn, a palm grove, six sunken majlis rooms and a ramped promenade
+  across Gulf Street to a waterfront deck. Nine zones, each a place you can stand in — `WASD` and
+  drag to look, or press a zone and be taken there. One short paragraph of text; the walkthrough
+  is the page. Bilingual (English / العربية). It is a **student design concept**: not affiliated
+  with, endorsed by or submitted to any authority, the mosque modelled from photographs rather
+  than drawings, and the dimensions paced off aerial imagery rather than a survey.
 - `notes/` — the Notebook: six running logs (places in Kuwait, a car build list, a gahwa
   log, things I'm learning, read & watched, small wins). A hub page plus one page per log,
   all sharing `notes/styles.css`. Currently a **draft** — every page carries a

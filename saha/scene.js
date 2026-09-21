@@ -209,6 +209,7 @@
   }
 
   function paintProgramme() {
+    if (!progEl) return;              /* the page may carry the chips only */
     var ar = lang === 'ar';
     progEl.innerHTML = byNum.map(function (z) {
       var facts = z.facts.map(function (f) {
@@ -250,7 +251,8 @@
     if (!z) return;
     goTo(z);
     if (t.classList.contains('go')) {
-      document.getElementById('walk').scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'center' });
+      var w = document.getElementById('walk');
+      if (w) w.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'center' });
     }
   });
 

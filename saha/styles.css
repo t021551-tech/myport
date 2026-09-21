@@ -78,7 +78,12 @@ body.lang-ar .pad{direction:ltr}
 .ar,[lang="ar"]{font-family:var(--body); font-weight:500; letter-spacing:0}
 
 /* ---------------------------------------------------------------- hero */
-.hero{padding:var(--s6) 0 var(--s4)}
+.hero{padding:var(--s5) 0 var(--s3)}
+
+.hero-row{
+  display:flex; flex-wrap:wrap; align-items:flex-start;
+  justify-content:space-between; gap:var(--s3); margin-bottom:var(--s3);
+}
 
 .eyebrow{
   font-family:var(--mono); font-size:.72rem; letter-spacing:.24em;
@@ -87,19 +92,19 @@ body.lang-ar .pad{direction:ltr}
 
 h1{
   font-family:var(--display);
-  font-size:clamp(3.2rem,11vw,7rem);
+  font-size:clamp(2.8rem,8vw,5rem);
   font-weight:800; line-height:.92; letter-spacing:-.03em;
   margin:0 0 var(--s2);
 }
 h1 em{
   display:block; font-style:normal; font-family:var(--body); font-weight:500;
-  font-size:clamp(1.6rem,5vw,3rem); color:var(--brass); letter-spacing:0;
-  margin-top:.12em;
+  font-size:clamp(1.4rem,4vw,2.2rem); color:var(--brass); letter-spacing:0;
+  margin-top:.1em;
 }
 
 .lede{
-  font-size:clamp(1.12rem,2.3vw,1.42rem);
-  line-height:1.62; max-width:60ch; margin:0 0 var(--s3);
+  font-size:clamp(1.02rem,1.8vw,1.22rem);
+  line-height:1.6; max-width:68ch; margin:0 0 var(--s3);
   color:var(--ink-2);
 }
 .sub{max-width:62ch; color:var(--ink-3); margin:0 0 var(--s4)}
@@ -108,11 +113,11 @@ h1 em{
   display:flex; flex-wrap:wrap; gap:var(--s1) var(--s3);
   font-family:var(--mono); font-size:.76rem; letter-spacing:.06em;
   color:var(--ink-3); border-top:1px solid var(--line);
-  padding-top:var(--s3); margin-bottom:var(--s3);
+  padding-top:var(--s3); margin:0;
 }
 .legend b{color:var(--ink); font-weight:600}
 
-.langbar{display:flex; gap:var(--s1); align-items:center; margin-bottom:var(--s2)}
+.langbar{display:flex; gap:var(--s1); align-items:center; flex-shrink:0}
 .langbar span{
   font-family:var(--mono); font-size:.7rem; letter-spacing:.18em;
   text-transform:uppercase; color:var(--ink-3); margin-inline-end:var(--s1);
@@ -129,18 +134,16 @@ h1 em{
 }
 
 /* ---------------------------------------------------------------- the walk */
-.walk{margin:var(--s4) 0 var(--s6)}
+.walk{margin:0 0 var(--s5)}
 
 .stage{
   position:relative;
   width:100%;
-  aspect-ratio:16/10;
-  min-height:380px;
-  border-radius:14px;
+  height:min(84vh,940px);
+  min-height:460px;
   overflow:hidden;
   background:linear-gradient(#BFD8E4,#E8DFCB);
-  border:1px solid var(--line);
-  box-shadow:0 30px 60px -32px rgba(36,31,23,.5);
+  border-block:1px solid var(--line);
   cursor:grab;
   touch-action:none;
   user-select:none;
@@ -148,7 +151,7 @@ h1 em{
 .stage.grabbing{cursor:grabbing}
 .stage canvas{display:block; width:100%; height:100%}
 
-@media (max-width:640px){ .stage{aspect-ratio:3/4; min-height:440px} }
+@media (max-width:640px){ .stage{height:min(80vh,720px); min-height:440px} }
 
 /* --- head-up display ------------------------------------------- */
 .hud{position:absolute; inset:0; pointer-events:none; color:#fff}
@@ -208,6 +211,8 @@ h1 em{
   background:rgba(255,255,255,.72); box-shadow:0 2px 10px rgba(0,0,0,.3);
 }
 body.touch .pad{display:block}
+/* the stick sits where the hint would be, so lift the hint clear of it */
+body.touch .hud-hint{bottom:calc(var(--s3) + 128px)}
 
 /* --- no-webgl fallback ------------------------------------------ */
 .fallback{
@@ -221,8 +226,9 @@ body.touch .pad{display:block}
 
 /* --- the bar of places ------------------------------------------ */
 .stage-bar{
+  padding-top:var(--s2);
   display:flex; flex-wrap:wrap; gap:var(--s1);
-  margin-top:var(--s2); align-items:center;
+  align-items:center;
 }
 .stage-bar .lbl{
   font-family:var(--mono); font-size:.68rem; letter-spacing:.18em;
@@ -239,98 +245,12 @@ body.touch .pad{display:block}
 .chip[aria-pressed="true"]{background:var(--ink); color:var(--sand); border-color:var(--ink)}
 .chip .ar{font-size:.95em; opacity:.78; unicode-bidi:isolate}
 
-/* ---------------------------------------------------------------- sections */
-.band{padding:var(--s5) 0; border-top:1px solid var(--line)}
-
-.band-head{max-width:66ch; margin-bottom:var(--s4)}
-.mark{
-  font-family:var(--mono); font-size:.7rem; letter-spacing:.22em;
-  text-transform:uppercase; color:var(--ink-3); display:block; margin-bottom:var(--s2);
-}
-h2{
-  font-family:var(--display); font-weight:600; letter-spacing:-.02em;
-  font-size:clamp(1.9rem,5vw,3rem); line-height:1.08; margin:0 0 .3rem;
-}
-h2 + .ar{
-  font-size:1.3rem; color:var(--brass); margin:0 0 var(--s3);
-  text-align:left;          /* an RTL phrase inside an LTR page still starts at the left margin */
-}
-body.lang-ar h2 + .ar{text-align:right}
-.band-head p{color:var(--ink-2); margin:0 0 var(--s2)}
-
-.cols{columns:2 22rem; column-gap:var(--s4)}
-.cols p{margin:0 0 var(--s3); break-inside:avoid; color:var(--ink-2)}
-
-/* --- the programme ---------------------------------------------- */
-.prog{list-style:none; margin:0; padding:0; display:grid; gap:var(--s2)}
-@media (min-width:780px){ .prog{grid-template-columns:1fr 1fr} }
-
-.zone{
-  position:relative; background:#fff; border:1px solid var(--line);
-  border-radius:12px; padding:var(--s3) var(--s3) var(--s3) calc(var(--s3) + 2.2rem);
-  transition:border-color .15s, transform .15s;
-}
-body.lang-ar .zone{padding:var(--s3) calc(var(--s3) + 2.2rem) var(--s3) var(--s3)}
-.zone:hover{border-color:var(--brass-soft)}
-.zone .n{
-  position:absolute; inset-inline-start:var(--s3); top:calc(var(--s3) + .15rem);
-  font-family:var(--mono); font-size:.8rem; color:var(--brass); font-weight:500;
-}
-.zone h3{
-  font-family:var(--display); font-weight:600; font-size:1.18rem;
-  margin:0; line-height:1.25;
-}
-.zone h3 .ar{
-  font-family:var(--body); font-weight:500; font-size:.95rem;
-  color:var(--ink-3); unicode-bidi:isolate;
-}
-.zone p{margin:.4rem 0 var(--s2); color:var(--ink-2); font-size:.94rem}
-.zone dl{
-  display:flex; flex-wrap:wrap; gap:.2rem var(--s3); margin:0;
-  font-family:var(--mono); font-size:.72rem; letter-spacing:.04em;
-  color:var(--ink-3); border-top:1px solid var(--line-soft); padding-top:var(--s1);
-}
-.zone dl div{display:flex; gap:.4rem}
-.zone dt::after{content:""}
-.zone dd{margin:0; color:var(--ink); font-weight:500}
-.zone .go{
-  font:inherit; font-size:.78rem; font-family:var(--mono); letter-spacing:.06em;
-  background:none; border:0; padding:0; margin-top:var(--s1);
-  color:var(--brass); cursor:pointer; text-decoration:underline;
-  text-underline-offset:3px;
-}
-.zone .go:hover{color:var(--terra)}
-
-/* --- plain facts ------------------------------------------------ */
-.facts{
-  display:grid; gap:var(--s2) var(--s4); margin:var(--s3) 0 0;
-  grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
-  border-top:1px solid var(--line); padding-top:var(--s3);
-}
-.facts div{display:flex; flex-direction:column; gap:.1rem}
-.facts dt{
-  font-family:var(--mono); font-size:.66rem; letter-spacing:.18em;
-  text-transform:uppercase; color:var(--ink-3);
-}
-.facts dd{margin:0; font-family:var(--display); font-size:1.3rem; font-weight:600}
-
-/* --- the honest note -------------------------------------------- */
-.note{
-  background:var(--sand-2); border:1px solid var(--line);
-  border-inline-start:3px solid var(--terra);
-  border-radius:0 10px 10px 0; padding:var(--s3);
-  font-size:.94rem; color:var(--ink-2);
-}
-body.lang-ar .note{border-radius:10px 0 0 10px}
-.note b{color:var(--ink)}
-.note p{margin:0 0 var(--s2)}
-.note p:last-child{margin:0}
-
 /* ---------------------------------------------------------------- footer */
 footer{
-  border-top:1px solid var(--line); margin-top:var(--s5);
-  padding:var(--s4) 0 var(--s6); color:var(--ink-3); font-size:.88rem;
+  border-top:1px solid var(--line);
+  padding:var(--s3) 0 var(--s5); color:var(--ink-3); font-size:.8rem; line-height:1.6;
 }
+footer .back{font-family:var(--mono); font-size:.72rem; letter-spacing:.06em}
 footer a{color:var(--ink-2)}
 footer p{margin:0 0 var(--s2); max-width:64ch}
 

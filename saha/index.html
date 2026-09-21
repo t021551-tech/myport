@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="A design concept for the open ground around the Grand Mosque of Kuwait: a souq of booths, arcaded shops, food terraces, lawns, shade and a walk to the water. Walk through it in 3D.">
+<meta name="description" content="The open ground around the Grand Mosque of Kuwait, given over to people: a souq, arcaded shops, food terraces, lawns and a walk to the sea. Walk through it in 3D.">
 <meta name="color-scheme" content="light">
 <meta property="og:title" content="Saha — الساحة">
-<meta property="og:description" content="The ground around the Grand Mosque of Kuwait, given over to people. Walk through it in 3D.">
+<meta property="og:description" content="The ground around the Grand Mosque of Kuwait, walked at eye level in 3D.">
 <meta property="og:type" content="website">
 <title>Saha — الساحة</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,200 +19,86 @@
 <div class="sky-bg" aria-hidden="true"></div>
 
 <div class="page">
-
   <header class="hero">
-    <p class="eyebrow">Kuwait City &middot; Mubarak Al-Kabeer &middot; a design concept</p>
-    <h1>Saha<em>الساحة</em></h1>
+    <div class="hero-row">
+      <div>
+        <p class="eyebrow">Kuwait City &middot; a design concept</p>
+        <h1>Saha<em>الساحة</em></h1>
+      </div>
+      <div class="langbar">
+        <button type="button" data-setlang="en" aria-pressed="true">English</button>
+        <button type="button" data-setlang="ar" aria-pressed="false" lang="ar">العربية</button>
+      </div>
+    </div>
 
     <p class="lede">
       <span class="en-only">The Grand Mosque stands on the Gulf road with car parks and bare
-        sand on three sides of it. This is a proposal for that ground: a souq of booths, an
-        arcade of small shops, food terraces, lawns deep enough to sit on, real shade, and a
-        walk that finally crosses the road to the sea.</span>
+        sand on three sides. This is that ground given over to people &mdash; a souq of booths,
+        arcaded shops, food terraces, lawns, real shade and a walk that finally crosses the road
+        to the sea. The prayer court around the mosque stays empty, because on the two Eids it
+        has to hold the overflow.</span>
       <span class="ar-only" lang="ar" dir="rtl">يقف المسجد الكبير على طريق الخليج، وحوله من ثلاث
-        جهات مواقف سيارات وأرض رملية فارغة. هذا اقتراح لتلك الأرض: سوق من الأكشاك، ورواق من
-        المحلات الصغيرة، ومصاطر للمطاعم، ومروج يمكن الجلوس عليها، وظلّ حقيقي، وممشى يعبر
-        الطريق أخيراً إلى البحر.</span>
-    </p>
-
-    <p class="sub">
-      <span class="en-only">Nothing is added inside the mosque wall. The prayer court around it
-        stays empty, because on the two Eids it has to hold the overflow. Everything new sits
-        beyond that line.</span>
-      <span class="ar-only" lang="ar" dir="rtl">لا يُضاف شيء داخل سور المسجد. تبقى ساحة الصلاة
-        المحيطة به خالية، لأنها في العيدين يجب أن تستوعب المصلين. وكل ما هو جديد يقع خلف ذلك
-        الخط.</span>
+        جهات مواقف سيارات وأرض رملية فارغة. هذه هي الأرض وقد أُعطيت للناس &mdash; سوق من الأكشاك،
+        ومحلات في رواق، ومصاطر للمطاعم، ومروج، وظلّ حقيقي، وممشى يعبر الطريق أخيراً إلى البحر.
+        وتبقى ساحة الصلاة حول المسجد خالية، لأنها في العيدين يجب أن تستوعب المصلين.</span>
     </p>
 
     <div class="legend">
       <span><b>9</b> <span class="en-only">zones</span><span class="ar-only" lang="ar">مناطق</span></span>
       <span><b>64</b> <span class="en-only">booths</span><span class="ar-only" lang="ar">كشك</span></span>
-      <span><b>28</b> <span class="en-only">shop units</span><span class="ar-only" lang="ar">محل</span></span>
+      <span><b>28</b> <span class="en-only">shops</span><span class="ar-only" lang="ar">محل</span></span>
+      <span><b>120</b> <span class="en-only">palms</span><span class="ar-only" lang="ar">نخلة</span></span>
       <span><b dir="ltr">~11 ha</b> <span class="en-only">of ground</span><span class="ar-only" lang="ar">من الأرض</span></span>
-      <span><span class="en-only">walk it in 3D &darr;</span><span class="ar-only" lang="ar">تجوّل فيها ثلاثي الأبعاد &darr;</span></span>
-    </div>
-
-    <div class="langbar">
-      <span class="en-only">Language</span><span class="ar-only" lang="ar">اللغة</span>
-      <button type="button" data-setlang="en" aria-pressed="true">English</button>
-      <button type="button" data-setlang="ar" aria-pressed="false" lang="ar">العربية</button>
     </div>
   </header>
+</div>
 
-  <!-- ===================== the walkthrough ===================== -->
-  <section class="walk" id="walk" aria-label="Walk through the proposal">
-    <div class="stage" id="stage">
-      <canvas id="view"></canvas>
+<!-- ===================== the walkthrough, full width ===================== -->
+<section class="walk" id="walk" aria-label="Walk through the proposal">
+  <div class="stage" id="stage">
+    <canvas id="view"></canvas>
 
-      <div class="hud" id="hud">
-        <div class="hud-top">
-          <div class="where">
-            <span class="num" id="whereNum">00</span>
-            <span class="nm" id="whereName">The Prayer Court</span>
-            <p class="txt" id="whereText"></p>
-          </div>
-          <div class="compass">
-            <b id="compassDir">N</b>
-            <span id="compassTo"></span>
-          </div>
+    <div class="hud" id="hud">
+      <div class="hud-top">
+        <div class="where">
+          <span class="num" id="whereNum">00</span>
+          <span class="nm" id="whereName">The Prayer Court</span>
+          <p class="txt" id="whereText"></p>
         </div>
-        <div class="hud-hint" id="hint"></div>
+        <div class="compass">
+          <b id="compassDir">N</b>
+          <span id="compassTo"></span>
+        </div>
       </div>
-
-      <div class="pad" id="pad" aria-hidden="true"><i id="padKnob"></i></div>
-
-      <div class="fallback">
-        <p>This browser can&rsquo;t draw the walkthrough. The proposal is written out in full
-          below &mdash; every zone, what it holds and how big it is.</p>
-      </div>
+      <div class="hud-hint" id="hint"></div>
     </div>
 
+    <div class="pad" id="pad" aria-hidden="true"><i id="padKnob"></i></div>
+
+    <div class="fallback">
+      <p>This browser can&rsquo;t draw the walkthrough &mdash; it needs WebGL.</p>
+    </div>
+  </div>
+
+  <div class="page">
     <div class="stage-bar" id="bar">
       <span class="lbl"><span class="en-only">Walk to</span><span class="ar-only" lang="ar">اذهب إلى</span></span>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- ===================== the argument ===================== -->
-  <section class="band" id="why">
-    <div class="band-head">
-      <span class="mark"><span class="en-only">The problem</span><span class="ar-only" lang="ar">المشكلة</span></span>
-      <h2><span class="en-only">A landmark with nothing around it</span><span class="ar-only" lang="ar">معلم بلا محيط</span></h2>
-      <p class="ar" lang="ar" dir="rtl">معلم بلا محيط</p>
-    </div>
-
-    <div class="cols">
-      <p><span class="en-only">The Grand Mosque opened in <b>1986</b>. It holds around
-        <b>10,000</b> worshippers in the main hall and several thousand more in the courtyard
-        and the women&rsquo;s hall, and on the two Eids the crowd spills out past the wall and
-        fills the paving. For those mornings the ground around it is exactly right: flat, open,
-        and big enough.</span>
-        <span class="ar-only" lang="ar" dir="rtl">افتُتح المسجد الكبير عام <b>١٩٨٦</b>، ويتسع
-        لنحو <b>١٠٬٠٠٠</b> مصلٍّ في القاعة الرئيسية، وآلاف آخرين في الصحن وقاعة النساء، وفي
-        العيدين يفيض الجمع خارج السور ويملأ البلاط. في تلك الصباحات تكون الأرض حوله مناسبة
-        تماماً: مستوية ومفتوحة وواسعة بما يكفي.</span></p>
-
-      <p><span class="en-only">The other three hundred and sixty-three days, it is a car park.
-        You arrive by car, you pray, you drive away. There is no reason to stay and nowhere to
-        stay if you wanted to &mdash; no shade you can sit in, nothing to eat, nothing to buy,
-        no grass, and the sea is eighty metres away behind six lanes of traffic you cannot
-        cross on foot.</span>
-        <span class="ar-only" lang="ar" dir="rtl">أما في الأيام الثلاثمئة والثلاثة والستين
-        الأخرى فهي موقف سيارات. تصل بسيارتك، تصلّي، ثم تنصرف. لا سبب للبقاء، ولا مكان للبقاء لو
-        أردت &mdash; لا ظلّ تجلس فيه، ولا طعام، ولا شيء تشتريه، ولا عشب، والبحر على بعد ثمانين
-        متراً خلف ستة مسارات لا يمكنك عبورها مشياً.</span></p>
-
-      <p><span class="en-only">So the proposal does one thing: it keeps the Eid ground clear and
-        builds everything else on the edges &mdash; the parking aprons, the leftover sand, the
-        strip against the road. The mosque is not touched. What changes is the half-kilometre of
-        ground that currently does nothing for eleven months of the year.</span>
-        <span class="ar-only" lang="ar" dir="rtl">لذلك يفعل الاقتراح شيئاً واحداً: يُبقي أرض
-        العيد خالية، ويبني كل ما عداها على الأطراف &mdash; مساحات المواقف، والرمل المتبقي،
-        والشريط الملاصق للطريق. لا يُمسّ المسجد. ما يتغير هو نصف الكيلومتر من الأرض التي لا
-        تفعل شيئاً أحد عشر شهراً في السنة.</span></p>
-
-      <p><span class="en-only">Two rules run through all of it. <b>No trading inside the
-        compound wall</b>, and <b>no booth open during the congregational prayer</b> &mdash; the
-        souq closes for the twenty minutes of each jama&rsquo;ah and reopens after. A market next
-        to a mosque only works if it behaves like one.</span>
-        <span class="ar-only" lang="ar" dir="rtl">قاعدتان تسريان على كل شيء: <b>لا بيع داخل سور
-        المسجد</b>، و<b>لا كشك مفتوح أثناء صلاة الجماعة</b> &mdash; يغلق السوق عشرين دقيقة مع كل
-        جماعة ثم يفتح بعدها. السوق بجوار المسجد لا ينجح إلا إذا تصرّف كجاره.</span></p>
-    </div>
-
-    <dl class="facts">
-      <div><dt><span class="en-only">Site</span><span class="ar-only" lang="ar">الموقع</span></dt><dd>~11 ha</dd></div>
-      <div><dt><span class="en-only">Kept clear</span><span class="ar-only" lang="ar">يبقى خالياً</span></dt><dd>4.2 ha</dd></div>
-      <div><dt><span class="en-only">New shade</span><span class="ar-only" lang="ar">ظل جديد</span></dt><dd>1.9 ha</dd></div>
-      <div><dt><span class="en-only">Trees</span><span class="ar-only" lang="ar">أشجار</span></dt><dd>261</dd></div>
-      <div><dt><span class="en-only">Seats</span><span class="ar-only" lang="ar">مقاعد</span></dt><dd>~1,400</dd></div>
-      <div><dt><span class="en-only">To the sea</span><span class="ar-only" lang="ar">إلى البحر</span></dt><dd>6 min</dd></div>
-    </dl>
-  </section>
-
-  <!-- ===================== the programme ===================== -->
-  <section class="band" id="programme">
-    <div class="band-head">
-      <span class="mark"><span class="en-only">The programme &middot; nine zones</span><span class="ar-only" lang="ar">البرنامج &middot; تسع مناطق</span></span>
-      <h2><span class="en-only">What goes where</span><span class="ar-only" lang="ar">ما الذي يوضع وأين</span></h2>
-      <p class="ar" lang="ar" dir="rtl">ما الذي يوضع وأين</p>
-      <p><span class="en-only">Every zone below is a place you can stand in on the walkthrough
-        above. Press <b>Walk there</b> and it takes you.</span>
-        <span class="ar-only" lang="ar" dir="rtl">كل منطقة أدناه مكان يمكنك الوقوف فيه في
-        التجوال أعلاه. اضغط <b>اذهب إلى هناك</b> فينقلك إليها.</span></p>
-    </div>
-
-    <ul class="prog" id="prog"></ul>
-  </section>
-
-  <!-- ===================== how it is built ===================== -->
-  <section class="band" id="how">
-    <div class="band-head">
-      <span class="mark"><span class="en-only">Honesty</span><span class="ar-only" lang="ar">توضيح</span></span>
-      <h2><span class="en-only">What this is, and what it isn&rsquo;t</span><span class="ar-only" lang="ar">ما هذا، وما ليس هو</span></h2>
-    </div>
-
-    <div class="note">
-      <p><span class="en-only"><b>This is a student design concept.</b> It is not affiliated
-        with, endorsed by or submitted to the Ministry of Awqaf and Islamic Affairs, Kuwait
-        Municipality, or anyone else. No part of it has been approved by anybody.</span>
-        <span class="ar-only" lang="ar" dir="rtl"><b>هذا تصوّر تصميمي طالبي.</b> ليس تابعاً
-        لوزارة الأوقاف والشؤون الإسلامية ولا لبلدية الكويت ولا لأي جهة أخرى، ولم يُعتمد من أحد،
-        ولم يُقدَّم إلى أحد.</span></p>
-
-      <p><span class="en-only">The mosque is modelled from photographs, not from drawings. Its
-        proportions are close enough to recognise and not close enough to build from: the dome
-        is about 26 m across and 43 m high, the minaret about 74 m, and the rest is judged by
-        eye. The site dimensions are paced off aerial imagery, not a survey.</span>
-        <span class="ar-only" lang="ar" dir="rtl">المسجد مُجسَّم من الصور لا من المخططات.
-        نسبه قريبة بما يكفي للتعرّف عليه، وليست قريبة بما يكفي للبناء منها: القبة نحو ٢٦ متراً
-        قطراً و٤٣ متراً ارتفاعاً، والمئذنة نحو ٧٤ متراً، والباقي مقدَّر بالعين. وأبعاد الموقع
-        مقيسة من صور جوية لا من مساحة ميدانية.</span></p>
-
-      <p><span class="en-only">Costs, ownership, who lets the booths, traffic modelling for the
-        land bridge and anything to do with structural design are all outside what a concept
-        like this can claim. Where a number appears, it is a design target, not a
-        measurement.</span>
-        <span class="ar-only" lang="ar" dir="rtl">التكاليف والملكية وجهة تأجير الأكشاك ونمذجة
-        الحركة المرورية للجسر وكل ما يتعلق بالتصميم الإنشائي خارج ما يستطيع تصوّر كهذا ادّعاءه.
-        وحيثما ظهر رقم فهو هدف تصميمي لا قياس.</span></p>
-
-      <p><span class="en-only">The page makes no network requests beyond the fonts and the 3D
-        library, stores nothing, and asks for nothing.</span>
-        <span class="ar-only" lang="ar" dir="rtl">لا تُجري الصفحة أي اتصال بالشبكة عدا الخطوط
-        ومكتبة الرسم ثلاثي الأبعاد، ولا تخزّن شيئاً، ولا تطلب شيئاً.</span></p>
-    </div>
-  </section>
-
+<div class="page">
   <footer>
     <p><b>Saha</b> <span class="ar" lang="ar" dir="rtl">الساحة</span> &mdash;
-      <span class="en-only">a design concept for the ground around the Grand Mosque of Kuwait
-        (<span class="ar" lang="ar" dir="rtl">المسجد الكبير</span>), Mubarak Al-Kabeer, Kuwait
-        City.</span>
-      <span class="ar-only" lang="ar" dir="rtl">تصوّر تصميمي للأرض المحيطة بالمسجد الكبير،
-        مبارك الكبير، مدينة الكويت.</span></p>
-    <p><a href="../">&larr; <span class="en-only">Back to the portfolio</span><span class="ar-only" lang="ar">عودة إلى الموقع</span></a></p>
+      <span class="en-only">a student design concept for the ground around the Grand Mosque of
+        Kuwait. Not affiliated with, endorsed by or submitted to any authority. The mosque is
+        modelled from photographs rather than drawings, and the dimensions are paced off aerial
+        imagery rather than a survey.</span>
+      <span class="ar-only" lang="ar" dir="rtl">تصوّر تصميمي طالبي للأرض المحيطة بالمسجد الكبير
+        في الكويت. غير تابع لأي جهة ولم يُعتمد من أحد ولم يُقدَّم إلى أحد. والمسجد مُجسَّم من
+        الصور لا من المخططات، والأبعاد مقيسة من صور جوية لا من مساحة ميدانية.</span></p>
+    <p class="back"><a href="../">&larr; <span class="en-only">Back to the portfolio</span><span class="ar-only" lang="ar">عودة إلى الموقع</span></a></p>
   </footer>
-
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
