@@ -168,6 +168,17 @@
   .swap button{background:none;border:1px solid var(--line);color:var(--muted);border-radius:99px;padding:.12rem .7rem;font-size:.75rem;cursor:pointer}
   .swap button:hover{color:var(--cool);border-color:var(--cool)}
 
+  input[type=text]{
+    width:100%;padding:.55rem .65rem;border-radius:9px;
+    background:var(--panel-2);border:1px solid var(--line);color:var(--sand);
+  }
+  input[type=text]::placeholder{color:#6E5E4C}
+  input[type=text][aria-invalid=true]{border-color:var(--clay);background:rgba(208,122,78,.08)}
+  .req{font-family:var(--body);font-size:.6rem;letter-spacing:.08em;color:var(--clay);
+    text-transform:uppercase;font-weight:600;margin-left:.35rem}
+  .privacy{margin:-.35rem 0 .7rem;font-size:.74rem;color:var(--muted);line-height:1.45}
+  .fielderr{margin:-.4rem 0 .7rem;font-size:.78rem;color:var(--clay)}
+
   .ramp{display:flex;align-items:center;gap:.5rem;font-size:.84rem;color:#DCCDB8;margin:.15rem 0 var(--s3)}
   .ramp input{accent-color:var(--cool);width:16px;height:16px}
 
@@ -416,6 +427,12 @@
       <aside class="panel">
         <h3>Call a cart</h3>
         <p class="hint">Nearest free cart, by lane distance.</p>
+        <label class="fld" for="rider"><span>Full name <b class="req">required</b></span>
+          <input id="rider" type="text" autocomplete="name" placeholder="First and family name"
+                 aria-required="true" aria-describedby="rider-hint" maxlength="60">
+        </label>
+        <p class="privacy" id="rider-hint">The seat is booked in your name. It stays in this tab &mdash; the page sends nothing anywhere.</p>
+        <p class="fielderr" id="rider-err" role="alert" hidden>Please give your full name &mdash; first and family.</p>
         <label class="fld"><span>From</span><select id="from"></select></label>
         <div class="swap"><button id="swap" type="button">&#8645; swap</button></div>
         <label class="fld"><span>To</span><select id="to"></select></label>
@@ -425,6 +442,7 @@
         <div class="bar" id="bar-wrap" hidden><i id="bar"></i></div>
         <div class="receipt" id="receipt">
           <dl>
+            <dt>Passenger</dt><dd id="r-rider">&mdash;</dd>
             <dt>Cart</dt><dd id="r-cart">&mdash;</dd>
             <dt>Distance</dt><dd id="r-dist">&mdash;</dd>
             <dt>Time in the cart</dt><dd id="r-time">&mdash;</dd>
@@ -1005,7 +1023,9 @@
      6. Wiring the panel
      ============================================================ */
 
-  var selFrom = document.getElementById("from"),
+  var riderInput = document.getElementById("rider"),
+      riderErr = document.getElementById("rider-err"),
+      selFrom = document.getElementById("from"),
       selTo   = document.getElementById("to"),
       btnGo   = document.getElementById("go"),
       btnSwap = document.getElementById("swap"),
@@ -1106,8 +1126,28 @@
     return best ? {cart:best, cost:bestCost} : null;
   }
 
+  function riderName(){
+    return riderInput.value.replace(/\s+/g, " ").trim();
+  }
+  function riderOk(){
+    var n = riderName();
+    return n.length >= 4 && n.split(" ").length >= 2;
+  }
+  function flagRider(on){
+    riderInput.setAttribute("aria-invalid", on ? "true" : "false");
+    riderErr.hidden = !on;
+  }
+  riderInput.addEventListener("input", function(){ if(riderOk()) flagRider(false); });
+
   btnGo.addEventListener("click", function(){
     if(riding) return;
+    if(!riderOk()){
+      flagRider(true);
+      riderInput.focus();
+      say("We need a name for the seat.", "Carts are booked to a passenger, so the driver knows who they are collecting.");
+      return;
+    }
+    flagRider(false);
     var a = stopOf(selFrom.value), b = stopOf(selTo.value);
     if(!a || !b || a.id === b.id){ say("Pick two different stops.", ""); return; }
 
@@ -1123,7 +1163,7 @@
     var cart = found.cart;
     cart.status = "trip";
     cart.job = {pickup:a, drop:b};
-    riding = true; ride = {cart:cart, from:a, to:b, phase:"approach", t:0};
+    riding = true; ride = {cart:cart, from:a, to:b, phase:"approach", t:0, rider:riderName()};
     btnGo.disabled = true;
     receipt.classList.remove("on");
     barWrap.hidden = false;
@@ -1157,7 +1197,7 @@
     cart.phase = "collecting at " + a.en;
 
     var etaS = metres(found.cost) / CART_MS / SIM;
-    say("Cart " + cart.id + " is on the way.",
+    say("Cart " + cart.id + " is on the way, " + ride.rider.split(" ")[0] + ".",
       Math.round(metres(found.cost)) + " m away · " + Math.max(5, Math.round(etaS)) +
       " s · cabin " + cart.cabin.toFixed(0) + "°C · driver " + cart.driver +
       (cart.ramp ? " · ramp cart" : ""));
@@ -1175,6 +1215,7 @@
     var walkMin = (m * 1.15 / WALK_MS) / 60;
     var f = fareFor(ride.from, ride.to, chkRamp.checked);
 
+    document.getElementById("r-rider").textContent = ride.rider;
     document.getElementById("r-cart").textContent = cart.id + " · " + cart.driver;
     document.getElementById("r-dist").textContent = Math.round(m) + " m";
     document.getElementById("r-time").textContent = Math.max(1, Math.round(rideMin)) + " min";
