@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Zill &mdash; air-conditioned carts for Souq Al-Mubarakiya</title>
-<meta name="description" content="Zill (&#1592;&#1604;&#1617;) &mdash; a concept for air-conditioned golf carts carrying shoppers around Souq Al-Mubarakiya, Kuwait City. Drawn, animated and live: a lane you watch a cart drive down, a working map, and the cart explained in pictures.">
+<meta name="description" content="Zill (&#1592;&#1604;&#1617;) &mdash; a concept for air-conditioned golf carts working Souq Al-Mubarakiya and Al-Shaheed Park, Kuwait City. Drawn, animated and live: a lane you watch a cart drive down, two working maps, and the cart in 3D.">
 <meta name="color-scheme" content="dark">
 <meta property="og:title" content="Zill &mdash; air-conditioned carts for Souq Al-Mubarakiya">
-<meta property="og:description" content="Kuwait's oldest market, and twelve cooled carts working its lanes. Concept project.">
+<meta property="og:description" content="Kuwait's oldest market and its biggest park, worked by cooled carts. Concept project.">
 <meta property="og:type" content="website">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -127,6 +127,19 @@
   .sec-head h2{font-family:var(--display);font-weight:700;font-size:clamp(1.5rem,4vw,2.2rem);letter-spacing:-.025em;margin:0}
   .sec-head .ara{margin-left:auto;font-size:1.02rem;color:var(--muted);direction:rtl}
   .sec-note{color:var(--muted);max-width:56ch;margin:0 0 var(--s3);font-size:.95rem}
+
+  /* ---------- which place ---------- */
+  .sites{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:var(--s3)}
+  .sites button{
+    flex:1 1 220px;text-align:left;cursor:pointer;
+    background:var(--panel);border:1px solid var(--line);color:var(--muted);
+    border-radius:10px;padding:.6rem .85rem;font-family:var(--display);font-size:1rem;
+  }
+  .sites button span{display:block;font-family:var(--body);font-size:.82rem;direction:rtl;
+    color:#6E5E4C;margin-top:.1rem}
+  .sites button:hover{border-color:var(--cool);color:var(--sand)}
+  .sites button[aria-pressed=true]{border-color:var(--gold);color:var(--sand);background:var(--panel-2)}
+  .sites button[aria-pressed=true] span{color:var(--gold)}
 
   /* ---------- map + dispatch ---------- */
   .board{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,21rem);gap:var(--s3);align-items:start}
@@ -304,7 +317,7 @@
     </div>
   </header>
 
-  <p class="concept"><b>Concept project.</b> Nothing here is a photograph and no such service runs in Al-Mubarakiya &mdash; the lane is drawn, the cart is modelled, and every figure is a design target.</p>
+  <p class="concept"><b>Concept project.</b> Nothing here is a photograph, and no such service runs in Al-Mubarakiya or Al-Shaheed Park &mdash; the lane is drawn, the cart is modelled, both maps are schematic, and every figure is a design target.</p>
 
   <section id="lane-sec" style="padding-top:var(--s3)">
     <div class="stage">
@@ -317,8 +330,8 @@
     </div>
 
     <div class="stats">
-      <div class="stat"><div class="n">12</div><div class="l">carts</div></div>
-      <div class="stat"><div class="n">13</div><div class="l">shaded stops</div></div>
+      <div class="stat"><div class="n" id="stat-carts">12</div><div class="l">carts</div></div>
+      <div class="stat"><div class="n" id="stat-stops">13</div><div class="l">shaded stops</div></div>
       <div class="stat cool"><div class="n">22<small>&deg;C</small></div><div class="l">in the cabin</div></div>
       <div class="stat hot"><div class="n" id="stat-out">48<small>&deg;C</small></div><div class="l">on the street</div></div>
       <div class="stat"><div class="n">3<small> min</small></div><div class="l">end to end</div></div>
@@ -328,18 +341,26 @@
 
   <section id="map-sec">
     <div class="sec-head">
-      <h2>Watch them work the lanes</h2>
+      <h2>Watch them work</h2>
       <span class="ara">&#1575;&#1604;&#1582;&#1585;&#1610;&#1591;&#1577; &#1575;&#1604;&#1581;&#1610;&#1617;&#1577;</span>
     </div>
-    <p class="sec-note">Tap two stops &mdash; the nearest free cart comes and gets you.</p>
+    <p class="sec-note">Two places: the souq's covered lanes, and the open paths of Al-Shaheed Park across Al-Soor Street. Tap two stops &mdash; the nearest free cart comes and gets you.</p>
+
+    <div class="sites" role="group" aria-label="Which place">
+      <button type="button" data-site="souq" aria-pressed="true">Souq Al-Mubarakiya <span>&#1587;&#1608;&#1602; &#1575;&#1604;&#1605;&#1576;&#1575;&#1585;&#1603;&#1610;&#1577;</span></button>
+      <button type="button" data-site="shaheed" aria-pressed="false">Al-Shaheed Park <span>&#1581;&#1583;&#1610;&#1602;&#1577; &#1575;&#1604;&#1588;&#1607;&#1610;&#1583;</span></button>
+    </div>
 
     <div class="board">
       <div>
         <div class="map-wrap">
           <svg id="map" viewBox="0 0 1000 660" role="img" aria-label="Live plan of Souq Al-Mubarakiya: market blocks under striped awnings, palms, crowds, thirteen shaded stops and twelve air-conditioned carts driving the lanes between them">
             <defs>
-              <linearGradient id="gr-ground" x1="0" y1="0" x2="0" y2="1">
+              <linearGradient id="gr-souq" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stop-color="#1B140E"/><stop offset="100%" stop-color="#110C08"/>
+              </linearGradient>
+              <linearGradient id="gr-shaheed" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#141A10"/><stop offset="100%" stop-color="#0C1008"/>
               </linearGradient>
               <filter id="glow" x="-70%" y="-70%" width="240%" height="240%">
                 <feGaussianBlur stdDeviation="7" result="b"/>
@@ -350,7 +371,7 @@
                 <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
               </filter>
             </defs>
-            <rect width="1000" height="660" fill="url(#gr-ground)"/>
+            <rect id="map-ground" width="1000" height="660" fill="url(#gr-souq)"/>
             <g id="blocks"></g>
             <g id="lanes"></g>
             <g id="canopy"></g>
@@ -371,7 +392,7 @@
             <span><i class="swatch" style="background:#6FD3E8"></i>on a trip</span>
             <span><i class="swatch" style="background:#E8B54B"></i>charging</span>
             <span><i class="swatch" style="background:#E88AA0"></i>pre-cooling</span>
-            <span style="margin-left:auto">demo clock &middot; 4&times; real time</span>
+            <span style="margin-left:auto"><b id="site-name" style="color:var(--sand);font-weight:500">Souq Al-Mubarakiya</b> &middot; demo clock 4&times;</span>
           </div>
         </div>
 
@@ -475,7 +496,7 @@
     </div>
     <div class="chart">
       <svg viewBox="0 0 900 300" role="img" aria-label="A typical August day in Kuwait City: the outside temperature climbing to about 48 degrees mid-afternoon while the cart cabin holds 22, with souq footfall in bars peaking after sunset"><g id="chart-body"></g></svg>
-      <p>A typical August day &mdash; not a forecast. Bars are the souq's own footfall: thin at noon, heavy after Maghrib.</p>
+      <p>A typical August day &mdash; not a forecast. The bars are <span id="foot-word">the souq's own footfall</span>: thin at noon, heavy after Maghrib.</p>
     </div>
   </section>
 
@@ -520,81 +541,158 @@
      420 m across, so one map unit is treated as 0.42 m.
      ============================================================ */
 
-  var M_PER_UNIT = 0.42;
   var SIM = 4;                 /* demo clock: 4x real time            */
   var CLOCK = 12;              /* a second of the demo is twelve       */
                                /* seconds of battery life, so a shift  */
                                /* plays out in minutes, not seconds    */
-  var CART_MS = 3.33;          /* 12 km/h in the lanes, m/s           */
   var WALK_MS = 1.25;          /* an unhurried shopper, m/s           */
 
-  var NODE = {
-    A1:[95,95],  A2:[85,215],  A3:[100,345], A4:[90,465],  A5:[105,575],
-    B1:[255,80], B2:[240,225], B3:[265,330], B4:[245,470], B5:[260,590],
-    C1:[425,100],C2:[440,200], C3:[410,340], C4:[435,455], C5:[420,580],
-    D1:[600,85], D2:[615,230], D3:[590,325], D4:[620,460], D5:[605,575],
-    E1:[780,95], E2:[765,210], E3:[795,345], E4:[770,455], E5:[785,585],
-    F1:[915,90], F2:[925,220], F3:[905,340], F4:[920,470], F5:[910,580]
+  /* ============================================================
+     Two places, drawn to their own scale. Both are schematic:
+     the shape is right, the survey is not.
+     ============================================================ */
+
+  var SITES = {
+    souq: {
+      key:"souq",
+      name:"Souq Al-Mubarakiya",
+      ar:"سوق المباركية",
+      kind:"souq",
+      mPerUnit:0.42,           /* the core is about 420 m across      */
+      cartMs:3.33,             /* 12 km/h in the lanes                */
+      fleet:12, prefix:"MB-", ramps:[3,9],
+      hub:"E5", from:"safat", to:"gold",
+      ground:["#1B140E","#110C08"],
+      blockFill:"#1A140E", blockStroke:"#2E251C",
+      footWord:"the souq's own footfall",
+      NODE: {
+        A1:[95,95],  A2:[85,215],  A3:[100,345], A4:[90,465],  A5:[105,575],
+        B1:[255,80], B2:[240,225], B3:[265,330], B4:[245,470], B5:[260,590],
+        C1:[425,100],C2:[440,200], C3:[410,340], C4:[435,455], C5:[420,580],
+        D1:[600,85], D2:[615,230], D3:[590,325], D4:[620,460], D5:[605,575],
+        E1:[780,95], E2:[765,210], E3:[795,345], E4:[770,455], E5:[785,585],
+        F1:[915,90], F2:[925,220], F3:[905,340], F4:[920,470], F5:[910,580]
+      },
+      /* kind: "street" = open perimeter road, "lane" = covered souq lane */
+      EDGE: [
+        ["A1","B1","street"],["B1","C1","street"],["C1","D1","street"],["D1","E1","street"],["E1","F1","street"],
+        ["F1","F2","street"],["F2","F3","street"],["F3","F4","street"],["F4","F5","street"],
+        ["F5","E5","street"],["E5","D5","street"],["D5","C5","street"],["C5","B5","street"],["B5","A5","street"],
+        ["A5","A4","street"],["A4","A3","street"],["A3","A2","street"],["A2","A1","street"],
+        ["B1","B2","lane"],["B2","B3","lane"],["B3","B4","lane"],["B4","B5","lane"],
+        ["C1","C2","lane"],["C2","C3","lane"],["C3","C4","lane"],["C4","C5","lane"],
+        ["D1","D2","lane"],["D2","D3","lane"],["D3","D4","lane"],["D4","D5","lane"],
+        ["E1","E2","lane"],["E2","E3","lane"],["E3","E4","lane"],["E4","E5","lane"],
+        ["A2","B2","lane"],["B2","C2","lane"],["D2","E2","lane"],["E2","F2","lane"],
+        ["A3","B3","lane"],["B3","C3","lane"],["C3","D3","lane"],["D3","E3","lane"],["E3","F3","lane"],
+        ["A4","B4","lane"],["C4","D4","lane"],["D4","E4","lane"],["E4","F4","lane"],
+        ["B2","C3","lane"],["D4","E3","lane"]
+      ],
+      STOPS: [
+        {id:"safat", node:"A1", en:"Safat Square gate",       ar:"بوابة الصفاة", side:"S"},
+        {id:"ali",   node:"D1", en:"Ali Al-Salem gate",       ar:"بوابة علي السالم", side:"S"},
+        {id:"gold",  node:"F2", en:"Gold souq",               ar:"سوق الذهب", side:"S"},
+        {id:"spice", node:"C2", en:"Spice & herb lane",       ar:"سوق العطارة", side:"E"},
+        {id:"bisht", node:"D2", en:"Bisht & textiles",        ar:"سوق البشوت", side:"E"},
+        {id:"antiq", node:"E2", en:"Antiques & pearls",       ar:"سوق الأنتيكات", side:"N"},
+        {id:"tamr",  node:"B3", en:"Date market",             ar:"سوق التمر", side:"N"},
+        {id:"harim", node:"C3", en:"Souq Al-Hareem",          ar:"سوق الحريم", side:"S"},
+        {id:"food",  node:"D3", en:"Food alley",              ar:"فريج المطاعم", side:"E"},
+        {id:"park",  node:"A3", en:"West car park",           ar:"موقف عبدالله السالم", side:"S"},
+        {id:"gahwa", node:"C4", en:"Coffee yard",             ar:"ساحة القهوة", side:"W"},
+        {id:"khud",  node:"D4", en:"Vegetable & meat market", ar:"سوق الخضار واللحم", side:"S"},
+        {id:"hadiqa",node:"B5", en:"Mubarakiya garden",       ar:"حديقة المباركية", side:"N"},
+        {id:"hub",   node:"E5", en:"Charging hub",            ar:"مركز الشحن", side:"N", hub:true}
+      ],
+      BLOCKS: [
+        [118,104,118,100],[290,96,116,96],[452,116,128,66],[632,102,128,108],[800,110,96,84],
+        [118,236,104,82],[282,244,136,66],[456,222,140,84],[640,252,104,52],[792,232,104,88],
+        [122,364,124,86],[292,352,98,84],[440,360,130,76],[622,346,132,90],[812,364,88,74],
+        [120,486,106,72],[276,488,136,74],[452,478,138,80],[644,484,106,74],[792,476,104,86]
+      ],
+      WATER: [],
+      LABELS: [
+        {x:500,y:52,  t:"Ali Al-Salem Street"},
+        {x:500,y:634, t:"Mubarak Al-Kabeer Street"},
+        {x:30, y:330, t:"Abdullah Al-Salem Street", rot:-90},
+        {x:974,y:330, t:"Al-Safat side", rot:90}
+      ],
+      /* relative footfall in the souq across the day */
+      FOOT: [.30,.12,.04,0,0,.04,.14,.28,.45,.52,.50,.40,.26,.14,.10,.20,.40,.56,.70,.86,1,.95,.80,.58]
+    },
+
+    shaheed: {
+      key:"shaheed",
+      name:"Al-Shaheed Park",
+      ar:"حديقة الشهيد",
+      kind:"park",
+      mPerUnit:0.78,           /* about 780 m along the Green Belt    */
+      cartMs:4.16,             /* 15 km/h on open path                */
+      fleet:8, prefix:"SP-", ramps:[2,6],
+      hub:"P12", from:"sgate", to:"lake",
+      ground:["#141A10","#0D1109"],
+      blockFill:"#16210F", blockStroke:"#25341A",
+      footWord:"the park's own footfall",
+      NODE: {
+        P1:[928,318], P2:[874,196], P3:[716,112], P4:[502,84],  P5:[286,116], P6:[128,198],
+        P7:[72,330],  P8:[130,462], P9:[288,548], P10:[500,578],P11:[714,546],P12:[872,462],
+        C:[500,330],  N:[500,190],  S:[500,470],  W:[268,330],  E:[736,330],
+        NW:[330,220], NE:[676,214], SW:[330,446], SE:[676,448]
+      },
+      /* kind: "track" = the jogging loop, "path" = garden path */
+      EDGE: [
+        ["P1","P2","track"],["P2","P3","track"],["P3","P4","track"],["P4","P5","track"],
+        ["P5","P6","track"],["P6","P7","track"],["P7","P8","track"],["P8","P9","track"],
+        ["P9","P10","track"],["P10","P11","track"],["P11","P12","track"],["P12","P1","track"],
+        ["P4","N","path"],["N","C","path"],["C","S","path"],["S","P10","path"],
+        ["P7","W","path"],["W","C","path"],["C","E","path"],["E","P1","path"],
+        ["P3","NE","path"],["NE","N","path"],["NE","E","path"],["P2","NE","path"],
+        ["P5","NW","path"],["NW","N","path"],["NW","W","path"],["P6","NW","path"],
+        ["P9","SW","path"],["SW","W","path"],["SW","S","path"],["P8","SW","path"],
+        ["P11","SE","path"],["SE","S","path"],["SE","E","path"],["P12","SE","path"]
+      ],
+      STOPS: [
+        {id:"sgate", node:"P4",  en:"Soor Street gate",   ar:"بوابة شارع السور", side:"N"},
+        {id:"visit", node:"N",   en:"Visitors' centre",   ar:"مركز الزوار", side:"E"},
+        {id:"memor", node:"NE",  en:"Memorial Museum",    ar:"متحف الشهيد", side:"N"},
+        {id:"habit", node:"NW",  en:"Habitat Museum",     ar:"متحف الموئل", side:"N"},
+        {id:"lake",  node:"C",   en:"The lake",           ar:"البحيرة", side:"E"},
+        {id:"amph",  node:"S",   en:"Amphitheatre",       ar:"المدرج", side:"S"},
+        {id:"cafe",  node:"E",   en:"Café terrace",  ar:"شرفة المقهى", side:"E"},
+        {id:"turn",  node:"P2",  en:"Track, east turn",   ar:"منعطف المسار", side:"S"},
+        {id:"cark",  node:"P9",  en:"Car park",           ar:"الموقف", side:"S"},
+        {id:"link",  node:"P7",  en:"Link to the souq",   ar:"الرابط إلى المباركية", side:"S"},
+        {id:"hub",   node:"P12", en:"Charging hub",       ar:"مركز الشحن", side:"S", hub:true}
+      ],
+      /* lawns between the paths */
+      BLOCKS: [
+        [150,150,150,110],[352,120,120,80],[560,124,132,84],[742,168,132,104],
+        [156,378,150,116],[352,436,140,96],[566,440,140,96],[744,382,140,116],
+        [196,262,110,120],[706,258,116,124]
+      ],
+      /* the lake, and the pool by the amphitheatre */
+      WATER: [[500,330,132,74],[500,470,86,34]],
+      LABELS: [
+        {x:216,y:52,  t:"Al-Soor Street"},
+        {x:500,y:642, t:"towards Phase Two"},
+        {x:30, y:330, t:"the Green Belt", rot:-90},
+        {x:974,y:330, t:"Kuwait City", rot:90}
+      ],
+      /* joggers at dawn, families after sunset */
+      FOOT: [.22,.10,.04,.02,.08,.26,.40,.34,.22,.16,.12,.08,.05,.04,.05,.10,.26,.48,.68,.86,1,.92,.72,.44]
+    }
   };
 
-  /* kind: "street" = open perimeter road, "lane" = covered souq lane */
-  var EDGE = [
-    ["A1","B1","street"],["B1","C1","street"],["C1","D1","street"],["D1","E1","street"],["E1","F1","street"],
-    ["F1","F2","street"],["F2","F3","street"],["F3","F4","street"],["F4","F5","street"],
-    ["F5","E5","street"],["E5","D5","street"],["D5","C5","street"],["C5","B5","street"],["B5","A5","street"],
-    ["A5","A4","street"],["A4","A3","street"],["A3","A2","street"],["A2","A1","street"],
-    ["B1","B2","lane"],["B2","B3","lane"],["B3","B4","lane"],["B4","B5","lane"],
-    ["C1","C2","lane"],["C2","C3","lane"],["C3","C4","lane"],["C4","C5","lane"],
-    ["D1","D2","lane"],["D2","D3","lane"],["D3","D4","lane"],["D4","D5","lane"],
-    ["E1","E2","lane"],["E2","E3","lane"],["E3","E4","lane"],["E4","E5","lane"],
-    ["A2","B2","lane"],["B2","C2","lane"],["D2","E2","lane"],["E2","F2","lane"],
-    ["A3","B3","lane"],["B3","C3","lane"],["C3","D3","lane"],["D3","E3","lane"],["E3","F3","lane"],
-    ["A4","B4","lane"],["C4","D4","lane"],["D4","E4","lane"],["E4","F4","lane"],
-    ["B2","C3","lane"],["D4","E3","lane"]
-  ];
-
-  var STOPS = [
-    {id:"safat", node:"A1", en:"Safat Square gate",        ar:"بوابة الصفاة",      side:"S"},
-    {id:"ali",   node:"D1", en:"Ali Al-Salem gate",        ar:"بوابة علي السالم", side:"S"},
-    {id:"gold",  node:"F2", en:"Gold souq",                ar:"سوق الذهب",                          side:"S"},
-    {id:"spice", node:"C2", en:"Spice & herb lane",        ar:"سوق العطارة",              side:"E"},
-    {id:"bisht", node:"D2", en:"Bisht & textiles",         ar:"سوق البشوت",                    side:"E"},
-    {id:"antiq", node:"E2", en:"Antiques & pearls",        ar:"سوق الأنتيكات",  side:"N"},
-    {id:"tamr",  node:"B3", en:"Date market",              ar:"سوق التمر",                          side:"N"},
-    {id:"harim", node:"C3", en:"Souq Al-Hareem",           ar:"سوق الحريم",                    side:"S"},
-    {id:"food",  node:"D3", en:"Food alley",               ar:"فريج المطاعم",        side:"E"},
-    {id:"park",  node:"A3", en:"West car park",            ar:"موقف عبدالله السالم", side:"S"},
-    {id:"gahwa", node:"C4", en:"Coffee yard",              ar:"ساحة القهوة",              side:"W"},
-    {id:"khud",  node:"D4", en:"Vegetable & meat market",  ar:"سوق الخضار واللحم",  side:"S"},
-    {id:"hadiqa",node:"B5", en:"Mubarakiya garden",        ar:"حديقة المباركية", side:"N"},
-    {id:"hub",   node:"E5", en:"Charging hub",             ar:"مركز الشحن",                    side:"N", hub:true}
-  ];
-
-  /* souq blocks, purely to read as a market rather than a grid */
-  var BLOCKS = [
-    [118,104,118,100],[290,96,116,96],[452,116,128,66],[632,102,128,108],[800,110,96,84],
-    [118,236,104,82],[282,244,136,66],[456,222,140,84],[640,252,104,52],[792,232,104,88],
-    [122,364,124,86],[292,352,98,84],[440,360,130,76],[622,346,132,90],[812,364,88,74],
-    [120,486,106,72],[276,488,136,74],[452,478,138,80],[644,484,106,74],[792,476,104,86]
-  ];
-
-  var STREET_LABELS = [
-    {x:500,y:52,  t:"Ali Al-Salem Street"},
-    {x:500,y:634, t:"Mubarak Al-Kabeer Street"},
-    {x:30, y:330, t:"Abdullah Al-Salem Street", rot:-90},
-    {x:974,y:330, t:"Al-Safat side", rot:90}
-  ];
+  var SITE, NODE, EDGE, STOPS, BLOCKS, WATER, STREET_LABELS, FOOT, M_PER_UNIT, CART_MS;
 
   /* hourly profile for a typical August day in Kuwait City */
   var TEMP = [35,34,33,32,31,31,32,35,38,41,44,46,47,48,48,48,47,45,43,41,39,38,37,36];
-  /* relative footfall in the souq across the same day */
-  var FOOT = [.30,.12,.04,0,0,.04,.14,.28,.45,.52,.50,.40,.26,.14,.10,.20,.40,.56,.70,.86,1,.95,.80,.58];
 
   var CABIN_SET = 22;
   var PACK_USABLE = 9.0;   /* kWh actually used from a 10 kWh pack  */
   var DRIVE_KW = 0.85;     /* average traction draw at souq speed   */
 
-  window.ZillMap = {NODE:NODE, EDGE:EDGE, STOPS:STOPS, BLOCKS:BLOCKS,
+  window.ZillMap = {NODE:null, EDGE:null, STOPS:null, BLOCKS:null, WATER:null, kind:"souq",
                     currentHour:15, currentFootfall:0.2};
 
   /* ============================================================
@@ -603,10 +701,13 @@
 
   var ADJ = {};
   function dist(a,b){ var p=NODE[a], q=NODE[b]; return Math.hypot(p[0]-q[0], p[1]-q[1]); }
-  EDGE.forEach(function(e){
-    (ADJ[e[0]] = ADJ[e[0]] || []).push({to:e[1], w:dist(e[0],e[1])});
-    (ADJ[e[1]] = ADJ[e[1]] || []).push({to:e[0], w:dist(e[0],e[1])});
-  });
+  function buildAdj(){
+    ADJ = {};
+    EDGE.forEach(function(e){
+      (ADJ[e[0]] = ADJ[e[0]] || []).push({to:e[1], w:dist(e[0],e[1])});
+      (ADJ[e[1]] = ADJ[e[1]] || []).push({to:e[0], w:dist(e[0],e[1])});
+    });
+  }
 
   function route(from, to){
     if(from === to) return {nodes:[from], cost:0};
@@ -657,24 +758,56 @@
       gCarts  = document.getElementById("carts"),
       gLabels = document.getElementById("labels");
 
-  BLOCKS.forEach(function(b){
-    gBlocks.appendChild(el("rect",{x:b[0],y:b[1],width:b[2],height:b[3],rx:9,
-      fill:"#1A140E",stroke:"#2E251C","stroke-width":1}));
-  });
+  function clear(g){ while(g && g.firstChild) g.removeChild(g.firstChild); }
 
-  EDGE.forEach(function(e){
-    var a = NODE[e[0]], b = NODE[e[1]], street = e[2] === "street";
-    gLanes.appendChild(el("line",{x1:a[0],y1:a[1],x2:b[0],y2:b[1],
-      stroke:"#241C15","stroke-width":street?20:13,"stroke-linecap":"round"}));
-    gLanes.appendChild(el("line",{x1:a[0],y1:a[1],x2:b[0],y2:b[1],
-      stroke:street?"#33291F":"#2C2319","stroke-width":street?15:9,"stroke-linecap":"round"}));
-    if(!street){
-      /* covered lane: the canopy ribs */
+  var stopEls = {};
+  var routeLine = null;
+
+  function drawSite(){
+    [gBlocks, gLanes, gStops, gLabels, gCarts, gRoute,
+     document.getElementById("canopy"), document.getElementById("crowd"),
+     document.getElementById("nightglow")].forEach(clear);
+    stopEls = {};
+
+    document.getElementById("map-ground").setAttribute("fill", "url(#gr-" + SITE.key + ")");
+
+    /* water first: the lake sits under everything */
+    (WATER || []).forEach(function(w){
+      gBlocks.appendChild(el("ellipse",{cx:w[0],cy:w[1],rx:w[2],ry:w[3],
+        fill:"#12313A",stroke:"#2A6472","stroke-width":1.5}));
+      gBlocks.appendChild(el("ellipse",{cx:w[0],cy:w[1],rx:w[2]*.72,ry:w[3]*.66,
+        fill:"#17414C",opacity:.8}));
+    });
+
+    BLOCKS.forEach(function(b){
+      gBlocks.appendChild(el("rect",{x:b[0],y:b[1],width:b[2],height:b[3],rx:SITE.kind === "park" ? 26 : 9,
+        fill:SITE.blockFill,stroke:SITE.blockStroke,"stroke-width":1}));
+    });
+
+    EDGE.forEach(function(e){
+      var a = NODE[e[0]], b = NODE[e[1]], kind = e[2];
+      var wide = (kind === "street" || kind === "track");
+      var base = SITE.kind === "park" ? (kind === "track" ? "#2E2118" : "#241D15")
+                                      : "#241C15";
+      var top  = SITE.kind === "park" ? (kind === "track" ? "#4A3324" : "#3A3226")
+                                      : (wide ? "#33291F" : "#2C2319");
       gLanes.appendChild(el("line",{x1:a[0],y1:a[1],x2:b[0],y2:b[1],
-        stroke:"rgba(232,181,75,.16)","stroke-width":9,"stroke-linecap":"round",
-        "stroke-dasharray":"2 9"}));
-    }
-  });
+        stroke:base,"stroke-width":wide?20:13,"stroke-linecap":"round"}));
+      gLanes.appendChild(el("line",{x1:a[0],y1:a[1],x2:b[0],y2:b[1],
+        stroke:top,"stroke-width":wide?15:9,"stroke-linecap":"round"}));
+      if(SITE.kind === "souq" && kind === "lane"){
+        /* covered lane: the canopy ribs */
+        gLanes.appendChild(el("line",{x1:a[0],y1:a[1],x2:b[0],y2:b[1],
+          stroke:"rgba(232,181,75,.16)","stroke-width":9,"stroke-linecap":"round",
+          "stroke-dasharray":"2 9"}));
+      }
+      if(SITE.kind === "park" && kind === "track"){
+        /* the jogging lane painted down the middle of the loop */
+        gLanes.appendChild(el("line",{x1:a[0],y1:a[1],x2:b[0],y2:b[1],
+          stroke:"rgba(232,181,75,.18)","stroke-width":2,"stroke-linecap":"round",
+          "stroke-dasharray":"10 12"}));
+      }
+    });
 
   STREET_LABELS.forEach(function(s){
     var t = el("text",{x:s.x,y:s.y,"text-anchor":"middle","font-family":"IBM Plex Mono, monospace",
@@ -684,7 +817,6 @@
     gLabels.appendChild(t);
   });
 
-  var stopEls = {};
   STOPS.forEach(function(s){
     var p = NODE[s.node];
     var g = el("g",{class:"stop", style:"cursor:pointer", role:"button", tabindex:"0"});
@@ -719,10 +851,11 @@
     stopEls[s.id] = {ring:ring, halo:halo, core:core, label:label};
   });
 
-  var routeLine = el("polyline",{fill:"none",stroke:"#6FD3E8","stroke-width":5,
+  routeLine = el("polyline",{fill:"none",stroke:"#6FD3E8","stroke-width":5,
     "stroke-linecap":"round","stroke-linejoin":"round",opacity:.55,
     "stroke-dasharray":"1 12","stroke-dashoffset":0,filter:"url(#soft)"});
   gRoute.appendChild(routeLine);
+  }   /* end drawSite */
 
   /* ============================================================
      4. The fleet
@@ -734,8 +867,8 @@
   function makeCart(i){
     var startNode = STOPS[(i*3+1) % STOPS.length].node;
     return {
-      id: "MB-" + (i<9 ? "0" : "") + (i+1),
-      ramp: (i === 3 || i === 9),
+      id: SITE.prefix + (i<9 ? "0" : "") + (i+1),
+      ramp: SITE.ramps.indexOf(i) !== -1,
       driver: NAMES[i % NAMES.length],
       node: startNode,
       pos: NODE[startNode].slice(),
@@ -754,9 +887,11 @@
   }
 
   var carts = [];
-  for(var i=0;i<12;i++) carts.push(makeCart(i));
+  function buildFleet(){
+    carts = [];
+    for(var i=0;i<SITE.fleet;i++) carts.push(makeCart(i));
 
-  carts.forEach(function(c){
+    carts.forEach(function(c){
     var g = el("g",{class:"cart"});
     var body = el("g",{});
     body.appendChild(el("rect",{x:-14,y:-8,width:28,height:16,rx:5,fill:"#15110D",
@@ -771,7 +906,8 @@
     g.appendChild(body); g.appendChild(txt);
     gCarts.appendChild(g);
     c.gEl = g; c.bodyEl = body; c.shellEl = body.firstChild; c.labelEl = txt;
-  });
+    });
+  }
 
   function setLeg(cart, fromNode, toNode, onDone){
     var r = route(fromNode, toNode);
@@ -817,7 +953,7 @@
     if(cart.battery < 0.15){
       cart.status = "charge";
       cart.phase = "returning to the hub";
-      cart.leg = setLeg(cart, cart.node, "E5", function(c){ c.phase = "on the charger"; });
+      cart.leg = setLeg(cart, cart.node, SITE.hub, function(c){ c.phase = "on the charger"; });
       return;
     }
     var pool = STOPS.filter(function(s){ return s.node !== cart.node; });
@@ -838,7 +974,7 @@
   }
   function rangeHours(out){ return PACK_USABLE / (acKw(out) + DRIVE_KW); }
   function demandAt(h){ return FOOT[((h % 24) + 24) % 24]; }
-  function cartsNeeded(h){ return Math.max(2, Math.round(12 * demandAt(h))); }
+  function cartsNeeded(h){ return Math.max(2, Math.round(SITE.fleet * demandAt(h))); }
   function demandWord(h){
     var d = demandAt(h);
     if(d > .75) return "heavy";
@@ -861,15 +997,18 @@
       barEl   = document.getElementById("bar"),
       receipt = document.getElementById("receipt");
 
-  STOPS.filter(function(s){ return !s.hub; }).forEach(function(s){
-    [selFrom, selTo].forEach(function(sel){
-      var o = document.createElement("option");
-      o.value = s.id; o.textContent = s.en;
-      sel.appendChild(o);
+  function fillSelects(){
+    selFrom.innerHTML = ""; selTo.innerHTML = "";
+    STOPS.filter(function(s){ return !s.hub; }).forEach(function(s){
+      [selFrom, selTo].forEach(function(sel){
+        var o = document.createElement("option");
+        o.value = s.id; o.textContent = s.en;
+        sel.appendChild(o);
+      });
     });
-  });
-  selFrom.value = "safat";
-  selTo.value   = "gold";
+    selFrom.value = SITE.from;
+    selTo.value   = SITE.to;
+  }
 
   var pickNext = "from";
   function onStopPick(id){
@@ -1143,7 +1282,10 @@
 
   var fleetBody = document.getElementById("fleet");
   var rows = {};
-  carts.forEach(function(c){
+  function buildTable(){
+    while(fleetBody.firstChild) fleetBody.removeChild(fleetBody.firstChild);
+    rows = {};
+    carts.forEach(function(c){
     var tr = document.createElement("tr");
     tr.innerHTML = '<td class="num">'+c.id+'</td>'+
       '<td><span class="pill st-idle">free</span></td>'+
@@ -1154,7 +1296,8 @@
       '<td class="num ramp">'+(c.ramp ? "yes" : "—")+'</td>';
     fleetBody.appendChild(tr);
     rows[c.id] = tr;
-  });
+    });
+  }
 
   var STATUS_TEXT = {idle:"free", trip:"on a trip", charge:"charging", cool:"pre-cooling"};
   var STATUS_CLASS = {idle:"st-idle", trip:"st-trip", charge:"st-charge", cool:"st-cool"};
@@ -1229,7 +1372,7 @@
         if(c.battery < 0.12 && c.status === "idle" && !c.leg){
           c.status = "charge";
           c.phase = "returning to the hub";
-          c.leg = setLeg(c, c.node, "E5", function(cc){ cc.phase = "on the charger"; });
+          c.leg = setLeg(c, c.node, SITE.hub, function(cc){ cc.phase = "on the charger"; });
         }
       }
 
@@ -1268,9 +1411,60 @@
     requestAnimationFrame(frame);
   }
 
-  applyHour();
-  onRouteChange();
-  paintFleet();
+  /* ============================================================
+     11. Two places, one page
+     ============================================================ */
+
+  function setText(id, v){
+    var e = document.getElementById(id);
+    if(e) e.textContent = v;
+  }
+
+  function useSite(key){
+    SITE = SITES[key] || SITES.souq;
+    NODE = SITE.NODE; EDGE = SITE.EDGE; STOPS = SITE.STOPS; BLOCKS = SITE.BLOCKS;
+    WATER = SITE.WATER; STREET_LABELS = SITE.LABELS; FOOT = SITE.FOOT;
+    M_PER_UNIT = SITE.mPerUnit; CART_MS = SITE.cartMs;
+
+    /* a ride belongs to the place it was called in */
+    riding = false; ride = null;
+    btnGo.disabled = false;
+    barWrap.hidden = true; barEl.style.width = "0%";
+    receipt.classList.remove("on");
+    pickNext = "from";
+
+    buildAdj();
+    drawSite();
+    buildFleet();
+    buildTable();
+    fillSelects();
+
+    window.ZillMap.NODE = NODE; window.ZillMap.EDGE = EDGE;
+    window.ZillMap.STOPS = STOPS; window.ZillMap.BLOCKS = BLOCKS;
+    window.ZillMap.WATER = WATER; window.ZillMap.kind = SITE.kind;
+    if(window.ZillDecor) window.ZillDecor.rebuild();
+
+    setText("site-name", SITE.name);
+    setText("stat-carts", SITE.fleet);
+    setText("stat-stops", STOPS.filter(function(st){ return !st.hub; }).length);
+    setText("foot-word", SITE.footWord);
+
+    applyHour();
+    onRouteChange();
+    paintFleet();
+  }
+
+  var siteBtns = [].slice.call(document.querySelectorAll(".sites button"));
+  siteBtns.forEach(function(b){
+    b.addEventListener("click", function(){
+      if(b.getAttribute("aria-pressed") === "true") return;
+      siteBtns.forEach(function(o){ o.setAttribute("aria-pressed", o === b ? "true" : "false"); });
+      useSite(b.getAttribute("data-site"));
+      say("Ready when you are.", "Pick two stops.");
+    });
+  });
+
+  useSite("souq");
   requestAnimationFrame(frame);
 })();
 </script>
@@ -2241,6 +2435,12 @@
       E("path",{d:"M13 11 v7 h7",stroke:C.cool,"stroke-width":2,fill:"none","stroke-linecap":"round"},g);
       E("circle",{cx:14,cy:21,r:7,fill:"none",stroke:C.cool,"stroke-width":2},g);
     }},
+    {b:"Souq \u2194 park link", s:"every 20 minutes, across Al-Soor Street", icon:function(g){
+      E("path",{d:"M4 15 h22 M20 9 l6 6 l-6 6",stroke:C.gold,"stroke-width":2,fill:"none",
+        "stroke-linecap":"round","stroke-linejoin":"round"},g);
+      E("circle",{cx:6,cy:8,r:2.6,fill:C.gold},g);
+      E("circle",{cx:24,cy:24,r:2.6,fill:C.gold},g);
+    }},
     {b:"Water and a first-aid kit", s:"in every cart, every shift", icon:function(g){
       E("path",{d:"M15 4 c6 8 9 11 9 15 a9 9 0 0 1 -18 0 c0 -4 3 -7 9 -15 z",fill:"none",stroke:C.rose||"#E88AA0","stroke-width":2},g);
     }}
@@ -2274,57 +2474,93 @@
         crowdG = document.getElementById("crowd"),
         blocks = document.getElementById("blocks"),
         night  = document.getElementById("nightglow");
-    if(!canopy || !window.ZillMap) return;
-    var M = window.ZillMap;   /* NODE, EDGE, STOPS, footfall */
+    if(!canopy || !window.ZillMap || !window.ZillMap.EDGE) return;
+    var M = window.ZillMap;
+    var park = M.kind === "park";
 
-    /* striped awnings down both sides of every covered lane */
-    M.EDGE.forEach(function(e){
-      if(e[2] !== "lane") return;
-      var a = M.NODE[e[0]], b = M.NODE[e[1]];
-      var dx = b[0]-a[0], dy = b[1]-a[1], len = Math.hypot(dx,dy) || 1;
-      var nx = -dy/len, ny = dx/len;
-      [-9, 9].forEach(function(off){
-        var x1 = a[0]+nx*off, y1 = a[1]+ny*off, x2 = b[0]+nx*off, y2 = b[1]+ny*off;
-        E("line",{x1:x1,y1:y1,x2:x2,y2:y2,stroke:"#3E2E22","stroke-width":7,"stroke-linecap":"butt"}, canopy);
-        E("line",{x1:x1,y1:y1,x2:x2,y2:y2,stroke:"#9E4B39","stroke-width":7,
-          "stroke-dasharray":"7 7","stroke-linecap":"butt",opacity:.85}, canopy);
-        E("line",{x1:x1,y1:y1,x2:x2,y2:y2,stroke:"#C6B49A","stroke-width":7,
-          "stroke-dasharray":"7 7","stroke-dashoffset":"7","stroke-linecap":"butt",opacity:.5}, canopy);
-      });
+    [canopy, crowdG, night].forEach(function(g){
+      while(g && g.firstChild) g.removeChild(g.firstChild);
     });
+    canopy.setAttribute("opacity", 1);
 
-    /* palms and rooftop clutter on the market blocks */
+    if(!park){
+      /* striped awnings down both sides of every covered lane */
+      M.EDGE.forEach(function(e){
+        if(e[2] !== "lane") return;
+        var a = M.NODE[e[0]], b = M.NODE[e[1]];
+        var dx = b[0]-a[0], dy = b[1]-a[1], len = Math.hypot(dx,dy) || 1;
+        var nx = -dy/len, ny = dx/len;
+        [-9, 9].forEach(function(off){
+          var x1 = a[0]+nx*off, y1 = a[1]+ny*off, x2 = b[0]+nx*off, y2 = b[1]+ny*off;
+          E("line",{x1:x1,y1:y1,x2:x2,y2:y2,stroke:"#3E2E22","stroke-width":7,"stroke-linecap":"butt"}, canopy);
+          E("line",{x1:x1,y1:y1,x2:x2,y2:y2,stroke:"#9E4B39","stroke-width":7,
+            "stroke-dasharray":"7 7","stroke-linecap":"butt",opacity:.85}, canopy);
+          E("line",{x1:x1,y1:y1,x2:x2,y2:y2,stroke:"#C6B49A","stroke-width":7,
+            "stroke-dasharray":"7 7","stroke-dashoffset":"7","stroke-linecap":"butt",opacity:.5}, canopy);
+        });
+      });
+    } else {
+      /* the park has no cover at all: lamp posts along the paths instead */
+      M.EDGE.forEach(function(e, i){
+        if(i % 3) return;
+        var a = M.NODE[e[0]], b = M.NODE[e[1]];
+        var mx = (a[0]+b[0])/2, my = (a[1]+b[1])/2;
+        var dx = b[0]-a[0], dy = b[1]-a[1], len = Math.hypot(dx,dy) || 1;
+        var nx = -dy/len*13, ny = dx/len*13;
+        E("line",{x1:mx+nx,y1:my+ny,x2:mx+nx,y2:my+ny-9,stroke:"#4A3B2C","stroke-width":1.6}, canopy);
+        E("circle",{cx:mx+nx,cy:my+ny-11,r:2.4,fill:"#FFC978",opacity:.85}, canopy);
+      });
+    }
+
+    /* what grows on the blocks: rooftop clutter and palms, or trees */
     var pr = seeded(31);
     M.BLOCKS.forEach(function(b, i){
-      for(var k=0;k<2;k++){
-        E("rect",{x:b[0]+10+pr()*(b[2]-30), y:b[1]+8+pr()*(b[3]-22), width:10+pr()*12, height:7,
-          rx:2, fill:"#33291F"}, blocks);
-      }
-      if(i % 3 === 0){
-        var px = b[0] + b[2]*(0.2+pr()*0.6), py = b[1] + b[3]*(0.25+pr()*0.5);
-        var g = E("g",{}, blocks);
-        E("path",{d:"M"+px+" "+py+" q2 -12 0 -20",stroke:"#4A3B2C","stroke-width":3,fill:"none"}, g);
-        for(var fr=0; fr<6; fr++){
-          var a = -Math.PI/2 + (fr-2.5)*0.42;
-          E("path",{d:"M"+px+" "+(py-20)+" q"+(Math.cos(a)*13)+" "+(Math.sin(a)*13)+" "+
-            (Math.cos(a)*22)+" "+(Math.sin(a)*20), stroke:"#4F7A4A","stroke-width":2.6,fill:"none",
-            "stroke-linecap":"round",opacity:.85}, g);
+      if(!park){
+        for(var k=0;k<2;k++){
+          E("rect",{x:b[0]+10+pr()*(b[2]-30), y:b[1]+8+pr()*(b[3]-22), width:10+pr()*12, height:7,
+            rx:2, fill:"#33291F"}, blocks);
+        }
+        if(i % 3 === 0){
+          var px = b[0] + b[2]*(0.2+pr()*0.6), py = b[1] + b[3]*(0.25+pr()*0.5);
+          var g = E("g",{}, blocks);
+          E("path",{d:"M"+px+" "+py+" q2 -12 0 -20",stroke:"#4A3B2C","stroke-width":3,fill:"none"}, g);
+          for(var fr=0; fr<6; fr++){
+            var a = -Math.PI/2 + (fr-2.5)*0.42;
+            E("path",{d:"M"+px+" "+(py-20)+" q"+(Math.cos(a)*13)+" "+(Math.sin(a)*13)+" "+
+              (Math.cos(a)*22)+" "+(Math.sin(a)*20), stroke:"#4F7A4A","stroke-width":2.6,fill:"none",
+              "stroke-linecap":"round",opacity:.85}, g);
+          }
+        }
+      } else {
+        /* grass, then a handful of trees on each lawn */
+        E("rect",{x:b[0]+4,y:b[1]+4,width:b[2]-8,height:b[3]-8,rx:22,
+          fill:"#1C2C13",opacity:.7}, blocks);
+        var trees = 3 + Math.floor(pr()*3);
+        for(var t=0;t<trees;t++){
+          var tx = b[0] + 16 + pr()*(b[2]-32), ty = b[1] + 16 + pr()*(b[3]-32);
+          var r = 7 + pr()*5;
+          var g2 = E("g",{}, blocks);
+          E("ellipse",{cx:tx+2,cy:ty+r*0.7,rx:r*1.05,ry:r*0.42,fill:"#000",opacity:.32}, g2);
+          E("rect",{x:tx-1.4,y:ty-2,width:2.8,height:r*0.9,fill:"#4A3B2C"}, g2);
+          E("circle",{cx:tx,cy:ty-r*0.5,r:r,fill:"#2F5730"}, g2);
+          E("circle",{cx:tx-r*0.5,cy:ty-r*0.1,r:r*0.7,fill:"#3E6B39",opacity:.95}, g2);
+          E("circle",{cx:tx+r*0.55,cy:ty-r*0.2,r:r*0.62,fill:"#25482A",opacity:.95}, g2);
         }
       }
     });
 
-    /* the crowd: dots along the lanes that thicken as the evening comes */
+    /* the crowd: dots along the ways that thicken as the evening comes */
     var crowd = [];
     var cr = seeded(77);
     M.EDGE.forEach(function(e){
       var a = M.NODE[e[0]], b = M.NODE[e[1]];
-      var n = e[2] === "lane" ? 5 : 2;
+      var n = (e[2] === "lane" || e[2] === "path") ? 5 : 2;
       for(var i=0;i<n;i++){
         var t = (i + .5 + (cr()-.5)*.6) / n;
         var dx = b[0]-a[0], dy = b[1]-a[1], len = Math.hypot(dx,dy) || 1;
         var off = (cr()-.5) * 12;
         var c = E("circle",{cx:a[0]+dx*t + (-dy/len)*off, cy:a[1]+dy*t + (dx/len)*off,
-          r:1.6 + cr()*1.6, fill:"#E7C79A"}, crowdG);
+          r:1.6 + cr()*1.6, fill: park ? "#CFE0B8" : "#E7C79A"}, crowdG);
         crowd.push(c);
       }
     });
@@ -2342,12 +2578,15 @@
       crowd.forEach(function(c, i){
         c.setAttribute("opacity", (i / crowd.length < footfall ? dens : 0.04).toFixed(3));
       });
-      canopy.setAttribute("opacity", (0.55 + (1-dark) * 0.45).toFixed(2));
+      canopy.setAttribute("opacity", park ? (0.5 + dark * 0.5).toFixed(2)
+                                          : (0.55 + (1-dark) * 0.45).toFixed(2));
     };
     if(window.ZillMap.currentHour !== undefined){
       window.onZillHour(window.ZillMap.currentHour, window.ZillMap.currentFootfall);
     }
   }
+
+  window.ZillDecor = {rebuild: buildMapDecor};
 
   buildCutaway();
   buildShots();
