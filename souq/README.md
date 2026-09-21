@@ -19,6 +19,7 @@ from published cart, battery and air-conditioning specifications.
 
 | | |
 |---|---|
+| **A cart in the park** | A drawn view of Al-Shaheed Park after Maghrib: the lake catching the last of the sun, lawns, trees and a clipped hedge, lamp posts down the path, people out in the cool, the Kuwait City skyline behind — and a cart coming down the path towards you with its headlamps on, on a loop. |
 | **The lane** | A drawn diorama of a covered souq lane at dusk — shopfronts, striped awnings, strung lanterns, shafts of light through the roof, shoppers — with a cart driving out of the sunlit end towards you, on a loop. |
 | **The maps** | **Two places, switched above the map.** The souq is a graph of 30 junctions and 48 lanes under striped awnings, with palms, a crowd that thickens after sunset, 13 shaded stops and 12 carts. **Al-Shaheed Park** is its own graph — a jogging loop of twelve turns with garden paths across it, lawns and trees, the lake, lamp posts instead of awnings, 10 stops and 8 carts, drawn to its own scale (780 m across, against the souq's 420 m) and with its own footfall curve: joggers at dawn, families after sunset. Either way, pick two stops and the nearest free cart by path distance (Dijkstra, not straight line) collects you, carries you and hands back a receipt. Tick the ramp box and only the accessible carts are eligible. |
 | **The cart** | A 3D model at 1 unit = 1 metre — 3.6 m long, 1.3 m wide: **six seats, three facing three, and the driver's own seat up front** with its wheel and dash, and **a sadu band (السدو)** down both flanks, across the nose and tail and along the roof fascia — the cabin itself is left plain. Drag to turn it, zoom in, and take it apart to see the roof unit lift off, the roof and glass rise, the pack drop out of the floor and the wheels step aside. Tapping 5 lifts the roof away entirely and looks straight down on the seating. Eight markers sit on the model itself and fade as they go round the back. If WebGL is unavailable the page falls back to the side drawing it replaced. |
@@ -44,7 +45,7 @@ the bottom of `index.html`:
    dispatch, the cabin-temperature and battery models, the chart and the fleet table, all
    driven by one `requestAnimationFrame` loop. The demo clock runs 3× real time and the pack
    drains on a compressed scale so a shift is visible in a minute.
-2. **The artwork** — `buildLane()` draws the diorama (a four-layer perspective built from one
+2. **The artwork** — `buildLane()` draws the souq diorama, `buildPark()` the park at dusk (a four-layer perspective built from one
    depth scale `S`), `drawCartSide()` and `drawCartFront()` draw the cart once so the same
    vehicle appears in the lane, in the annotated view and at the hub, and `buildCartArt()`
    wires the numbered markers to the caption.
