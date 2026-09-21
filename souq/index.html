@@ -400,8 +400,8 @@
         <div class="clockbar">
           <div class="row">
             <span class="t" id="hour-label">15:00</span>
-            <input id="hour" type="range" min="0" max="23" step="1" value="15" aria-label="Hour of the day">
-            <span style="font-family:var(--mono);font-size:.72rem;color:var(--muted)">drag through a day in August</span>
+            <input id="hour" type="range" min="13" max="24" step="1" value="15" aria-label="Hour of the service day, 13:00 to midnight">
+            <span style="font-family:var(--mono);font-size:.72rem;color:var(--muted)">13:00 &rarr; midnight, a day in August</span>
           </div>
           <div class="chips">
             <span class="chip">outside <b id="c-out">48&deg;C</b></span>
@@ -512,7 +512,7 @@
     </div>
     <div class="chart">
       <svg viewBox="0 0 900 300" role="img" aria-label="A typical August day in Kuwait City: the outside temperature climbing to about 48 degrees mid-afternoon while the cart cabin holds 22, with souq footfall in bars peaking after sunset"><g id="chart-body"></g></svg>
-      <p>A typical August day &mdash; not a forecast. The bars are <span id="foot-word">the souq's own footfall</span>: thin at noon, heavy after Maghrib.</p>
+      <p>A typical August day &mdash; not a forecast. The bars are <span id="foot-word">the souq's own footfall</span>: thin at noon, heavy after Maghrib. The carts run the shaded hours, 13:00 to midnight.</p>
     </div>
   </section>
 
@@ -1208,7 +1208,8 @@
     hour = parseInt(hourInput.value, 10);
     var out = outsideAt(hour);
     var ac = acKw(out);
-    document.getElementById("hour-label").textContent = (hour<10?"0":"") + hour + ":00";
+    var shown = hour % 24;
+    document.getElementById("hour-label").textContent = (shown<10?"0":"") + shown + ":00";
     document.getElementById("c-out").textContent = out + "°C";
     document.getElementById("c-ac").textContent = ac.toFixed(2) + " kW";
     document.getElementById("c-range").textContent = rangeHours(out).toFixed(1) + " h";
@@ -1245,6 +1246,12 @@
         fill:"rgba(232,181,75,.16)"}));
     });
 
+    /* the service window: 13:00 to midnight */
+    g.appendChild(el("rect",{x:x(13), y:T-8, width:x(23.999)-x(13), height:B-T+8,
+      fill:"#6FD3E8", opacity:.055}));
+    g.appendChild(el("line",{x1:x(13),y1:T-8,x2:x(13),y2:B,
+      stroke:"#6FD3E8","stroke-width":1,opacity:.35,"stroke-dasharray":"4 5"}));
+
     /* axes */
     g.appendChild(el("line",{x1:L,y1:B,x2:R,y2:B,stroke:"#2E251C","stroke-width":1.4}));
     [20,30,40,50].forEach(function(t){
@@ -1273,16 +1280,18 @@
     g.appendChild(el("line",{x1:L,y1:y(CABIN_SET),x2:R,y2:y(CABIN_SET),
       stroke:"#6FD3E8","stroke-width":2.4,"stroke-dasharray":"7 6"}));
 
-    /* the hour you are looking at */
-    g.appendChild(el("line",{x1:x(hour),y1:T-6,x2:x(hour),y2:B,
+    /* the hour you are looking at (midnight sits at the right-hand edge) */
+    var hx = Math.min(hour, 23.999);
+    g.appendChild(el("line",{x1:x(hx),y1:T-6,x2:x(hx),y2:B,
       stroke:"#F4E9DA","stroke-width":1,opacity:.45}));
-    g.appendChild(el("circle",{cx:x(hour),cy:y(TEMP[hour]),r:6,fill:"#D07A4E",
+    g.appendChild(el("circle",{cx:x(hx),cy:y(TEMP[hour % 24]),r:6,fill:"#D07A4E",
       stroke:"#15110D","stroke-width":2}));
 
     var tags = [
       {x:R, y:y(TEMP[15])-14, t:"outside", fill:"#D07A4E", anchor:"end"},
       {x:R, y:y(CABIN_SET)-12, t:"cabin, held at 22°", fill:"#6FD3E8", anchor:"end"},
-      {x:L+4, y:T+6, t:"bars: footfall in the souq", fill:"#8A7965", anchor:"start"}
+      {x:L+4, y:T+6, t:"bars: footfall", fill:"#8A7965", anchor:"start"},
+      {x:x(13)+8, y:T+6, t:"carts run 13:00 \u2192 00:00", fill:"#6FD3E8", anchor:"start"}
     ];
     tags.forEach(function(tg){
       var t = el("text",{x:tg.x,y:tg.y,"text-anchor":tg.anchor,
@@ -2651,7 +2660,7 @@
      ================================================================ */
 
   var FACTS = [
-    {b:"08:00 – 13:00, 16:00 – 23:00", s:"the souq's own hours", icon:function(g){
+    {b:"13:00 \u2013 00:00", s:"one shift, from the worst of the heat to midnight", icon:function(g){
       E("circle",{cx:15,cy:15,r:11,fill:"none",stroke:C.gold,"stroke-width":2},g);
       E("path",{d:"M15 8 v8 l6 4",stroke:C.gold,"stroke-width":2,fill:"none","stroke-linecap":"round"},g);
     }},

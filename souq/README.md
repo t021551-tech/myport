@@ -25,7 +25,7 @@ from published cart, battery and air-conditioning specifications.
 | **The cart** | A 3D model at 1 unit = 1 metre — 3.6 m long, 1.3 m wide: **six seats, three facing three, and the driver's own seat up front** with its wheel and dash, and **a sadu band (السدو)** down both flanks, across the nose and tail and along the roof fascia — the cabin itself is left plain. Drag to turn it, zoom in, and take it apart to see the roof unit lift off, the roof and glass rise, the pack drop out of the floor and the wheels step aside. Tapping 5 lifts the roof away entirely and looks straight down on the seating. Eight markers sit on the model itself and fade as they go round the back. If WebGL is unavailable the page falls back to the side drawing it replaced. |
 | **Close up** | Six drawn panels: the roof unit, the cabin, the pack under the bench, the ramp, the hub at night, the misted shelter. A line of caption each. |
 | **Cut in half** | A section through the cart, head-on: heat pressing in from both sides, cold falling from the ceiling vents, the pack under the floor. |
-| **The day** | A typical August day in Kuwait City — the outside curve, the 22 °C cabin line, and the souq's own footfall in bars. The hour slider drives the whole model: outside temperature sets the air-conditioner's draw, which sets range on one pack, which sets how many carts that hour needs. |
+| **The day** | A typical August day in Kuwait City — the outside curve, the 22 °C cabin line, and the souq's own footfall in bars. The hour slider runs the service day — **13:00 to midnight**, the shaded band on the chart — and drives the whole model: outside temperature sets the air-conditioner's draw, which sets range on one pack, which sets how many carts that hour needs. |
 
 ## Running it
 
