@@ -443,7 +443,7 @@
       <h2>A cart in the park</h2>
       <span class="ara">&#1575;&#1604;&#1581;&#1583;&#1610;&#1602;&#1577; &#1593;&#1606;&#1583; &#1575;&#1604;&#1594;&#1585;&#1608;&#1576;</span>
     </div>
-    <p class="sec-note">Long open paths, a lake, and almost no shade &mdash; which is why the park empties in the afternoon and fills again after sunset.</p>
+    <p class="sec-note">Long open paths, a lake, and almost no shade &mdash; which is why the park empties in the afternoon and fills again after sunset. Eight carts run it on the same shift as the souq: 13:00 to midnight.</p>
     <div class="stage">
       <svg id="parkscene" viewBox="0 0 1400 620" preserveAspectRatio="xMidYMid slice" role="img" aria-label="A drawn view of Al-Shaheed Park at dusk: the lake catching the last of the sun, lawns and trees, lamp posts along the paths, people walking in the cool of the evening, the Kuwait City skyline behind, and an air-conditioned cart coming down the path towards the viewer."></svg>
       <div class="stage-copy">
@@ -512,7 +512,7 @@
     </div>
     <div class="chart">
       <svg viewBox="0 0 900 300" role="img" aria-label="A typical August day in Kuwait City: the outside temperature climbing to about 48 degrees mid-afternoon while the cart cabin holds 22, with souq footfall in bars peaking after sunset"><g id="chart-body"></g></svg>
-      <p>A typical August day &mdash; not a forecast. The bars are <span id="foot-word">the souq's own footfall</span>: thin at noon, heavy after Maghrib. The carts run the shaded hours, 13:00 to midnight.</p>
+      <p>A typical August day &mdash; not a forecast. The bars are <span id="foot-word">the souq's own footfall</span>: <span id="foot-note">thin at noon, heavy after Maghrib</span>. The carts run the shaded hours, 13:00 to midnight &mdash; in both places.</p>
     </div>
   </section>
 
@@ -581,6 +581,7 @@
       ground:["#1B140E","#110C08"],
       blockFill:"#1A140E", blockStroke:"#2E251C",
       footWord:"the souq's own footfall",
+      footNote:"thin at noon, heavy after Maghrib",
       NODE: {
         A1:[95,95],  A2:[85,215],  A3:[100,345], A4:[90,465],  A5:[105,575],
         B1:[255,80], B2:[240,225], B3:[265,330], B4:[245,470], B5:[260,590],
@@ -649,6 +650,7 @@
       ground:["#141A10","#0D1109"],
       blockFill:"#16210F", blockStroke:"#25341A",
       footWord:"the park's own footfall",
+      footNote:"joggers at first light, families after sunset \u2014 the shift starts long after the runners have gone home",
       NODE: {
         P1:[928,318], P2:[874,196], P3:[716,112], P4:[502,84],  P5:[286,116], P6:[128,198],
         P7:[72,330],  P8:[130,462], P9:[288,548], P10:[500,578],P11:[714,546],P12:[872,462],
@@ -1473,6 +1475,7 @@
     setText("stat-carts", SITE.fleet);
     setText("stat-stops", STOPS.filter(function(st){ return !st.hub; }).length);
     setText("foot-word", SITE.footWord);
+    setText("foot-note", SITE.footNote);
 
     applyHour();
     onRouteChange();
