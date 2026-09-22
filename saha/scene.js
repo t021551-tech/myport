@@ -62,19 +62,37 @@
       bounds: [-152, 152, -166, -104], view: { x: 0, z: -134, yaw: Math.PI }
     },
     {
+      id: 'shuttle', num: '11',
+      en: { name: 'The Shuttle', short: 'Eight seats, sadu livery, one every two minutes.' },
+      ar: { name: 'المكوك', short: 'ثمانية مقاعد، بكسوة السدو، واحد كل دقيقتين.' },
+      enText: 'The cart is what makes the distance workable. Eight seats, no doors, a canopy ' +
+        'and 24 km/h — five minutes from the mosque terminus to the head of the souq, against ' +
+        'twenty-five on foot. One every two minutes, with four stops each way and a spare ' +
+        'sitting in the layby. It is dressed in sadu, السدو, the Bedouin weave: madder red, ' +
+        'undyed white, black wool and camel hair, which is the one thing on this whole site ' +
+        'that could not be mistaken for anywhere else.',
+      arText: 'العربة هي ما يجعل المسافة عملية. ثمانية مقاعد بلا أبواب، ومظلة، وسرعة ٢٤ كم/س ' +
+        '— خمس دقائق من موقف المسجد إلى رأس السوق، مقابل خمس وعشرين مشياً. واحدة كل دقيقتين، ' +
+        'مع أربع محطات في كل اتجاه وعربة احتياطية في الجيب. وهي مكسوّة بالسدو: الأحمر الفوّة، ' +
+        'والأبيض غير المصبوغ، والصوف الأسود، وشعر الإبل — وهو الشيء الوحيد في هذا الموقع كله ' +
+        'الذي لا يمكن أن يُظن أنه من مكان آخر.',
+      facts: [['Seats', 'المقاعد', '8'], ['Speed', 'السرعة', '24 km/h'], ['End to end', 'الرحلة', '5 min'], ['Every', 'كل', '2 min']],
+      bounds: [-30, 30, 172, 252], view: { x: 17.2, z: 197, yaw: 2.5 }
+    },
+    {
       id: 'road', num: '10',
-      en: { name: 'The Road', short: '1.8 km of planted carriageway, footways both sides.' },
-      ar: { name: 'الطريق', short: '١٫٨ كم من طريق مشجَّر، وأرصفة على الجانبين.' },
+      en: { name: 'The Road', short: '1.8 km of planted carriageway, with the cart on it.' },
+      ar: { name: 'الطريق', short: '١٫٨ كم من طريق مشجَّر، وعليه المكوك.' },
       enText: 'What the distance actually costs: 1.8 km of carriageway between the south edge ' +
         'of the court and the head of the souq, with a nine-metre footway on each side and a ' +
-        'date palm every twenty-four metres. Three minutes by car, five in traffic, ' +
-        'twenty-five on foot — and the palms are there because the walk is only honest if it ' +
-        'is shaded.',
+        'date palm every twenty-four metres. Three minutes by car, twenty-five on foot, five ' +
+        'on the shuttle cart that runs it end to end — and the palms are there because the ' +
+        'walk is only honest if it is shaded.',
       arText: 'ما تكلّفه المسافة فعلاً: ١٫٨ كم من الطريق بين الحد الجنوبي للساحة ورأس السوق، ' +
         'مع رصيف بعرض تسعة أمتار على كل جانب ونخلة كل أربعة وعشرين متراً. ثلاث دقائق ' +
-        'بالسيارة، وخمس في الزحام، وخمس وعشرون مشياً — والنخيل هناك لأن المشي لا يكون ' +
-        'صادقاً إلا إذا كان مظلَّلاً.',
-      facts: [['Length', 'الطول', '1.8 km'], ['By car', 'بالسيارة', '3 min'], ['On foot', 'مشياً', '25 min'], ['Footway', 'الرصيف', '9 m']],
+        'بالسيارة، وخمس وعشرون مشياً، وخمس على عربة المكوك التي تقطعه من طرف إلى طرف — ' +
+        'والنخيل هناك لأن المشي لا يكون صادقاً إلا إذا كان مظلَّلاً.',
+      facts: [['Length', 'الطول', '1.8 km'], ['By car', 'بالسيارة', '3 min'], ['By cart', 'بالمكوك', '5 min'], ['On foot', 'مشياً', '25 min']],
       bounds: [-26, 26, 200, 2020], view: { x: 14.6, z: 620, yaw: 0 }
     },
     {
@@ -501,6 +519,25 @@
     x.fillStyle = g; x.fillRect(0, 0, w, h);
   });
 
+  /* sadu — السدو, the Bedouin weave the shuttle is dressed in:
+     madder red ground, undyed white centre, black wool motif, camel hair. */
+  var saduTex = tex(128, 64, function (x, w, h) {
+    x.fillStyle = '#8E2B26'; x.fillRect(0, 0, w, h);
+    x.fillStyle = '#14120F';
+    x.fillRect(0, 0, w, 5); x.fillRect(0, h - 5, w, 5);
+    x.fillRect(0, h / 2 - 14, w, 3); x.fillRect(0, h / 2 + 11, w, 3);
+    x.fillStyle = '#EFE6D4'; x.fillRect(0, h / 2 - 11, w, 22);
+    x.fillStyle = '#14120F';
+    for (var v = 0; v < w; v += 16) {          /* the diamond, repeated */
+      x.beginPath();
+      x.moveTo(v + 8, h / 2 - 8); x.lineTo(v + 14, h / 2);
+      x.lineTo(v + 8, h / 2 + 8); x.lineTo(v + 2, h / 2);
+      x.closePath(); x.fill();
+    }
+    x.fillStyle = '#A6825A';
+    for (var u = 0; u < w; u += 16) { x.fillRect(u + 6, 6, 4, 4); x.fillRect(u + 6, h - 10, 4, 4); }
+  }, 3, 1);
+
   /* a band of glazed tile, for the one piece of colour on the mosque */
   var tileTex = tex(128, 32, function (x, w, h) {
     x.fillStyle = '#1F6E86'; x.fillRect(0, 0, w, h);
@@ -534,7 +571,11 @@
     shadow: new THREE.MeshBasicMaterial({ map: shadowTex, transparent: true, depthWrite: false }),
     glass: new THREE.MeshStandardMaterial({ color: 0xA9CBD2, roughness: 0.1, metalness: 0.5 }),
     white: mat(0xF6F2E8, 0.86),
-    steel: mat(0x9AA0A2, 0.4, 0.6)
+    steel: mat(0x9AA0A2, 0.4, 0.6),
+    sadu: new THREE.MeshStandardMaterial({ map: saduTex, roughness: 0.82 }),
+    cartBody: mat(0x1D2420, 0.6, 0.12),
+    madder: mat(0x8E2B26, 0.72),
+    tyre: mat(0x141412, 0.9)
   };
 
   var stripeMats = [
@@ -812,6 +853,12 @@
 
     /* 01 · the prayer court — paving, and nothing on it */
     world.add(ground(268, 226, M.pave, 0, 0, 0.01));
+
+    /* the approach from the court down to the shuttle terminus */
+    world.add(ground(106, 96, M.walk, 0, 150, 0.02));
+    /* the terminus apron, so the stops are not standing on sand */
+    world.add(ground(24, 52, M.walk, 16, 198, 0.03));
+    world.add(ground(24, 52, M.walk, -16, 198, 0.03));
 
     /* the souq ground and the walk that runs south from the court */
     world.add(ground(120, 122, M.walk, 0, 132, 0.02));
@@ -1209,6 +1256,132 @@
     blocker(BR.half + 0.6, 600, -152, -120);
   })();
 
+  /* ---- the shuttle: a sadu-liveried cart, mosque to souq ----------
+     The road is 1.8 km. A car does it in three minutes and a walk in
+     twenty-five, so the thing that actually makes the distance workable
+     is a cart: eight seats, no doors, 24 km/h, one every two minutes.
+     Built once and cloned, so six carts cost one set of geometry. ---- */
+  var CARTS = [];
+
+  function buildCart() {
+    var g = new THREE.Group();          /* built facing -Z, which is north */
+
+    /* chassis, and the sadu panel along each flank */
+    g.add(put(box(1.52, 0.26, 3.6, M.cartBody), 0, 0.46, 0));
+    g.add(put(box(1.56, 0.46, 3.44, M.sadu), 0, 0.72, 0));
+    g.add(put(box(1.46, 0.08, 3.5, M.cartBody), 0, 0.96, 0));
+
+    /* three benches, back to the front */
+    [-1.05, 0.05, 1.15].forEach(function (bz) {
+      g.add(put(box(1.34, 0.12, 0.46, M.madder), 0, 1.06, bz));
+      g.add(put(box(1.34, 0.46, 0.09, M.cartBody), 0, 1.33, bz + 0.28));
+    });
+
+    /* canopy on four posts, with a sadu valance under its edge */
+    [[-0.7, -1.6], [0.7, -1.6], [-0.7, 1.6], [0.7, 1.6]].forEach(function (c) {
+      var post = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.05, 1.2, 8), M.steel);
+      g.add(put(post, c[0], 1.78, c[1]));
+    });
+    g.add(put(box(1.74, 0.1, 3.8, M.madder), 0, 2.42, 0));
+    g.add(put(box(1.8, 0.16, 3.86, M.sadu), 0, 2.3, 0));
+
+    /* windscreen, wheel, and the lamp that says which way is forward */
+    g.add(put(box(1.34, 0.6, 0.05, M.glass), 0, 1.66, -1.72));
+    g.add(put(box(0.3, 0.05, 0.3, M.cartBody), -0.38, 1.5, -1.5));
+    g.add(put(box(0.5, 0.12, 0.1, M.white), 0, 0.66, -1.82));
+
+    /* wheels */
+    [[-0.78, -1.24], [0.78, -1.24], [-0.78, 1.3], [0.78, 1.3]].forEach(function (wp) {
+      var wh = new THREE.Mesh(new THREE.CylinderGeometry(0.33, 0.33, 0.18, 12), M.tyre);
+      wh.rotation.z = Math.PI / 2;
+      g.add(put(wh, wp[0], 0.33, wp[1]));
+    });
+
+    /* a driver and one passenger, so it never looks like a parked prop */
+    [[-0.38, -1.15, 0xF4F1E8], [0.34, 0.05, 0x2A2A2E]].forEach(function (q) {
+      var t = new THREE.Mesh(new THREE.CylinderGeometry(0.17, 0.2, 0.62, 8), mat(q[2], 0.88));
+      g.add(put(t, q[0], 1.43, q[1]));
+      g.add(put(new THREE.Mesh(new THREE.SphereGeometry(0.1, 8, 6), mat(0xC9A07B, 0.85)), q[0], 1.83, q[1]));
+    });
+
+    return g;
+  }
+
+  /* a stop: a shade roof, a bench and a sign, on the footway */
+  function cartStop(z, side) {
+    var x = side * 13.4;
+    [[-1.9, -1.4], [1.9, -1.4], [-1.9, 1.4], [1.9, 1.4]].forEach(function (c) {
+      I.steelPost.at(x + c[0], 0, z + c[1], { sx: 1, sy: 2.6, sz: 1 });
+    });
+    world.add(put(box(4.6, 0.12, 3.4, M.madder), x, 2.66, z));
+    world.add(put(box(4.8, 0.2, 3.6, M.sadu), x, 2.52, z));
+    I.bench.at(x, 0.22, z + 1, { sx: 3.4, sy: 1, sz: 1, ry: Math.PI });
+    /* the sign, out at the kerb where you can see it from the cart */
+    I.steelPost.at(side * 10.4, 0, z - 2.6, { sx: 1, sy: 2.5, sz: 1 });
+    world.add(put(box(0.09, 0.62, 0.9, M.sadu), side * 10.4, 2.4, z - 2.6));
+    person(x + 1.2, z + 0.4);
+    person(x - 1.4, z - 0.8);
+  }
+
+  /* where a cart sits for a given distance along the route. Traffic keeps
+     right: northbound at +x, southbound at -x. */
+  function placeCart(c, route) {
+    c.g.position.set(c.dir > 0 ? -4.7 : 4.7,
+      c.wait > 0 ? 0 : Math.sin(c.s * 1.6) * 0.022,
+      route.z0 + c.s);
+  }
+
+  (function shuttle() {
+    var z0 = 196, z1 = SOUQ.z - 78, L = z1 - z0;
+    var mid = [L * 0.34, L * 0.67];
+
+    cartStop(z0 + 12, 1); cartStop(z0 + 12, -1);
+    cartStop(z0 + mid[0], 1); cartStop(z0 + mid[0], -1);
+    cartStop(z0 + mid[1], 1); cartStop(z0 + mid[1], -1);
+    cartStop(z1 - 12, 1); cartStop(z1 - 12, -1);
+
+    var proto = buildCart();
+    for (var i = 0; i < 5; i++) {
+      var dir = i % 2 ? 1 : -1;            /* +1 runs to the souq, -1 back to the mosque */
+      var g = i === 0 ? proto : proto.clone();
+      g.rotation.y = dir > 0 ? Math.PI : 0;
+      world.add(g);
+      var c = { g: g, s: (i / 5) * L, dir: dir, wait: i === 0 ? 6 : 0, held: -1 };
+      CARTS.push(c);
+      placeCart(c, { z0: z0 });        /* so a reduced-motion viewer still sees them on the road */
+    }
+    /* the spare, always sitting in the layby at the mosque terminus */
+    var spare = proto.clone();
+    spare.rotation.y = Math.PI;
+    world.add(put(spare, 9.6, 0, z0 + 10));       /* in the layby at the mosque terminus */
+
+    CARTS.route = { z0: z0, L: L, mid: mid };
+  })();
+
+  /* moved every frame by the loop at the bottom of this file */
+  function driveCarts(dt) {
+    var r = CARTS.route;
+    for (var i = 0; i < CARTS.length; i++) {
+      var c = CARTS[i];
+      if (c.wait > 0) {
+        c.wait -= dt;
+      } else {
+        var prev = c.s;
+        c.s += c.dir * 6.7 * dt;                       /* 24 km/h */
+        for (var k = 0; k < r.mid.length; k++) {
+          if (k === c.held) continue;
+          if ((prev - r.mid[k]) * (c.s - r.mid[k]) <= 0) {
+            c.s = r.mid[k]; c.wait = 5.5; c.held = k; break;
+          }
+        }
+        if (c.held >= 0 && Math.abs(c.s - r.mid[c.held]) > 14) c.held = -1;
+        if (c.s >= r.L) { c.s = r.L; c.dir = -1; c.wait = 8; c.g.rotation.y = 0; c.held = -1; }
+        else if (c.s <= 0) { c.s = 0; c.dir = 1; c.wait = 8; c.g.rotation.y = Math.PI; c.held = -1; }
+      }
+      placeCart(c, r);
+    }
+  }
+
   /* ---- the city on the horizon, hazed by the fog ------------------ */
   (function horizon() {
     var far = mat(0xA9B6BC, 0.9);
@@ -1537,6 +1710,7 @@
       } else if (bob) { bob *= 0.9; if (Math.abs(bob) < 0.002) bob = 0; }
     }
 
+    if (!reduced) driveCarts(dt);
     place();
     carrySky();
     look();
