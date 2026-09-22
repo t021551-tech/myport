@@ -29,21 +29,7 @@
      ================================================================ */
   var ZONES = [
     {
-      id: 'deck', num: '09',
-      en: { name: 'The Waterfront Deck', short: 'Timber deck, the sea below, the mosque behind you.' },
-      ar: { name: 'الواجهة البحرية', short: 'سطح خشبي، البحر تحته، والمسجد خلفك.' },
-      enText: 'Where the walk ends: a timber deck on the seaward side, the water below it and ' +
-        'the mosque behind you. Eighty metres of it, benches turned north-west for the sunset, ' +
-        'and steps down to the rock edge. From here the dome and the minaret line up over the ' +
-        'road you no longer have to cross.',
-      arText: 'حيث ينتهي الممشى: سطح خشبي على جهة البحر، الماء تحته والمسجد خلفك. طوله ثمانون ' +
-        'متراً، ومقاعده موجّهة نحو الشمال الغربي للغروب، ودرجٌ ينزل إلى حافة الصخر. من هنا ' +
-        'تصطف القبة والمئذنة فوق الطريق الذي لم تعد مضطراً لعبوره.',
-      facts: [['Length', 'الطول', '250 m'], ['Faces', 'الاتجاه', 'NW'], ['From the souq', 'من السوق', '8 min']],
-      bounds: [-158, 96, -212, -166], view: { x: -34, z: -203, yaw: -2.9 }
-    },
-    {
-      id: 'promenade', num: '08',
+      id: 'promenade', num: '07',
       en: { name: 'The Promenade', short: '11 m wide, 1:20 all the way, and not one step.' },
       ar: { name: 'الممشى', short: 'عرض ١١ م، وميل ١:٢٠ كاملاً، وبلا درجة واحدة.' },
       enText: 'The one piece of real infrastructure here. Gulf Street is six lanes with no ' +
@@ -59,12 +45,12 @@
         'لذلك ينعطف المدخلان ويسيران بمحاذاة الكورنيش، شرقاً من جهة المسجد وغرباً من جهة ' +
         'البحر، ولا يعبر الطريق سوى الجسر بطول اثنين وخمسين متراً. لا مصاعد ولا درج ولا درجة واحدة.',
       facts: [['Width', 'العرض', '11 m'], ['Ramp', 'الميل', '1:20'], ['Ramp run', 'طول المنحدر', '2 × 144 m'], ['Clear height', 'الارتفاع الحر', '6.6 m']],
-      bounds: [-152, 152, -166, -104], view: { x: 0, z: -134, yaw: Math.PI }
+      bounds: [-190, 152, -196, -104], view: { x: 0, z: -134, yaw: Math.PI }
     },
     {
-      id: 'shuttle', num: '11',
-      en: { name: 'The Shuttle', short: 'Eight seats, sadu livery, one every two minutes.' },
-      ar: { name: 'المكوك', short: 'ثمانية مقاعد، بكسوة السدو، واحد كل دقيقتين.' },
+      id: 'cart', num: '09',
+      en: { name: 'The Cart', short: 'Eight seats, sadu livery, one every two minutes.' },
+      ar: { name: 'العربة', short: 'ثمانية مقاعد، بكسوة السدو، واحدة كل دقيقتين.' },
       enText: 'The cart is what makes the distance workable. Eight seats, no doors, a canopy ' +
         'and 24 km/h — five minutes from the mosque terminus to the head of the souq, against ' +
         'twenty-five on foot. One every two minutes, with four stops each way and a spare ' +
@@ -80,13 +66,13 @@
       bounds: [-30, 30, 172, 252], view: { x: 17.2, z: 197, yaw: 2.5 }
     },
     {
-      id: 'road', num: '10',
+      id: 'road', num: '08',
       en: { name: 'The Road', short: '1.8 km of planted carriageway, with the cart on it.' },
       ar: { name: 'الطريق', short: '١٫٨ كم من طريق مشجَّر، وعليه المكوك.' },
       enText: 'What the distance actually costs: 1.8 km of carriageway between the south edge ' +
         'of the court and the head of the souq, with a nine-metre footway on each side and a ' +
         'date palm every twenty-four metres. Three minutes by car, twenty-five on foot, five ' +
-        'on the shuttle cart that runs it end to end — and the palms are there because the ' +
+        'on the cart that runs it end to end — and the palms are there because the ' +
         'walk is only honest if it is shaded.',
       arText: 'ما تكلّفه المسافة فعلاً: ١٫٨ كم من الطريق بين الحد الجنوبي للساحة ورأس السوق، ' +
         'مع رصيف بعرض تسعة أمتار على كل جانب ونخلة كل أربعة وعشرين متراً. ثلاث دقائق ' +
@@ -96,7 +82,7 @@
       bounds: [-26, 26, 200, 2020], view: { x: 14.6, z: 620, yaw: 0 }
     },
     {
-      id: 'majlis', num: '07',
+      id: 'majlis', num: '06',
       en: { name: 'The Majlis', short: 'Six sunken seating rooms under fabric sails.' },
       ar: { name: 'المجالس', short: 'ست غرف جلوس منخفضة تحت مظلات قماشية.' },
       enText: 'Six sunken seating rooms at the head of the souq, each a square of low benches ' +
@@ -131,21 +117,7 @@
       bounds: [-52, 52, 2050, 2150], view: { x: -5.5, z: 2136, yaw: 0 }
     },
     {
-      id: 'lawn', num: '05',
-      en: { name: 'The Lawn', short: '0.9 ha of grass, graded into a shallow bowl.' },
-      ar: { name: 'المرج', short: '٠٫٩ هكتار من العشب، مائلة كالحوض الضحل.' },
-      enText: 'Nine thousand square metres of grass on the south-east, graded into a shallow ' +
-        'bowl so it reads as somewhere to sit rather than a lawn to look at. Ninety trees ' +
-        'around the rim for the shade grass cannot give. Irrigated with treated water, which ' +
-        'is the only thing that makes a lawn this size defensible in this climate.',
-      arText: 'تسعة آلاف متر مربع من العشب في الجنوب الشرقي، مائلة كحوض ضحل حتى تُقرأ كمكان ' +
-        'للجلوس لا كمرج يُنظر إليه. تسعون شجرة حول حافتها للظل الذي لا يعطيه العشب. تُروى ' +
-        'بمياه معالجة، وهو وحده ما يجعل مرجاً بهذا الحجم مقبولاً في هذا المناخ.',
-      facts: [['Area', 'المساحة', '0.9 ha'], ['Trees', 'الأشجار', '90'], ['Water', 'الري', 'treated']],
-      bounds: [50, 180, 92, 192], view: { x: 104, z: 150, yaw: 0.64 }
-    },
-    {
-      id: 'grove', num: '06',
+      id: 'grove', num: '05',
       en: { name: 'The Palm Grove', short: '120 date palms on a nine-metre grid.' },
       ar: { name: 'النخيل', short: '١٢٠ نخلة على شبكة تسعة أمتار.' },
       enText: 'A hundred and twenty date palms on a nine-metre grid over compacted sand, ' +
@@ -177,14 +149,14 @@
     },
     {
       id: 'terraces', num: '04',
-      en: { name: 'The Food Terraces', short: 'Nine kitchens, 400 seats, all of them shaded.' },
-      ar: { name: 'المصاطر', short: 'تسعة مطابخ، ٤٠٠ مقعد، كلها مظلّلة.' },
+      en: { name: 'The Food Area', short: 'Nine kitchens, 400 seats, all of them shaded.' },
+      ar: { name: 'منطقة المطاعم', short: 'تسعة مطابخ، ٤٠٠ مقعد، كلها مظلّلة.' },
       enText: 'Nine kitchens on the west side with their seating outside under pergolas, ' +
         'turned to face the afternoon shade rather than the afternoon sun. Around four hundred ' +
-        'seats, and a run of water along the terrace edge — moving water drops the air ' +
+        'seats, and a run of water along the outer edge — moving water drops the air ' +
         'temperature by a degree or two you can actually feel.',
       arText: 'تسعة مطابخ على الجهة الغربية وجلساتها في الخارج تحت العرائش، موجَّهة نحو ظل ' +
-        'العصر لا نحو شمسه. نحو أربعمئة مقعد، ومجرى ماء على حافة المصطبة — الماء الجاري يخفض ' +
+        'العصر لا نحو شمسه. نحو أربعمئة مقعد، ومجرى ماء على الحافة الخارجية — الماء الجاري يخفض ' +
         'حرارة الهواء درجة أو درجتين تشعر بهما فعلاً.',
       facts: [['Kitchens', 'المطابخ', '9'], ['Seats', 'المقاعد', '~400'], ['Shaded by', 'مظللة بحلول', '3pm']],
       bounds: [-182, -104, -92, 92], view: { x: -108, z: 4, yaw: Math.PI / 2 }
@@ -264,7 +236,7 @@
         '<p>' + esc(ar ? z.arText : z.enText) + '</p>' +
         '<dl>' + facts + '</dl>' +
         '<button type="button" class="go" data-go="' + z.id + '">' +
-          (ar ? 'اذهب إلى هناك ↑' : 'Walk there ↑') + '</button>' +
+          (ar ? 'اذهب إلى هناك ↑' : 'Go there ↑') + '</button>' +
         '</li>';
     }).join('');
   }
@@ -873,9 +845,9 @@
     var sea = ground(2000, 900, M.sea, 0, -660, -1.6);
     world.add(sea);
     /* the rock edge it breaks against */
-    for (var i = -156; i <= 94; i += 4) {
+    for (var i = -190; i <= 40; i += 4) {
       var r = box(4.2, 2.2, 3.4, M.stoneWarm);
-      r.position.set(i, -0.6, -209 - Math.random() * 1.6);
+      r.position.set(i, -0.6, -196 - Math.random() * 1.6);
       r.rotation.y = Math.random() * 0.6;
       world.add(r);
     }
@@ -1040,8 +1012,8 @@
     blocker(cx - 13.4, cx + 11.6, -72, 72);
   })();
 
-  /* ---- 04. the food terraces on the west -------------------------- */
-  (function terraces() {
+  /* ---- 04. the food area on the west ------------------------------ */
+  (function foodArea() {
     var kx = -152;
     for (var i = 0; i < 9; i++) {
       var kz = -64 + i * 16;
@@ -1078,37 +1050,14 @@
       }
       if (i % 2 === 0) person(px + 2, kz + 1);
     }
-    /* the runnel along the terrace edge */
+    /* the runnel along the outer edge */
     world.add(put(box(1.4, 0.4, 150, M.stoneWarm), -126, 0.16, 8));
     world.add(put(box(1, 0.42, 150, M.water), -126, 0.26, 8));
     for (var p = 0; p < 15; p++) { palm(-120, -64 + p * 10.5, 7 + (p % 3), p); lampPost(-123, -60 + p * 10.5); }
     for (var q = 0; q < 14; q++) person(-140 + Math.random() * 18, -64 + Math.random() * 130);
   })();
 
-  /* ---- 05. the lawn, south-east ----------------------------------- */
-  (function lawn() {
-    world.add(ground(118, 92, M.grass, 116, 142, 0.03));
-    /* the rim, a step you can sit on the whole way round */
-    world.add(put(box(122, 0.5, 1.2, M.stoneWarm), 116, 0.2, 95.4));
-    world.add(put(box(122, 0.5, 1.2, M.stoneWarm), 116, 0.2, 188.6));
-    world.add(put(box(1.2, 0.5, 94, M.stoneWarm), 56.4, 0.2, 142));
-    world.add(put(box(1.2, 0.5, 94, M.stoneWarm), 175.6, 0.2, 142));
-    /* ninety trees around it */
-    for (var i = 0; i < 26; i++) {
-      palm(60 + i * 4.6, 98, 7 + (i % 3), i);
-      palm(60 + i * 4.6, 186, 7 + ((i + 2) % 3), i + 2);
-    }
-    for (var j = 0; j < 19; j++) { palm(59, 102 + j * 4.6, 7 + (j % 3), j); palm(173, 102 + j * 4.6, 8 + (j % 2), j + 1); }
-    /* benches on the rim, and people on the grass */
-    for (var b = 0; b < 14; b++) {
-      I.bench.at(64 + b * 8, 0.22, 99.5, { sx: 2.2, sy: 1, sz: 1 });
-      I.bench.at(64 + b * 8, 0.22, 184.5, { sx: 2.2, sy: 1, sz: 1, ry: Math.PI });
-    }
-    for (var q = 0; q < 22; q++) person(64 + Math.random() * 104, 100 + Math.random() * 84);
-    for (var l = 0; l < 6; l++) { lampPost(60, 104 + l * 15); lampPost(172, 104 + l * 15); }
-  })();
-
-  /* ---- 06. the palm grove, south-west ----------------------------- */
+  /* ---- 05. the palm grove, south-west ----------------------------- */
   (function grove() {
     world.add(ground(118, 92, M.sand, -116, 142, 0.03));
     /* a hundred and twenty palms on a nine-metre grid, the walk left clear */
@@ -1131,7 +1080,7 @@
     for (var q = 0; q < 16; q++) person(-160 + Math.random() * 96, 102 + Math.random() * 84);
   })();
 
-  /* ---- 07. the majlis: six sunken rooms at the head of the souq --- */
+  /* ---- 06. the majlis: six sunken rooms at the head of the souq --- */
   (function majlis() {
     var h = SOUQ.z - 68, h2 = SOUQ.z - 56;
     var spots = [[-42, h], [-14, h], [14, h], [42, h], [-28, h2], [28, h2]];
@@ -1159,7 +1108,7 @@
     for (var l = 0; l < 5; l++) { lampPost(-56 + l * 28, SOUQ.z - 78); }
   })();
 
-  /* ---- 08 + 09. the promenade and the waterfront deck -------------
+  /* ---- 07. the promenade across Gulf Street -----------------------
      A ramp at one in twenty is the whole point of this piece, and one
      in twenty means 144 m of run for a 7.2 m rise. There is no room
      for that head-on, so the two approaches turn and run east and
@@ -1242,14 +1191,15 @@
     }
     for (var q = 0; q < 8; q++) person((Math.random() - 0.5) * 9, BR.zN + Math.random() * spanLen);
 
-    /* the corniche deck the west approach lands on */
-    world.add(ground(250, 42, M.deck, -31, -187, 0.06));
-    world.add(put(box(252, 0.6, 1.2, M.stoneWarm), -31, 0.3, -207.6));
-    for (var b = 0; b < 17; b++) {
-      I.bench.at(-148 + b * 14, 0.22, -202, { sx: 2.6, sy: 1, sz: 1, ry: Math.PI });
-      lampPost(-148 + b * 14, -195);
+    /* a paved corniche walk at the foot of the west approach: where the
+       crossing lands, and no more than that */
+    world.add(ground(150, 26, M.walk, -110, -180, 0.05));
+    world.add(put(box(152, 0.6, 1.1, M.stoneWarm), -110, 0.3, -192.6));
+    for (var b = 0; b < 9; b++) {
+      I.bench.at(-176 + b * 16, 0.22, -188, { sx: 2.6, sy: 1, sz: 1, ry: Math.PI });
+      lampPost(-176 + b * 16, -172);
     }
-    for (var w2 = 0; w2 < 18; w2++) person(-150 + Math.random() * 240, -200 + Math.random() * 30);
+    for (var w2 = 0; w2 < 10; w2++) person(-176 + Math.random() * 140, -186 + Math.random() * 14);
 
     /* you cannot cross the road at grade: only the span gets you over */
     blocker(-600, -BR.half - 0.6, -152, -120);
@@ -1455,7 +1405,7 @@
   var vel = { f: 0, s: 0 };
   var bob = 0;
 
-  var LIMIT = { x0: -178, x1: 178, z0: -206, z1: 2180 };
+  var LIMIT = { x0: -178, x1: 178, z0: -190, z1: 2180 };
 
   function blocked(x, z) {
     var r = 0.52;
