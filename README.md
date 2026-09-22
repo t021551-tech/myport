@@ -33,11 +33,13 @@ Manchester Metropolitan University.
   stricter one for `/rafeeq/`.
 - `saha/` — **Saha** (الساحة): the open ground around the Grand Mosque of Kuwait, given over to
   people, walked at eye level in 3D. The Eid prayer court stays empty and everything new sits on
-  the edges: a souq of sixty-four booths under striped canvas, an arcade of twenty-eight shop
-  units, nine food terraces, a lawn, a palm grove, six sunken majlis rooms and a ramped promenade
-  across Gulf Street to a waterfront deck. Nine zones, each a place you can stand in — `WASD` and
-  drag to look, or press a zone and be taken there. One short paragraph of text; the walkthrough
-  is the page. Bilingual (English / العربية). It is a **student design concept**: not affiliated
+  the edges: an arcade of twenty-eight shop units, nine food terraces, a lawn, a palm grove and a
+  ramped promenade across Gulf Street to a waterfront deck. The souq — sixty-four booths under
+  striped canvas, with its own majlis rooms and car park — sits 2.1 km inland, a three-minute
+  drive down 1.8 km of planted road, because a market that size wants its own ground rather than
+  the mosque's. Ten zones, each a place you can stand in — `WASD` and drag to look, or press a
+  zone and be taken there (a jump of more than 400 m cuts rather than flies). One short paragraph
+  of text; the walkthrough is the page. Bilingual (English / العربية). It is a **student design concept**: not affiliated
   with, endorsed by or submitted to any authority, the mosque modelled from photographs rather
   than drawings, and the dimensions paced off aerial imagery rather than a survey.
 - `notes/` — the Notebook: six running logs (places in Kuwait, a car build list, a gahwa

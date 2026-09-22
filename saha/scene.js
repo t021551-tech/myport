@@ -62,34 +62,55 @@
       bounds: [-152, 152, -166, -104], view: { x: 0, z: -134, yaw: Math.PI }
     },
     {
+      id: 'road', num: '10',
+      en: { name: 'The Road', short: '1.8 km of planted carriageway, footways both sides.' },
+      ar: { name: 'الطريق', short: '١٫٨ كم من طريق مشجَّر، وأرصفة على الجانبين.' },
+      enText: 'What the distance actually costs: 1.8 km of carriageway between the south edge ' +
+        'of the court and the head of the souq, with a nine-metre footway on each side and a ' +
+        'date palm every twenty-four metres. Three minutes by car, five in traffic, ' +
+        'twenty-five on foot — and the palms are there because the walk is only honest if it ' +
+        'is shaded.',
+      arText: 'ما تكلّفه المسافة فعلاً: ١٫٨ كم من الطريق بين الحد الجنوبي للساحة ورأس السوق، ' +
+        'مع رصيف بعرض تسعة أمتار على كل جانب ونخلة كل أربعة وعشرين متراً. ثلاث دقائق ' +
+        'بالسيارة، وخمس في الزحام، وخمس وعشرون مشياً — والنخيل هناك لأن المشي لا يكون ' +
+        'صادقاً إلا إذا كان مظلَّلاً.',
+      facts: [['Length', 'الطول', '1.8 km'], ['By car', 'بالسيارة', '3 min'], ['On foot', 'مشياً', '25 min'], ['Footway', 'الرصيف', '9 m']],
+      bounds: [-26, 26, 200, 2020], view: { x: 14.6, z: 620, yaw: 0 }
+    },
+    {
       id: 'majlis', num: '07',
       en: { name: 'The Majlis', short: 'Six sunken seating rooms under fabric sails.' },
       ar: { name: 'المجالس', short: 'ست غرف جلوس منخفضة تحت مظلات قماشية.' },
       enText: 'Six sunken seating rooms at the head of the souq, each a square of low benches ' +
         'under a single fabric sail, cut one step below the paving so that sitting down takes ' +
-        'you out of the through-traffic. Two keep clear sight of the mosque; the rest turn ' +
-        'inward on themselves.',
+        'you out of the through-traffic. Two face back up the road you drove in on; the rest ' +
+        'turn inward on themselves.',
       arText: 'ست غرف جلوس منخفضة عند رأس السوق، كل واحدة مربّع من المصاطب المنخفضة تحت مظلة ' +
         'قماشية واحدة، محفورة درجة تحت مستوى البلاط حتى يخرجك الجلوس من طريق المارّة. اثنتان ' +
-        'تبقيان على مرأى من المسجد، والبقية تنغلق على نفسها.',
+        'تتجهان إلى الطريق الذي جئت منه، والبقية تنغلق على نفسها.',
       facts: [['Rooms', 'الغرف', '6'], ['Seats', 'المقاعد', '240'], ['Sail span', 'اتساع المظلة', '12 m']],
-      bounds: [-56, 56, 72, 102], view: { x: -20, z: 96, yaw: 0 }
+      bounds: [-58, 58, 2016, 2050], view: { x: -20, z: 2042, yaw: Math.PI }
     },
     {
       id: 'souq', num: '02',
-      en: { name: 'The Souq', short: '64 booths in four rows, canvas over timber.' },
-      ar: { name: 'السوق', short: '٦٤ كشكاً في أربعة صفوف، قماش فوق خشب.' },
+      en: { name: 'The Souq', short: '64 booths, 2.1 km inland — a three-minute drive.' },
+      ar: { name: 'السوق', short: '٦٤ كشكاً، على ٢٫١ كم داخل البر — ثلاث دقائق بالسيارة.' },
       enText: 'Sixty-four booths in four rows — three metres square, timber frames under ' +
-        'striped canvas. Small enough that one person can run one: dates, oud, tailoring, a ' +
+        'striped canvas. It is deliberately not the mosque\'s forecourt: it stands 2.1 km ' +
+        'inland, a three-minute drive or a twenty-five-minute walk down a planted road, ' +
+        'because a market this size wants its own ground and its own car park rather than the ' +
+        'mosque\'s. Small enough that one person can run a booth: dates, oud, tailoring, a ' +
         'bookseller, prayer beads, a kitchen the size of a kitchen. Let by the month, and the ' +
         'rows stand sixteen metres apart so a Friday crowd passes without pressing on the ' +
         'counters. A water channel runs the length of the middle.',
       arText: 'أربعة وستون كشكاً في أربعة صفوف — ثلاثة أمتار في ثلاثة، هياكل خشبية تحت قماش ' +
-        'مخطّط. صغيرة بما يكفي ليديرها شخص واحد: تمر، وعود، وخياطة، وبائع كتب، ومسابح، ومطبخ ' +
-        'بحجم مطبخ. تُؤجَّر بالشهر، والصفوف متباعدة ستة عشر متراً فيمرّ زحام الجمعة دون أن ' +
-        'يضغط على الطاولات. ويجري في منتصفها جدول ماء بطولها.',
-      facts: [['Booths', 'الأكشاك', '64'], ['Each', 'المساحة', '3 × 3 m'], ['Walk', 'عرض الممشى', '16 m'], ['During prayer', 'وقت الصلاة', 'closed']],
-      bounds: [-52, 52, 102, 186], view: { x: -5.5, z: 168, yaw: 0 }
+        'مخطّط. وهو ليس صحن المسجد عن قصد: يقع على مسافة ٢٫١ كم داخل البر، أي ثلاث دقائق ' +
+        'بالسيارة أو خمس وعشرون دقيقة مشياً على طريق مشجَّر، لأن سوقاً بهذا الحجم يريد أرضه ' +
+        'ومواقفه لا أرض المسجد. صغيرة بما يكفي ليديرها شخص واحد: تمر، وعود، وخياطة، وبائع ' +
+        'كتب، ومسابح، ومطبخ بحجم مطبخ. تُؤجَّر بالشهر، والصفوف متباعدة ستة عشر متراً فيمرّ ' +
+        'زحام الجمعة دون أن يضغط على الطاولات. ويجري في منتصفها جدول ماء بطولها.',
+      facts: [['Booths', 'الأكشاك', '64'], ['Each', 'المساحة', '3 × 3 m'], ['From the mosque', 'من المسجد', '2.1 km'], ['By car', 'بالسيارة', '3 min']],
+      bounds: [-52, 52, 2050, 2150], view: { x: -5.5, z: 2136, yaw: 0 }
     },
     {
       id: 'lawn', num: '05',
@@ -125,12 +146,14 @@
       ar: { name: 'الرواق', short: '٢٨ محلاً خلف رواق من العقود المدببة.' },
       enText: 'A single long building on the east side: twenty-eight units behind a colonnade ' +
         'of pointed arches that carries its own shade all day. This is the permanent half of ' +
-        'the trade — the shops that need a door, a store room and a fixed address, as against ' +
-        'the booths, which need none of the three. Its back wall takes the car park off the court.',
+        'the trade, and the only trade the mosque grounds carry — the shops that need a door, ' +
+        'a store room and a fixed address, as against the booths of the souq two kilometres ' +
+        'inland, which need none of the three. Its back wall takes the car park off the court.',
       arText: 'مبنى واحد طويل على الجهة الشرقية: ثمانية وعشرون محلاً خلف رواق من العقود المدببة ' +
-        'يحمل ظلّه طوال النهار. هذا هو النصف الدائم من التجارة — المحلات التي تحتاج باباً ' +
-        'ومخزناً وعنواناً ثابتاً، بخلاف الأكشاك التي لا تحتاج شيئاً من الثلاثة. ويحجب جداره ' +
-        'الخلفي موقف السيارات عن الساحة.',
+        'يحمل ظلّه طوال النهار. هذا هو النصف الدائم من التجارة، وهو التجارة الوحيدة التي ' +
+        'تحملها أرض المسجد — المحلات التي تحتاج باباً ومخزناً وعنواناً ثابتاً، بخلاف أكشاك ' +
+        'السوق على كيلومترين داخل البر التي لا تحتاج شيئاً من الثلاثة. ويحجب جداره الخلفي ' +
+        'موقف السيارات عن الساحة.',
       facts: [['Units', 'المحلات', '28'], ['Length', 'الطول', '140 m'], ['Colonnade', 'عمق الرواق', '6 m']],
       bounds: [102, 182, -88, 88], view: { x: 106, z: 6, yaw: -Math.PI / 2 }
     },
@@ -576,7 +599,7 @@
      +X is east, -Z is north (the sea). One unit is one metre.
      ================================================================ */
   var scene = new THREE.Scene();
-  scene.fog = new THREE.Fog(0xD6CDB6, 150, 620);
+  scene.fog = new THREE.Fog(0xD6CDB6, 190, 1150);
   var world = new THREE.Group();
   scene.add(world);
 
@@ -811,10 +834,19 @@
     }
   })();
 
-  /* ---- 02. the souq: 64 booths in four rows ----------------------- */
+  /* ---- 02. the souq: 64 booths in four rows, 2.1 km inland ---------
+     It is deliberately not the mosque's forecourt. A market of this size
+     wants its own ground and its own car park, so it sits a three-minute
+     drive down the planted road that starts at the south edge of the
+     court. SOUQ.z is the one number that places the whole precinct. --- */
+  var SOUQ = { z: 2098, km: 2.1 };
+
   (function souq() {
     var rowsX = [-26, -10, 10, 26];      /* four rows, a 16 m walk between the inner pair */
-    var z0 = 106, step = 5.2, per = 16;
+    var z0 = SOUQ.z - 40, step = 5.2, per = 16;
+
+    /* the ground the precinct stands on */
+    world.add(ground(150, 150, M.walk, 0, SOUQ.z - 12, 0.02));
 
     rowsX.forEach(function (bx, ri) {
       var facing = bx < 0 ? 1 : -1;      /* counters turn to face the central walk */
@@ -846,18 +878,16 @@
     });
 
     /* the water channel down the middle of the walk */
-    var chan = box(2.4, 0.5, 84, M.water);
-    world.add(put(chan, 0, 0.12, 144));
-    world.add(put(box(3.4, 0.36, 84, M.stoneWarm), 0, 0.16, 144));
-    world.add(put(box(2.4, 0.5, 84, M.water), 0, 0.22, 144));
-    /* a basin at its head, where the souq meets the court */
-    world.add(put(new THREE.Mesh(new THREE.CylinderGeometry(5, 5, 0.5, 28), M.stoneWarm), 0, 0.2, 100));
-    world.add(put(new THREE.Mesh(new THREE.CylinderGeometry(4.4, 4.4, 0.52, 28), M.water), 0, 0.32, 100));
+    world.add(put(box(3.4, 0.36, 84, M.stoneWarm), 0, 0.16, SOUQ.z - 1));
+    world.add(put(box(2.4, 0.5, 84, M.water), 0, 0.22, SOUQ.z - 1));
+    /* a basin at its head, where the road arrives */
+    world.add(put(new THREE.Mesh(new THREE.CylinderGeometry(5, 5, 0.5, 28), M.stoneWarm), 0, 0.2, SOUQ.z - 46));
+    world.add(put(new THREE.Mesh(new THREE.CylinderGeometry(4.4, 4.4, 0.52, 28), M.water), 0, 0.32, SOUQ.z - 46));
 
     /* shade sails over the central walk, and lamps along it */
-    for (var s = 0; s < 5; s++) {
-      var sz = 114 + s * 17;
-      var sl = sail(13, 12, 1.5, stripeMats[(s + 1) % 4]);
+    for (var sN = 0; sN < 5; sN++) {
+      var sz = SOUQ.z - 32 + sN * 17;
+      var sl = sail(13, 12, 1.5, stripeMats[(sN + 1) % 4]);
       sl.position.set(0, 8, sz);
       world.add(sl);
       [[-6, -6], [6, -6], [-6, 6], [6, 6]].forEach(function (p) {
@@ -870,15 +900,65 @@
 
     /* palms lining the outside of the rows */
     for (var p = 0; p < 10; p++) {
-      palm(-36, 108 + p * 8.4, 7 + (p % 3), p);
-      palm(36, 108 + p * 8.4, 7 + ((p + 1) % 3), p + 3);
+      palm(-36, SOUQ.z - 38 + p * 8.4, 7 + (p % 3), p);
+      palm(36, SOUQ.z - 38 + p * 8.4, 7 + ((p + 1) % 3), p + 3);
     }
 
     /* people, thickest here */
     for (var q = 0; q < 46; q++) {
       var side = Math.random() < 0.5 ? -1 : 1;
-      person(side * (2.5 + Math.random() * 6), 104 + Math.random() * 82);
+      person(side * (2.5 + Math.random() * 6), SOUQ.z - 42 + Math.random() * 82);
     }
+
+    /* the car park the distance earns it */
+    world.add(ground(84, 132, M.walk, 102, SOUQ.z - 12, 0.03));
+    var bay = new Inst(new THREE.BoxGeometry(0.14, 0.02, 5, 1, 1, 1), M.white);
+    var car = new Inst((function () {
+      var g = new THREE.BoxGeometry(1.82, 1.44, 4.4); g.translate(0, 0.72, 0); return g;
+    })(), mat(0xFFFFFF, 0.4, 0.3));
+    var PAINT = [0xF2F2F0, 0x2A2C30, 0x9BA1A6, 0x6E2F2C, 0x24415C, 0xE8E4DA, 0x3A4A3C];
+    for (var r = 0; r < 4; r++) {
+      var cx = 70 + r * 22;
+      for (var b = 0; b < 22; b++) {
+        var cz = SOUQ.z - 74 + b * 6;
+        bay.at(cx - 3, 0.05, cz - 3, {});
+        bay.at(cx + 3, 0.05, cz - 3, {});
+        if ((r * 22 + b) % 3 !== 2) {
+          car.at(cx, 0, cz, { ry: (r % 2 ? 0.02 : -0.02), c: PAINT[(r * 7 + b) % PAINT.length] });
+          shade(cx, cz, 6);
+        }
+      }
+      blocker(cx - 4, cx + 4, SOUQ.z - 78, SOUQ.z + 54);
+    }
+    bay.into(world);
+    car.into(world);
+  })();
+
+  /* ---- the road between them: 1.8 km of planted carriageway --------
+     Gulf Street's texture repeated over two kilometres would stretch its
+     markings out of shape, so the link gets its own copy of the map with
+     its own repeat. ------------------------------------------------- */
+  (function link() {
+    var z0 = 196, z1 = SOUQ.z - 78, len = z1 - z0, mid = (z0 + z1) / 2;
+
+    var t = roadTex.clone();
+    t.needsUpdate = true;
+    t.repeat.set(1, len / 15);
+    var linkRoad = new THREE.MeshStandardMaterial({ map: t, roughness: 0.96 });
+
+    world.add(ground(18, len, linkRoad, 0, mid, 0.03));
+    world.add(ground(9, len, M.walk, -14.5, mid, 0.04));
+    world.add(ground(9, len, M.walk, 14.5, mid, 0.04));
+    world.add(put(box(1, 0.42, len, M.stoneWarm), -9.6, 0.21, mid));
+    world.add(put(box(1, 0.42, len, M.stoneWarm), 9.6, 0.21, mid));
+
+    for (var z = z0 + 14; z < z1 - 10; z += 24) {
+      palm(-19.5, z, 7 + (z % 3), z);
+      palm(19.5, z, 7 + ((z + 1) % 3), z + 1);
+      if (z % 48 < 24) { lampPost(-10.8, z); lampPost(10.8, z); }
+    }
+    /* the footways are yours; the carriageway is not */
+    blocker(-9.4, 9.4, z0, z1);
   })();
 
   /* ---- 03. the arcade: 28 shop units on the east ------------------ */
@@ -1006,7 +1086,8 @@
 
   /* ---- 07. the majlis: six sunken rooms at the head of the souq --- */
   (function majlis() {
-    var spots = [[-42, 86], [-14, 86], [14, 86], [42, 86], [-28, 98], [28, 98]];
+    var h = SOUQ.z - 68, h2 = SOUQ.z - 56;
+    var spots = [[-42, h], [-14, h], [14, h], [42, h], [-28, h2], [28, h2]];
     spots.forEach(function (s, i) {
       var x = s[0], z = s[1];
       /* the floor, one step down */
@@ -1028,7 +1109,7 @@
       shade(x, z, 18);
       person(x + 2, z - 3.4); person(x - 2.6, z + 3.2);
     });
-    for (var l = 0; l < 5; l++) { lampPost(-56 + l * 28, 76); }
+    for (var l = 0; l < 5; l++) { lampPost(-56 + l * 28, SOUQ.z - 78); }
   })();
 
   /* ---- 08 + 09. the promenade and the waterfront deck -------------
@@ -1135,8 +1216,24 @@
       var h = 18 + Math.random() * 90;
       var b = box(14 + Math.random() * 20, h, 14 + Math.random() * 20, far);
       var a = -0.5 + Math.random() * 2.6;
-      b.position.set(Math.sin(a) * (430 + Math.random() * 180), h / 2, Math.cos(a) * (430 + Math.random() * 180) + 60);
+      var bx = Math.sin(a) * (430 + Math.random() * 180);
+      if (Math.abs(bx) < 230) bx = (bx < 0 ? -230 : 230) - bx * 0.4;   /* clear of the road */
+      b.position.set(bx, h / 2, Math.cos(a) * (430 + Math.random() * 180) + 60);
       world.add(b);
+    }
+    /* the souq is inland, so it has city on every side of it */
+    for (var j = 0; j < 40; j++) {
+      var h2 = 12 + Math.random() * 34;
+      var c = box(16 + Math.random() * 26, h2, 16 + Math.random() * 26, far);
+      var side = Math.random() < 0.5 ? -1 : 1;
+      c.position.set(side * (230 + Math.random() * 300), h2 / 2, SOUQ.z - 400 + Math.random() * 800);
+      world.add(c);
+    }
+    for (var k = 0; k < 14; k++) {
+      var h3 = 12 + Math.random() * 26;
+      var d = box(18 + Math.random() * 24, h3, 18 + Math.random() * 24, far);
+      d.position.set(-220 + Math.random() * 440, h3 / 2, SOUQ.z + 210 + Math.random() * 260);
+      world.add(d);
     }
   })();
 
@@ -1150,8 +1247,13 @@
   scene.add(sky);
   var sun = new THREE.Mesh(new THREE.SphereGeometry(16, 16, 12),
     new THREE.MeshBasicMaterial({ color: 0xFFF3D2, fog: false }));
-  sun.position.set(-620, 190, -320);
   scene.add(sun);
+  /* both ride with the camera, so the sky and the sun sit in the same place in
+     the sky whether you are at the mosque or two kilometres inland */
+  function carrySky() {
+    sky.position.set(camera.position.x, 0, camera.position.z);
+    sun.position.set(camera.position.x - 620, 190, camera.position.z - 320);
+  }
 
   /* late afternoon, light coming in off the sea from the north-west */
   scene.add(new THREE.HemisphereLight(0xBBD8EA, 0x9C8560, 0.52));
@@ -1172,15 +1274,15 @@
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 0.92;
 
-  var camera = new THREE.PerspectiveCamera(62, 16 / 10, 0.1, 1500);
+  var camera = new THREE.PerspectiveCamera(62, 16 / 10, 0.1, 2600);
   camera.rotation.order = 'YXZ';
 
   var EYE = 1.7;
-  var me = { x: -5.5, z: 176, yaw: 0, pitch: -0.02 };
+  var me = { x: 0, z: -134, yaw: Math.PI, pitch: -0.02 };   /* open on the mosque, from the bridge */
   var vel = { f: 0, s: 0 };
   var bob = 0;
 
-  var LIMIT = { x0: -178, x1: 178, z0: -206, z1: 190 };
+  var LIMIT = { x0: -178, x1: 178, z0: -206, z1: 2180 };
 
   function blocked(x, z) {
     var r = 0.52;
@@ -1302,12 +1404,18 @@
     var dy = z.view.yaw - me.yaw;
     while (dy > Math.PI) dy -= TAU;
     while (dy < -Math.PI) dy += TAU;
-    if (reduced) {
+    var far = Math.abs(z.view.x - me.x) + Math.abs(z.view.z - me.z) > 400;
+    if (reduced || far) {
+      /* the souq is a drive away: cut to it rather than fly the whole road */
       me.x = z.view.x; me.z = z.view.z; me.yaw = z.view.yaw; me.pitch = -0.02;
+      glide = null;
       place(); look();
       return;
     }
-    glide = { from: from, to: z.view, dyaw: dy, t: 0 };
+    /* pace the move by how far it is, so a 300 m hop doesn't read as a rocket */
+    var dist = Math.sqrt(Math.pow(z.view.x - from.x, 2) + Math.pow(z.view.z - from.z, 2));
+    glide = { from: from, to: z.view, dyaw: dy, t: 0,
+              dur: Math.max(0.7, Math.min(2.4, dist / 110)) };
     hideHint();
   }
 
@@ -1369,9 +1477,10 @@
     var idx = Math.round(a / (TAU / 8)) % 8;
     compassDir.textContent = lang === 'ar' ? DIRS_AR[idx] : DIRS_EN[idx];
     var d = Math.round(Math.sqrt(me.x * me.x + me.z * me.z) - 70);
+    var far = d >= 1000 ? (d / 1000).toFixed(1) : null;
     compassTo.textContent = lang === 'ar'
-      ? 'المسجد ' + (d < 6 ? 'أمامك' : d + ' م')
-      : 'mosque ' + (d < 6 ? 'right here' : d + ' m');
+      ? 'المسجد ' + (d < 6 ? 'أمامك' : far ? far + ' كم' : d + ' م')
+      : 'mosque ' + (d < 6 ? 'right here' : far ? far + ' km' : d + ' m');
   }
 
   /* -- size, visibility, and the loop ---------------------------------- */
@@ -1399,7 +1508,7 @@
     if (!visible) return;
 
     if (glide) {
-      glide.t = Math.min(1, glide.t + dt / 1.15);
+      glide.t = Math.min(1, glide.t + dt / glide.dur);
       var e = glide.t < 0.5 ? 4 * glide.t * glide.t * glide.t
         : 1 - Math.pow(-2 * glide.t + 2, 3) / 2;
       me.x = glide.from.x + (glide.to.x - glide.from.x) * e;
@@ -1429,12 +1538,14 @@
     }
 
     place();
+    carrySky();
     look();
     renderer.render(scene, camera);
   }
 
   resize();
   place();
+  carrySky();
   setLang('en');
   paintWhere(ZONES[ZONES.length - 1]);
   current = null;
